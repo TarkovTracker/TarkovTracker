@@ -1,0 +1,36 @@
+body
+  background-color: var(--v-sitebackground-base)
+
+.text-mono
+  font-family: monospace
+
+// Helpers
+.flex-1-1-auto
+  flex: 1 1 auto !important
+
+.flex-1-0-auto
+  flex: 1 0 auto !important
+
+.flex-0-1-auto
+  flex: 0 1 auto !important
+
+.flex-0-0-auto
+  flex: 0 0 auto !important
+
+.position-relative
+  position: relative !important
+
+.overflow-y-scroll
+  overflow-y: scroll
+
+table
+  > thead > tr > th,
+  > tbody > tr > td
+    font-weight: 300 !important
+
+/* Removes sidebar scrollbar */
+.v-navigation-drawer__content
+  scrollbar-width: none
+
+.v-navigation-drawer__content::-webkit-scrollbar
+  width: 0

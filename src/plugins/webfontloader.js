@@ -1,0 +1,16 @@
+/**
+ * plugins/webfontloader.js
+ *
+ * webfontloader documentation: https://github.com/typekit/webfontloader
+ */
+
+ // Imports
+ import WebFontLoader from 'webfontloader'
+
+ export function loadFonts () {
+   WebFontLoader.load({
+     google: {
+       families: ['Share+Tech+Mono&display=swap'],
+     },
+   })
+ }
