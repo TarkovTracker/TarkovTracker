@@ -1,0 +1,10 @@
+# Code owners file for TarkovTracker
+
+# Default Code Owner to Thaddeus for project open source initation
+* @thaddeus
+
+# Firebase data assigned to @thaddeus
+/database.rules.json @thaddeus
+/firestore.rules @thaddeus
+/firebase.json @thaddeus
+/src/firebaseConfig.js @thaddeus
