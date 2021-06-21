@@ -1,3 +1,6 @@
 [submodule "tarkovdata"]
 	path = tarkovdata
 	url = git@github.com:TarkovTracker/tarkovdata.git
+[submodule "EfTIcons"]
+	path = EfTIcons
+	url = git@github.com:RatScanner/EfTIcons.git

@@ -42,17 +42,14 @@
           class="mr-1 objective-icon-sub"
         >{{ objectiveIcon }}</v-icon>
       </span>
-      <span v-if="questObjective.type === 'key'">
-        <b>{{ questObjective.target }}</b> needed on {{ questObjective.location }}</span>
+      <span v-if="questObjective.type === 'key'"><b><tarkov-item :id="questObjective.target" format="minimal" /></b> needed on {{ questObjective.location }}</span>
       <span v-else-if="questObjective.type === 'kill'">Eliminate {{ questObjective.number }} {{ questObjective.target }} <span v-if="questObjective.location != 'Any'">on {{ questObjective.location }}</span><span v-if="questObjective.with"> with <b>{{ questObjective.with.join(", ") }}</b></span></span>
-      <span v-else-if="questObjective.type === 'collect'">Hand over {{ questObjective.number }} <b>{{ questObjective.target }}</b></span>
-      <span v-else-if="questObjective.type === 'find'">Find in raid {{ questObjective.number }} <b>{{ questObjective.target }}</b></span>
+      <span v-else-if="questObjective.type === 'collect'">Hand over {{ questObjective.number }} <b> <tarkov-item :id="questObjective.target" format="minimal" /></b></span>
+      <span v-else-if="questObjective.type === 'find'">Find in raid {{ questObjective.number }} <b><tarkov-item :id="questObjective.target" format="minimal" /></b></span>
       <span v-else-if="questObjective.type === 'pickup'">Pick-up <b>{{ questObjective.target }}</b> <span v-if="questObjective.hint">({{ questObjective.hint }})</span> on {{ questObjective.location }}</span>
-      <span v-else-if="questObjective.type === 'place'">
-        Place <span v-if="questObjective.number > 1">{{ questObjective.number }}x</span> <b>{{ questObjective.target }}</b> <span v-if="questObjective.hint">({{ questObjective.hint }})</span> on {{ questObjective.location }}
+      <span v-else-if="questObjective.type === 'place'">Place <span v-if="questObjective.number > 1">{{ questObjective.number }}x</span> <b><tarkov-item :id="questObjective.target" format="minimal" /></b> <span v-if="questObjective.hint">({{ questObjective.hint }})</span> on {{ questObjective.location }}
       </span>
-      <span v-else-if="questObjective.type === 'mark'">
-        Place <b>{{ questObjective.tool }}</b> at <b>{{ questObjective.target }}</b> <span v-if="questObjective.hint">({{ questObjective.hint }})</span> on {{ questObjective.location }}
+      <span v-else-if="questObjective.type === 'mark'">Place <b>{{ questObjective.tool }}</b> at <b>{{ questObjective.target }}</b> <span v-if="questObjective.hint">({{ questObjective.hint }})</span> on {{ questObjective.location }}
       </span>
       <span v-else-if="questObjective.type === 'reputation'">Reach loyalty level <b>{{ questObjective.number }}</b> with {{ questObjective.target }}</span>
       <span v-else-if="questObjective.type === 'skill'">Reach skill level <b>{{ questObjective.number }}</b> with {{ questObjective.target }}</span>

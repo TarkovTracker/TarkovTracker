@@ -7,8 +7,8 @@
     "indexes": "firestore.indexes.json"
   },
   "hosting": {
-    "predeploy": "npm run build",
-    "public": "dist",
+    "predeploy": "rm -rf public/img/items && mkdir public/img/items && cp EfTIcons/uid/* public/img/items/ && npm run build",
+  "public": "dist",
     "ignore": [
       "firebase.json",
       "**/.*",
