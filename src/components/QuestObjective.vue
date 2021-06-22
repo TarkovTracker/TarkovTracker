@@ -42,7 +42,19 @@
           class="mr-1 objective-icon-sub"
         >{{ objectiveIcon }}</v-icon>
       </span>
-      <span v-if="questObjective.type === 'key'"><b><tarkov-item :id="questObjective.target" format="minimal" /></b> needed on {{ questObjective.location }}</span>
+      <!-- Handle optional key arrays -->
+      <span v-if="questObjective.type === 'key' && Array.isArray(questObjective.target)">
+        <b v-for="(specificKey, keyIndex) in questObjective.target">
+          <tarkov-item :id="specificKey" format="minimal"/>
+          <span v-if="keyIndex < questObjective.target.length - 1"> OR </span>
+        </b> needed on {{ questObjective.location }}
+      </span>
+      <!-- Handle standard key situation -->
+      <span v-else-if="questObjective.type === 'key'">
+        <b>
+          <tarkov-item :id="questObjective.target" format="minimal" />
+        </b> needed on {{ questObjective.location }}
+      </span>
       <span v-else-if="questObjective.type === 'kill'">Eliminate {{ questObjective.number }} {{ questObjective.target }} <span v-if="questObjective.location != 'Any'">on {{ questObjective.location }}</span><span v-if="questObjective.with"> with <b>{{ questObjective.with.join(", ") }}</b></span></span>
       <span v-else-if="questObjective.type === 'collect'">Hand over {{ questObjective.number }} <b> <tarkov-item :id="questObjective.target" format="minimal" /></b></span>
       <span v-else-if="questObjective.type === 'find'">Find in raid {{ questObjective.number }} <b><tarkov-item :id="questObjective.target" format="minimal" /></b></span>

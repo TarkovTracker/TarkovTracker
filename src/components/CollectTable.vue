@@ -43,7 +43,7 @@
       <!-- Item Name Modifications -->
       <template v-slot:item.name="{ item }">
         <span class="font-weight-bold">
-          <tarkov-item :id="item.itemId" />
+          <tarkov-item :id="item.itemId" :toolsLink="true" />
           <span v-if="'fir' in item && item.fir === true">
             <v-icon small class="icon-align">
               mdi-checkbox-marked-circle-outline
@@ -99,7 +99,7 @@
       <!-- Item Name Modifications -->
       <template v-slot:item.name="{ item }">
         <span class="font-weight-bold">
-          <tarkov-item :id="item.itemId" :fir="item.fir" />
+          <tarkov-item :id="item.itemId" :fir="item.fir" :toolsLink="true" />
           <span v-if="item.teamHave && Object.keys(item.teamHave).length > 0">
             
             <v-tooltip top>

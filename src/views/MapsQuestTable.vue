@@ -40,7 +40,22 @@
                     :key="keyObjective.id"
                   >
                     <div style="font-weight: 400">
-                      <tarkov-item :id="keyObjective.target" format="small" />
+                      <div v-if="Array.isArray(keyObjective.target)">
+                        <v-divider></v-divider>
+                        <div
+                          v-for="(keyOptional, keyIndex) in keyObjective.target"
+                          :key="keyIndex"
+                        >
+                          <tarkov-item :id="keyOptional" format="small" :toolsLink="true" />
+                          <div v-if="keyIndex < keyObjective.target.length - 1" class="text-center">
+                            OR
+                          </div>
+                        </div>
+                        <v-divider></v-divider>
+                      </div>
+                      <div v-else>
+                        <tarkov-item :id="keyObjective.target" format="small" :toolsLink="true" />
+                      </div>
                     </div>
                   </div>
                 </v-col>
@@ -57,7 +72,7 @@
                     v-for="(itemCount, itemObjective) in bringItems"
                     :key="itemObjective"
                   >
-                    <tarkov-item :id="itemObjective" format="small" :count="itemCount" />
+                    <tarkov-item :id="itemObjective" format="small" :count="itemCount" :toolsLink="true" />
                   </div>
                 </v-col>
               </v-row>

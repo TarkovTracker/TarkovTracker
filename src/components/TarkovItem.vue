@@ -5,23 +5,36 @@
   <span v-else>
     <v-container fluid class="pa-0">
       <v-row no-gutters>
-          <v-col align-self="center" justify="start" cols="auto" v-if="useImage">
-            <v-img
-              :src = "icon"
-              :max-height = "imageSize"
-              :max-width = "imageSize"
-              contain
-              class="item-icon item-block"
-            >
-            </v-img>
-          </v-col>
+        <v-col align-self="center" justify="start" cols="auto" v-if="useImage">
+          <v-img
+            :src = "icon"
+            :max-height = "imageSize"
+            :max-width = "imageSize"
+            contain
+            class="item-icon item-block my-2 mr-2"
+          >
+          </v-img>
+        </v-col>
+        <v-hover v-slot="{ hover }">
           <v-col align-self="center" justify="start" cols="auto">
-            <span class="align-self-center ml-2"><span v-if="count">{{ count }}x </span>{{ name }}
-              <v-icon small class="icon-align" v-if="fir">
-                mdi-checkbox-marked-circle-outline
-              </v-icon>
-            </span>
+            <v-badge
+              avatar
+              inline
+              :value="toolsLink && hover"
+            >
+              <template v-slot:badge>
+                <v-avatar @click="visitToolsLink()" title="Show item details on Tarkov Tools">
+                  <v-img src="/img/tarkovtoolslogo.png"></v-img>
+                </v-avatar>
+              </template>
+              <span class="align-self-center"><span v-if="count">{{ count }}x </span>{{ name }}
+                <v-icon small class="icon-align" v-if="fir">
+                  mdi-checkbox-marked-circle-outline
+                </v-icon>
+              </span>
+            </v-badge>
           </v-col>
+        </v-hover>
       </v-row>
     </v-container>
   </span>
@@ -47,6 +60,10 @@
       fir: {
         type: Boolean,
         default: false,
+      },
+      toolsLink: {
+        type: Boolean,
+        default: false,
       }
     },
 
@@ -60,7 +77,7 @@
       },
 
       icon: function() {
-        return `/img/items/${this.id}.png`
+        return `https://assets.tarkov-tools.com/${this.id}-icon.jpg`
       },
 
       // Use tooltip if we're full or details format
@@ -76,6 +93,12 @@
         }
       }
     },
+
+    methods: {
+      visitToolsLink () {
+        window.open(`https://tarkov-tools.com/item/${this.id}`, "_blank");
+      },
+    },
   }
 </script>
 <style lang="sass">
@@ -86,4 +109,5 @@
   vertical-align: middle
 .item-icon
   float: left
+  border: 1px solid var(--v-accent-base)
 </style>
