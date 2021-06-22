@@ -23,12 +23,12 @@
               :value="toolsLink && hover"
             >
               <template v-slot:badge>
-                <v-avatar @click="visitToolsLink()" title="Show item details on Tarkov Tools">
+                <v-avatar @click="visitToolsLink()" title="Show item details on Tarkov Tools" class="tools-link">
                   <v-img src="/img/tarkovtoolslogo.png"></v-img>
                 </v-avatar>
               </template>
               <span class="align-self-center"><span v-if="count">{{ count }}x </span>{{ name }}
-                <v-icon small class="icon-align" v-if="fir">
+                <v-icon small class="icon-align" v-if="fir" title="Found in Raid status required">
                   mdi-checkbox-marked-circle-outline
                 </v-icon>
               </span>
@@ -102,6 +102,8 @@
   }
 </script>
 <style lang="sass">
+.tools-link
+  cursor: pointer
 .full-item
   width: 100%
 .item-block
