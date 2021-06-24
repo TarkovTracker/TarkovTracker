@@ -46,7 +46,7 @@
                           v-for="(keyOptional, keyIndex) in keyObjective.target"
                           :key="keyIndex"
                         >
-                          <tarkov-item :id="keyOptional" format="small" :toolsLink="true" />
+                          <tarkov-item :id="keyOptional" format="small" :externalLinks="true" />
                           <div v-if="keyIndex < keyObjective.target.length - 1" class="text-center">
                             OR
                           </div>
@@ -54,7 +54,7 @@
                         <v-divider></v-divider>
                       </div>
                       <div v-else>
-                        <tarkov-item :id="keyObjective.target" format="small" :toolsLink="true" />
+                        <tarkov-item :id="keyObjective.target" format="small" :externalLinks="true" />
                       </div>
                     </div>
                   </div>
@@ -72,7 +72,7 @@
                     v-for="(itemCount, itemObjective) in bringItems"
                     :key="itemObjective"
                   >
-                    <tarkov-item :id="itemObjective" format="small" :count="itemCount" :toolsLink="true" />
+                    <tarkov-item :id="itemObjective" format="small" :count="itemCount" :externalLinks="true" />
                   </div>
                 </v-col>
               </v-row>

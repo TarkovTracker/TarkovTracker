@@ -43,7 +43,7 @@
       <!-- Item Name Modifications -->
       <template v-slot:item.name="{ item }">
         <span class="font-weight-bold">
-          <tarkov-item :id="item.itemId" :toolsLink="true" />
+          <tarkov-item :id="item.itemId" :externalLinks="true" />
           <span v-if="'fir' in item && item.fir === true">
             <v-icon small class="icon-align">
               mdi-checkbox-marked-circle-outline
@@ -98,35 +98,37 @@
     >
       <!-- Item Name Modifications -->
       <template v-slot:item.name="{ item }">
-        <span class="font-weight-bold">
-          <tarkov-item :id="item.itemId" :fir="item.fir" :toolsLink="true" />
-          <span v-if="item.teamHave && Object.keys(item.teamHave).length > 0">
-            
-            <v-tooltip top>
-              <template v-slot:activator="{ on, attrs }">
-                <v-icon
-                  small
-                  class="ml-2 icon-align"
-                  v-bind="attrs"
-                  v-on="on"
-                >
-                  mdi-account-group
-                </v-icon>
-              </template>
-              <span>
-                <div
-                  v-for="(amountHave, valueIndex) in Object.values(item.teamHave)"
-                  :key="valueIndex"
-                >
-                    <teammate-identity
-                      :teammate="$root.team[Object.keys(item.teamHave)[valueIndex]]"
-                      left
-                    /> needs {{ item.number - amountHave }}
-                </div>
-              </span>
-            </v-tooltip>
+        <v-hover v-slot="{ hover }">
+          <span class="font-weight-bold">
+            <tarkov-item :id="item.itemId" :fir="item.fir" :externalLinks="true" :linksForce="hover" />
+            <span v-if="item.teamHave && Object.keys(item.teamHave).length > 0">
+              
+              <v-tooltip top>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-icon
+                    small
+                    class="ml-2 icon-align"
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    mdi-account-group
+                  </v-icon>
+                </template>
+                <span>
+                  <div
+                    v-for="(amountHave, valueIndex) in Object.values(item.teamHave)"
+                    :key="valueIndex"
+                  >
+                      <teammate-identity
+                        :teammate="$root.team[Object.keys(item.teamHave)[valueIndex]]"
+                        left
+                      /> needs {{ item.number - amountHave }}
+                  </div>
+                </span>
+              </v-tooltip>
+            </span>
           </span>
-        </span>
+        </v-hover>
       </template>
 
       <!-- Item Needed Modifications -->

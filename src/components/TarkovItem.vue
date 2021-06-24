@@ -1,41 +1,35 @@
 <template>
-  <span v-if="format === 'minimal'">
-    {{ item.name }}
-  </span>
+  <span v-if="format === 'minimal'">{{ item.name }}</span>
   <span v-else>
     <v-container fluid class="pa-0">
-      <v-row no-gutters>
-        <v-col align-self="center" justify="start" cols="auto" v-if="useImage">
-          <v-img
-            :src = "icon"
-            :max-height = "imageSize"
-            :max-width = "imageSize"
-            contain
-            class="item-icon item-block my-2 mr-2"
-          >
-          </v-img>
-        </v-col>
-        <v-hover v-slot="{ hover }">
-          <v-col align-self="center" justify="start" cols="auto">
-            <v-badge
-              avatar
-              inline
-              :value="toolsLink && hover"
+      <v-hover v-slot="{ hover }">
+        <v-row no-gutters>
+          <v-col align-self="center" justify="start" cols="auto" v-if="useImage">
+            <v-img
+              :src = "icon"
+              :max-height = "imageSize"
+              :max-width = "imageSize"
+              contain
+              class="item-icon item-block my-2 mr-2"
             >
-              <template v-slot:badge>
-                <v-avatar @click="visitToolsLink()" title="Show item details on Tarkov Tools" class="tools-link">
-                  <v-img src="/img/tarkovtoolslogo.png"></v-img>
-                </v-avatar>
-              </template>
+            </v-img>
+          </v-col>
+          
+          <v-col align-self="center" justify="start" cols="auto">
               <span class="align-self-center"><span v-if="count">{{ count }}x </span>{{ name }}
                 <v-icon small class="icon-align" v-if="fir" title="Found in Raid status required">
                   mdi-checkbox-marked-circle-outline
                 </v-icon>
               </span>
-            </v-badge>
+              <v-avatar @click="visitToolsLink()" title="Show item on Tarkov Tools" class="external-link ml-1" v-if="(externalLinks && hover) || linksForce" size="1.25em">
+                <v-img src="/img/tarkovtoolslogo.png"></v-img>
+              </v-avatar>
+              <v-avatar @click="visitWikiLink()" title="Show item on EFT Wiki" class="external-link  ml-1" v-if="(externalLinks && hover) || linksForce" size="1.25em">
+                <v-img src="/img/wikilogo.png"></v-img>
+              </v-avatar>
           </v-col>
-        </v-hover>
-      </v-row>
+        </v-row>
+      </v-hover>
     </v-container>
   </span>
 </template>
@@ -61,7 +55,11 @@
         type: Boolean,
         default: false,
       },
-      toolsLink: {
+      externalLinks: {
+        type: Boolean,
+        default: false,
+      },
+      linksForce: {
         type: Boolean,
         default: false,
       }
@@ -98,11 +96,14 @@
       visitToolsLink () {
         window.open(`https://tarkov-tools.com/item/${this.id}`, "_blank");
       },
+      visitWikiLink () {
+        window.open(`https://escapefromtarkov.fandom.com/wiki/${this.name}`, "_blank");
+      },
     },
   }
 </script>
 <style lang="sass">
-.tools-link
+.external-link
   cursor: pointer
 .full-item
   width: 100%
