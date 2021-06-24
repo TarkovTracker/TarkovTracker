@@ -23,35 +23,60 @@
         <!-- Show what to bring -->
         <tr
           v-if="bringTrue"
-          style="text-align:center;"
         >
           <td colspan="3">
-            <div class="md-layout md-alignment-top-center">
-              <div
-                v-if="bringKeys.length > 0"
-                class="md-layout-item md-size-25 "
-              >
-                <v-icon>mdi-key</v-icon> <b>Keys:</b>
-                <div
-                  v-for="keyObjective in bringKeys"
-                  :key="keyObjective.id"
+            <v-container>
+              <v-row>
+                <!-- If we have keys needed, set up the grid for that -->
+                <v-col 
+                  v-if="bringKeys.length > 0"
+                  :lg="3"
+                  :sm="12"
+                  class="mx-auto"
                 >
-                  <span style="font-weight: 400">{{ keyObjective.target }}</span>
-                </div>
-              </div>
-              <div
-                v-if="Object.keys(bringItems).length != 0"
-                class="md-layout-item md-size-25"
-              >
-                <v-icon>mdi-package-variant</v-icon> <b>Items:</b>
-                <div
-                  v-for="(itemCount, itemObjective) in bringItems"
-                  :key="itemObjective"
+                  <v-icon>mdi-key</v-icon> <b>Keys:</b>
+                  <div
+                    v-for="keyObjective in bringKeys"
+                    :key="keyObjective.id"
+                  >
+                    <div style="font-weight: 400">
+                      <div v-if="Array.isArray(keyObjective.target)">
+                        <v-divider></v-divider>
+                        <div
+                          v-for="(keyOptional, keyIndex) in keyObjective.target"
+                          :key="keyIndex"
+                        >
+                          <tarkov-item :id="keyOptional" format="small" :externalLinks="true" />
+                          <div v-if="keyIndex < keyObjective.target.length - 1" class="text-center">
+                            OR
+                          </div>
+                        </div>
+                        <v-divider></v-divider>
+                      </div>
+                      <div v-else>
+                        <tarkov-item :id="keyObjective.target" format="small" :externalLinks="true" />
+                      </div>
+                    </div>
+                  </div>
+                </v-col>
+
+                <!-- If we have items needed, set up that grid -->
+                <v-col 
+                  v-if="Object.keys(bringItems).length != 0"
+                  :lg="3"
+                  :sm="12"
+                  class="mx-auto"
                 >
-                  <span style="font-weight: 400">{{ itemCount }}x</span> <span>{{ itemObjective }}</span>
-                </div>
-              </div>
-            </div>
+                  <v-icon>mdi-package-variant</v-icon> <b>Items:</b>
+                  <div
+                    v-for="(itemCount, itemObjective) in bringItems"
+                    :key="itemObjective"
+                  >
+                    <tarkov-item :id="itemObjective" format="small" :count="itemCount" :externalLinks="true" />
+                  </div>
+                </v-col>
+              </v-row>
+            </v-container>
           </td>
         </tr>
         <!-- Show the map specific quests -->

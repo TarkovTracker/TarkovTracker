@@ -10,7 +10,7 @@
     "build:dev": "vue-cli-service build --mode development",
     "build:watch": "vue-cli-service build --mode development --watch --no-clean",
     "deploy:firebase": "firebase deploy",
-    "serve:firebase": "firebase emulators:start --export-on-exit=./.firebase-emulator-savedata --import=./.firebase-emulator-savedata",
+    "serve:firebase": "firebase emulators:start --export-on-exit=./.firebase-emulator-savedata",
     "serve:vue": "vue-cli-service serve",
     "sitemap": "vue-cli-service sitemap",
     "watch": "run-p build:watch serve:firebase"

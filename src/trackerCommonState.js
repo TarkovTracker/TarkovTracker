@@ -37,6 +37,9 @@ export default {
       return this.hideoutDataDefault.stations
         .reduce((a, x) => ({ ...a, [x.id]: x }), {}) // Reduce to a mapping of ID to station
     },
+    itemDictionary: function() {
+      return this.itemDataDefault // Return the existing dictionary of items from tarkovdata
+    },
     me: function() {
       return {
         store: this.$store,
@@ -180,7 +183,7 @@ export default {
               // If the requirement type is an item, and anyone needs it
               if (requirement.type == 'item' && this.hideoutNeeded[requirement.id][0] == true) {
                 hideoutItems.push({
-                    name: requirement.name,
+                    itemId: requirement.name,
                     have: this.$store.get('progress/hideout_objective_have', requirement.id),
                     number: requirement.quantity,
                     for: hModule,
@@ -206,7 +209,7 @@ export default {
     				}, this)
     				questItems.push(
 	                {
-	                  name: objective.target,
+                    itemId: objective.target,
 	                  have: this.$store.get('progress/objective_have', objective.id),
 	                  teamHave: teamHave,
 	                  number: objective.number,

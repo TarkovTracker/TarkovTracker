@@ -1,11 +1,13 @@
 import questData from '../tarkovdata/quests.json'
 import hideoutData from '../tarkovdata/hideout.json'
+import itemData from '../tarkovdata/items.en.json'
 
 export default {
   data() {
     return {
       questDataDefault: questData, // Imports the quest data from questData.json
       hideoutDataDefault: hideoutData, // Imports the hideout data from hideoutData.json
+      itemDataDefault: itemData, // Imports the item data from items.en.json
     }
   },
   methods: {
@@ -172,16 +174,21 @@ export default {
     },
 
     calculateUnlockedListRecursive(unlockQuestId) {
-      var unlockSet = new Set()
+      //try {
+        var unlockSet = new Set()
 
-      if (this.$root.questDictionaryId[unlockQuestId].require.quests) {
-        // Get a set of ids of all of the required quests for this, add them together and send them up
-        this.$root.questDictionaryId[unlockQuestId].require.quests.flat().forEach((requiredQuestId) => {
-          unlockSet = new Set([...unlockSet, requiredQuestId, ...this.calculateUnlockedListRecursive(requiredQuestId)])
-        }, this)
-      }
+        if (this.$root.questDictionaryId[unlockQuestId].require.quests) {
+          // Get a set of ids of all of the required quests for this, add them together and send them up
+          this.$root.questDictionaryId[unlockQuestId].require.quests.flat().forEach((requiredQuestId) => {
+            unlockSet = new Set([...unlockSet, requiredQuestId, ...this.calculateUnlockedListRecursive(requiredQuestId)])
+          }, this)
+        }
 
-      return [...unlockSet]
+        return [...unlockSet]
+      //}
+      //catch(err) {
+        //debugger
+      //}
     },
 
     // Calculate the quests needed to be completed before this quest becomes available

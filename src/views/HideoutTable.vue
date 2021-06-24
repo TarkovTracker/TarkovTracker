@@ -14,7 +14,7 @@
           :key="module.id"
           cols="12"
           md="6"
-          lg="3"
+          lg="4"
         >
           <hideout-module
             :module-details="module"
