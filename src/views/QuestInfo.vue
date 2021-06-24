@@ -170,7 +170,7 @@
                     <quest-objective
                       :quest-objective="objective"
                       :quest-interact="false"
-                      :quest-available="myselfQuestAvailable(thisQuest)"
+                      :quest-id="Number(id)"
                     />
                   </div>
                 </v-col>

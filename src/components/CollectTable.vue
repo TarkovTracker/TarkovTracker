@@ -101,39 +101,13 @@
         <v-hover v-slot="{ hover }">
           <span class="font-weight-bold">
             <tarkov-item :id="item.itemId" :fir="item.fir" :externalLinks="true" :linksForce="hover" />
-            <span v-if="item.teamHave && Object.keys(item.teamHave).length > 0">
-              
-              <v-tooltip top>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-icon
-                    small
-                    class="ml-2 icon-align"
-                    v-bind="attrs"
-                    v-on="on"
-                  >
-                    mdi-account-group
-                  </v-icon>
-                </template>
-                <span>
-                  <div
-                    v-for="(amountHave, valueIndex) in Object.values(item.teamHave)"
-                    :key="valueIndex"
-                  >
-                      <teammate-identity
-                        :teammate="$root.team[Object.keys(item.teamHave)[valueIndex]]"
-                        left
-                      /> needs {{ (item.number - amountHave).toLocaleString() }}
-                  </div>
-                </span>
-              </v-tooltip>
-            </span>
           </span>
         </v-hover>
       </template>
 
       <!-- Item Needed Modifications -->
       <template v-slot:item.number="{ item }">
-        <span v-if="item.type === 'quest' ? !$store.get('progress/objective_complete', item.objective) : !$store.get('progress/hideout_objective_complete', item.objective)">
+        <span v-if="item.type === 'quest' ? !$store.get('progress/objective_complete', item.objective) : !$store.get('progress/hideout_objective_complete', item.objective)" class="d-flex justify-center">
           <v-btn-toggle
             background-color="transparent"
             active-class="none"
@@ -168,6 +142,32 @@
             </v-btn>
           </v-btn-toggle>
         </span>
+        <div v-if="item.teamHave && Object.keys(item.teamHave).length > 0" class="d-flex justify-center mt-1">
+              
+              <v-tooltip top>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-icon
+                    small
+                    class="ml-2 icon-align justify-center"
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    mdi-account-group
+                  </v-icon>
+                </template>
+                <span>
+                  <div
+                    v-for="(amountHave, valueIndex) in Object.values(item.teamHave)"
+                    :key="valueIndex"
+                  >
+                      <teammate-identity
+                        :teammate="$root.team[Object.keys(item.teamHave)[valueIndex]]"
+                        left
+                      /> needs {{ (item.number - amountHave).toLocaleString() }}
+                  </div>
+                </span>
+              </v-tooltip>
+            </div>
       </template>
 
       <!-- Item For Modications -->
