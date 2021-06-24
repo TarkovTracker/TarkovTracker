@@ -64,7 +64,7 @@
             small
             @click="editToggleTotalHaveCount(item)"
           >
-            {{ item.have }} / {{ item.number }}
+            {{ item.have.toLocaleString() }} / {{ item.number.toLocaleString() }}
           </v-btn>
         </v-btn-toggle>
       </template>
@@ -122,7 +122,7 @@
                       <teammate-identity
                         :teammate="$root.team[Object.keys(item.teamHave)[valueIndex]]"
                         left
-                      /> needs {{ item.number - amountHave }}
+                      /> needs {{ (item.number - amountHave).toLocaleString() }}
                   </div>
                 </span>
               </v-tooltip>
@@ -154,7 +154,7 @@
               small
               @click="editToggleHaveCount(item)"
             >
-              {{ item.have }} / {{ item.number }}
+              {{ item.have.toLocaleString() }} / {{ item.number.toLocaleString() }}
             </v-btn>
 
             <v-btn
@@ -252,7 +252,7 @@
           ],
         totalsHeaders:
           [
-            { text: 'Item', value: 'name' },
+            { text: 'Item', value: 'name', width: '40%' },
             { text: 'Needed', value: 'number' },
             { text: 'For', value: 'for' },
           ],
@@ -303,7 +303,7 @@
               .map(z => new Object({ quest: z.quest, objective: z.objective })),
             hideout: onlyMine
               .filter(y => y.itemId == x && y.type == 'hideout')
-              .map(z => new Object({ itemId: this.$root.hideoutStationDictionary[z.for.stationId].locales.en, level: z.forLevel, objective: z.objective })),
+              .map(z => new Object({ name: this.$root.hideoutStationDictionary[z.for.stationId].locales.en, level: z.forLevel, objective: z.objective })),
           },
         }))
         return totals

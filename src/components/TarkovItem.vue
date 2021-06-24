@@ -16,7 +16,7 @@
           </v-col>
           
           <v-col align-self="center" justify="start" cols="auto">
-              <span class="align-self-center"><span v-if="count">{{ count }}x </span>{{ name }}
+              <span class="align-self-center"><span v-if="count">{{ count.toLocaleString() }} </span>{{ name }}
                 <v-icon small class="icon-align" v-if="fir" title="Found in Raid status required">
                   mdi-checkbox-marked-circle-outline
                 </v-icon>

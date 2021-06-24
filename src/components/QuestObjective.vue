@@ -59,7 +59,7 @@
       <span v-else-if="questObjective.type === 'collect'">Hand over {{ questObjective.number }} <b> <tarkov-item :id="questObjective.target" format="minimal" /></b></span>
       <span v-else-if="questObjective.type === 'find'">Find in raid {{ questObjective.number }} <b><tarkov-item :id="questObjective.target" format="minimal" /></b></span>
       <span v-else-if="questObjective.type === 'pickup'">Pick-up <b>{{ questObjective.target }}</b> <span v-if="questObjective.hint">({{ questObjective.hint }})</span> on {{ questObjective.location }}</span>
-      <span v-else-if="questObjective.type === 'place'">Place <span v-if="questObjective.number > 1">{{ questObjective.number }}x </span> <b><tarkov-item :id="questObjective.target" format="minimal" /></b> <span v-if="questObjective.hint">({{ questObjective.hint }})</span> on {{ questObjective.location }}
+      <span v-else-if="questObjective.type === 'place'">Place <span v-if="questObjective.number > 1">{{ questObjective.number }} </span> <b><tarkov-item :id="questObjective.target" format="minimal" /></b> <span v-if="questObjective.hint">({{ questObjective.hint }})</span> on {{ questObjective.location }}
       </span>
       <span v-else-if="questObjective.type === 'mark'">Place <b><tarkov-item :id="questObjective.tool" format="minimal" /></b> at <b>{{ questObjective.target }}</b> <span v-if="questObjective.hint">({{ questObjective.hint }})</span> on {{ questObjective.location }}
       </span>

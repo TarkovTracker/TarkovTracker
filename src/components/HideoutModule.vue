@@ -26,10 +26,12 @@
         :class="haveRequirement(requirement)"
       >
         <span v-if="requirement.type === 'module'"><v-icon>mdi-home</v-icon></span>
-        <span v-else-if="requirement.type === 'item'"><v-icon>mdi-basket</v-icon></span>
         <span v-else-if="requirement.type === 'skill'"><v-icon>mdi-run</v-icon></span>
         <span v-else-if="requirement.type === 'currency'"><v-icon>mdi-cash-multiple</v-icon></span>
-        {{ requirement.quantity.toLocaleString() }} <span v-if="requirement.type =='item'"><tarkov-item :id="requirement.name" format="minimal" /></span><span v-else>{{ requirement.name }}</span>
+        <span v-if="requirement.type =='item'">
+          <tarkov-item :id="requirement.name" format="small" :count="requirement.quantity" :externalLinks="true" />
+        </span>
+        <span v-else>{{ requirement.quantity.toLocaleString() }} {{ requirement.name }}</span>
       </div>
     </v-card-text>
     <template v-slot:actions>
