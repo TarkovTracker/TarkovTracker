@@ -2,9 +2,8 @@
   <div id="firebaseui-auth-container" />
 </template>
 <script>
-  import 'firebase/auth'
   import * as firebaseui from 'firebaseui'
-  import fireapp from '@/fireapp.js'
+  import firebase from 'firebase/app'
   export default {
     name: 'FirebaseAuth',
     mounted () {
@@ -40,7 +39,7 @@
         privacyPolicyUrl: 'https://www.termsfeed.com/live/b6d6f7fd-adc4-4717-8a2b-83daf9d8ddb9',
       }
       // Initialize the FirebaseUI Widget using Firebase.
-      var ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(fireapp.auth())
+      var ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(this.$firebase.auth())
       // The start method will wait until the DOM is loaded.
       ui.start('#firebaseui-auth-container', uiConfig)
     },

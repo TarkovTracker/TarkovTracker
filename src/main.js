@@ -12,6 +12,7 @@ import { get as pathGet, sync as pathSync } from 'vuex-pathify'
 import fireapp from './fireapp.js'
 import { db } from './db.js'
 
+
 import trackerGlobalMixin from './trackerGlobalMixin.js'
 import trackerCommonState from './trackerCommonState.js'
 
