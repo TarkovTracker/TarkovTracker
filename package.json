@@ -13,7 +13,8 @@
     "serve:firebase": "firebase emulators:start --export-on-exit=./.firebase-emulator-savedata",
     "serve:vue": "vue-cli-service serve",
     "sitemap": "vue-cli-service sitemap",
-    "watch": "run-p build:watch serve:firebase"
+    "watch": "run-p build:watch serve:firebase browsersync",
+    "browsersync": "sleep 15 && browser-sync start --port 5000 --proxy \"localhost:4999\" --files \"dist/*\""
   },
   "dependencies": {
     "@mdi/font": "^5.9.55",
@@ -43,6 +44,7 @@
     "archiver": "^4.0.1",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.1.0",
+    "browser-sync": "^2.27.1",
     "dotenv": "^8.2.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
