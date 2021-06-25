@@ -34,7 +34,6 @@ const themeLight = {
 const themeDark = {
   ...colorTheme,
   bgdarken: colors.grey.darken4,
-  background: 'var(--v-primary-base)',
   enough: '#001638',
   questlink: colors.grey.lighten4,
   objectivecomplete: '#114200',
