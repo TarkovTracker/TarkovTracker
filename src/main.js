@@ -103,9 +103,9 @@ const vmf = new Vue({
     }
   },
   async created () {
-    const dataHashResponse = await fetch('https://api.github.com/repos/thaddeus/tarkovdata/git/refs')
-    const dataHashData = await dataHashResponse.json()
-    this.$set(this, 'dataHash', dataHashData.filter(x => x.ref == 'refs/heads/master')[0].object.sha)
+    const trackerTreeResponse = await fetch(`https://api.github.com/repos/TarkovTracker/TarkovTracker/git/trees/${ GIT_DESCRIBE.hash }`)
+    const trackerTreeData = await trackerTreeResponse.json()
+    this.$set(this, 'dataHash', trackerTreeData.tree.filter(x => x.path == 'tarkovdata')[0].sha)
   },
   // i18n,
   render: h => h(App),
