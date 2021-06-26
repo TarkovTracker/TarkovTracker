@@ -17,15 +17,18 @@
         href="https://discord.gg/zeAP4Ng"
         target="_blank"
         class="info-link"
-      >discord server.</a> Tracker Version: <a
+      >discord server.</a>
+    </div>
+    <div>
+      Tracker Version: <a
         :href="trackerSourceLink"
         target="_blank"
         class="info-link"
-      >{{ $root.$data.overallVersion }}</a> Data: <a
+      >{{ $root.$data.overallVersion }}</a> ({{ trackerCommitTime | timeSince }}) Data: <a
         :href="tarkovDataLink"
         target="_blank"
         class="info-link"
-      >{{ $root.$data.dataHash.substring(0, 7) }}</a>
+      >{{ $root.$data.dataHash.substring(0, 7) }}</a> ({{ dataCommitTime | timeSince }})
     </div>
     <div>
       <a
@@ -45,8 +48,19 @@
   </v-col>
 </template>
 <script>
+  import moment from 'moment';
   export default {
     name: 'SharedFooter',
+    data () {
+      return {
+        trackerCommitTime: '',
+        dataCommitTime: '',
+      }
+    },
+    mounted () {
+      this.trackerCommitRetrieve()
+      this.dataCommitRetrieve()
+    },
     computed: {
       tarkovDataLink: function () {
         return `https://github.com/TarkovTracker/tarkovdata/tree/${this.$root.$data.dataHash}`
@@ -55,5 +69,22 @@
         return `https://github.com/TarkovTracker/TarkovTracker/tree/${this.$root.$data.overallVersion}`
       },
     },
+    methods: {
+      trackerCommitRetrieve: async function() {
+        const trackerCommitData = await fetch(`https://api.github.com/repos/TarkovTracker/TarkovTracker/commits/${ this.$root.$data.overallVersion }`)
+        const trackerCommitJson = await trackerCommitData.json()
+        this.trackerCommitTime = trackerCommitJson.commit.author.date
+      },
+      dataCommitRetrieve: async function() {
+        const dataCommitData = await fetch(`https://api.github.com/repos/TarkovTracker/tarkovdata/commits/${this.$root.$data.dataHash}`)
+        const dataCommitJson = await dataCommitData.json()
+        this.dataCommitTime = dataCommitJson.commit.author.date
+      }
+    },
+    filters: {
+      timeSince: function (timestamp) {
+        return moment(timestamp).from(Date.now())
+      },
+    }
   }
 </script>
