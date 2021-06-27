@@ -401,11 +401,11 @@
         <material-card
           icon="mdi-api"
           icon-small
-          title="TarkovTracker API"
+          title="TarkovTracker API (BETA)"
           color="secondary"
         >
           <v-card-text>
-            Create access tokens so external tools can utilize your TarkovTracker progress data to provide you richer information. 
+            Create access tokens so external tools can utilize your TarkovTracker progress data to provide you information tailored to your current progress. This feature is currently in BETA.
             <v-container
               class="bgdarken text--primary mt-2"
               fluid
@@ -432,9 +432,7 @@
                       outlined
                       elevation="2"
                       small
-                      v-bind="attrs"
                       @click="copyToClipboard(item.token)"
-                      v-on="on"
                     >
                       <v-icon>mdi-clipboard-file-outline</v-icon>
                     </v-btn>
@@ -511,6 +509,7 @@
                               v-bind="attrs"
                               @click="createToken()"
                               :loading="creatingToken"
+                              :disabled="!tokenCreateEnabled"
                               v-on="on"
                             >
                               <v-icon>mdi-key-plus</v-icon> Create Token
@@ -819,6 +818,9 @@
       streamerLink: function () {
         return this.streamerMode ? 'Hidden for Streamer Mode - Copy via button.' : this.liveShareURL
       },
+      tokenCreateEnabled: function () {
+        return (this.apiTokenNote.length > 0 && this.apiSelectedPermissions.length > 0)
+      },
       darkMode: {
         get () {
           return this.$store.get('app/dark')
@@ -1002,7 +1004,12 @@
         createToken({ note: this.apiTokenNote, permissions: this.apiSelectedPermissions })
           .then((result) => {
             // Read result of the Cloud Function.
+            console.log(result)
             this.creatingToken = false
+            if(!result.data.error) {
+              this.apiTokenNote = ""
+              this.apiSelectedPermissions = []
+            }
           }, this)
       },
       revokeToken (token) {

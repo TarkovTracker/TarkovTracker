@@ -336,10 +336,22 @@ exports.deletedUserCleanup = functions.firestore
       }
 });
 
+// If a token is deleted on its own, make sure its removed from the system document
+exports.deletedTokenCleanup = functions.firestore
+.document('token/{tokenId}')
+.onDelete(async (snap, context) => {
+    const db = admin.firestore();
+    const systemRef = db.collection('system').doc(snap.data().owner);
+    const tokenRef = db.collection('token').doc(context.params.tokenId);
+	await systemRef.set({
+		tokens: admin.firestore.FieldValue.arrayRemove(tokenRef)
+	}, {merge: true});
+});
+
 exports.setUpTTUser = functions.auth.user().onCreate((user) => {
-  const db = admin.firestore();
-  const systemRef = db.collection('system').doc(user.uid);
-  return systemRef.set({
+    const db = admin.firestore();
+    const systemRef = db.collection('system').doc(user.uid);
+    return systemRef.set({
 	  	firstSeen: admin.firestore.FieldValue.serverTimestamp()
-  }, {merge: true})
+    }, {merge: true})
 });
