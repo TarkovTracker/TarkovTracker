@@ -49,6 +49,21 @@ app.use(function (err, req, res, next) {
 })
 
 // GET progress endpoint
+app.get('/api/v1/token', async (req, res) => {
+	if (req.apiToken != null) {
+    	const db = admin.firestore();
+    	const tokenRef = db.collection('token').doc(req.apiToken.token);
+		const tokenDoc = await tokenRef.get();
+		const tokenData = Object.assign({}, tokenDoc.data());
+		delete tokenData.owner
+		delete tokenData.note
+		res.status(200).json(tokenData).send()
+	}else{
+		res.status(401).send()
+	}
+})
+
+// GET progress endpoint
 app.get('/api/v1/progress', async (req, res) => {
 	if (req.apiToken != null && req.apiToken.permissions.includes('GP')) {
     	const db = admin.firestore();
