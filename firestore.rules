@@ -14,6 +14,10 @@ service cloud.firestore {
     match /system/{userId} {
       allow read: if request.auth != null && request.auth.uid == userId;
     }
+
+    match /token/{tokenId} {
+      allow read: if (request.auth != null && request.auth.uid == resource.data.owner);
+    }
     
     match /team/{teamId} {
       allow read: if (memberOfTeam());

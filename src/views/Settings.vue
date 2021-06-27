@@ -152,7 +152,7 @@
                   <v-text-field
                     v-model.lazy="shareName"
                     class="mb-n3"
-                    :label="shareName ? 'Your Username' : 'Choose a Username'"
+                    :label="shareName ? 'Your Display Name' : 'Choose a Display Name'"
                     type="undefined"
                   />
                 </v-col>
@@ -393,6 +393,163 @@
       </v-col>
       <v-col
         class="xs"
+        xl="12"
+        md="12"
+        sm="12"
+        v-if="this.$store.get('app/user_auth@uid')"
+      >
+        <material-card
+          icon="mdi-api"
+          icon-small
+          title="TarkovTracker API"
+          color="secondary"
+        >
+          <v-card-text>
+            Create access tokens so external tools can utilize your TarkovTracker progress data to provide you richer information. 
+            <v-container
+              class="bgdarken text--primary mt-2"
+              fluid
+              v-if="!streamerMode"
+            >
+              <v-data-table
+                dense
+                :headers="tokenHeaders"
+                :items="firesys.tokens"
+                item-key="token"
+                disable-pagination
+                hide-default-footer
+              >
+                <template v-slot:item.permissions="{ item }">
+                    <span class="font-weight-bold" v-for="permission in item.permissions">
+                      {{ availablePermissions[permission].title }}
+                    </span>
+                </template>
+                <template v-slot:item.token="{ item }">
+                    <span class="font-weight-bold">
+                      {{ item.token.substring(0,item.token.length-6).replace(/./g, '*') }}{{ item.token.substring(item.token.length-6) }}
+                    </span>
+                </template>
+                <template v-slot:item.createdAt="{ item }">
+                    <span class="font-weight-bold">
+                      {{ (new Date(item.createdAt.seconds * 1000)) | timeSince(nowTime) }}
+                    </span>
+                </template>
+                <template v-slot:item.actions="{ item }">
+                    <v-btn
+                      outlined
+                      elevation="2"
+                      :loading="revokingToken[item.token]"
+                      small
+                      @click="revokeToken(item.token)"
+                    >
+                      <v-icon>mdi-key-remove</v-icon> Revoke Token
+                    </v-btn>
+                </template>
+              </v-data-table>
+            </v-container>
+            <v-container
+              class="bgdarken text--primary mt-2"
+              fluid
+              v-else
+            >
+              <v-row class="font-weight-bold text-center">
+                  <v-col>
+                    Tokens Hidden for Streamer Mode
+                  </v-col>
+              </v-row>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-container fluid>
+                    <v-row
+                      align="center"
+                    >
+                      <v-col
+                        cols="auto"
+                        class="text-right"
+                      >
+                        <v-tooltip top>
+                          <template v-slot:activator="{ on, attrs }">
+                            <span
+                              v-bind="attrs"
+                              v-on="on"
+                            >
+                              <v-icon dense>mdi-help-circle</v-icon>Note
+                            </span>
+                          </template>
+                          <span>A personal note about what you're using the token for, so that you can easily identify tokens to revoke in the future</span>
+                        </v-tooltip>
+                      </v-col>
+                      <v-col>
+                        <v-text-field
+                          v-model="apiTokenNote"
+                          class="mb-n3"
+                          label=""
+                          placeholder="This token is for..."
+                          color="objectiveenough"
+                          prepend-inner-icon="mdi-notebook"
+                          type="undefined"
+                          dense
+                        />
+                      </v-col>
+                      <v-col cols="auto">
+                        <v-tooltip top>
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-btn
+                              outlined
+                              elevation="2"
+                              v-bind="attrs"
+                              @click="createToken()"
+                              :loading="creatingToken"
+                              v-on="on"
+                            >
+                              <v-icon>mdi-key-plus</v-icon> Create Token
+                            </v-btn>
+                          </template>
+                          <span>Create new API Token</span>
+                        </v-tooltip>
+                      </v-col>
+                    </v-row>
+                    <v-row align="center">
+                      <v-col cols="auto">
+                        <v-tooltip top>
+                          <template v-slot:activator="{ on, attrs }">
+                            <span
+                              v-bind="attrs"
+                              v-on="on"
+                            >
+                              <v-icon dense>mdi-help-circle</v-icon>Permissions
+                            </span>
+                          </template>
+                          <span>The types of data or actions this token can perform on your behalf</span>
+                        </v-tooltip>
+                      </v-col>
+                      <v-col cols="auto" v-for="permission in Object.keys(availablePermissions)">
+                        <v-tooltip top>
+                          <template v-slot:activator="{ on, attrs }">
+                            <span
+                              v-bind="attrs"
+                              v-on="on"
+                            >
+                              <v-checkbox
+                                v-model="apiSelectedPermissions"
+                                :label="availablePermissions[permission].title"
+                                :value="permission"
+                                color="objectiveenough"
+                                dense
+                              ></v-checkbox>
+                            </span>
+                          </template>
+                          <span>{{ availablePermissions[permission].description }}</span>
+                        </v-tooltip>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+          </v-card-actions>
+        </material-card>
+      </v-col>
+      <v-col
+        class="xs"
         xl="4"
         md="6"
         sm="12"
@@ -433,105 +590,6 @@
               class="ml-4"
             />
           </v-card-text>
-        </material-card>
-      </v-col>
-      <v-col
-        class="xs"
-        xl="4"
-        md="6"
-        sm="12"
-        v-if="this.$store.get('app/user_auth@uid')"
-      >
-        <material-card
-          icon="mdi-api"
-          icon-small
-          title="TarkovTracker API"
-          color="info"
-        >
-          <v-card-text>
-            Create access tokens so external tools can utilize your TarkovTracker progress data to provide you richer information.
-            
-          </v-card-text>
-          <v-card-actions>
-            <v-container fluid>
-                    <v-row
-                      align="center"
-                    >
-                      <v-col
-                        cols="auto"
-                        class="text-right"
-                      >
-                        <v-tooltip top>
-                          <template v-slot:activator="{ on, attrs }">
-                            <span
-                              v-bind="attrs"
-                              v-on="on"
-                            >
-                              <v-icon dense>mdi-help-circle</v-icon>Note
-                            </span>
-                          </template>
-                          <span>A personal note about what you're using the token for, so that you can easily identify tokens to revoke in the future</span>
-                        </v-tooltip>
-                      </v-col>
-                      <v-col>
-                        <v-text-field
-                          v-model="apiTokenNote"
-                          class="mb-n3"
-                          label=""
-                          placeholder="This token is for..."
-                          prepend-inner-icon="mdi-notebook"
-                          type="undefined"
-                          dense
-                        />
-                      </v-col>
-                      <v-col cols="auto">
-                        <v-tooltip top>
-                          <template v-slot:activator="{ on, attrs }">
-                            <v-btn
-                              outlined
-                              elevation="2"
-                              small
-                              v-bind="attrs"
-                              @click="copyLiveShareURL()"
-                              v-on="on"
-                            >
-                              <v-icon>mdi-key-plus</v-icon>
-                            </v-btn>
-                          </template>
-                          <span>Create new API Token</span>
-                        </v-tooltip>
-                      </v-col>
-                    </v-row>
-                    <v-row align="center">
-                      <v-col cols="auto">
-                            <v-checkbox
-                              v-model="apiSelectedPermissions"
-                              label="Get Personal Progression"
-                              value="GP"
-                              color="objectiveenough"
-                              class="my-0"
-                              dense
-                            ></v-checkbox>
-                            <v-checkbox
-                              v-model="apiSelectedPermissions"
-                              label="Get Team Progression"
-                              value="GT"
-                              color="objectiveenough"
-                              class="my-0"
-                              dense
-                            ></v-checkbox>
-                            <v-checkbox
-                              v-model="apiSelectedPermissions"
-                              label="Update Personal Progression"
-                              value="UP"
-                              color="objectiveenough"
-                              class="my-0"
-                              dense
-                            ></v-checkbox>
-                      </v-col>
-                    </v-row>
-                  </v-container>
-          </v-card-actions>
         </material-card>
       </v-col>
       <v-col
@@ -659,9 +717,58 @@
         leavingTeam: false,
         joiningTeam: false,
         kickingTeam: {},
+        creatingToken: false,
 
         apiTokenNote: '',
         apiSelectedPermissions: [],
+
+        revokingToken: {},
+
+        availablePermissions: {
+          'GP': {
+            title: 'Get Progression',
+            description: 'Allows access to read your general progression information, including your TarkovTracker display name, quest progress, hideout progress, and virtual team'
+          }
+        },
+
+        tokenHeaders: [
+          {
+            text: 'Note',
+            align: 'start',
+            sortable: false,
+            value: 'note',
+          },
+          {
+            text: 'Permissions',
+            align: 'end',
+            sortable: false,
+            value: 'permissions',
+          },
+          {
+            text: 'Token',
+            align: 'end',
+            sortable: false,
+            value: 'token',
+          },
+          {
+            text: '# Calls',
+            align: 'end',
+            sortable: true,
+            value: 'calls',
+          },
+          {
+            text: 'Created',
+            align: 'end',
+            sortable: true,
+            value: 'createdAt',
+          },
+          {
+            text: 'Actions',
+            align: 'end',
+            sortable: false,
+            value: 'actions',
+          },
+        ],
 
         nowTime: null,
       }
@@ -853,7 +960,6 @@
         createTeam()
           .then((result) => {
             // Read result of the Cloud Function.
-            console.log(result.data)
             this.creatingTeam = false
           }, this)
       },
@@ -875,6 +981,27 @@
           .then((result) => {
             // Reactive change the value
             this.$set(this.kickingTeam, teammate.id, false)
+          })
+      },
+      createToken () {
+        this.creatingToken = true
+        var createToken = this.$firebase.functions().httpsCallable('createToken')
+        createToken({ note: this.apiTokenNote, permissions: this.apiSelectedPermissions })
+          .then((result) => {
+            // Read result of the Cloud Function.
+            this.creatingToken = false
+          }, this)
+      },
+      revokeToken (token) {
+        // Since we're making a new field within the object, we need to make it reactive
+        this.$set(this.revokingToken, token, true)
+        // this.kickingTeam[teammate.id] = true
+        var revokeToken = this.$firebase.functions().httpsCallable('revokeToken')
+        revokeToken({ token: token })
+          .then((result) => {
+            // Reactive change the value
+            console.log(result)
+            this.$set(this.revokingToken, token, false)
           })
       },
       importData () {

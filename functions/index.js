@@ -196,9 +196,89 @@ exports.teamChanged = functions.firestore
       }, this)
 });
 
+exports.createToken = functions.https.onCall( async (data, context) => {
+	const db = admin.firestore();
+
+	if ( data.note == null || !(data.permissions.length > 0)) {
+		return { error: 'Invalid token parameters' }
+	}
+
+  	const systemRef = db.collection('system').doc(context.auth.uid);
+	const systemDoc = await systemRef.get();
+
+	if (systemDoc?.data()?.tokens?.length >= 5) {
+		// We have too many tokens already
+		return { error: 'You have the maximum number of tokens' }
+	}
+
+	// Generate a random token
+	const UIDGenerator = require('uid-generator');
+	const uidgen = new UIDGenerator(128);
+	const token = await uidgen.generate()
+
+	const tokenRef = db.collection('token').doc(token);
+	const tokenDoc = await tokenRef.get();
+	if (tokenDoc.exists) {
+		// Somehow the generator hit an existing Id in 2^128 possibilities
+		return { error: 'Play the lottery' }
+	}else{
+		// Create a token document
+		tokenRef.set({
+			owner: context.auth.uid,
+			note: data.note,
+			permissions: data.permissions,
+			token: token,
+			calls: 0,
+			createdAt: admin.firestore.FieldValue.serverTimestamp()
+		})
+	}
+
+	// Reference the token from our system doc
+	const unionRes = await systemRef.update({
+	  tokens: admin.firestore.FieldValue.arrayUnion(tokenRef)
+	});
+
+	return { token: token }
+});
+
+exports.revokeToken = functions.https.onCall( async (data, context) => {
+	const db = admin.firestore();
+
+	if ( data.token == null) {
+		return { error: 'Invalid token parameters' }
+	}
+
+  	const systemRef = db.collection('system').doc(context.auth.uid);
+	const systemDoc = await systemRef.get();
+	const tokenRef = db.collection('token').doc(data.token);
+	const tokenDoc = await tokenRef.get();
+
+	if (!tokenDoc.exists || tokenDoc.data().owner != context.auth.uid) {
+		// We have too many tokens already
+		return { error: 'This is not one of your tokens' }
+	}else{
+		const tokenRef = db.collection('token').doc(data.token);
+		await systemRef.set({
+		  tokens: admin.firestore.FieldValue.arrayRemove(tokenRef)
+		}, {merge: true});
+		await tokenRef.delete()
+		return { revoked: true }
+	}
+});
+
 exports.deletedUserCleanup = functions.firestore
     .document('system/{userId}')
-    .onDelete((snap, context) => {
+    .onDelete(async (snap, context) => {
+      const db = admin.firestore();
+      if(snap.data().tokens) {
+      	// Create promises to remove each token
+      	var tokenPromises = []
+      	snap.data().tokens.forEach((token) => {
+      		tokenPromises.push(db.collection('token').doc(token).delete())
+      	})
+      	// Await for all the promises to finish
+      	await Promise.all(tokenPromises)
+      }
       if(snap.data().team) {
       	// We had a team value, make sure we aren't in that team any more
       	return snap.data().team.set({
