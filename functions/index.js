@@ -50,6 +50,8 @@ async function verifyAPIAuth(req, res) {
     const tokenRef = db.collection('token').doc(authToken);
 	const tokenDoc = await tokenRef.get();
 	if (tokenDoc.exists) {
+		const callIncrement = admin.firestore.FieldValue.increment(1);
+		tokenRef.update({ calls: callIncrement });
 		return tokenDoc.data()
 	}else{
 		res.status(401).send()

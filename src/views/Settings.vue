@@ -428,6 +428,16 @@
                     <span class="font-weight-bold">
                       {{ item.token.substring(0,item.token.length-6).replace(/./g, '*') }}{{ item.token.substring(item.token.length-6) }}
                     </span>
+                    <v-btn
+                      outlined
+                      elevation="2"
+                      small
+                      v-bind="attrs"
+                      @click="copyToClipboard(item.token)"
+                      v-on="on"
+                    >
+                      <v-icon>mdi-clipboard-file-outline</v-icon>
+                    </v-btn>
                 </template>
                 <template v-slot:item.createdAt="{ item }">
                     <span class="font-weight-bold">
@@ -746,7 +756,7 @@
           },
           {
             text: 'Token',
-            align: 'end',
+            align: 'center',
             sortable: false,
             value: 'token',
           },
@@ -947,6 +957,9 @@
       updateExport () {
         this.dataExport = this.packExport(this.generateExportData())
         navigator.clipboard.writeText(this.dataExport)
+      },
+      copyToClipboard(text) {
+        navigator.clipboard.writeText(text)
       },
       copyShareURL () {
         if (this.shareURL != null && !!this.shareURL) { navigator.clipboard.writeText(this.shareURL) }
