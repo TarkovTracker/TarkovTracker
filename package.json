@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "run-s watch",
+    "serve:persist": "run-s watch:persist",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "deploy": "run-s build deploy:firebase",
@@ -11,9 +12,11 @@
     "build:watch": "vue-cli-service build --mode development --watch --no-clean",
     "deploy:firebase": "firebase deploy",
     "serve:firebase": "firebase emulators:start --export-on-exit=./.firebase-emulator-savedata",
+    "serve:firebase:persist": "firebase emulators:start --export-on-exit=./.firebase-emulator-savedata --import=./.firebase-emulator-savedata",
     "serve:vue": "vue-cli-service serve",
     "sitemap": "vue-cli-service sitemap",
     "watch": "run-p build:watch serve:firebase browsersync",
+    "watch:persist": "run-p build:watch serve:firebase:persist browsersync",
     "browsersync": "sleep 15 && browser-sync start --port 5000 --proxy \"localhost:4999\" --files \"dist/*\""
   },
   "dependencies": {
