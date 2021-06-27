@@ -443,6 +443,105 @@
         v-if="this.$store.get('app/user_auth@uid')"
       >
         <material-card
+          icon="mdi-api"
+          icon-small
+          title="TarkovTracker API"
+          color="info"
+        >
+          <v-card-text>
+            Create access tokens so external tools can utilize your TarkovTracker progress data to provide you richer information.
+            
+          </v-card-text>
+          <v-card-actions>
+            <v-container fluid>
+                    <v-row
+                      align="center"
+                    >
+                      <v-col
+                        cols="auto"
+                        class="text-right"
+                      >
+                        <v-tooltip top>
+                          <template v-slot:activator="{ on, attrs }">
+                            <span
+                              v-bind="attrs"
+                              v-on="on"
+                            >
+                              <v-icon dense>mdi-help-circle</v-icon>Note
+                            </span>
+                          </template>
+                          <span>A personal note about what you're using the token for, so that you can easily identify tokens to revoke in the future</span>
+                        </v-tooltip>
+                      </v-col>
+                      <v-col>
+                        <v-text-field
+                          v-model="apiTokenNote"
+                          class="mb-n3"
+                          label=""
+                          placeholder="This token is for..."
+                          prepend-inner-icon="mdi-notebook"
+                          type="undefined"
+                          dense
+                        />
+                      </v-col>
+                      <v-col cols="auto">
+                        <v-tooltip top>
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-btn
+                              outlined
+                              elevation="2"
+                              small
+                              v-bind="attrs"
+                              @click="copyLiveShareURL()"
+                              v-on="on"
+                            >
+                              <v-icon>mdi-key-plus</v-icon>
+                            </v-btn>
+                          </template>
+                          <span>Create new API Token</span>
+                        </v-tooltip>
+                      </v-col>
+                    </v-row>
+                    <v-row align="center">
+                      <v-col cols="auto">
+                            <v-checkbox
+                              v-model="apiSelectedPermissions"
+                              label="Get Personal Progression"
+                              value="GP"
+                              color="objectiveenough"
+                              class="my-0"
+                              dense
+                            ></v-checkbox>
+                            <v-checkbox
+                              v-model="apiSelectedPermissions"
+                              label="Get Team Progression"
+                              value="GT"
+                              color="objectiveenough"
+                              class="my-0"
+                              dense
+                            ></v-checkbox>
+                            <v-checkbox
+                              v-model="apiSelectedPermissions"
+                              label="Update Personal Progression"
+                              value="UP"
+                              color="objectiveenough"
+                              class="my-0"
+                              dense
+                            ></v-checkbox>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+          </v-card-actions>
+        </material-card>
+      </v-col>
+      <v-col
+        class="xs"
+        xl="4"
+        md="6"
+        sm="12"
+        v-if="this.$store.get('app/user_auth@uid')"
+      >
+        <material-card
           icon="mdi-account-remove"
           icon-small
           title="Delete Account"
@@ -560,6 +659,9 @@
         leavingTeam: false,
         joiningTeam: false,
         kickingTeam: {},
+
+        apiTokenNote: '',
+        apiSelectedPermissions: [],
 
         nowTime: null,
       }
