@@ -11,6 +11,51 @@ const admin = require("firebase-admin");
 
 admin.initializeApp(functions.config().firebase);
 
+exports.progressAPI = functions.https.onRequest(async (req, res) => {
+	const cors = require('cors')({origin: true});
+	cors(req, res, async () => {
+        // Run all of our authentication & authorization checks
+		const authToken = await verifyAPIAuth(req, res)
+		if (authToken != null && req.method == 'GET' && authToken.permissions.includes('GP')) {
+        	const db = admin.firestore();
+        	const progressRef = db.collection('progress').doc(authToken.owner);
+			const progressDoc = await progressRef.get();
+			res.status(200).json(progressDoc.data()).send()
+		}else{
+			res.status(401).send()
+		}
+    })
+});
+
+async function verifyAPIAuth(req, res) {
+	const db = admin.firestore();
+
+    const authHeader = req.get('Authorization')
+
+    // If no auth, 401
+    if (authHeader == null) {
+    	res.status(401).send()
+    	return null
+    }
+
+    // If auth broken, 400
+    if (authHeader.split(' ')[1] == null) {
+    	res.status(400).send()
+    	return null
+    }else{
+    	var authToken = authHeader.split(' ')[1]
+    }
+
+    // Check if token is valid
+    const tokenRef = db.collection('token').doc(authToken);
+	const tokenDoc = await tokenRef.get();
+	if (tokenDoc.exists) {
+		return tokenDoc.data()
+	}else{
+		res.status(401).send()
+		return null
+	}
+}
 
 async function userLeaveTeam(userId) {
 	const db = admin.firestore();
