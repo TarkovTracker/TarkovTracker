@@ -4,6 +4,7 @@ import { make } from 'vuex-pathify'
 // Data
 const state = {
   team: null,
+  tokens: null
 }
 
 const mutations = {

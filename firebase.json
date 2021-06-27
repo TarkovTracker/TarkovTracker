@@ -28,6 +28,10 @@
     ],
     "rewrites": [
       {
+        "source": "/api/v1/progress",
+        "function": "progressAPI"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }
