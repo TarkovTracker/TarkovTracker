@@ -16,8 +16,13 @@ First time setup can be done by running the following:
 3) `git submodule update` pulls the pinned commit for the submodule (required)
 4) `npm install` inside the repository to install all the dependencies
 
+If you work on anything that utilizes the Firebase Cloud Functions, you will also need to run `npm install` inside the `functions` folder.
+
 Now you can run the project locally!
 
 ### Running local environment for testing/development
-`npm run serve`
+`npm run serve` results in `localhost:5000` for Web APP, and `localhost:4000` for emulator UI
+
+You can modify the serve command and run as `npm run serve:persist` to keep Firebase emulator data across multiple sessions of the emulator. Otherwise, the firestore database and authentication will be reset each emulator session.
+
 Access the local environment at http://localhost:5000 by default. This project is built to be hosted via Google Firebase. The Firebase Emulator will be installed via npm when setting up the project. Included is a hosting, database, authentication, and function emulator. The emulator console is available at http://localhost:4000 by default. These resources cost money to run on the production version of TarkovTracker. Thankfully to Patrons, this is covered, and isn't a blocker to new features utilizing them, but please be aware of the scale of potential resource use of new features!
