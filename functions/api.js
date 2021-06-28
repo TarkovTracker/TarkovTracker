@@ -83,21 +83,26 @@ app.get('/api/v1/team/progress', async (req, res) => {
     	const systemRef = db.collection('system').doc(req.apiToken.owner);
 		const systemDoc = await systemRef.get();
 
-		// Get the requestee's team doc
-		const teamRef = systemDoc.data().team;
-		const teamDoc = await teamRef.get();
-
 		const requesteeProgressRef = db.collection('progress').doc(req.apiToken.owner);
 
 		// Create an array to store all the team's progress data
 		var team = []
 
-		// Get copies of your team's progress
-		teamDoc.data().members.forEach((member) => {
-			// Get each member's progress document as a promise
-			const memberProgressRef = db.collection('progress').doc(member);
-			team.push(memberProgressRef.get())
-		})
+		// We aren't currently in a team
+		if (systemDoc.data().team == null) {
+			team.push(requesteeProgressRef.get())
+		}else{
+			// Get the requestee's team doc
+			const teamRef = systemDoc.data().team;
+			const teamDoc = await teamRef.get();
+
+			// Get copies of your team's progress
+			teamDoc.data().members.forEach((member) => {
+				// Get each member's progress document as a promise
+				const memberProgressRef = db.collection('progress').doc(member);
+				team.push(memberProgressRef.get())
+			})
+		}
 
 		// Wait for all the promises to finish
 		var teamResponse = []
