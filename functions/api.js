@@ -69,7 +69,7 @@ app.get('/api/v1/progress', async (req, res) => {
     	const db = admin.firestore();
     	const progressRef = db.collection('progress').doc(req.apiToken.owner);
 		const progressDoc = await progressRef.get();
-		res.status(200).json(progressDoc.data()).send()
+		res.status(200).json({...progressDoc.data(), self: true}).send()
 	}else{
 		res.status(401).send()
 	}
