@@ -414,7 +414,7 @@
               <v-data-table
                 dense
                 :headers="tokenHeaders"
-                :items="firesys.tokens"
+                :items="firesys ? firesys.tokens : [] || []"
                 item-key="token"
                 disable-pagination
                 hide-default-footer
