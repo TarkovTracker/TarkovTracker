@@ -49,18 +49,6 @@ const vm = new Vue({
     // Set the theme to the user's choice
     this.$vuetify.theme.dark = this.$store.get('app/dark')
 
-    if (this.$store.copy('progress/dataVersion') === 0) {
-      // We need to run migrations
-      this.$store.set(
-        'progress/migrations!',
-        {
-          questData: JSON.parse(localStorage.getItem('tarkovProgress')),
-          hideoutData: JSON.parse(localStorage.getItem('tarkovHideoutProgress')),
-        },
-      )
-      localStorage.removeItem('tarkovProgress')
-      localStorage.removeItem('tarkovHideoutProgress')
-    }
   },
   async created () {
     const trackerTreeResponse = await fetch(`https://api.github.com/repos/TarkovTracker/TarkovTracker/git/trees/${ GIT_DESCRIBE.hash }`)

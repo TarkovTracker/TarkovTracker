@@ -8,7 +8,7 @@ const getDefaultState = () => {
     hideout: {},
     hideoutObjectives: {},
     shareName: null,
-    dataVersion: 0,
+    dataVersion: 1,
   }
 }
 
