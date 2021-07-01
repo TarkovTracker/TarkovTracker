@@ -64,7 +64,7 @@
             small
             @click="editToggleTotalHaveCount(item)"
           >
-            {{ item.have.toLocaleString() }} / {{ item.number.toLocaleString() }}
+            {{ item.have.toLocaleString() || 0 }} / {{ item.number.toLocaleString() || 0 }}
           </v-btn>
         </v-btn-toggle>
       </template>
@@ -128,7 +128,7 @@
               small
               @click="editToggleHaveCount(item)"
             >
-              {{ item.have.toLocaleString() }} / {{ item.number.toLocaleString() }}
+              {{ item.have.toLocaleString() || 0 }} / {{ item.number.toLocaleString() || 0 }}
             </v-btn>
 
             <v-btn
@@ -163,7 +163,7 @@
                       <teammate-identity
                         :teammate="$root.team[Object.keys(item.teamHave)[valueIndex]]"
                         left
-                      /> needs {{ (item.number - amountHave).toLocaleString() }}
+                      /> needs {{ (item.number - amountHave).toLocaleString() || 0 }}
                   </div>
                 </span>
               </v-tooltip>
