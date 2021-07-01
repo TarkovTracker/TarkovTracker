@@ -64,7 +64,7 @@
             small
             @click="editToggleTotalHaveCount(item)"
           >
-            {{ item.have.toLocaleString() || 0 }} / {{ item.number.toLocaleString() || 0 }}
+            {{ item.have ? item.have.toLocaleString() : 0 }} / {{ item.have ? item.number.toLocaleString() : 0 }}
           </v-btn>
         </v-btn-toggle>
       </template>
@@ -128,7 +128,7 @@
               small
               @click="editToggleHaveCount(item)"
             >
-              {{ item.have.toLocaleString() || 0 }} / {{ item.number.toLocaleString() || 0 }}
+              {{ item.have ? item.have.toLocaleString() : 0 }} / {{ item.number ? item.number.toLocaleString() : 0 }}
             </v-btn>
 
             <v-btn
