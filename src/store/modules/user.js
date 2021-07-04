@@ -7,6 +7,7 @@ const getDefaultState = () => {
     hideObtained: false,
     neededTotals: false,
   	teammates: {},
+    hideTeammates: [],
   	useTeammates: false,
     useTeamObjectives: false,
     streamerMode: false,

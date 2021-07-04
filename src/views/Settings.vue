@@ -32,7 +32,7 @@
                   Quests:
                 </v-col>
                 <v-col cols="2">
-                  TarkovTracker:
+                  Hide:
                 </v-col>
                 <v-col cols="3">
                   Remove
@@ -61,7 +61,22 @@
                   </span>
                 </v-col>
                 <v-col cols="2">
-                  {{ teammate.version.major || $root.$data.overallVersion }} {{ teammate.version.data.substring(0, 7) }}
+                  <span v-if="teammate.dynamic == true && inLiveTeam && index != 0">
+                    <v-switch
+                      dense
+                      class="mt-0 pt-0"
+                      color="objectiveenough"
+                      v-model="hiddenTeammates"
+                      :value="teammate.id"
+                      :label="hiddenTeammates.includes(teammate.id) ? 'Hide' : 'Show'"
+                    ></v-switch>
+                  </span>
+                  <span v-else-if="index == 0">
+                    ---
+                  </span>
+                  <span v-else>
+                    Cannot hide static teammates
+                  </span>
                 </v-col>
                 <v-col cols="3">
                   <span v-if="teammate.dynamic == true && inLiveTeam">
@@ -869,6 +884,14 @@
       firesys: {
         get () {
           return this.$store.copy('firesys')
+        },
+      },
+      hiddenTeammates: {
+        get () {
+          return this.$store.copy('user/hideTeammates')
+        },
+        set (value) {
+          this.$store.set('user/hideTeammates', value)
         },
       },
     },
