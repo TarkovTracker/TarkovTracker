@@ -81,7 +81,7 @@ export default {
                 id: userId,
                 store: makeTeamStore(),
                 exportTime: Date.now(),
-                hide: hideTeammates.includes(userId),
+                hide: hideTeammates ? hideTeammates.includes(userId) : false,
                 version: {
                   major: this.$root.$data.overallVersion,
                   data: this.$root.$data.dataHash,
