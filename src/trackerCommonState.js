@@ -73,6 +73,7 @@ export default {
       if (this.$store.copy('app/get_user_auth_uid')) {
         var fireSys = this.$store.copy('firesys')
         if (fireSys && fireSys.team && fireSys.team.members) {
+          var hideTeammates = this.$store.get('user/hideTeammates') || []
           fireSys.team.members.forEach((userId) => {
             if (userId != this.$store.copy('app/get_user_auth_uid')) {
               var dynamicTeammate = {
@@ -80,6 +81,7 @@ export default {
                 id: userId,
                 store: makeTeamStore(),
                 exportTime: Date.now(),
+                hide: hideTeammates ? hideTeammates.includes(userId) : false,
                 version: {
                   major: this.$root.$data.overallVersion,
                   data: this.$root.$data.dataHash,
@@ -116,7 +118,10 @@ export default {
       this.questArray.forEach((quest) => {
         questAvailability[quest.id] = {}
         this.team.forEach((member, teamIndex) => {
-          questAvailability[quest.id][teamIndex] = this.isQuestAvailable(quest, member.store)
+          // If were not a hidden teammate, and were not a teammate with teammates off
+          if (!member.hide && !(!member.self && this.$store.copy('user/useTeammates') == false)) {
+            questAvailability[quest.id][teamIndex] = this.isQuestAvailable(quest, member.store)
+          }
         }, this)
       }, this)
 
@@ -128,7 +133,10 @@ export default {
       this.objectiveArray.forEach((objective) => {
         objectiveAvailability[objective.id] = {}
         this.team.forEach((member, teamIndex) => {
-          objectiveAvailability[objective.id][teamIndex] = member.store.copy('progress/objective_complete', objective.id)
+          // If were not a hidden teammate, and were not a teammate with teammates off
+          if (!member.hide && !(!member.self && this.$store.copy('user/useTeammates') == false)) {
+            objectiveAvailability[objective.id][teamIndex] = member.store.copy('progress/objective_complete', objective.id)
+          }
         }, this)
       }, this)
 
@@ -166,7 +174,8 @@ export default {
           hModule.require.forEach((requirement) => {
             hideoutNeeded[requirement.id] = {}
             	this.team.forEach((member, teamIndex) => {
-            		if(member.self || member.dynamic) {
+                // If our own objectives, or a dynamic teammate that isn't hidden and showing team is on
+            		if ((member.self || member.dynamic) && !(!member.self && this.$store.copy('user/useTeammates') == false)) {
             			hideoutNeeded[requirement.id][teamIndex] = (member.store.copy('progress/hideout_objective_complete', requirement.id) == false)
             		}
 		        }, this)

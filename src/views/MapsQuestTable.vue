@@ -184,7 +184,7 @@
       available_quests: function () {
         var available_quests = []
         var useTeammates = this.$store.copy('user/useTeammates') || false
-        var extraTeammates = Object.values(this.$root.team).slice(1)
+        var extraTeammates = Object.values(this.$root.team).slice(1).filter(teammate => !teammate.hide)
         var questProgress = this.$store
         // Get the default quest list by value instead of reference
         var tempQuests = this.$root.questArrayCopy()
