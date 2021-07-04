@@ -73,7 +73,7 @@ export default {
       if (this.$store.copy('app/get_user_auth_uid')) {
         var fireSys = this.$store.copy('firesys')
         if (fireSys && fireSys.team && fireSys.team.members) {
-          var hideTeammates = this.$store.get('user/hideTeammates')
+          var hideTeammates = this.$store.get('user/hideTeammates') || []
           fireSys.team.members.forEach((userId) => {
             if (userId != this.$store.copy('app/get_user_auth_uid')) {
               var dynamicTeammate = {
