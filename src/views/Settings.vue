@@ -888,7 +888,7 @@
       },
       hiddenTeammates: {
         get () {
-          return this.$store.copy('user/hideTeammates')
+          return this.$store.copy('user/hideTeammates') || []
         },
         set (value) {
           this.$store.set('user/hideTeammates', value)
