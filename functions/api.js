@@ -9,7 +9,7 @@ app.use(cors({ origin: true }));
 
 // Middleware for checking validity and access of tokens
 const verifyBearer = async (req, res, next) => {
-  	const db = admin.firestore();
+  const db = admin.firestore();
 
 	const authHeader = req.get('Authorization')
 
@@ -51,8 +51,8 @@ app.use(function (err, req, res, next) {
 // GET progress endpoint
 app.get('/api/v1/token', async (req, res) => {
 	if (req.apiToken != null) {
-    	const db = admin.firestore();
-    	const tokenRef = db.collection('token').doc(req.apiToken.token);
+    const db = admin.firestore();
+    const tokenRef = db.collection('token').doc(req.apiToken.token);
 		const tokenDoc = await tokenRef.get();
 		const tokenData = Object.assign({}, tokenDoc.data());
 		delete tokenData.owner
@@ -66,10 +66,10 @@ app.get('/api/v1/token', async (req, res) => {
 // GET progress endpoint
 app.get('/api/v1/progress', async (req, res) => {
 	if (req.apiToken != null && req.apiToken.permissions.includes('GP')) {
-    	const db = admin.firestore();
-    	const progressRef = db.collection('progress').doc(req.apiToken.owner);
+    const db = admin.firestore();
+    const progressRef = db.collection('progress').doc(req.apiToken.owner);
 		const progressDoc = await progressRef.get();
-		res.status(200).json({...progressDoc.data(), self: true}).send()
+		res.status(200).json({...progressDoc.data(), self: true, hide: false}).send()
 	}else{
 		res.status(401).send()
 	}
@@ -78,10 +78,25 @@ app.get('/api/v1/progress', async (req, res) => {
 // GET team progress endpoint
 app.get('/api/v1/team/progress', async (req, res) => {
 	if (req.apiToken != null && req.apiToken.permissions.includes('TP')) {
-    	const db = admin.firestore();
-    	// Get the requestee's system doc
-    	const systemRef = db.collection('system').doc(req.apiToken.owner);
-		const systemDoc = await systemRef.get();
+    const db = admin.firestore();
+
+    // Get the requestee's meta documents
+    const systemRef = db.collection('system').doc(req.apiToken.owner);
+    const userRef = db.collection('user').doc(req.apiToken.owner);
+
+    var systemDoc = null;
+    var userDoc = null;
+
+    var systemPromise = systemRef.get().then((result) => {
+    	systemDoc = result
+    })
+
+    var userPromise = userRef.get().then((result) => {
+    	userDoc = result
+    })
+
+		// Get the system and user doc simultaneously
+		await Promise.all([systemPromise, userPromise])
 
 		const requesteeProgressRef = db.collection('progress').doc(req.apiToken.owner);
 
@@ -104,11 +119,18 @@ app.get('/api/v1/team/progress', async (req, res) => {
 			})
 		}
 
+		const hideTeammates = userDoc.data()?.hideTeammates || []
+
 		// Wait for all the promises to finish
 		var teamResponse = []
+
 		await Promise.all(team).then((members) => {
 			members.forEach((member) => {
-				teamResponse.push({...member.data(), self: member.ref.isEqual(requesteeProgressRef) ? true : undefined })
+				teamResponse.push({
+					...member.data(), 
+					hide: hideTeammates.includes(member.id), 
+					self: member.ref.isEqual(requesteeProgressRef) ? true : undefined
+				})
 			})
 		})
 
