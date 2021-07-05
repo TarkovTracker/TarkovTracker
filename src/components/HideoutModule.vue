@@ -11,7 +11,7 @@
     <template v-slot:title>
       {{ moduleDetails.module }}
       <span class="module-level">
-        Level {{ moduleDetails.level }}
+        {{ $t('level') }} {{ moduleDetails.level }}
       </span>
     </template>
 
@@ -41,14 +41,14 @@
           class="warning"
           small
           @click="clickCompleteModule(moduleDetails)"
-        >Build</v-btn>
+        >{{ $t('build') }}</v-btn>
       </span>
       <span v-else-if="pageType === 'current'">
         <v-btn
           class="error"
           small
           @click="clickUncompleteModule(moduleDetails)"
-        >Downgrade</v-btn>
+        >{{ $t('downgrade') }}</v-btn>
       </span>
     </template>
   </material-card>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <span v-show="currentHint != ''">
-      Hint: {{ currentHint }}
+      {{ $t('hint') }}: {{ currentHint }}
     </span>
   </div>
 </template>
@@ -13,23 +13,23 @@
       return {
         currentHint: '',
         hintList: [
-          "Skip to your current quests in the Trader's locked tabs",
-          'Use the Maps page to plan multiple quest objectives at once',
-          'Choose what items to keep or sell with the Needed Items page',
-          'Use the locked behind quest count to help prioritize long quest chains',
-          'Check the skills page to see what you need to be working on in raids',
-          'We all have bad days of Tarkov. Take a break, sleep it off.',
-          'Learn Jaeger stash locations to help fund your progression',
-          'Scav Case is a great source of Kappa items',
-          'Hideout produced items count as Found In Raid (FIR)',
-          'Using headphones (in-game, and irl) makes a world of difference',
-          'Some barter trades can get you useful gear pieces under market price',
-          'Good ammo is usually worth the investment',
-          'You can click an objective of a quest to mark it complete',
-          'Learn & customize the advanced controls for Tarkov',
-          'Playing with others can help make the game less brutal',
-          "Save weapon parts you like even if you don't keep the weapon",
-          'You can submit feature requests on the TarkovTracker discord',
+          this.$t('hints.skip_to_your_current_quests'),
+          this.$t('hints.use_the_maps_page'),
+          this.$t('hints.choose_what_items_to_keep_or_sell'),
+          this.$t('hints.use_the_locked_behind_quest_count'),
+          this.$t('hints.check_the_skills_page'),
+          this.$t('hints.we_all_have_bad_days'),
+          this.$t('hints.learn_jaeger_stash_locations'),
+          this.$t('hints.scav_case_is_a_great_source'),
+          this.$t('hints.hideout_produced_items_count'),
+          this.$t('hints.using_headphones_makes_a_difference'),
+          this.$t('hints.some_barter_under_market_price'),
+          this.$t('hints.good_ammo'),
+          this.$t('hints.click_an_objective_of_a_quest'),
+          this.$t('hints.advanced_controls'),
+          this.$t('hints.playing_with_others'),
+          this.$t('hints.save_weapon_parts'),
+          this.$t('hints.submit_feature_requests'),
         ],
       }
     },

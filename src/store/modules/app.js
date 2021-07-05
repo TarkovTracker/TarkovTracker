@@ -7,6 +7,7 @@ const state = {
   mini: false,
   drawer: null,
   user_auth: null,
+  locale: 'en'
 }
 
 const mutations = {

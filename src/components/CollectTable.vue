@@ -5,7 +5,7 @@
         <v-text-field
           v-model="filterString"
           append-icon="mdi-magnify"
-          label="Filter by item, quest, trader, or hideout module"
+          :label="$t('filter_by_label')"
           single-line
           hide-details
           tabindex="1"
@@ -15,14 +15,14 @@
       <v-col cols="2">
         <v-switch
           v-model="hideObtained"
-          :label="`${hideObtained ? 'Hide Obtained' : 'Show Obtained'}`"
+          :label="`${hideObtained ? $t('hide_obtained') : $t('show_obtained')}`"
           class="ml-1"
         />
       </v-col>
       <v-col cols="2">
         <v-switch
           v-model="neededTotals"
-          :label="`${neededTotals ? 'Show Totals' : 'Show Details'}`"
+          :label="`${neededTotals ? $t('show_totals') : $t('show_details')}`"
           class="ml-1"
         />
       </v-col>
@@ -77,7 +77,7 @@
         <span v-for="(hideoutModule, index) in item.for.hideout">
           {{ hideoutModule.name }}
           <span class="font-weight-bold">
-            Level {{ hideoutModule.level }}
+            {{ $t('level') }} {{ hideoutModule.level }}
           </span>
         </span>
       </template>
@@ -163,7 +163,7 @@
                       <teammate-identity
                         :teammate="$root.team[Object.keys(item.teamHave)[valueIndex]]"
                         left
-                      /> needs {{ (item.number - amountHave).toLocaleString() || 0 }}
+                      /> {{ $t('needs') }} {{ (item.number - amountHave).toLocaleString() || 0 }}
                   </div>
                 </span>
               </v-tooltip>
@@ -188,7 +188,7 @@
             <v-icon small class="icon-align">
               mdi-lock-open
             </v-icon>
-            {{ item.unlocked }} before
+            {{ item.unlocked }} {{ $t('before') }}
           </span>
           <span v-if="item.nokappa">
             <v-chip
@@ -196,7 +196,7 @@
               x-small
               color="error"
             >
-              NOT KAPPA
+              {{ $t('not_kappa') }}
             </v-chip>
           </span>
           <span v-if="'alternative' in item.quest">
@@ -209,11 +209,11 @@
                   v-bind="attrs"
                   v-on="on"
                 >
-                  ALTERNATIVES
+                  {{ $t('alternatives') }}
                 </v-chip>
               </template>
               <span>
-                Complete one of:
+                {{ $t('complete_one_of') }}:
                 <div
                   v-for="(quest, index) in calculateAlternatives(item.quest)"
                   :key="index"
@@ -246,15 +246,15 @@
         filterString: '',
         detailsHeaders:
           [
-            { text: 'Item', value: 'name' },
-            { text: 'Needed', value: 'number' },
-            { text: 'For', value: 'unlocked' },
+            { text: this.$t('item'), value: 'name' },
+            { text: this.$t('needed'), value: 'number' },
+            { text: this.$t('for'), value: 'unlocked' },
           ],
         totalsHeaders:
           [
-            { text: 'Item', value: 'name', width: '40%' },
-            { text: 'Needed', value: 'number' },
-            { text: 'For', value: 'for' },
+            { text: this.$t('item'), value: 'name', width: '40%' },
+            { text: this.$t('needed'), value: 'number' },
+            { text: this.$t('for'), value: 'for' },
           ],
       }
     },

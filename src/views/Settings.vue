@@ -600,6 +600,28 @@
         sm="12"
       >
         <material-card
+          icon="mdi-translate"
+          icon-small
+          title="Language"
+          color="info"
+        >
+          <v-card-text>
+            <v-select
+              :items="locales"
+              v-model="locale"
+              label="Select language"
+              class="ml-4"
+            />
+          </v-card-text>
+        </material-card>
+      </v-col>
+      <v-col
+        class="xs"
+        xl="4"
+        md="6"
+        sm="12"
+      >
+        <material-card
           icon="mdi-eye"
           icon-small
           title="Streamer Mode"
@@ -799,6 +821,11 @@
         ],
 
         nowTime: null,
+
+        locales: [
+          {text: 'English', value: 'en'},
+          {text: 'Test', value: 'test'}
+        ]
       }
     },
     computed: {
@@ -847,6 +874,15 @@
         set (value) {
           this.$vuetify.theme.dark = value
           return this.$store.set('app/dark', value)
+        },
+      },
+      locale: {
+        get () {
+          return this.$store.get('app/locale')
+        },
+        set (value) {
+          this.$root.$i18n.locale = value;
+          return this.$store.set('app/locale', value)
         },
       },
       shareName: {
