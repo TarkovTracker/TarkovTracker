@@ -20,7 +20,7 @@
               v-on="on"
             >done</v-icon>
           </template>
-          <span>Complete Objective</span>
+          <span>{{ $t('complete_objective') }}</span>
         </v-tooltip>
       </span>
       <span v-else-if="questInteract && $root.questAvailability[questId][0] == 0 && hoverIndex === questObjective && questObjective.completed === true">
@@ -33,7 +33,7 @@
               v-on="on"
             >clear</v-icon>
           </template>
-          <span>Uncomplete Objective</span>
+          <span>{{ $t('uncomplete_objective') }}</span>
         </v-tooltip>
       </span>
       <span v-else>
@@ -47,13 +47,13 @@
         <b v-for="(specificKey, keyIndex) in questObjective.target">
           <tarkov-item :id="specificKey" format="minimal" />
           <span v-if="keyIndex < questObjective.target.length - 1"> OR </span>
-        </b> needed on {{ questObjective.location }}
+        </b> {{ $t('needed_on') }} {{ questObjective.location }}
       </span>
       <!-- Handle standard key situation -->
       <span v-else-if="questObjective.type === 'key'">
         <b>
           <tarkov-item :id="questObjective.target" format="minimal" />
-        </b> needed on {{ questObjective.location }}
+        </b> {{ $t('needed_on') }} {{ questObjective.location }}
       </span>
       <span v-else-if="questObjective.type === 'kill'">Eliminate {{ questObjective.number }} {{ questObjective.target }} <span v-if="questObjective.location != 'Any'">on {{ questObjective.location }}</span><span v-if="questObjective.with"> with <b>{{ questObjective.with.join(", ") }}</b></span></span>
       <span v-else-if="questObjective.type === 'collect'">Hand over {{ questObjective.number }} <b> <tarkov-item :id="questObjective.target" format="minimal" /></b></span>

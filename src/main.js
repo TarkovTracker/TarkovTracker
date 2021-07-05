@@ -12,13 +12,26 @@ import { get as pathGet, sync as pathSync } from 'vuex-pathify'
 import fireapp from './fireapp.js'
 import { db } from './db.js'
 
-
 import trackerGlobalMixin from './trackerGlobalMixin.js'
 import trackerCommonState from './trackerCommonState.js'
 
 // Add firebase app to vue
 Vue.prototype.$firebase = fireapp
 Vue.prototype.$analytics = fireapp.analytics()
+
+// Localisation framework
+import VueI18n from 'vue-i18n'
+Vue.use(VueI18n)
+
+import { languages } from './lang/index.js'
+import { defaultLocale } from './lang/index.js'
+const messages = Object.assign(languages)
+
+const i18n = new VueI18n({
+  locale: defaultLocale, // set locale
+  messages,     // translation dictionary
+  fallbackLocale: defaultLocale
+})
 
 Vue.config.productionTip = false
 
@@ -35,6 +48,7 @@ Vue.mixin(trackerGlobalMixin)
 sync(localstore, router)
 
 const vm = new Vue({
+  i18n,
   router,
   vuetify,
   store: localstore,
@@ -67,6 +81,7 @@ const vm = new Vue({
 })
 
 const vmf = new Vue({
+  i18n,
   router,
   vuetify,
   data: {
