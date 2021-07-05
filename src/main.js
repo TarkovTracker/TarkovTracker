@@ -62,7 +62,8 @@ const vm = new Vue({
   mounted () {
     // Set the theme to the user's choice
     this.$vuetify.theme.dark = this.$store.get('app/dark')
-
+    // Set selected locale (language)
+    this.$i18n.locale = this.$store.get('app/locale')
     // Allow iframe use of the site, but make sure they dont keep drawer hidden
     if (window.self == window.top) {
       this.$store.set('app/drawer', true)
