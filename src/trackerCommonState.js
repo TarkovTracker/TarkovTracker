@@ -173,10 +173,19 @@ export default {
       Object.keys(this.questsByMap).forEach((map) => {
         mapAvailability[map] = 0
         this.questsByMap[map].forEach((questId) => {
-          if (Object.values(this.questAvailability[questId]).some(availability => availability === 0)) {
+          if (Object.values(this.questAvailability[questId]).some(availability => availability === 0)
+            && this.isQuestMapSpecific(this.questDictionaryId[questId], map)) {
             mapAvailability[map] += 1
           }
         }, this)
+      }, this)
+
+      mapAvailability['global'] = 0
+      this.questArrayCopy().forEach((quest) => {
+        if (Object.values(this.questAvailability[quest.id]).some(person => person == 0) && this.isQuestOnMap(quest) != false && !this.isQuestMapSpecific(quest)) {
+          console.log(quest.id)
+          mapAvailability['global'] += 1
+        }
       }, this)
       return mapAvailability
     },

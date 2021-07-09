@@ -282,11 +282,13 @@ export default {
       }
     },
     // Determine if there are any map specific objectives for this quest
-    isQuestMapSpecific(quest) {
+    isQuestMapSpecific(quest, mapName = false) {
       var match = false
       if ('objectives' in quest && quest.objectives.length > 0) {
         quest.objectives.forEach((objective) => {
-          if (objective.location.toLowerCase() != 'any') {
+          if (mapName != false && objective.location.toLowerCase() == mapName.toLowerCase()) {
+            match = true
+          }else if (objective.location.toLowerCase() != 'any') {
             match = true
           }
         }, this)

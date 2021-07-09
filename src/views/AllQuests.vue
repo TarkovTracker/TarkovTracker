@@ -108,7 +108,13 @@
                 <v-icon class="mr-2">
                   mdi-compass
                 </v-icon>
+                <v-badge
+                  :value="activeAvailableTab == 0 && $root.mapAvailability[map.toLowerCase()] >= 1"
+                  color="primary"
+                  :content="$root.mapAvailability[map.toLowerCase()]"
+                >
                   {{ map }}
+                </v-badge>
               </v-tab>
             </v-tabs>
           </v-theme-provider>
@@ -511,7 +517,7 @@
         class="ma-3 pa-3"
       >
 
-        <div v-if="primaryQuests.length == 0" class="text-center ma-3 mb-5">
+        <div v-if="primaryQuests.length == 0 && activeMapTab != 7" class="text-center ma-3 mb-5">
           <v-icon>mdi-help-circle</v-icon>No quests found for specified filter
         </div>
 
@@ -522,7 +528,7 @@
           :page-type="availabilities[activeAvailableTab].title.toLowerCase()"
         />
         <v-container
-          v-if="globalQuests.length > 0"
+          v-if="activeMapTab != 7 && globalQuests.length > 0"
         >
           <v-row>
             <v-sheet
