@@ -261,12 +261,12 @@ export default {
       // If we haven't found a non-anywhere location, we must be anywhere
       return true
     },
-    // Check if a quest has objectives that can be completed on this map
-    isQuestOnMap(quest, mapName) {
+    // Check if a quest has any objectives that can be completed on this map
+    isQuestOnMap(quest, mapName = false) {
       var match = false
       if ('objectives' in quest && quest.objectives.length > 0) {
         for (var x = quest.objectives.length - 1; x >= 0; x--) {
-          if (quest.objectives[x].location.toLowerCase() === mapName.toLowerCase()) {
+          if ( mapName !== false && quest.objectives[x].location.toLowerCase() === mapName.toLowerCase() ) {
             match = true
           } else if (quest.objectives[x].location.toLowerCase() === 'any' && ['skill', 'collect', 'find', 'reputation'].indexOf(quest.objectives[x].type.toLowerCase()) < 0) {
             match = true
@@ -280,6 +280,18 @@ export default {
       } else {
         return false
       }
+    },
+    // Determine if there are any map specific objectives for this quest
+    isQuestMapSpecific(quest) {
+      var match = false
+      if ('objectives' in quest && quest.objectives.length > 0) {
+        quest.objectives.forEach((objective) => {
+          if (objective.location.toLowerCase() != 'any') {
+            match = true
+          }
+        }, this)
+      }
+      return match
     },
     myselfObjectiveComplete(objective) {
       return this.isObjectiveComplete(objective, this.$store)

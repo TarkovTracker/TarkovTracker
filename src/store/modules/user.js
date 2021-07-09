@@ -11,6 +11,10 @@ const getDefaultState = () => {
   	useTeammates: false,
     useTeamObjectives: false,
     streamerMode: false,
+    onlyKappa: false,
+    onlyLevels: false,
+    primarySort: 0,
+    teamSort: 0,
   }
 }
 
@@ -51,6 +55,14 @@ const getters = {
 	      return false
 	   	}
 	},
+
+  get_hidden_teammates: (state) => {
+    if (state && 'hideTeammates' in state) {
+      return state.hideTeammates
+    } else {
+      return []
+    }
+  },
 }
 
 export default {

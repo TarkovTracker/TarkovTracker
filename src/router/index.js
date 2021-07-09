@@ -14,6 +14,8 @@ import TraderQuestTable from '@/views/TraderQuestTable.vue'
 import Maps from '@/views/Maps.vue'
 import MapsQuestTable from '@/views/MapsQuestTable.vue'
 
+import AllQuests from '@/views/AllQuests.vue'
+
 import Hideout from '@/views/Hideout.vue'
 import HideoutTable from '@/views/HideoutTable.vue'
 
@@ -58,6 +60,19 @@ const router = new Router({
         name: 'Maps',
         path: '/maps',
         component: Maps,
+        props: true,
+        children: [
+          {
+            name: 'Map',
+            path: '/maps/:mapName',
+            component: MapsQuestTable,
+          },
+        ],
+      },
+      {
+        name: 'Quests',
+        path: '/quests',
+        component: AllQuests,
         props: true,
         children: [
           {

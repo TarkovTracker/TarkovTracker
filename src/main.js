@@ -100,12 +100,12 @@ const vmf = new Vue({
       if (fireapp.auth().currentUser != null) {
         db.collection('progress').doc(fireapp.auth().currentUser.uid).set(this.$store.copy('progress'))
       }
-    }, 1000),
+    }, 250),
     uploadLocalUser: _.debounce(function () {
       if (fireapp.auth().currentUser != null) {
         db.collection('user').doc(fireapp.auth().currentUser.uid).set(this.$store.copy('user'))
       }
-    }, 1000),
+    }, 250),
     bindFirestore () {
       var bindProgress = firestore.set('bindProgress!')
       var bindUser = firestore.set('bindUser!')
