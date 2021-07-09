@@ -73,6 +73,11 @@
             to: '/',
           },
           {
+            title: 'Quests [NEW]',
+            icon: 'mdi-clipboard-check',
+            to: '/quests',
+          },
+          {
             title: 'Maps',
             icon: 'map',
             to: '/maps',
@@ -186,10 +191,10 @@
     computed: {
       dynamicItems: function () {
         if (this.$root.myselfQuestAvailable(this.$root.questDictionary['Collector']) === 0) {
-          this.items[3].items[7].disabled = false
+          this.items[4].items[7].disabled = false
           return this.items
         } else {
-          this.items[3].items[7].disabled = true
+          this.items[4].items[7].disabled = true
           return this.items
         }
       },

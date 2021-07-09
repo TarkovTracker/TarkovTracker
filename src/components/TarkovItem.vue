@@ -1,5 +1,5 @@
 <template>
-  <span v-if="format === 'minimal'">{{ item.name }}</span>
+  <span v-if="format === 'minimal'">{{ name }}</span>
   <span v-else>
     <v-container fluid class="pa-0">
       <v-hover v-slot="{ hover }">

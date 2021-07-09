@@ -9,6 +9,7 @@ const getDefaultState = () => {
     hideoutObjectives: {},
     shareName: null,
     dataVersion: 1,
+    level: 71,
   }
 }
 

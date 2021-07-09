@@ -73,7 +73,7 @@ export default {
       if (this.$store.copy('app/get_user_auth_uid')) {
         var fireSys = this.$store.copy('firesys')
         if (fireSys && fireSys.team && fireSys.team.members) {
-          var hideTeammates = this.$store.get('user/hideTeammates') || []
+          var hideTeammates = this.$store.copy('user/get_hidden_teammates')
           fireSys.team.members.forEach((userId) => {
             if (userId != this.$store.copy('app/get_user_auth_uid')) {
               var dynamicTeammate = {
@@ -127,6 +127,18 @@ export default {
 
       return questAvailability
     },
+    levelAvailability: function() {
+      // Creats a matrix of level availability for you and the members of your team
+      var levelAvailability = {}
+      this.questArray.forEach((quest) => {
+        levelAvailability[quest.id] = {}
+        this.team.forEach((member, teamIndex) => {
+          // If were not a hidden teammate, and were not a teammate with teammates off
+          levelAvailability[quest.id][teamIndex] = (member.store.copy('progress/level') || 71) >= quest.require.level ? true : false
+        }, this)
+      }, this)
+      return levelAvailability
+    },
     objectiveAvailability: function() {
       // Creats a matrix of objective availability for you and the members of your team
       var objectiveAvailability = {}
@@ -161,10 +173,19 @@ export default {
       Object.keys(this.questsByMap).forEach((map) => {
         mapAvailability[map] = 0
         this.questsByMap[map].forEach((questId) => {
-          if (Object.values(this.questAvailability[questId]).some(availability => availability === 0)) {
+          if (Object.values(this.questAvailability[questId]).some(availability => availability === 0)
+            && this.isQuestMapSpecific(this.questDictionaryId[questId], map)) {
             mapAvailability[map] += 1
           }
         }, this)
+      }, this)
+
+      mapAvailability['global'] = 0
+      this.questArrayCopy().forEach((quest) => {
+        if (Object.values(this.questAvailability[quest.id]).some(person => person == 0) && this.isQuestOnMap(quest) != false && !this.isQuestMapSpecific(quest)) {
+          console.log(quest.id)
+          mapAvailability['global'] += 1
+        }
       }, this)
       return mapAvailability
     },

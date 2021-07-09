@@ -17,6 +17,7 @@ const colorTheme = {
   warning: '#242F35',
   error: '#FF0000',
   failure: '#540000',
+
 }
 
 const themeLight = {
@@ -29,6 +30,7 @@ const themeLight = {
   objectiveenough: '#d6ebff',
   chartbase: '#bbbbbb',
   sitebackground: '#eeeeee',
+  contentbackground: '#FFFFFF'
 }
 
 const themeDark = {
@@ -41,6 +43,7 @@ const themeDark = {
   objectiveenough: '#2e455a',
   chartbase: '#ffffff',
   sitebackground: '#121212',
+  contentbackground: '#1E1E1E'
 }
 
 export default new Vuetify({
