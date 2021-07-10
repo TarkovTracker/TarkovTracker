@@ -292,10 +292,10 @@
   border-color: var(--v-bgdarken-lighten1)
 
 .tarkov-ahead-team
-  background: linear-gradient(to left, var(--v-bgdarken-base), var(--v-objectivecomplete-base))
+  background: linear-gradient(to left, var(--v-bgdarken-base), var(--v-objectiveahead-base))
 
 .tarkov-ahead-team:hover
-  background: linear-gradient(to left, var(--v-bgdarken-lighten3), var(--v-objectivecomplete-base)) !important
+  background: linear-gradient(to left, var(--v-bgdarken-lighten3), var(--v-objectiveahead-base)) !important
 
 .tarkov-behind-team
   background: linear-gradient(to left, var(--v-bgdarken-base), var(--v-objectiveuncomplete-base))
