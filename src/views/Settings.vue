@@ -590,6 +590,17 @@
               :label="`${$vuetify.theme.dark ? 'Dark Mode' : 'Light Mode'}`"
               class="ml-4"
             />
+            <v-select
+              v-model="selectedFont"
+              :items="fontOptions"
+              label="Font"
+              item-text="title"
+              item-value="value"
+              color="white"
+              item-color="white"
+              dense
+              outlined
+            ></v-select>
           </v-card-text>
         </material-card>
       </v-col>
@@ -797,7 +808,10 @@
             value: 'actions',
           },
         ],
-
+        fontOptions: [
+          { title: 'Share Tech Mono', value: 0 },
+          { title: 'Roboto', value: 1 },
+        ],
         nowTime: null,
       }
     },
@@ -839,6 +853,14 @@
       },
       tokenCreateEnabled: function () {
         return (this.apiTokenNote.length > 0 && this.apiSelectedPermissions.length > 0)
+      },
+      selectedFont: {
+        get () {
+          return this.$store.copy('app/font') || 0
+        },
+        set (value) {
+          this.$store.set('app/font', value)
+        }
       },
       darkMode: {
         get () {

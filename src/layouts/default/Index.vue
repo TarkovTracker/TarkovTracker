@@ -1,5 +1,8 @@
 <template>
-  <v-app :style="{background: $vuetify.theme.themes[theme].background}">
+  <v-app 
+    :style="{background: $vuetify.theme.themes[theme].background}" 
+    :class="appClass"
+  >
     <default-bar />
 
     <default-drawer />
@@ -32,9 +35,30 @@
       ),
     },
     computed: {
+      selectedFont: {
+        get () {
+          return this.$store.copy('app/font') || 0
+        },
+        set (value) {
+          this.$store.set('app/font', value)
+        }
+      },
       theme () {
         return (this.$vuetify.theme.dark) ? 'dark' : 'light'
       },
+      appClass () {
+        return {
+          'font-share-tech-mono': this.selectedFont == 0,
+          'font-roboto': this.selectedFont == 1
+        }
+      }
     },
   }
 </script>
+<style lang="sass">
+.font-share-tech-mono
+  font-family: Share Tech Mono, sans-serif !important
+
+.font-roboto
+  font-family: Roboto, sans-serif !important
+</style>
