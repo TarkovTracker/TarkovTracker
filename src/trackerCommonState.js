@@ -183,7 +183,6 @@ export default {
       mapAvailability['global'] = 0
       this.questArrayCopy().forEach((quest) => {
         if (Object.values(this.questAvailability[quest.id]).some(person => person == 0) && this.isQuestOnMap(quest) != false && !this.isQuestMapSpecific(quest)) {
-          console.log(quest.id)
           mapAvailability['global'] += 1
         }
       }, this)

@@ -569,9 +569,6 @@
       return {
         showPacking: 0,
         progressValue: 0,
-        activeViewTab: 0,
-        activeMapTab: 0,
-        activeTraderTab: 0,
         activeTeamTab: 0,
         activeAvailableTab: 0,
         maps: ['Factory', 'Customs', 'Woods', 'Shoreline', 'Interchange', 'Reserve', 'Labs', 'Global'],
@@ -604,12 +601,12 @@
     },
     metaInfo: {
       // Children can override the title.
-      title: 'Maps',
+      title: 'Quests',
       // Define meta tags here.
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'Plan your raid, seeing available quests by map, as well as items, keys, and friends you need to bring with you.' },
+        { name: 'description', content: 'Find quests, plan your raid, and collaborate with your team to complete tasks. All the information you\'ll need including items to bring!' },
       ],
     },
     computed: {
@@ -651,6 +648,30 @@
         },
         set (value) {
           this.$store.set('user/teamSort', value)
+        },
+      },
+      activeViewTab: {
+        get () {
+          return this.$store.copy('user/questViewTab') || 0
+        },
+        set (value) {
+          this.$store.set('user/questViewTab', value)
+        },
+      },
+      activeMapTab: {
+        get () {
+          return this.$store.copy('user/questMapTab') || 0
+        },
+        set (value) {
+          this.$store.set('user/questMapTab', value)
+        },
+      },
+      activeTraderTab: {
+        get () {
+          return this.$store.copy('user/questTraderTab') || 0
+        },
+        set (value) {
+          this.$store.set('user/questTraderTab', value)
         },
       },
       showAnyFromTeam() {

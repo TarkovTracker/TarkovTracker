@@ -11,10 +11,16 @@ const getDefaultState = () => {
   	useTeammates: false,
     useTeamObjectives: false,
     streamerMode: false,
+
+    questViewTab: 0,
+    questMapTab: 0,
+    questTraderTab: 0,
+
     onlyKappa: false,
     onlyLevels: false,
     primarySort: 0,
     teamSort: 0,
+
   }
 }
 
