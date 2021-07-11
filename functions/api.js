@@ -1,11 +1,13 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const express = require('express');
+const bodyParser = require('body-parser');
 const cors = require('cors');
 
 // Initialize Express App and allow all origins
 const app = express();
 app.use(cors({ origin: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Middleware for checking validity and access of tokens
 const verifyBearer = async (req, res, next) => {
@@ -139,6 +141,159 @@ app.get('/api/v1/team/progress', async (req, res) => {
 		res.status(401).send()
 	}
 })
+
+// Update the user's level
+app.post('/api/v1/progress/level/:levelValue(\\d+)', async (req, res) => {
+	if (req.apiToken != null && req.apiToken.permissions.includes('WP')) {
+		const db = admin.firestore();
+
+		const requesteeProgressRef = db.collection('progress').doc(req.apiToken.owner);
+
+		if (req.params.levelValue) {
+			await requesteeProgressRef.set({
+				level: parseInt(req.params.levelValue)
+			}, {merge: true});
+			res.status(200).send()
+		}else{
+			res.status(400).send()
+		}
+	}else{
+		res.status(401).send()
+	}
+})
+
+// Update progress on a quest
+app.post('/api/v1/progress/quest/:questId(\\d+)', async (req, res) => {
+	if (req.apiToken != null && req.apiToken.permissions.includes('WP')) {
+		const db = admin.firestore();
+
+		const requesteeProgressRef = db.collection('progress').doc(req.apiToken.owner);
+
+		if (req.body && req.params.questId) {
+
+			// Set up an object to update merge with
+			var updateObject = {}
+			if ('complete' in req.body && typeof req.body.complete === 'boolean') { 
+				updateObject.complete = req.body.complete
+				if(req.body.complete) { 
+					updateObject.timeComplete = new Date().getTime() 
+				}else{
+					updateObject.timeComplete = null
+				}
+			}
+
+			await requesteeProgressRef.set({
+				quests: {[req.params.questId]: updateObject}
+			}, {merge: true});
+			res.status(200).send()
+		}else{
+			res.status(400).send()
+		}
+	}else{
+		res.status(401).send()
+	}
+})
+
+// Update progress on a quest objective
+app.post('/api/v1/progress/quest/objective/:objectiveId(\\d+)', async (req, res) => {
+	if (req.apiToken != null && req.apiToken.permissions.includes('WP')) {
+		const db = admin.firestore();
+
+		const requesteeProgressRef = db.collection('progress').doc(req.apiToken.owner);
+
+		if (req.body && req.params.objectiveId) {
+
+			// Set up an object to update merge with
+			var updateObject = {}
+			// 'have' value
+			if ('have' in req.body && typeof req.body.have === 'number') { updateObject.have = req.body.have }
+			if ('complete' in req.body && typeof req.body.complete === 'boolean') { 
+				updateObject.complete = req.body.complete
+				if(req.body.complete) { 
+					updateObject.timeComplete = new Date().getTime() 
+				}else{
+					updateObject.timeComplete = null
+				}
+			}
+
+			await requesteeProgressRef.set({
+				objectives: {[req.params.objectiveId]: updateObject}
+			}, {merge: true});
+			res.status(200).send()
+		}else{
+			res.status(400).send()
+		}
+	}else{
+		res.status(401).send()
+	}
+})
+
+// Update progress on a hideout objective
+app.post('/api/v1/progress/hideout/:hideoutId(\\d+)', async (req, res) => {
+	if (req.apiToken != null && req.apiToken.permissions.includes('WP')) {
+		const db = admin.firestore();
+
+		const requesteeProgressRef = db.collection('progress').doc(req.apiToken.owner);
+
+		if (req.body && req.params.hideoutId) {
+
+			// Set up an object to update merge with
+			var updateObject = {}
+			if ('complete' in req.body && typeof req.body.complete === 'boolean') { 
+				updateObject.complete = req.body.complete
+				if(req.body.complete) { 
+					updateObject.timeComplete = new Date().getTime() 
+				}else{
+					updateObject.timeComplete = null
+				}
+			}
+
+			await requesteeProgressRef.set({
+				quests: {[req.params.hideoutId]: updateObject}
+			}, {merge: true});
+			res.status(200).send()
+		}else{
+			res.status(400).send()
+		}
+	}else{
+		res.status(401).send()
+	}
+})
+
+// Update progress on a hideout objective
+app.post('/api/v1/progress/hideout/objective/:objectiveId(\\d+)', async (req, res) => {
+	if (req.apiToken != null && req.apiToken.permissions.includes('WP')) {
+		const db = admin.firestore();
+
+		const requesteeProgressRef = db.collection('progress').doc(req.apiToken.owner);
+
+		if (req.body && req.params.objectiveId) {
+
+			// Set up an object to update merge with
+			var updateObject = {}
+			// 'have' value
+			if ('have' in req.body && typeof req.body.have === 'number') { updateObject.have = req.body.have }
+			if ('complete' in req.body && typeof req.body.complete === 'boolean') { 
+				updateObject.complete = req.body.complete
+				if(req.body.complete) { 
+					updateObject.timeComplete = new Date().getTime() 
+				}else{
+					updateObject.timeComplete = null
+				}
+			}
+
+			await requesteeProgressRef.set({
+				hideoutObjectives: {[req.params.objectiveId]: updateObject}
+			}, {merge: true});
+			res.status(200).send()
+		}else{
+			res.status(400).send()
+		}
+	}else{
+		res.status(401).send()
+	}
+})
+
 
 // Export the express app as a cloud function
 exports.default = functions.https.onRequest(app)
