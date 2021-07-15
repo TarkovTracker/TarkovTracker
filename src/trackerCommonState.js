@@ -1,6 +1,4 @@
 import Vue from 'vue'
-import questData from '../tarkovdata/quests.json'
-import hideoutData from '../tarkovdata/hideout.json'
 import makeTeamStore from './store/teamstore.js'
 
 // Global TarkovTracker Vue Mixin
@@ -39,6 +37,10 @@ export default {
     },
     itemDictionary: function() {
       return this.itemDataDefault // Return the existing dictionary of items from tarkovdata
+    },
+    traderDictionary: function() {
+      return Object.values(this.traderDataDefault)
+        .reduce((a, x) => ({ ...a, [x.id]: x }), {}) // Reduce to a mapping of id to trader
     },
     me: function() {
       return {

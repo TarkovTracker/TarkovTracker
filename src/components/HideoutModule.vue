@@ -31,6 +31,9 @@
         <span v-if="requirement.type =='item'">
           <tarkov-item :id="requirement.name" format="small" :count="requirement.quantity" :externalLinks="true" />
         </span>
+        <span v-else-if="requirement.type === 'trader'">
+          <trader-link :id="parseInt(requirement.name)" />
+        </span>
         <span v-else-if="requirement.type === 'module'">{{ requirement.name }} Level {{ requirement.quantity }} </span>
         <span v-else>{{ requirement.quantity.toLocaleString() }} {{ requirement.name }}</span>
       </div>

@@ -74,13 +74,6 @@ const router = new Router({
         path: '/quests',
         component: AllQuests,
         props: true,
-        children: [
-          {
-            name: 'Map',
-            path: '/maps/:mapName',
-            component: MapsQuestTable,
-          },
-        ],
       },
       { path: '/hideout', redirect: '/hideout/available' },
       {
