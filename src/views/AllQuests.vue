@@ -29,8 +29,6 @@
             >
               <v-tab
                 v-for="view in views"
-                exact
-                replace
               >
                 <v-icon class="mr-2">
                   {{ view.icon }}
@@ -63,10 +61,7 @@
               centered
               height="36px"
             >
-              <v-tab
-                exact
-                replace
-              >
+              <v-tab>
                 <v-icon class="mr-2">
                   mdi-compass
                 </v-icon>
@@ -102,8 +97,6 @@
             >
               <v-tab
                 v-for="map in maps"
-                exact
-                replace
               >
                 <v-icon class="mr-2">
                   mdi-compass
@@ -145,8 +138,6 @@
             >
               <v-tab
                 v-for="trader in traders"
-                exact
-                replace
               >
                 <v-avatar
                   color="primary"
@@ -191,8 +182,6 @@
             >
               <v-tab
                 v-for="availability in availabilities"
-                exact
-                replace
               >
                 <v-icon class="mr-2">
                   {{ availability.icon }}
@@ -229,8 +218,6 @@
                 v-for="(teammate, index) in visibleTeam"
                 :class="teamTabClasses(teammate, index)"
                 :disabled="index == 0 && [1, 2].includes(activeAvailableTab) && visibleTeam.length > 1"
-                exact
-                replace
               >
                   <template v-if="visibleTeam.length > 1 && index == 0">
                     <v-icon class="mr-2">
@@ -561,7 +548,10 @@
   import orderBy from 'lodash/orderBy';
   export default {
     props: {
-      mapName: {
+      viewType: {
+        type: String,
+      },
+      subView: {
         type: String,
       },
     },
@@ -839,6 +829,26 @@
       },
     },
     mounted () {
+      if (this.viewType != null) {
+        var validView = this.views.reduce((acc, x) => acc.concat(x.title.toLowerCase()), []).indexOf(this.viewType.toLowerCase())
+        if (validView >= 0) {
+          this.$store.set('user/questViewTab', validView)
+        }
+      }
+
+      if (this.$store.copy('user/questViewTab') == 1 && this.subView != null) {
+        var validView = this.maps.reduce((acc, x) => acc.concat(x.toLowerCase()), []).indexOf(this.viewType.toLowerCase())
+        if (validView >= 0) {
+          this.$store.set('user/questMapTab', validView)
+        }
+      }
+
+      if (this.$store.copy('user/questViewTab') == 2 && this.subView != null) {
+        var validView = this.traders.reduce((acc, x) => acc.concat(x.toLowerCase()), []).indexOf(this.viewType.toLowerCase())
+        if (validView >= 0) {
+          this.$store.set('user/questTraderTab', validView)
+        }
+      }
     },
     methods: {
       availableTabChange: function (newTab) {
