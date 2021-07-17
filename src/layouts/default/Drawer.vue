@@ -28,7 +28,7 @@
 
       <v-divider class="mx-3 mb-2" />
 
-      <default-list :items="dynamicItems" />
+      <default-list :items="items" />
 
       <v-divider class="mx-3 mb-2" />
 
@@ -73,66 +73,14 @@
             to: '/',
           },
           {
-            title: 'Quests [NEW]',
+            title: 'Quests',
             icon: 'mdi-clipboard-check',
             to: '/quests',
-          },
-          {
-            title: 'Maps',
-            icon: 'map',
-            to: '/maps',
           },
           {
             title: 'Needed Items',
             icon: 'mdi-clipboard-text',
             to: '/gather',
-          },
-          {
-            title: 'Traders',
-            icon: 'mdi-account',
-            items: [
-              {
-                title: 'Prapor',
-                to: '/trader/prapor',
-                image: '/img/PraporHeadshot.jpg',
-              },
-              {
-                title: 'Therapist',
-                to: '/trader/therapist',
-                image: '/img/TherapistHeadshot.jpg',
-              },
-              {
-                title: 'Skier',
-                to: '/trader/skier',
-                image: '/img/SkierHeadshot.jpg',
-              },
-              {
-                title: 'Peacekeeper',
-                to: '/trader/peacekeeper',
-                image: '/img/PeacekeeperHeadshot.jpg',
-              },
-              {
-                title: 'Mechanic',
-                to: '/trader/mechanic',
-                image: '/img/MechanicHeadshot.jpg',
-              },
-              {
-                title: 'Ragman',
-                to: '/trader/ragman',
-                image: '/img/RagmanHeadshot.jpg',
-              },
-              {
-                title: 'Jaeger',
-                to: '/trader/jaeger',
-                image: '/img/JaegerHeadshot.jpg',
-              },
-              {
-                title: 'Fence',
-                to: '/trader/fence',
-                image: '/img/FenceHeadshot.jpg',
-                disabled: true,
-              },
-            ],
           },
           {
             title: 'Hideout',
@@ -172,6 +120,12 @@
                 href: 'https://github.com/RatScanner/RatScanner/',
                 noradius: true,
               },
+              {
+                title: 'Tarkov Guru',
+                image: '/img/tarkovgurulogo.png',
+                href: 'https://tarkov.guru/',
+                noradius: true,
+              },
             ],
           },
         ],
@@ -189,16 +143,6 @@
     },
 
     computed: {
-      dynamicItems: function () {
-        if (this.$root.myselfQuestAvailable(this.$root.questDictionary['Collector']) === 0) {
-          this.items[4].items[7].disabled = false
-          return this.items
-        } else {
-          this.items[4].items[7].disabled = true
-          return this.items
-        }
-      },
-
       ...sync('app', [
         'mini',
         'dark',
