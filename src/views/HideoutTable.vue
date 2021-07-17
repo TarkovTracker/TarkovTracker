@@ -83,7 +83,9 @@
         var uniqueModules = new Set()
         // Scan all of the default hideout data and get unique modules
         for (var i = tempHideout.length - 1; i >= 0; i--) {
-          uniqueModules.add(tempHideout[i].module)
+          if (this.$root.hideoutStationDictionary[tempHideout[i].stationId].disabled != true) {
+            uniqueModules.add(tempHideout[i].module)
+          }
         }
         // Check for locked modules
         for (const curModule of uniqueModules) {
