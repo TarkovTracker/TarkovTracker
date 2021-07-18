@@ -12,8 +12,8 @@ jobs:
     steps:
       - name: Checkout Ref
         uses: actions/checkout@v2
-          with:
-            submodules: recursive
+        with:
+          submodules: recursive
 
       - name: Install Environment
         run: npm install
