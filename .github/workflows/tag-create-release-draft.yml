@@ -9,13 +9,24 @@ jobs:
   build_and_draft:
     name: Build and Draft Release
     runs-on: ubuntu-latest
+    environment: 
+      name: staging
+      url: https://tarkovtracker-staging.web.app/
     steps:
       - name: Checkout Ref
         uses: actions/checkout@v2
         with:
           submodules: recursive
 
+      - name: Set Workflow Tag Name
+        id: vars
+        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+
       - name: Install Environment
+        run: npm install
+
+      - name: Install Functions Environment
+        working-directory: ./functions
         run: npm install
 
       - name: Build Project
@@ -24,14 +35,14 @@ jobs:
       - name: Create Build Artifact Zip
         uses: thedoctor0/zip-release@master
         with:
-          filename: 'TarkovTracker-${{ github.ref }}.zip'
+          filename: TarkovTracker-${{ steps.vars.outputs.tag }}.zip
           path: ./dist/
           type: zip
 
       - name: Create Build Artifact Gzipped Tar
         uses: thedoctor0/zip-release@master
         with:
-          filename: 'TarkovTracker-${{ github.ref }}.tar.gz'
+          filename: TarkovTracker-${{ steps.vars.outputs.tag }}.tar.gz
           path: ./dist/
           type: zip
 
@@ -46,8 +57,16 @@ jobs:
         with:
           body: ${{steps.github_release.outputs.changelog}}
           files: |
-            'TarkovTracker-${{ github.ref }}.zip'
-            'TarkovTracker-${{ github.ref }}.tar.gz'
+            TarkovTracker-${{ steps.vars.outputs.tag }}.zip
+            TarkovTracker-${{ steps.vars.outputs.tag }}.tar.gz
           draft: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Deploy to Firebase Staging Project
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_ENVIRONMENT_CI_TOKEN }}
+          PROJECT_ID: tarkovtracker-staging

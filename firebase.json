@@ -8,7 +8,7 @@
   },
   "hosting": {
     "predeploy": "npm run build",
-  "public": "dist",
+    "public": "dist",
     "ignore": [
       "firebase.json",
       "**/.*",
@@ -53,5 +53,8 @@
     "ui": {
       "enabled": true
     }
+  },
+  "functions": {
+    "source": "functions"
   }
 }
