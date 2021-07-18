@@ -57,9 +57,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name:  Deploy to Firebase Staging Project
+      - name: Deploy to Firebase Staging Project
         uses: w9jds/firebase-action@master
         with:
           args: deploy
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_ENVIRONMENT_CI_TOKEN }}
+          PROJECT_ID: tarkovtracker-staging
