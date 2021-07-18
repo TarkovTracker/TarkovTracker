@@ -5,12 +5,15 @@ name: Deploy to Firebase Hosting on PR
 'on': pull_request
 jobs:
   build_and_preview:
+    name: Build and Preview
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
         with:
           submodules: recursive
+          
       - run: npm install
+
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'

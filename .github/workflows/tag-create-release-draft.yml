@@ -1,0 +1,40 @@
+name: Create Release Draft
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build_and_draft:
+    name: Build and Draft Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Ref
+        uses: actions/checkout@v2
+          with:
+            submodules: recursive
+
+      - name: Install Environment
+        run: npm install
+
+      - name: Build Project
+        run: npm run build
+
+      - name: Create Build Artifact
+        run: 7z a -r TarkovTracker-${{ github.ref }}.zip ./dist/*
+
+      - name: Build Changelog
+          id: github_release
+          uses: mikepenz/release-changelog-builder-action@v1
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Draft Release
+        uses: softprops/action-gh-release@v1
+        with:
+          body: ${{steps.github_release.outputs.changelog}}
+          files: TarkovTracker-${{ github.ref }}.zip
+          draft: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
