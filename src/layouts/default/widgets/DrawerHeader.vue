@@ -16,6 +16,9 @@
     <v-list-item-content class="pl-2">
       <v-list-item-title class="text-h3">
         Tarkov Tracker
+        <div v-if="$firebase.options.projectId != 'tarkovtracker-59ebc'">
+          DEVELOPMENT
+        </div>
       </v-list-item-title>
     </v-list-item-content>
   </v-list-item>
@@ -30,6 +33,11 @@
 
     computed: {
       logoImage () {
+        // If we're not on official tarkovtracker environment, show dev logo
+        if (this.$firebase.options.projectId != "tarkovtracker-59ebc") {
+          return '/img/tarkovtrackerlogo-development.png'
+        }
+
         if (this.mini) {
           return '/img/tarkovtrackerlogo-mini.png'
         } else {
