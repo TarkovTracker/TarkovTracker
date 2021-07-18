@@ -21,20 +21,17 @@ jobs:
       - name: Build Project
         run: npm run build
 
-      - name: Create Build Artifact
-        run: 7z a -r TarkovTracker-${{ github.ref }}.zip ./dist/*
-
       - name: Create Build Artifact Zip
         uses: thedoctor0/zip-release@master
         with:
-          filename: TarkovTracker-${{ github.ref }}.zip
+          filename: 'TarkovTracker-${{ github.ref }}.zip'
           path: ./dist/
           type: zip
 
       - name: Create Build Artifact Gzipped Tar
         uses: thedoctor0/zip-release@master
         with:
-          filename: TarkovTracker-${{ github.ref }}.tar.gz
+          filename: 'TarkovTracker-${{ github.ref }}.tar.gz'
           path: ./dist/
           type: zip
 
@@ -49,8 +46,8 @@ jobs:
         with:
           body: ${{steps.github_release.outputs.changelog}}
           files: |
-            TarkovTracker-${{ github.ref }}.zip
-            TarkovTracker-${{ github.ref }}.tar.gz
+            'TarkovTracker-${{ github.ref }}.zip'
+            'TarkovTracker-${{ github.ref }}.tar.gz'
           draft: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
