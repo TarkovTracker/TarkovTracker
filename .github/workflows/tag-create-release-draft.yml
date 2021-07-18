@@ -25,10 +25,10 @@ jobs:
         run: 7z a -r TarkovTracker-${{ github.ref }}.zip ./dist/*
 
       - name: Build Changelog
-          id: github_release
-          uses: mikepenz/release-changelog-builder-action@v1
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: github_release
+        uses: mikepenz/release-changelog-builder-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Draft Release
         uses: softprops/action-gh-release@v1
