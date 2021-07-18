@@ -9,7 +9,9 @@ jobs:
   build_and_draft:
     name: Build and Draft Release
     runs-on: ubuntu-latest
-    environment: staging
+    environment: 
+      name: staging
+      url: https://tarkovtracker-staging.web.app/
     steps:
       - name: Checkout Ref
         uses: actions/checkout@v2
@@ -21,6 +23,10 @@ jobs:
         run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
 
       - name: Install Environment
+        run: npm install
+
+      - name: Install Functions Environment
+        working-directory: ./functions
         run: npm install
 
       - name: Build Project
