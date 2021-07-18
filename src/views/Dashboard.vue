@@ -192,7 +192,54 @@
 
         var objectivesPerDay = Math.ceil(timelineObjectivesComplete / Math.ceil((Date.now() - firstObjectiveComplete) / 86400000))
 
-        return [
+        const START_REPUTATION = this.$store.get('progress/gameEdition') === 3 ? 0.2 : 0;
+        let relevantTraders = ['prapor', 'therapist', 'skier', 'peacekeeper', 'mechanic', 'ragman', 'jaeger',]
+
+        let reputations = {}
+        relevantTraders.forEach(trader => {reputations[trader] = {value: START_REPUTATION, level: 1, toNextLevel: 0}});
+
+        this.questDataDefault.forEach(quest => {
+          if (this.$store.get('progress/quest_complete', quest.id) == true) {
+            quest.reputation.forEach(reputation => {
+              let trader = reputation.trader.toLowerCase();
+              reputations[trader].value += reputation.rep;
+            });
+          }
+        });
+
+        for (let [trader, reputation] of Object.entries(reputations)) {
+          let currentTrader = this.traderDataDefault[trader];
+          for (let i = 0; i < currentTrader.loyalty.length; i++) {
+            // If we are looking at last possible level and player has more than the required reputation for that level
+            if (i === currentTrader.loyalty.length - 1 && currentTrader.loyalty[i].requiredReputation <= reputation.value) {
+              reputation.level = currentTrader.loyalty[i].level
+            // If player has enough reputation for the given level, but not more than what is required for the next level
+            } else if (currentTrader.loyalty[i].requiredReputation <= reputation.value && currentTrader.loyalty[i + 1].requiredReputation > reputation.value) {
+              reputation.level = currentTrader.loyalty[i].level
+              break;
+            }
+          }
+        }
+
+        for (let [trader, reputation] of Object.entries(reputations)) {
+          let currentTrader = this.traderDataDefault[trader];
+          let maxLoyaltyLevel = currentTrader.loyalty[currentTrader.loyalty.length - 1].level;
+          reputation.toNextLevel = reputation.level === maxLoyaltyLevel ? 0 : currentTrader.loyalty[reputation.level].requiredReputation - reputation.value
+        }
+
+        let traderCardData = [];
+        for (let [trader, reputation] of Object.entries(reputations)) {
+          traderCardData.push({
+            actionIcon: 'mdi-help-circle',
+            actionText: `${reputations[trader].value.toFixed(2)} (${reputation.toNextLevel === 0 ? 'Max level' : reputation.toNextLevel.toFixed(2) + ' to next level'})`,
+            color: 'var(--v-accent-base)',
+            icon: 'mdi-account-cash',
+            title: `${trader.capitalize()}`,
+            value: `Level ${reputation.level}`,
+          })
+        }
+
+        let otherCardsData = [
           {
             actionIcon: 'mdi-help-circle',
             actionText: `${completedKappaQuests}/${totalKappaQuests} Kappa`,
@@ -289,7 +336,9 @@
             title: 'Objectives Per Day',
             value: `${objectivesPerDay}`,
           },
-        ]
+        ];
+
+        return traderCardData.concat(otherCardsData)
       },
       mapChartData () {
         var factoryObjectives = 0
@@ -442,9 +491,37 @@
             ],
           ],
         }
-
         return chartData
       },
+      traderReputationData () {
+        const EOD_START_REP = 0.2;
+        let reputations = {
+          'Prapor': 0,
+          'Therapist': 0,
+          'Skier': 0,
+          'Peacekeeper': 0,
+          'Mechanic': 0,
+          'Ragman': 0,
+          'Jaeger': 0,
+        };
+        for (let i = 0; i < this.questDataDefault.length; i++) {
+          let quest = this.questDataDefault[i];
+          if (this.$store.get('progress/quest_complete', quest.id) == true) {
+            for (var j = 0; j < quest.reputation.length; j++) {
+              let trader = quest.reputation[j].trader;
+              reputations[trader] += quest.reputation[j].rep;
+            }
+          }
+        }
+        var chartData = {
+          labels: Object.keys(reputations),
+          series: [
+            Object.values(reputations).map(value => {return value + EOD_START_REP}),
+            Object.values(reputations),
+          ],
+        }
+        return chartData;
+      }
     },
     methods: {
     },

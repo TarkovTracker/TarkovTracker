@@ -10,6 +10,7 @@ const getDefaultState = () => {
     shareName: null,
     dataVersion: 1,
     level: 71,
+    gameEdition: 3,
   }
 }
 
