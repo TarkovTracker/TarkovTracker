@@ -28,14 +28,14 @@ jobs:
       - name: Create Build Artifact Zip
         uses: thedoctor0/zip-release@master
         with:
-          filename: 'TarkovTracker-${{ steps.vars.outputs.tag }}.zip'
+          filename: TarkovTracker-${{ steps.vars.outputs.tag }}.zip
           path: ./dist/
           type: zip
 
       - name: Create Build Artifact Gzipped Tar
         uses: thedoctor0/zip-release@master
         with:
-          filename: 'TarkovTracker-${{ steps.vars.outputs.tag }}.tar.gz'
+          filename: TarkovTracker-${{ steps.vars.outputs.tag }}.tar.gz
           path: ./dist/
           type: zip
 
@@ -50,8 +50,8 @@ jobs:
         with:
           body: ${{steps.github_release.outputs.changelog}}
           files: |
-            'TarkovTracker-${{ steps.vars.outputs.tag }}.zip'
-            'TarkovTracker-${{ steps.vars.outputs.tag }}.tar.gz'
+            TarkovTracker-${{ steps.vars.outputs.tag }}.zip
+            TarkovTracker-${{ steps.vars.outputs.tag }}.tar.gz
           draft: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
