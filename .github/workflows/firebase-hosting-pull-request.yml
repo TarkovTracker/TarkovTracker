@@ -8,16 +8,19 @@ jobs:
     name: Build and Preview
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Check out source code
+        uses: actions/checkout@v2
         with:
           submodules: recursive
           
-      - run: npm install
+      - name: Set up build environment
+        run: npm install
 
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      - name: Deploy to Firebase Hosting Preview Channel
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_TARKOVTRACKER_59EBC }}'
-          projectId: tarkovtracker-59ebc
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_TARKOVTRACKER_STAGING }}'
+          projectId: tarkovtracker-staging
         env:
           FIREBASE_CLI_PREVIEWS: hostingchannels
