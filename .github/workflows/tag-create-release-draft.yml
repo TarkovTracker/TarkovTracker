@@ -24,6 +24,20 @@ jobs:
       - name: Create Build Artifact
         run: 7z a -r TarkovTracker-${{ github.ref }}.zip ./dist/*
 
+      - name: Create Build Artifact Zip
+        uses: thedoctor0/zip-release@master
+        with:
+          filename: TarkovTracker-${{ github.ref }}.zip
+          path: ./dist/
+          type: zip
+
+      - name: Create Build Artifact Gzipped Tar
+        uses: thedoctor0/zip-release@master
+        with:
+          filename: TarkovTracker-${{ github.ref }}.tar.gz
+          path: ./dist/
+          type: zip
+
       - name: Build Changelog
         id: github_release
         uses: mikepenz/release-changelog-builder-action@v1
@@ -34,7 +48,9 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           body: ${{steps.github_release.outputs.changelog}}
-          files: TarkovTracker-${{ github.ref }}.zip
+          files: |
+            TarkovTracker-${{ github.ref }}.zip
+            TarkovTracker-${{ github.ref }}.tar.gz
           draft: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
