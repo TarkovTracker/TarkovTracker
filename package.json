@@ -3,6 +3,7 @@
   "version": "2.0.0",
   "private": true,
   "scripts": {
+    "start": "run-s serve:firebase",
     "serve": "run-s watch",
     "serve:persist": "run-s watch:persist",
     "build": "vue-cli-service build",
@@ -17,7 +18,8 @@
     "sitemap": "vue-cli-service sitemap",
     "watch": "run-p build:watch serve:firebase browsersync",
     "watch:persist": "run-p build:watch serve:firebase:persist browsersync",
-    "browsersync": "sleep 15 && browser-sync start --port 5000 --proxy \"localhost:4999\" --files \"dist/*\""
+    "browsersync": "sleep 15 && browser-sync start --port 5000 --proxy \"localhost:4999\" --files \"dist/*\"",
+    "cypress:open": "cypress open"
   },
   "dependencies": {
     "@mdi/font": "^5.9.55",
@@ -48,6 +50,7 @@
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.1.0",
     "browser-sync": "^2.27.1",
+    "cypress": "^7.7.0",
     "dotenv": "^8.2.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",

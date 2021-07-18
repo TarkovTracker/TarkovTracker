@@ -27,7 +27,7 @@ jobs:
       - name: Build Project
         run: npm run build
 
-      - name: Deploy to Firebase Staging Project
+      - name: Deploy to Firebase Production Project
         uses: w9jds/firebase-action@master
         with:
           args: deploy
