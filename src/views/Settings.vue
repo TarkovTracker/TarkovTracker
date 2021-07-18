@@ -611,6 +611,34 @@
         sm="12"
       >
         <material-card
+          icon="mdi-brightness-6"
+          icon-small
+          title="Game Edition"
+          color="info"
+        >
+          <v-card-text>
+            <p>Additional data may be computed from this information (e.g. trader reputation).</p>
+            <v-select
+              v-model="selectedGameEdition"
+              :items="gameEditions"
+              label="Select game edition"
+              item-text="title"
+              item-value="value"
+              color="white"
+              item-color="white"
+              dense
+              outlined
+            ></v-select>
+          </v-card-text>
+        </material-card>
+      </v-col>
+      <v-col
+        class="xs"
+        xl="4"
+        md="6"
+        sm="12"
+      >
+        <material-card
           icon="mdi-eye"
           icon-small
           title="Streamer Mode"
@@ -812,6 +840,12 @@
             value: 'actions',
           },
         ],
+        gameEditions: [
+          { title: 'Standard Edition', value: 0 },
+          { title: 'Left Behind Edition', value: 1 },
+          { title: 'Prepare for Escape Edition', value: 2 },
+          { title: 'Edge of Darkness Limited Edition', value: 3 },
+        ],
         fontOptions: [
           { title: 'Share Tech Mono', value: 0 },
           { title: 'Roboto', value: 1 },
@@ -857,6 +891,14 @@
       },
       tokenCreateEnabled: function () {
         return (this.apiTokenNote.length > 0 && this.apiSelectedPermissions.length > 0)
+      },
+      selectedGameEdition: {
+        get () {
+          return this.$store.copy('progress/gameEdition') || 3
+        },
+        set (value) {
+          this.$store.set('progress/gameEdition', value)
+        }
       },
       selectedFont: {
         get () {
