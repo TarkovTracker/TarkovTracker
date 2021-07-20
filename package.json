@@ -63,7 +63,7 @@
     "vue-chartist": "^2.3.1",
     "vue-cli-plugin-git-describe": "~1.0.0",
     "vue-cli-plugin-sitemap": "~2.3.0",
-    "vue-cli-plugin-vuetify": "^2.3.1",
+    "vue-cli-plugin-vuetify": "^2.4.1",
     "vue-template-compiler": "^2.6.11",
     "vuetify-loader": "^1.7.2",
     "webfontloader": "^1.6.28",
