@@ -34,13 +34,15 @@ Vue.mixin(trackerGlobalMixin)
 
 sync(localstore, router)
 
+const gitHash = GIT_DESCRIBE.hash.replace(/g/,'')
+
 const vm = new Vue({
   router,
   vuetify,
   store: localstore,
   data: {
     dataHash: '',
-    overallVersion: GIT_DESCRIBE.hash,
+    overallVersion: gitHash,
     vmName: 'Local VM',
   },
   // This mixin are exlusively used within the root instances. It contains common properties and computed functions for the application.
@@ -55,7 +57,7 @@ const vm = new Vue({
     }
   },
   async created () {
-    const trackerTreeResponse = await fetch(`https://api.github.com/repos/TarkovTracker/TarkovTracker/git/trees/${ GIT_DESCRIBE.hash }`)
+    const trackerTreeResponse = await fetch(`https://api.github.com/repos/TarkovTracker/TarkovTracker/git/trees/${ gitHash }`)
     const trackerTreeData = await trackerTreeResponse.json()
     this.$set(this, 'dataHash', trackerTreeData.tree.filter(x => x.path == 'tarkovdata')[0].sha)
   },
@@ -71,7 +73,7 @@ const vmf = new Vue({
   vuetify,
   data: {
     dataHash: '',
-    overallVersion: GIT_DESCRIBE.hash,
+    oerallVersion: gitHash,
     progressSubscribe: null,
     userSubscribe: null,
     vmName: 'Fire VM',
@@ -88,7 +90,7 @@ const vmf = new Vue({
     }
   },
   async created () {
-    const trackerTreeResponse = await fetch(`https://api.github.com/repos/TarkovTracker/TarkovTracker/git/trees/${ GIT_DESCRIBE.hash }`)
+    const trackerTreeResponse = await fetch(`https://api.github.com/repos/TarkovTracker/TarkovTracker/git/trees/${ gitHash }`)
     const trackerTreeData = await trackerTreeResponse.json()
     this.$set(this, 'dataHash', trackerTreeData.tree.filter(x => x.path == 'tarkovdata')[0].sha)
   },
