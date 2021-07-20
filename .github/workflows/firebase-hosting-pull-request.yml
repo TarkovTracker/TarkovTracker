@@ -2,7 +2,13 @@
 # https://github.com/firebase/firebase-tools
 
 name: Deploy to Firebase Hosting on PR
-'on': pull_request
+on: 
+  pull_request:
+    paths:
+      - 'src/**'
+      - '*.js'
+      - '*.json'
+
 jobs:
   build_and_preview:
     name: Build and Preview
