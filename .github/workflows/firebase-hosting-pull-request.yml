@@ -4,7 +4,11 @@
 name: Deploy to Firebase Hosting on PR
 on: 
   pull_request_target:
-    [opened, synchronize]
+    types: [opened, synchronize]
+    paths:
+      - 'src/**'
+      - '*.js'
+      - '*.json'
 
 jobs:
   build_and_preview:
