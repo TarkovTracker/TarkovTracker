@@ -17,7 +17,8 @@
     "sitemap": "vue-cli-service sitemap",
     "watch": "run-p build:watch serve:firebase browsersync",
     "watch:persist": "run-p build:watch serve:firebase:persist browsersync",
-    "browsersync": "sleep 15 && browser-sync start --port 5000 --proxy \"localhost:4999\" --files \"dist/*\""
+    "browsersync": "sleep 15 && browser-sync start --port 5000 --proxy \"localhost:4999\" --files \"dist/*\"",
+    "updata": "git submodule foreach git pull origin master"
   },
   "dependencies": {
     "@mdi/font": "^5.9.55",
