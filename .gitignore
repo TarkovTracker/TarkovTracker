@@ -6,6 +6,7 @@ node_modules
 
 /.firebase
 /.firebase-emulator-savedata
+.firebaserc
 
 /tests/e2e/videos/
 /tests/e2e/screenshots/

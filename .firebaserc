@@ -1,6 +1,0 @@
-{
-  "projects": {
-    "default": "tarkovtracker-staging",
-    "production": "tarkovtracker-59ebc"
-  }
-}
