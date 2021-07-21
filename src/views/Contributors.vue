@@ -60,7 +60,7 @@
                 :href="contributor.html_url"
                 target="_blank"
               >
-                <v-list-item-avatar>
+                <v-list-item-avatar size="30">
                   <v-img :src="contributor.avatar_url" />
                 </v-list-item-avatar>
                 <v-list-item-content>
@@ -82,7 +82,7 @@
                 :href="contributor.html_url"
                 target="_blank"
               >
-                <v-list-item-avatar>
+                <v-list-item-avatar size="30">
                   <v-img :src="contributor.avatar_url" />
                 </v-list-item-avatar>
                 <v-list-item-content>
@@ -112,14 +112,31 @@
     computed: {
     },
     async created () {
+      // Grab the list of Patrons from the TT Patron endpoint
       const ttPatronResponse = await fetch('https://patrons.tarkovtracker.io/get')
       const ttPatronData = await ttPatronResponse.json()
       this.ttPatronData = ttPatronData.patron_names
 
-      const contributorResponse = await fetch('https://api.github.com/orgs/TarkovTracker/members')
+      // Grab the list of contributors from TarkovTracker repo
+      const contributorResponse = await fetch('https://api.github.com/repos/TarkovTracker/TarkovTracker/contributors')
       const contributorData = await contributorResponse.json()
       this.contributorData = contributorData
 
+      // Grab the list of members of TarkovTracker org to fill in missing contributor since open source
+      const orgMemberResponse = await fetch('https://api.github.com/orgs/TarkovTracker/members')
+      const orgMemberData = await orgMemberResponse.json()
+      
+      // Add any org members to contributor list that are missing
+      orgMemberData.forEach((member) => {
+        if (this.contributorData.filter(contrib => contrib.id == member.id).length == 0) {
+          this.contributorData.push(member)
+        }
+      }, this)
+
+      // Remove any bot accounts
+      this.contributorData = contributorData.filter(contrib => contrib.type != "Bot")
+
+      // Grab the list of contributors from tarkovdata repo
       const tarkovdataContributorResponse = await fetch('https://api.github.com/repos/TarkovTracker/tarkovdata/contributors')
       const tarkovdataContributorData = await tarkovdataContributorResponse.json()
       this.tarkovdataContributorData = tarkovdataContributorData
