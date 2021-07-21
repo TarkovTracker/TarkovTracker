@@ -14,7 +14,7 @@
         >
           <v-card-text>
             <div>
-              Thank you to {{ ttPatronData.join(', ') }} for their support on Patreon! They help pay the base costs of keeping the site available for everyone to use!
+              Thank you to <span class="font-italic">{{ ttPatronData.join(', ') }}</span> for their support on Patreon! They help pay the base costs of keeping the site available for everyone to use!
             </div>
             <div>
               Patreons cover the costs of domains, hosting, development resources, and other cloud resources to provide TarkovTracker as a free service without ads - if you'd like to help allow us to continue expanding the sites with better services, we'd love your support!
@@ -51,7 +51,10 @@
             </div>
             <v-divider class="my-4" />
             <h3>
-              Primary Development Contributors:
+              <a
+                href="https://github.com/TarkovTracker/TarkovTracker"
+                class="info-link"
+              >TarkovTracker</a> Contributors:
             </h3>
             <v-list>
               <v-list-item
