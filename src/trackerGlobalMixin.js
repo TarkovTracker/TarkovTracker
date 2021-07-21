@@ -220,7 +220,7 @@ export default {
     myselfQuestAvailable(quest) {
       return this.isQuestAvailable(quest, this.$store)
     },
-    // Figure out if the quest is available (0), locked (-1) or completed (1)
+    // Figure out if the quest is available (0), locked (-1), blocked (-2), or completed (1)
     isQuestAvailable(quest, progressStore) {
       // If the quest is already completed, then the quest is not available
       if (progressStore.copy('progress/quest_complete', quest.id)) {
@@ -230,29 +230,41 @@ export default {
       if (quest.require.quests) {
         // For each prerequisite
         for (var x = quest.require.quests.length - 1; x >= 0; x--) {
+          // Keep track if any of the optional quest array is complete
           var oneOf = false
+          // Keep track if all of the optional quest array is failed
+          var oneOfNotFailed = false
           if (Array.isArray(quest.require.quests[x])) {
             for (var i = quest.require.quests[x].length - 1; i >= 0; i--) {
-              if (progressStore.copy('progress/quest_complete', quest.require.quests[x][i]) === true &&
-                  progressStore.copy('progress/quest_failed', quest.require.quests[x][i]) != true) {
+              if ( progressStore.copy('progress/quest_complete', quest.require.quests[x][i]) === true ) {
+                // One of the optional prereqs is complete, we can continue
                 oneOf = true
               }
+
+              if ( progressStore.copy('progress/quest_failed', quest.require.quests[x][i]) === false ) {
+                // One of the optional prereqs is complete, we can continue
+                oneOfNotFailed = true
+              }
+            }
+
+            if (!oneOfNotFailed) {
+              // All of the optional array of prereqs were failed, so were blocked
+              return -2
             }
 
             if (!oneOf) {
               // We didn't complete one of the one-of array required quests
               return -1
             }
-          }
-          // If the prereq isn't completed & not failed, then we are locked
-          if (
-              !oneOf && 
-              (
-                !progressStore.copy('progress/quest_complete', quest.require.quests[x]) || 
-                progressStore.copy('progress/quest_failed', quest.require.quests[x])
-              )
-            ) {
-            return -1
+          }else{
+            
+            if ( progressStore.copy('progress/quest_failed', quest.require.quests[x]) ) {
+              // If a prereq is failed, the quest is blocked
+              return -2
+            }else if ( !progressStore.copy('progress/quest_complete', quest.require.quests[x]) ) {
+              // If a prereq isn't completed, the quest is locked
+              return -1
+            }
           }
         }
       }

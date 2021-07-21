@@ -752,10 +752,10 @@
           case 1: // The 'Locked' view (show locked specifically for yourself)
             if ( this.showAnyFromTeam ) {
               // Were viewing ourself, normal use case, show everything available currently
-              quests = quests.filter(quest => this.$root.questAvailability[quest.id][0] == -1)
+              quests = quests.filter(quest => this.$root.questAvailability[quest.id][0] <= -1)
             }else{
               // We specifically want to see what another teammate has available
-              quests = quests.filter(quest => this.$root.questAvailability[quest.id][this.activeTeamTab - 1] == -1)
+              quests = quests.filter(quest => this.$root.questAvailability[quest.id][this.activeTeamTab - 1] <= -1)
             }
             break;
 

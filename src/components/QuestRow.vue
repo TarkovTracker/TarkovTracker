@@ -187,6 +187,17 @@
               <v-icon>mdi-replay</v-icon>
             </v-btn>
           </span>
+          <span v-else-if="pageType === 'locked' && myselfQuestAvailable(questDetails) === -2">
+            <v-btn
+              disabled
+              large
+              class="warning"
+              elevation="2"
+            >
+              <v-icon>mdi-fast-forward</v-icon>
+            </v-btn>
+            <div>Quest unavailable</div>
+          </span>        
         </v-col>
       </v-row>
     </v-container>
@@ -217,7 +228,7 @@
           })
         }, this)
         return availability
-      }
+      },
     },
     methods: {
       teamBadgeClass (availability) {
