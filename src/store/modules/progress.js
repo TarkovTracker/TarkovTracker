@@ -291,6 +291,14 @@ const getters = {
     }
   },
 
+  quest_failed: (state) => (id) => {
+    if (state && 'quests' in state && id in state.quests && 'failed' in state.quests[id]) {
+      return state.quests[id].failed
+    } else {
+      return false
+    }
+  },
+
   objective_complete: (state) => (id) => {
     if (state && 'objectives' in state && id in state.objectives && 'complete' in state.objectives[id]) {
       return state.objectives[id].complete

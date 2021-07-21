@@ -233,7 +233,8 @@ export default {
           var oneOf = false
           if (Array.isArray(quest.require.quests[x])) {
             for (var i = quest.require.quests[x].length - 1; i >= 0; i--) {
-              if (progressStore.copy('progress/quest_complete', quest.require.quests[x][i]) === true) {
+              if (progressStore.copy('progress/quest_complete', quest.require.quests[x][i]) === true &&
+                  progressStore.copy('progress/quest_failed', quest.require.quests[x][i]) != true) {
                 oneOf = true
               }
             }
@@ -243,8 +244,14 @@ export default {
               return -1
             }
           }
-          // If the prereq isn't completed, then we are locked
-          if (!oneOf && !progressStore.copy('progress/quest_complete', quest.require.quests[x])) {
+          // If the prereq isn't completed & not failed, then we are locked
+          if (
+              !oneOf && 
+              (
+                !progressStore.copy('progress/quest_complete', quest.require.quests[x]) || 
+                progressStore.copy('progress/quest_failed', quest.require.quests[x])
+              )
+            ) {
             return -1
           }
         }
