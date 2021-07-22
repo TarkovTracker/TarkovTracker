@@ -229,7 +229,7 @@
             class="text-caption mx-a"
             width="fit-content"
           >
-            <span class="text-caption">Alternative path taken. Quest blocked.</span>
+            <span class="text-caption">Alternative path taken, or required path not selected. Quest blocked.</span>
           </v-alert>
         </v-col>
       </v-row>
