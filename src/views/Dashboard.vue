@@ -1,5 +1,4 @@
 <template>
-  <keep-alive>
     <v-container
       id="dashboard-view"
       fluid
@@ -118,7 +117,6 @@
         </div>
       </v-row>
     </v-container>
-  </keep-alive>
 </template>
 
 <script>
