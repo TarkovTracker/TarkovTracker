@@ -73,7 +73,7 @@ const vmf = new Vue({
   vuetify,
   data: {
     dataHash: '',
-    oerallVersion: gitHash,
+    overallVersion: gitHash,
     progressSubscribe: null,
     userSubscribe: null,
     vmName: 'Fire VM',
