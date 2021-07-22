@@ -12,6 +12,8 @@ on:
       - 'src/**'
       - '*.js'
       - '*.json'
+      - 'tarkovdata'
+      - 'tarkovdata/*'
       - 'tarkovdata/**'
 
 jobs:
