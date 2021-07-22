@@ -92,7 +92,14 @@ export default {
       })
     },
     QuestUncomplete(quest) {
-      this.$store.set('progress/uncomplete_quest', quest.id)
+      this.$store.set('progress/unfail_quest', quest.id)
+      // If there are any alternative quests, mark them as not complete, not failed
+      if (quest.alternatives) {
+        // For each alternative
+        quest.alternatives.forEach((questId) => {
+          this.$store.set('progress/unfail_quest', questId)
+        }, this)
+      }
 
       this.$analytics.logEvent('quest_uncomplete', {
         event_category: 'Progression',
