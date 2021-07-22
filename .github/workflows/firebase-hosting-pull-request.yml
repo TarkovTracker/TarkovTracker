@@ -13,8 +13,6 @@ on:
       - '*.js'
       - '*.json'
       - 'tarkovdata'
-      - 'tarkovdata/*'
-      - 'tarkovdata/**'
 
 jobs:
   build_and_preview:
