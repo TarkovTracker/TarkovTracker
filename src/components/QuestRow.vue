@@ -73,32 +73,6 @@
               <span>Not required to achieve Kappa</span>
             </v-tooltip>
           </div>
-          <div
-            v-if="typeof questDetails.alternatives !== 'undefined' && questDetails.alternatives.length > 0"
-          >
-            <v-tooltip top>
-              <template v-slot:activator="{ on, attrs }">
-                <v-chip
-                  class="mt-1 font-weight-bold"
-                  x-small
-                  color="info"
-                  v-bind="attrs"
-                  v-on="on"
-                >
-                  ALTERNATIVES
-                </v-chip>
-              </template>
-              <span>
-                Complete one of:
-                <div
-                  v-for="(title, index) in calculateAlternatives(questDetails)"
-                  :key="index"
-                >
-                  <b>{{ title }}</b>
-                </div>
-              </span>
-            </v-tooltip>
-          </div>
           <span v-if="typeof availability !== 'undefined' && availability.length > 1">
             <v-tooltip top>
               <template v-slot:activator="{ on, attrs }">
@@ -186,7 +160,102 @@
             >
               <v-icon>mdi-replay</v-icon>
             </v-btn>
-          </span>
+          </span>      
+        </v-col>
+      </v-row>
+      <v-row
+        align="center"
+        no-gutters
+        v-if="$store.copy('progress/quest_failed', questDetails.id) === true"
+      >
+        <v-col
+          cols="12"
+          align="center"
+        >
+          <v-alert
+            dense
+            outlined
+            type="info"
+            class="text-caption mx-a"
+            color="secondary"
+            width="fit-content"
+          >
+            <span class="text-center">This quest was marked was marked as failed via completion of 
+              <span v-for="alternative in questDetails.alternatives">
+                <quest-link :quest-id="alternative" v-if="$store.copy('progress/quest_failed', alternative) === false" />
+              </span>
+            </span>
+          </v-alert>
+        </v-col>
+      </v-row>
+      <v-row
+        align="center"
+        no-gutters
+        v-if="pageType === 'available' && typeof questDetails.alternatives !== 'undefined' && questDetails.alternatives.length > 0"
+      >
+        <v-col
+          cols="12"
+          align="center"
+        >
+          <v-alert
+            dense
+            outlined
+            type="info"
+            class="text-caption mx-a"
+            color="secondary"
+            width="fit-content"
+          >
+            <span class="text-center">Fails alternative quests:
+              <span v-for="alternative in questDetails.alternatives">
+                <quest-link :quest-id="alternative" />
+              </span>
+            </span>
+          </v-alert>
+        </v-col>
+      </v-row>
+      <v-row
+        align="center"
+        no-gutters
+        v-if="pageType === 'locked' && myselfQuestAvailable(questDetails) === -2"
+      >
+        <v-col
+          cols="12"
+          align="center"
+        >
+          <v-alert
+            dense
+            outlined
+            type="error"
+            class="text-caption mx-a"
+            width="fit-content"
+          >
+            <span class="text-caption">Alternative path taken. Quest blocked.</span>
+          </v-alert>
+        </v-col>
+      </v-row>
+      <v-row
+        align="center"
+        no-gutters
+        v-if="pageType === 'completed' && typeof questDetails.alternatives !== 'undefined' && questDetails.alternatives.length > 0"
+      >
+        <v-col
+          cols="12"
+          align="center"
+        >
+          <v-alert
+            dense
+            outlined
+            type="info"
+            class="text-caption mx-a"
+            color="secondary"
+            width="fit-content"
+          >
+            <span class="text-center">Uncomplete will also reset alternative quests:
+              <span v-for="alternative in questDetails.alternatives">
+                <quest-link :quest-id="alternative" />
+              </span>
+            </span>
+          </v-alert>
         </v-col>
       </v-row>
     </v-container>
@@ -217,7 +286,7 @@
           })
         }, this)
         return availability
-      }
+      },
     },
     methods: {
       teamBadgeClass (availability) {
