@@ -180,7 +180,11 @@
             color="secondary"
             width="fit-content"
           >
-            <span class="text-center">This quest was marked was marked as failed via completion of an alternative.</span>
+            <span class="text-center">This quest was marked was marked as failed via completion of 
+              <span v-for="alternative in questDetails.alternatives">
+                <quest-link :quest-id="alternative" v-if="$store.copy('progress/quest_failed', alternative) === false" />
+              </span>
+            </span>
           </v-alert>
         </v-col>
       </v-row>
