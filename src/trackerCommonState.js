@@ -257,8 +257,5 @@ export default {
     	}, this)
     	return questItems
     },
-    overallVersion: function () {
-      return ;
-    },
   },
 }

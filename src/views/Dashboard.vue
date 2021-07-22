@@ -67,10 +67,54 @@
         class="mt-5"
       >
         <div>
-          <a
+          <v-btn
+            elevation="2"
+            large
+            href="https://discord.gg/zeAP4Ng"
+            target="_blank"
+            color="#5865F2"
+            class="mx-2"
+          >
+            <v-icon
+              dark
+              class="mr-2"
+            >
+              mdi-discord
+            </v-icon>
+            Join Discord
+          </v-btn>
+          <v-btn
+            elevation="2"
+            large
             href="https://www.patreon.com/bePatron?u=13444262"
             target="_blank"
-          ><img src="https://c5.patreon.com/external/logo/become_a_patron_button.png"></a>
+            color="#FF424D"
+            class="mx-2"
+          >
+            <v-icon
+              dark
+              class="mr-2"
+            >
+              mdi-patreon
+            </v-icon>
+            Support TarkovTracker
+          </v-btn>
+          <v-btn
+            elevation="2"
+            large
+            href="https://github.com/TarkovTracker/TarkovTracker"
+            target="_blank"
+            color="#FFFFF"
+            class="mx-2"
+          >
+            <v-icon
+              dark
+              class="mr-2"
+            >
+              mdi-github
+            </v-icon>
+            Contribute Code
+          </v-btn>
         </div>
       </v-row>
     </v-container>
