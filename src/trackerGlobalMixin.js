@@ -254,8 +254,8 @@ export default {
               }
             }
 
-            if (!oneOfNotFailed) {
-              // All of the optional array of prereqs were failed, so were blocked
+            if (!oneOfNotFailed || !oneOf) {
+              // We haven't selected a path
               return -2
             }
 
