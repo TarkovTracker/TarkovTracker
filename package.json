@@ -24,7 +24,7 @@
   "dependencies": {
     "@mdi/font": "^5.9.55",
     "firebase": "^8.8.0",
-    "firebaseui": "^4.8.0",
+    "firebaseui": "^4.8.1",
     "moment": "^2.29.1",
     "vue": "^2.6.11",
     "vue-meta": "^2.3.3",
