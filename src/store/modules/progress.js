@@ -259,6 +259,13 @@ const getters = {
     }
   },
 
+  complete_hideout: (state) => (id) => {
+    if (state.hideout[id] && state.hideout[id].complete) {
+      return state.hideout[id].complete;
+    }
+    return false;
+  },
+
   hideout_array: (state) => {
     if (state && 'hideout' in state) {
       return Object.values(state.hideout)

@@ -755,6 +755,8 @@
 </template>
 <script>
   import moment from 'moment';
+  import getHideoutModule from '../functions/hideoutFunctions';
+  import GAME_EDITION from '../constants/gameEdition';
   export default {
     name: 'SettingsView',
     components: {
@@ -841,10 +843,10 @@
           },
         ],
         gameEditions: [
-          { title: 'Standard Edition', value: 0 },
-          { title: 'Left Behind Edition', value: 1 },
-          { title: 'Prepare for Escape Edition', value: 2 },
-          { title: 'Edge of Darkness Limited Edition', value: 3 },
+          { title: 'Standard Edition', value: GAME_EDITION.STANDARD },
+          { title: 'Left Behind Edition', value: GAME_EDITION.LEFT_BEHIND },
+          { title: 'Prepare for Escape Edition', value: GAME_EDITION.PREPARE_FOR_ESCAPE },
+          { title: 'Edge of Darkness Limited Edition', value: GAME_EDITION.EDGE_OF_DARKNESS },
         ],
         fontOptions: [
           { title: 'Share Tech Mono', value: 0 },
@@ -894,10 +896,19 @@
       },
       selectedGameEdition: {
         get () {
-          return this.$store.copy('progress/gameEdition') || 3
+          return this.$store.copy('progress/gameEdition') || GAME_EDITION.EDGE_OF_DARKNESS
         },
         set (value) {
-          this.$store.set('progress/gameEdition', value)
+          this.$store.set('progress/gameEdition', value);
+          if (value === GAME_EDITION.EDGE_OF_DARKNESS) {
+            [2, 3, 4].forEach((level) => {
+                this.$store.set('progress/complete_hideout', getHideoutModule("stash", level).id);
+            });
+          } else {
+            [4, 3, 2].forEach((level) => {
+              this.$store.set('progress/uncomplete_hideout', getHideoutModule("stash", level).id);
+            });
+          }
         }
       },
       selectedFont: {

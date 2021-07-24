@@ -28,6 +28,8 @@
 </template>
 
 <script>
+  import getHideoutModule from '../functions/hideoutFunctions'
+
   export default {
     components: {
       HideoutModule: () => import('../components/HideoutModule.vue'),
@@ -82,7 +84,7 @@
         var tempHideout = this.hideoutDataDefault.modules
         var uniqueModules = new Set()
         // Scan all of the default hideout data and get unique modules
-        for (var i = tempHideout.length - 1; i >= 0; i--) {
+        for (let i = tempHideout.length - 1; i >= 0; i--) {
           if (this.$root.hideoutStationDictionary[tempHideout[i].stationId].disabled != true) {
             uniqueModules.add(tempHideout[i].module)
           }
@@ -90,11 +92,11 @@
         // Check for locked modules
         for (const curModule of uniqueModules) {
           // Loop through all the modules until we find the level 1 version of this
-          for (var z = tempHideout.length - 1; z >= 0; z--) {
+          for (let z = tempHideout.length - 1; z >= 0; z--) {
             if (tempHideout[z].module == curModule && tempHideout[z].level == 1) {
               // We found the matching module level 1
               // Loop through all the requirements for this, and find modules that could block
-              var isLocked = false
+              let isLocked = false
               isLocked = this.isModuleLocked(tempHideout[z].module, tempHideout[z].level)
               if (isLocked) {
                 this.lockedModules.push(tempHideout[z])
@@ -108,15 +110,15 @@
         // Check for currently completed modules
         for (const curModule of uniqueModules) {
           // Check the highest level of this module we've completed
-          var highestCurrent = this.highestCompleted(curModule)
+          let highestCurrent = this.highestCompleted(curModule)
           if (highestCurrent >= 1) {
             // Find the module object
-            for (var i = tempHideout.length - 1; i >= 0; i--) {
+            for (let i = tempHideout.length - 1; i >= 0; i--) {
               if (tempHideout[i].module == curModule && tempHideout[i].level == highestCurrent) {
                 this.currentModules.push(tempHideout[i])
 
                 // Is there an upgraded version of this module?
-                var upgradedModule = this.getModuleData(tempHideout[i].module, tempHideout[i].level + 1)
+                let upgradedModule = getHideoutModule(tempHideout[i].module, tempHideout[i].level + 1)
                 if (upgradedModule != null) {
                   if (!(this.isModuleLocked(upgradedModule.module, upgradedModule.level))) {
                     // Upgraded module is not locked, so add it to the available modules
@@ -148,16 +150,6 @@
           }
         }
         return isLocked
-      },
-      getModuleData (moduleName, moduleLevel) {
-        var tempHideout = this.hideoutDataDefault.modules
-        // Find the right module
-        for (var z = tempHideout.length - 1; z >= 0; z--) {
-          if (tempHideout[z].module == moduleName && tempHideout[z].level == moduleLevel) {
-            return tempHideout[z]
-          }
-        }
-        return null
       },
       highestCompleted (moduleName) {
         var tempHideout = this.hideoutDataDefault.modules

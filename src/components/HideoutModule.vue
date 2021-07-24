@@ -53,10 +53,20 @@
           @click="clickUncompleteModule(moduleDetails)"
         >Downgrade</v-btn>
       </span>
+      <span v-else-if="pageType === 'locked' && !(moduleData.module === 'stash' && this.$store.get('progress/gameEdition') === GAME_EDITION.EDGE_OF_DARKNESS)">
+        <v-btn
+          class="warning"
+          small
+          @click="clickCompleteModule(moduleDetails)"
+        >Build anyway</v-btn>
+      </span>
     </template>
   </material-card>
 </template>
 <script>
+  import getHideoutModule from '../functions/hideoutFunctions'
+  import GAME_EDITION from "../constants/gameEdition";
+
   export default {
     name: 'HideoutModule',
     props: {
@@ -85,16 +95,6 @@
       refreshHideout () {
         this.$emit('hideoutStateChanged')
       },
-      getModuleData (moduleName, moduleLevel) {
-        var tempHideout = this.hideoutDataDefault.modules
-        // Find the right module
-        for (var z = tempHideout.length - 1; z >= 0; z--) {
-          if (tempHideout[z].module == moduleName && tempHideout[z].level == moduleLevel) {
-            return tempHideout[z]
-          }
-        }
-        return null
-      },
       haveRequirement (requirement) {
         var have = false
         if (this.pageType == 'current') {
@@ -114,7 +114,27 @@
       },
       uncompleteModule (moduleName, moduleLevel) {
         var tempHideout = this.hideoutDataDefault.modules
-        var tempModuleData = this.getModuleData(moduleName, moduleLevel)
+
+        // Ignore any upgrades/downgrades on Stash upgrade if user has EOD edition
+        if (moduleName === 'stash' && this.$store.get('progress/gameEdition') === GAME_EDITION.EDGE_OF_DARKNESS) {
+          return;
+        }
+
+        var tempModuleData = getHideoutModule(moduleName, moduleLevel)
+
+        if (!this.$store.get('progress/complete_hideout', tempModuleData.id)) {
+          return;
+        }
+
+        // Mark all hideouts that require this module also as incomplete (in case of downgrading modules while already having
+        // another module dependant on this module)
+        tempHideout.forEach(module => {
+          module.require.forEach(requirement => {
+            if (requirement.type === 'module' && requirement.name === moduleName && requirement.quantity === moduleLevel) {
+              this.uncompleteModule(module.module, module.level);
+            }
+          });
+        });
 
         // Mark this module as not built
         this.$store.set('progress/uncomplete_hideout', tempModuleData.id)
@@ -140,12 +160,32 @@
           quests_previously: this.$store.get('progress/quests_array').filter(x => x.complete).length,
         })
       },
+      clickCompleteModuleLevel (moduleName, moduleLevel) {
+        this.completeModule(moduleName, moduleLevel);
+      },
       clickCompleteModule (moduleData) {
         this.completeModule(moduleData.module, moduleData.level)
       },
       completeModule (moduleName, moduleLevel) {
         var tempHideout = this.hideoutDataDefault.modules
-        var tempModuleData = this.getModuleData(moduleName, moduleLevel)
+
+        // Ignore any upgrades/downgrades on Stash upgrade if user has EOD edition
+        if (moduleName === 'stash' && this.$store.get('progress/gameEdition') === GAME_EDITION.EDGE_OF_DARKNESS) {
+          return;
+        }
+
+        var tempModuleData = getHideoutModule(moduleName, moduleLevel)
+
+        if (this.$store.get('progress/complete_hideout', tempModuleData.id)) {
+          return;
+        }
+
+        // Mark all requirements as complete (in case of completing locked modules)
+        tempModuleData.require.forEach(requirement => {
+            if (requirement.type === 'module') {
+              this.completeModule(requirement.name, requirement.quantity);
+            }
+        });
 
         // Mark this module as built
         this.$store.set('progress/complete_hideout', tempModuleData.id)
