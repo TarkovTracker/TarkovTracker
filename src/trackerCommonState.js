@@ -42,6 +42,13 @@ export default {
       return Object.values(this.traderDataDefault)
         .reduce((a, x) => ({ ...a, [x.id]: x }), {}) // Reduce to a mapping of id to trader
     },
+    mapArray: function() {
+      return Object.values(this.mapDataDefault)
+    },
+    mapDictionary: function() {
+      return Object.values(this.mapDataDefault)
+        .reduce((a, x) => ({ ...a, [x.id]: x }), {}) // Reduce to a mapping of id to map
+    },
     me: function() {
       return {
         store: this.$store,

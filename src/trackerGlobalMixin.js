@@ -2,6 +2,7 @@ import questData from '../tarkovdata/quests.json'
 import hideoutData from '../tarkovdata/hideout.json'
 import itemData from '../tarkovdata/items.en.json'
 import traderData from '../tarkovdata/traders.json'
+import mapData from '../tarkovdata/maps.json'
 
 export default {
   data() {
@@ -10,6 +11,7 @@ export default {
       hideoutDataDefault: hideoutData, // Imports the hideout data from hideoutData.json
       itemDataDefault: itemData, // Imports the item data from items.en.json
       traderDataDefault: traderData, // Imports the trader data from traders.json
+      mapDataDefault: mapData, // Imports the trader data from traders.json
     }
   },
   methods: {

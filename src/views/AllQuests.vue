@@ -496,8 +496,91 @@
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
-    </v-row>
+      <v-expansion-panels 
+        class="mx-3 mt-3"
+        inset
+        v-show = "(bringKeys.length > 0 && activeViewTab == 1 && activeAvailableTab == 0) || (Object.keys(bringItems).length != 0 && activeViewTab == 1 && activeAvailableTab == 0)"
+        v-model="showPacking"
+      >
+        <v-expansion-panel>
+          <v-expansion-panel-header
+            disable-icon-rotate
+            class="small-panels py-1 px-3"
+          >
+              <v-row no-gutters>
+                <v-col cols="auto">
+                  Packing List
+                </v-col>
+                <v-col
+                  cols="auto"
+                  class="text--secondary ml-auto mr-auto"
+                >
+                  Items to bring  
+                </v-col>
+              </v-row>
+            <template v-slot:actions>
+              <v-icon>
+                mdi-package-variant
+              </v-icon>
+            </template>
+          </v-expansion-panel-header>
+          <v-expansion-panel-content
+            color="contentbackground"
+          >
+              <v-row>
+                <!-- If we have keys needed, set up the grid for that -->
+                <v-col 
+                  v-if="bringKeys.length > 0 && activeViewTab == 1 && activeAvailableTab == 0"
+                  :lg="3"
+                  :sm="12"
+                  class="mx-auto"
+                >
+                  <v-icon>mdi-key</v-icon> <b>Keys:</b>
+                  <div
+                    v-for="keyObjective in bringKeys"
+                    :key="keyObjective.id"
+                  >
+                    <div style="font-weight: 400">
+                      <div v-if="Array.isArray(keyObjective.target)">
+                        <v-divider></v-divider>
+                        <div
+                          v-for="(keyOptional, keyIndex) in keyObjective.target"
+                          :key="keyIndex"
+                        >
+                          <tarkov-item :id="keyOptional" format="small" :externalLinks="true" />
+                          <div v-if="keyIndex < keyObjective.target.length - 1" class="text-center">
+                            OR
+                          </div>
+                        </div>
+                        <v-divider></v-divider>
+                      </div>
+                      <div v-else>
+                        <tarkov-item :id="keyObjective.target" format="small" :externalLinks="true" />
+                      </div>
+                    </div>
+                  </div>
+                </v-col>
 
+                <!-- If we have items needed, set up that grid -->
+                <v-col 
+                  v-if="Object.keys(bringItems).length != 0 && activeViewTab == 1 && activeAvailableTab == 0"
+                  :lg="3"
+                  :sm="12"
+                  class="mx-auto"
+                >
+                  <v-icon>mdi-package-variant</v-icon> <b>Items:</b>
+                  <div
+                    v-for="(itemCount, itemObjective) in bringItems"
+                    :key="itemObjective"
+                  >
+                    <tarkov-item :id="itemObjective" format="small" :count="itemCount" :externalLinks="true" />
+                  </div>
+                </v-col>
+              </v-row>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-expansion-panels>
+    </v-row>
     <v-row>
       <v-card
         width="100%"
