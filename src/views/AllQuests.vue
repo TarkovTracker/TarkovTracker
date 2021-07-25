@@ -499,84 +499,54 @@
       <v-expansion-panels 
         class="mx-3 mt-3"
         inset
-        v-show = "(bringKeys.length > 0 && activeViewTab == 1 && activeAvailableTab == 0) || (Object.keys(bringItems).length != 0 && activeViewTab == 1 && activeAvailableTab == 0)"
-        v-model="showPacking"
+        v-if = "activeViewTab == 1 && activeAvailableTab == 0 && activeMapTab < (maps.length - 1)"
+        v-model="showObjectiveMap"
       >
         <v-expansion-panel>
           <v-expansion-panel-header
             disable-icon-rotate
             class="small-panels py-1 px-3"
           >
-              <v-row no-gutters>
+              <v-row
+                no-gutters
+                class="mt-1 ml-auto mr-auto"
+              >
                 <v-col cols="auto">
-                  Packing List
+                  Objective Map
                 </v-col>
                 <v-col
                   cols="auto"
-                  class="text--secondary ml-auto mr-auto"
+                  class="text--secondary mx-auto"
+                  v-if="$root.mapDictionary[activeMapTab].svg == null && showObjectiveMap == undefined"
                 >
-                  Items to bring  
+                  No map yet available for {{ maps[activeMapTab] }}  
                 </v-col>
               </v-row>
             <template v-slot:actions>
               <v-icon>
-                mdi-package-variant
+                mdi-map-marker-radius
               </v-icon>
             </template>
           </v-expansion-panel-header>
           <v-expansion-panel-content
             color="contentbackground"
           >
-              <v-row>
-                <!-- If we have keys needed, set up the grid for that -->
-                <v-col 
-                  v-if="bringKeys.length > 0 && activeViewTab == 1 && activeAvailableTab == 0"
-                  :lg="3"
-                  :sm="12"
-                  class="mx-auto"
+            <v-row>
+              <v-col
+                v-if="$root.mapDictionary[activeMapTab].svg == null"
+                class="mx-auto"
+                cols="auto"
+              >
+                Know how to work with Illustrator, or SVGs? Want to help create this map? Head over to <a href="https://github.com/TarkovTracker/tarkovdata/tree/master/maps" target="_blank" class="quest-link">tarkovdata.io</a>!
+              </v-col>
+              <v-col
+                  v-else
+                  cols="8"
+                  class=""
                 >
-                  <v-icon>mdi-key</v-icon> <b>Keys:</b>
-                  <div
-                    v-for="keyObjective in bringKeys"
-                    :key="keyObjective.id"
-                  >
-                    <div style="font-weight: 400">
-                      <div v-if="Array.isArray(keyObjective.target)">
-                        <v-divider></v-divider>
-                        <div
-                          v-for="(keyOptional, keyIndex) in keyObjective.target"
-                          :key="keyIndex"
-                        >
-                          <tarkov-item :id="keyOptional" format="small" :externalLinks="true" />
-                          <div v-if="keyIndex < keyObjective.target.length - 1" class="text-center">
-                            OR
-                          </div>
-                        </div>
-                        <v-divider></v-divider>
-                      </div>
-                      <div v-else>
-                        <tarkov-item :id="keyObjective.target" format="small" :externalLinks="true" />
-                      </div>
-                    </div>
-                  </div>
-                </v-col>
-
-                <!-- If we have items needed, set up that grid -->
-                <v-col 
-                  v-if="Object.keys(bringItems).length != 0 && activeViewTab == 1 && activeAvailableTab == 0"
-                  :lg="3"
-                  :sm="12"
-                  class="mx-auto"
-                >
-                  <v-icon>mdi-package-variant</v-icon> <b>Items:</b>
-                  <div
-                    v-for="(itemCount, itemObjective) in bringItems"
-                    :key="itemObjective"
-                  >
-                    <tarkov-item :id="itemObjective" format="small" :count="itemCount" :externalLinks="true" />
-                  </div>
-                </v-col>
-              </v-row>
+                  <tarkov-map :mapId="activeMapTab" :layerControls="true" />
+              </v-col>
+            </v-row>
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
@@ -641,6 +611,7 @@
     data () {
       return {
         showPacking: 0,
+        showObjectiveMap: 0,
         progressValue: 0,
         activeTeamTab: 0,
         activeAvailableTab: 0,
