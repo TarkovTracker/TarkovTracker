@@ -122,7 +122,6 @@
 <script>
   // Utilities
   import { get } from 'vuex-pathify'
-  import GAME_EDITION from '../constants/gameEdition';
   import Vue from 'vue'
 
   const lineSmooth = Vue.chartist.Interpolation.cardinal({
@@ -235,7 +234,7 @@
 
         var objectivesPerDay = Math.ceil(timelineObjectivesComplete / Math.ceil((Date.now() - firstObjectiveComplete) / 86400000))
 
-        const START_REPUTATION = this.$store.get('progress/gameEdition') === GAME_EDITION.EDGE_OF_DARKNESS ? 0.2 : 0;
+        const START_REPUTATION = this.$store.get('progress/gameEdition') === 4 ? 0.2 : 0;
         let relevantTraders = ['prapor', 'therapist', 'skier', 'peacekeeper', 'mechanic', 'ragman', 'jaeger',]
 
         let reputations = {}

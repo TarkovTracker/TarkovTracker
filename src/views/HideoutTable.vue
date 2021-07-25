@@ -28,7 +28,7 @@
 </template>
 
 <script>
-  import getHideoutModule from '../functions/hideoutFunctions'
+  import hideoutFunctions from '../functions/hideoutFunctions'
 
   export default {
     components: {
@@ -82,6 +82,18 @@
         this.currentModules = []
         this.lockedModules = []
         var tempHideout = this.hideoutDataDefault.modules
+
+        if (this.$store.get('progress/dataVersion') < 2) {
+          for (let level = 1; level <= this.$store.get('progress/gameEdition'); level++) {
+            let module = hideoutFunctions.getHideoutModule("stash", level);
+            if (!this.$store.get('progress/hideout_complete', module.id)) {
+              this.$store.set('progress/complete_hideout', module.id);
+              hideoutFunctions.completeModuleObjective(this.$store, 'stash', level);
+            }
+          }
+          this.$store.set('progress/set_data_version', 2);
+        }
+
         var uniqueModules = new Set()
         // Scan all of the default hideout data and get unique modules
         for (let i = tempHideout.length - 1; i >= 0; i--) {
@@ -118,7 +130,7 @@
                 this.currentModules.push(tempHideout[i])
 
                 // Is there an upgraded version of this module?
-                let upgradedModule = getHideoutModule(tempHideout[i].module, tempHideout[i].level + 1)
+                let upgradedModule = hideoutFunctions.getHideoutModule(tempHideout[i].module, tempHideout[i].level + 1)
                 if (upgradedModule != null) {
                   if (!(this.isModuleLocked(upgradedModule.module, upgradedModule.level))) {
                     // Upgraded module is not locked, so add it to the available modules

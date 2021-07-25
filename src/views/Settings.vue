@@ -755,8 +755,8 @@
 </template>
 <script>
   import moment from 'moment';
-  import getHideoutModule from '../functions/hideoutFunctions';
-  import GAME_EDITION from '../constants/gameEdition';
+  import hideoutFunctions from '../functions/hideoutFunctions';
+
   export default {
     name: 'SettingsView',
     components: {
@@ -843,10 +843,10 @@
           },
         ],
         gameEditions: [
-          { title: 'Standard Edition', value: GAME_EDITION.STANDARD },
-          { title: 'Left Behind Edition', value: GAME_EDITION.LEFT_BEHIND },
-          { title: 'Prepare for Escape Edition', value: GAME_EDITION.PREPARE_FOR_ESCAPE },
-          { title: 'Edge of Darkness Limited Edition', value: GAME_EDITION.EDGE_OF_DARKNESS },
+          { title: 'Standard Edition', value: 1 },
+          { title: 'Left Behind Edition', value: 2 },
+          { title: 'Prepare for Escape Edition', value: 3 },
+          { title: 'Edge of Darkness Limited Edition', value: 4 },
         ],
         fontOptions: [
           { title: 'Share Tech Mono', value: 0 },
@@ -896,18 +896,19 @@
       },
       selectedGameEdition: {
         get () {
-          return this.$store.copy('progress/gameEdition') || GAME_EDITION.EDGE_OF_DARKNESS
+          return this.$store.copy('progress/gameEdition') || 1
         },
         set (value) {
           this.$store.set('progress/gameEdition', value);
-          if (value === GAME_EDITION.EDGE_OF_DARKNESS) {
-            [2, 3, 4].forEach((level) => {
-                this.$store.set('progress/complete_hideout', getHideoutModule("stash", level).id);
-            });
-          } else {
-            [4, 3, 2].forEach((level) => {
-              this.$store.set('progress/uncomplete_hideout', getHideoutModule("stash", level).id);
-            });
+          for (let level = 1; level <= 4; level++) {
+            let stash = hideoutFunctions.getHideoutModule("stash", level);
+            if (value >= level && !this.$store.get('progress/hideout_complete', stash.id)) {
+              this.$store.set('progress/complete_hideout', stash.id);
+              hideoutFunctions.completeModuleObjective(this.$store, "stash", level);
+            } else if (value < level && this.$store.get('progress/hideout_complete', stash.id)) {
+              this.$store.set('progress/uncomplete_hideout', stash.id);
+              hideoutFunctions.uncompleteModuleObjective(this.$store, "stash", level);
+            }
           }
         }
       },

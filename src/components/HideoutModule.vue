@@ -21,6 +21,7 @@
       </div>
       <div
         v-for="requirement in moduleDetails.require"
+        v-if="!modificationDisabled(moduleDetails)"
         :key="requirement.id"
         class="text-left"
         :class="haveRequirement(requirement)"
@@ -39,33 +40,39 @@
       </div>
     </v-card-text>
     <template v-slot:actions>
-      <span v-if="pageType === 'available'">
+      <span v-if="pageType === 'available' && !modificationDisabled(moduleDetails)">
         <v-btn
           class="warning"
           small
           @click="clickCompleteModule(moduleDetails)"
         >Build</v-btn>
       </span>
-      <span v-else-if="pageType === 'current'">
+      <span v-else-if="pageType === 'current' && !modificationDisabled(moduleDetails)">
         <v-btn
           class="error"
           small
           @click="clickUncompleteModule(moduleDetails)"
         >Downgrade</v-btn>
       </span>
-      <span v-else-if="pageType === 'locked' && !(moduleData.module === 'stash' && this.$store.get('progress/gameEdition') === GAME_EDITION.EDGE_OF_DARKNESS)">
+      <span v-else-if="pageType === 'locked' && !modificationDisabled(moduleDetails)">
         <v-btn
-          class="warning"
+          class="warning upgrade-hideout"
           small
           @click="clickCompleteModule(moduleDetails)"
         >Build anyway</v-btn>
+        <v-btn
+          v-for="level in getLockedLevels(moduleDetails)"
+          class="warning upgrade-hideout"
+          small
+          :key="level"
+          @click="clickCompleteModule(moduleDetails)"
+        >Level {{level}}</v-btn>
       </span>
     </template>
   </material-card>
 </template>
 <script>
-  import getHideoutModule from '../functions/hideoutFunctions'
-  import GAME_EDITION from "../constants/gameEdition";
+  import hideoutFunctions from '../functions/hideoutFunctions'
 
   export default {
     name: 'HideoutModule',
@@ -92,6 +99,18 @@
       },
     },
     methods: {
+      getLockedLevels(module) {
+        let lockedLevels = [];
+        let MAX_ITERATIONS = 10;
+        for (let level = module.level + 1; level < MAX_ITERATIONS; level++) {
+          let nextLevelModule = hideoutFunctions.getHideoutModule(module.module, level);
+          if (!nextLevelModule) {
+            break;
+          }
+          lockedLevels.push(level)
+        }
+        return lockedLevels;
+      },
       refreshHideout () {
         this.$emit('hideoutStateChanged')
       },
@@ -109,6 +128,9 @@
 
         return { 'objective-enough': have }
       },
+      modificationDisabled(module) {
+        return module.module.toLowerCase() === 'stash' && module.level <= this.$store.get('progress/gameEdition');
+      },
       clickUncompleteModule (moduleData) {
         this.uncompleteModule(moduleData.module, moduleData.level)
       },
@@ -116,11 +138,11 @@
         var tempHideout = this.hideoutDataDefault.modules
 
         // Ignore any upgrades/downgrades on Stash upgrade if user has EOD edition
-        if (moduleName === 'stash' && this.$store.get('progress/gameEdition') === GAME_EDITION.EDGE_OF_DARKNESS) {
+        if (moduleName.toLowerCase() === 'stash' && moduleLevel <= this.$store.get('progress/gameEdition')) {
           return;
         }
 
-        var tempModuleData = getHideoutModule(moduleName, moduleLevel)
+        var tempModuleData = hideoutFunctions.getHideoutModule(moduleName, moduleLevel)
 
         if (!this.$store.get('progress/complete_hideout', tempModuleData.id)) {
           return;
@@ -136,21 +158,8 @@
           });
         });
 
-        // Mark this module as not built
-        this.$store.set('progress/uncomplete_hideout', tempModuleData.id)
-        // Mark all of the requirements for this module as complete
-        for (var i = tempModuleData.require.length - 1; i >= 0; i--) {
-          this.$store.set('progress/uncomplete_hideout_objective', tempModuleData.require[i].id)
-        }
-        // Search for this module as a requirement for other modules, and mark it as complete
-        for (i = tempHideout.length - 1; i >= 0; i--) {
-          for (var x = tempHideout[i].require.length - 1; x >= 0; x--) {
-            // If requirement is a module, and its this module, mark it as complete
-            if (tempHideout[i].require[x].type == 'module' && tempHideout[i].require[x].name == moduleName && tempHideout[i].require[x].quantity <= moduleLevel) {
-              this.$store.set('progress/uncomplete_hideout_objective', tempHideout[i].require[x].id)
-            }
-          }
-        }
+        hideoutFunctions.uncompleteModule(this.$store, tempModuleData.id);
+        hideoutFunctions.uncompleteModuleObjective(this.$store, moduleName, moduleLevel);
 
         this.refreshHideout()
 
@@ -170,11 +179,11 @@
         var tempHideout = this.hideoutDataDefault.modules
 
         // Ignore any upgrades/downgrades on Stash upgrade if user has EOD edition
-        if (moduleName === 'stash' && this.$store.get('progress/gameEdition') === GAME_EDITION.EDGE_OF_DARKNESS) {
+        if (moduleName.toLowerCase() === 'stash' && moduleLevel <= this.$store.get('progress/gameEdition')) {
           return;
         }
 
-        var tempModuleData = getHideoutModule(moduleName, moduleLevel)
+        var tempModuleData = hideoutFunctions.getHideoutModule(moduleName, moduleLevel)
 
         if (this.$store.get('progress/complete_hideout', tempModuleData.id)) {
           return;
@@ -187,21 +196,8 @@
             }
         });
 
-        // Mark this module as built
-        this.$store.set('progress/complete_hideout', tempModuleData.id)
-        // Mark all of the requirements for this module as complete
-        for (var i = tempModuleData.require.length - 1; i >= 0; i--) {
-          this.$store.set('progress/complete_hideout_objective', tempModuleData.require[i].id)
-        }
-        // Search for this module as a requirement for other modules, and mark it as complete
-        for (i = tempHideout.length - 1; i >= 0; i--) {
-          for (var x = tempHideout[i].require.length - 1; x >= 0; x--) {
-            // If requirement is a module, and its this module, mark it as complete
-            if (tempHideout[i].require[x].type == 'module' && tempHideout[i].require[x].name == moduleName && tempHideout[i].require[x].quantity <= moduleLevel) {
-              this.$store.set('progress/complete_hideout_objective', tempHideout[i].require[x].id)
-            }
-          }
-        }
+        hideoutFunctions.completeModule(this.$store, tempModuleData.id);
+        hideoutFunctions.completeModuleObjective(this.$store, moduleName, moduleLevel);
 
         this.refreshHideout()
 
@@ -220,4 +216,6 @@
   font-size: .8rem !important
   margin-left: auto
   font-weight: bold
+.upgrade-hideout
+  margin-right: 10px
 </style>
