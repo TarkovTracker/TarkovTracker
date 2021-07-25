@@ -21,7 +21,9 @@
             </v-col>
           </v-row>
         </v-col>
+      </v-row>
 
+      <v-row>
         <v-col cols="12">
           <v-row>
             <v-col
@@ -38,7 +40,27 @@
             </v-col>
           </v-row>
         </v-col>
+      </v-row>
 
+      <v-row
+        class="mt-5"
+      >
+        <v-col
+          v-for="trader in loyaltyLevelStats"
+          :key="i"
+          cols="auto"
+          class="ml-auto mr-auto"
+        >
+          <loyalty-stat-card 
+            :trader="trader.trader" 
+            :loyaltyLevel="trader.loyaltyLevel" 
+            :reputation="trader.reputation" 
+            :nextLoyaltyRep="trader.nextLoyaltyRep" 
+          />
+        </v-col>
+      </v-row>
+
+      <v-row>
         <v-col
           v-for="({ actionIcon, actionText, ...attrs }, i) in completionStats"
           :key="i"
@@ -234,54 +256,7 @@
 
         var objectivesPerDay = Math.ceil(timelineObjectivesComplete / Math.ceil((Date.now() - firstObjectiveComplete) / 86400000))
 
-        const START_REPUTATION = this.$store.get('progress/gameEdition') >= 3 ? 0.2 : 0;
-        let relevantTraders = ['prapor', 'therapist', 'skier', 'peacekeeper', 'mechanic', 'ragman', 'jaeger',]
-
-        let reputations = {}
-        relevantTraders.forEach(trader => {reputations[trader] = {value: START_REPUTATION, level: 1, toNextLevel: 0}});
-
-        this.questDataDefault.forEach(quest => {
-          if (this.$store.get('progress/quest_complete', quest.id) == true) {
-            quest.reputation.forEach(reputation => {
-              let trader = reputation.trader.toLowerCase();
-              reputations[trader].value += reputation.rep;
-            });
-          }
-        });
-
-        for (let [trader, reputation] of Object.entries(reputations)) {
-          let currentTrader = this.traderDataDefault[trader];
-          for (let i = 0; i < currentTrader.loyalty.length; i++) {
-            // If we are looking at last possible level and player has more than the required reputation for that level
-            if (i === currentTrader.loyalty.length - 1 && currentTrader.loyalty[i].requiredReputation <= reputation.value) {
-              reputation.level = currentTrader.loyalty[i].level
-            // If player has enough reputation for the given level, but not more than what is required for the next level
-            } else if (currentTrader.loyalty[i].requiredReputation <= reputation.value && currentTrader.loyalty[i + 1].requiredReputation > reputation.value) {
-              reputation.level = currentTrader.loyalty[i].level
-              break;
-            }
-          }
-        }
-
-        for (let [trader, reputation] of Object.entries(reputations)) {
-          let currentTrader = this.traderDataDefault[trader];
-          let maxLoyaltyLevel = currentTrader.loyalty[currentTrader.loyalty.length - 1].level;
-          reputation.toNextLevel = reputation.level === maxLoyaltyLevel ? 0 : currentTrader.loyalty[reputation.level].requiredReputation - reputation.value
-        }
-
-        let traderCardData = [];
-        for (let [trader, reputation] of Object.entries(reputations)) {
-          traderCardData.push({
-            actionIcon: 'mdi-help-circle',
-            actionText: `${reputations[trader].value.toFixed(2)} (${reputation.toNextLevel === 0 ? 'Max level' : reputation.toNextLevel.toFixed(2) + ' to next level'})`,
-            color: 'var(--v-accent-base)',
-            icon: 'mdi-account-cash',
-            title: `${trader.capitalize()}`,
-            value: `Level ${reputation.level}`,
-          })
-        }
-
-        let otherCardsData = [
+        let cardsData = [
           {
             actionIcon: 'mdi-help-circle',
             actionText: `${completedKappaQuests}/${totalKappaQuests} Kappa`,
@@ -380,7 +355,60 @@
           },
         ];
 
-        return traderCardData.concat(otherCardsData)
+        return cardsData
+      },
+      loyaltyLevelStats () {
+        const START_REPUTATION = this.$store.get('progress/gameEdition') >= 3 ? 0.2 : 0;
+        let relevantTraders = ['prapor', 'therapist', 'skier', 'peacekeeper', 'mechanic', 'ragman', 'jaeger',]
+
+        let reputations = {}
+        relevantTraders.forEach(trader => {reputations[trader] = {value: START_REPUTATION, level: 1, toNextLevel: 0}});
+
+        this.questDataDefault.forEach(quest => {
+          if (this.$store.copy('progress/quest_failed', quest.id) == true) {
+            quest.reputationFailure.forEach(reputation => {
+              let trader = reputation.trader.toLowerCase();
+              reputations[trader].value += reputation.rep;
+            });
+          } else if (this.$store.copy('progress/quest_complete', quest.id) == true) {
+            quest.reputation.forEach(reputation => {
+              let trader = reputation.trader.toLowerCase();
+              reputations[trader].value += reputation.rep;
+            });
+          }
+        });
+
+        for (let [trader, reputation] of Object.entries(reputations)) {
+          let currentTrader = this.traderDataDefault[trader];
+          for (let i = 0; i < currentTrader.loyalty.length; i++) {
+            // If we are looking at last possible level and player has more than the required reputation for that level
+            if (i === currentTrader.loyalty.length - 1 && currentTrader.loyalty[i].requiredReputation <= reputation.value) {
+              reputation.level = currentTrader.loyalty[i].level
+            // If player has enough reputation for the given level, but not more than what is required for the next level
+            } else if (currentTrader.loyalty[i].requiredReputation <= reputation.value && currentTrader.loyalty[i + 1].requiredReputation > reputation.value) {
+              reputation.level = currentTrader.loyalty[i].level
+              break;
+            }
+          }
+        }
+
+        for (let [trader, reputation] of Object.entries(reputations)) {
+          let currentTrader = this.traderDataDefault[trader];
+          let maxLoyaltyLevel = currentTrader.loyalty[currentTrader.loyalty.length - 1].level;
+          reputation.toNextLevel = reputation.level === maxLoyaltyLevel ? 0 : currentTrader.loyalty[reputation.level].requiredReputation - reputation.value
+        }
+
+        let traderCardData = [];
+        for (let [trader, reputation] of Object.entries(reputations)) {
+          traderCardData.push({
+            trader: trader,
+            loyaltyLevel: reputation.level,
+            reputation: reputations[trader].value,
+            nextLoyaltyRep: reputation.toNextLevel
+          })
+        }
+
+        return traderCardData
       },
       mapChartData () {
         var factoryObjectives = 0
