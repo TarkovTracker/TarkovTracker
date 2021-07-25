@@ -414,80 +414,34 @@
 
         return traderCardData
       },
+      // Tally up the data for the map objective completion chart
       mapChartData () {
-        var factoryObjectives = 0
-        var customsObjectives = 0
-        var woodsObjectives = 0
-        var shorelineObjectives = 0
-        var interchangeObjectives = 0
-        var reserveObjectives = 0
-        var labsObjectives = 0
-        var factoryObjectivesComplete = 0
-        var customsObjectivesComplete = 0
-        var woodsObjectivesComplete = 0
-        var shorelineObjectivesComplete = 0
-        var interchangeObjectivesComplete = 0
-        var reserveObjectivesComplete = 0
-        var labsObjectivesComplete = 0
-        var tempQuests = this.questDataDefault
-        var i
-        for (i = 0; i < tempQuests.length; i++) {
-          for (var x = tempQuests[i].objectives.length - 1; x >= 0; x--) {
-            switch (tempQuests[i].objectives[x].location.toLowerCase()) {
-              case 'factory':
-                factoryObjectives++
-                if (this.$store.get('progress/objective_complete', tempQuests[i].objectives[x].id) == true) factoryObjectivesComplete++
-                break
-              case 'customs':
-                customsObjectives++
-                if (this.$store.get('progress/objective_complete', tempQuests[i].objectives[x].id) == true) customsObjectivesComplete++
-                break
-              case 'woods':
-                woodsObjectives++
-                if (this.$store.get('progress/objective_complete', tempQuests[i].objectives[x].id) == true) woodsObjectivesComplete++
-                break
-              case 'shoreline':
-                shorelineObjectives++
-                if (this.$store.get('progress/objective_complete', tempQuests[i].objectives[x].id) == true) shorelineObjectivesComplete++
-                break
-              case 'interchange':
-                interchangeObjectives++
-                if (this.$store.get('progress/objective_complete', tempQuests[i].objectives[x].id) == true) interchangeObjectivesComplete++
-                break
-              case 'reserve':
-                reserveObjectives++
-                if (this.$store.get('progress/objective_complete', tempQuests[i].objectives[x].id) == true) reserveObjectivesComplete++
-                break
-              case 'labs':
-                labsObjectives++
-                if (this.$store.get('progress/objective_complete', tempQuests[i].objectives[x].id) == true) labsObjectivesComplete++
-                break
+        var labels = []
+        var seriesComplete = []
+        var seriesTotal = []
+
+        // Loop through each map we have in maps.json
+        this.$root.mapArray.forEach((map) => {
+          var mapTotal = 0
+          var mapComplete = 0
+
+          // Check all the relevant objectives and add
+          this.$root.objectiveArray.filter(objective => objective.location == map.id).forEach((objective) => {
+            mapTotal++
+            if (this.$store.get('progress/objective_complete', objective.id) === true) {
+              mapComplete++
             }
-          }
-        }
+          }, this)
+
+          // Add this maps data to the chart arrays
+          labels.push(map.locale.en)
+          seriesComplete.push(mapComplete)
+          seriesTotal.push(mapTotal - mapComplete)
+        }, this)
 
         var chartData = {
-          labels: ['Factory', 'Customs', 'Woods', 'Shoreline', 'Interchange', 'Reserve', 'Labs'],
-          series: [
-            [
-              factoryObjectivesComplete,
-              customsObjectivesComplete,
-              woodsObjectivesComplete,
-              shorelineObjectivesComplete,
-              interchangeObjectivesComplete,
-              reserveObjectivesComplete,
-              labsObjectivesComplete,
-            ],
-            [
-              factoryObjectives - factoryObjectivesComplete,
-              customsObjectives - customsObjectivesComplete,
-              woodsObjectives - woodsObjectivesComplete,
-              shorelineObjectives - shorelineObjectivesComplete,
-              interchangeObjectives - interchangeObjectivesComplete,
-              reserveObjectives - reserveObjectivesComplete,
-              labsObjectives - labsObjectivesComplete,
-            ],
-          ],
+          labels: labels,
+          series: [seriesComplete, seriesTotal],
         }
 
         return chartData

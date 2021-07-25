@@ -102,9 +102,9 @@
                   mdi-compass
                 </v-icon>
                 <v-badge
-                  :value="activeAvailableTab == 0 && $root.mapAvailability[map.toLowerCase()] >= 1"
+                  :value="activeAvailableTab == 0 && $root.mapAvailability[map] >= 1"
                   color="primary"
-                  :content="$root.mapAvailability[map.toLowerCase()]"
+                  :content="$root.mapAvailability[map]"
                 >
                   {{ map }}
                 </v-badge>
@@ -644,8 +644,6 @@
         progressValue: 0,
         activeTeamTab: 0,
         activeAvailableTab: 0,
-        maps: ['Factory', 'Customs', 'Woods', 'Shoreline', 'Interchange', 'Reserve', 'Labs', 'Global'],
-        
         views: [
           {title: 'All', icon: 'mdi-clipboard-check'},
           {title: 'Maps', icon: 'mdi-compass'},
@@ -683,6 +681,9 @@
       ],
     },
     computed: {
+      maps: function() {
+        return this.$root.mapArray.reduce((acc, x) => acc.concat(x.locale.en), []).concat('Global')
+      },
       onlyKappa: {
         get () {
           return this.$store.copy('user/onlyKappa') || false
@@ -789,12 +790,13 @@
             break;
 
           case 1: // The 'Maps' view
-            if( this.activeMapTab == 7 ) {
+            // Global should always be the last tab
+            if( this.activeMapTab == (this.maps.length - 1) ) {
               // We want to see global quests
               quests = quests.filter(quest => this.isQuestOnMap(quest) != false)
             }else{
-              quests = quests.filter(quest => this.$root.questsByMap[this.maps[this.activeMapTab].toLowerCase()].has(quest.id))
-              quests = quests.map(quest => this.isQuestOnMap(quest, this.maps[this.activeMapTab]))
+              quests = quests.filter(quest => this.$root.questsByMap[this.activeMapTab].has(quest.id))
+              quests = quests.map(quest => this.isQuestOnMap(quest, this.activeMapTab))
             }
             break;
 

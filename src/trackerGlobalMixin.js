@@ -22,17 +22,6 @@ export default {
       var returnCopy = JSON.parse(stringCopy)
       return returnCopy
     },
-    // Return a string which is a list of related quest maps
-    calculateLocation(quest) {
-      var locations = []
-      for (var i = quest.objectives.length - 1; i >= 0; i--) {
-        if (quest.objectives[i].location.toLowerCase() !== 'Any') {
-          locations.push(quest.objectives[i].location)
-        }
-      }
-      locations.splice(0, locations.length, ...(new Set(locations)))
-      return locations.join(', ')
-    },
     // Return a string which is a list of alternative quests
     calculateAlternatives(quest) {
       var alternatives = [quest.title]
@@ -284,7 +273,7 @@ export default {
     isQuestAnywhere(quest) {
       for (var i = quest.objectives.length - 1; i >= 0; i--) {
         // If we have a location and it isn't any, then we are targeted
-        if ('location' in quest.objectives[i] && quest.objectives[i].location.toLowerCase() !== 'any') {
+        if ('location' in quest.objectives[i] && quest.objectives[i].location == -1) {
           return false
         }
       }
@@ -292,13 +281,13 @@ export default {
       return true
     },
     // Check if a quest has any objectives that can be completed on this map
-    isQuestOnMap(quest, mapName = false) {
+    isQuestOnMap(quest, mapId = false) {
       var match = false
       if ('objectives' in quest && quest.objectives.length > 0) {
         for (var x = quest.objectives.length - 1; x >= 0; x--) {
-          if ( mapName !== false && quest.objectives[x].location.toLowerCase() === mapName.toLowerCase() ) {
+          if ( mapId !== false && quest.objectives[x].location === mapId ) {
             match = true
-          } else if (quest.objectives[x].location.toLowerCase() === 'any' && ['skill', 'collect', 'find', 'reputation'].indexOf(quest.objectives[x].type.toLowerCase()) < 0) {
+          } else if (quest.objectives[x].location == -1 && ['skill', 'collect', 'find', 'reputation'].indexOf(quest.objectives[x].type.toLowerCase()) < 0) {
             match = true
           } else {
             quest.objectives.splice(x, 1)
@@ -312,13 +301,13 @@ export default {
       }
     },
     // Determine if there are any map specific objectives for this quest
-    isQuestMapSpecific(quest, mapName = false) {
+    isQuestMapSpecific(quest, mapId = false) {
       var match = false
       if ('objectives' in quest && quest.objectives.length > 0) {
         quest.objectives.forEach((objective) => {
-          if (mapName != false && objective.location.toLowerCase() == mapName.toLowerCase()) {
+          if (mapId !== false && objective.location === mapId) {
             match = true
-          }else if (objective.location.toLowerCase() != 'any') {
+          }else if (objective.location >= 0) {
             match = true
           }
         }, this)
