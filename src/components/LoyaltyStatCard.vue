@@ -12,9 +12,8 @@
         align="center"
       >
         <v-avatar
-          class="mt-n10 ml-auto mr-auto"
+          class="mt-n10 ml-auto mr-auto elevation-6"
           size="80"
-          elevation="12"
         >
           <img :src="avatar" />
         </v-avatar>
