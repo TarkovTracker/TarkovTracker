@@ -1,17 +1,24 @@
 // This Storage Module is for User's progress and other data that may be shared in a team or via a public endpoint
 import { make } from 'vuex-pathify'
+import hideoutFunctions from "../../functions/hideoutFunctions";
 
 const getDefaultState = () => {
-  return {
+  let hideoutWithStash = {};
+  hideoutWithStash[hideoutFunctions.getHideoutModule("stash", 1).id] = {
+    complete: true,
+    timeComplete: new Date().getTime()
+  };
+  let defaultState = {
     quests: {},
     objectives: {},
-    hideout: {},
+    hideout: hideoutWithStash,
     hideoutObjectives: {},
     shareName: null,
-    dataVersion: 1,
+    dataVersion: 2,
     level: 71,
-    gameEdition: 3,
+    gameEdition: 1,
   }
+  return defaultState;
 }
 
 const mutations = {
@@ -257,6 +264,13 @@ const getters = {
     } else {
       return []
     }
+  },
+
+  complete_hideout: (state) => (id) => {
+    if (state.hideout[id] && state.hideout[id].complete) {
+      return state.hideout[id].complete;
+    }
+    return false;
   },
 
   hideout_array: (state) => {
