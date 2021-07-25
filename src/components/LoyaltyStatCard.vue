@@ -1,0 +1,110 @@
+<template>
+  <v-sheet
+    elevation="6"
+    class="px-2"
+  >
+    <v-row
+      class="mt-6"
+      no-gutters
+    >
+      <v-col
+        cols="12"
+        align="center"
+      >
+        <v-avatar
+          class="mt-n10 ml-auto mr-auto"
+          size="80"
+          elevation="12"
+        >
+          <img :src="avatar" />
+        </v-avatar>
+      </v-col>
+    </v-row>
+    <v-row
+      no-gutters
+      class="mt-1"
+    >
+      <v-col align="center" cols="12">
+        {{ trader.capitalize() }}
+      </v-col>
+    </v-row>
+    <v-row
+      no-gutters
+      class="mt-1"
+    >
+      <v-col align="center" cols="12">
+        <span v-if="loyaltyLevel != null">
+          <span v-if="loyaltyLevel === 4">
+            Loyalty <v-icon class="objective-icon-bottom" small>mdi-crown</v-icon>
+          </span>
+          <span v-else>
+            Loyalty {{romanLoyalty}}
+          </span>
+        </span>
+      </v-col>
+    </v-row>
+    <v-row
+      no-gutters
+      class="mt-1"
+    >
+      <v-col align="center" cols="12" class="text-caption">
+        <v-divider
+          class="mb-2"
+        ></v-divider>
+        Reputation {{ reputation.toFixed(2) }}
+      </v-col>
+    </v-row>
+    <v-row
+      no-gutters
+      class="mt-1"
+      v-if="nextLoyaltyRep > 0"
+    >
+      <v-col align="center" cols="12" class="text-caption">
+        Next @ {{ nextLoyaltyRep.toFixed(2) }}
+      </v-col>
+    </v-row>
+  </v-sheet>
+</template>
+
+<script>
+  export default {
+    name: 'LoyaltyStatCard',
+
+    props: {
+      trader: {
+        type: String,
+      },
+      loyaltyLevel: {
+        type: Number,
+      },
+      reputation: {
+        type: Number,
+      },
+      nextLoyaltyRep: {
+        type: Number,
+      },
+    },
+
+    computed: {
+      avatar: function () {
+        return this.traderIcon(this.trader)
+      },
+      romanLoyalty: function () {
+        switch(this.loyaltyLevel) {
+          case 1:
+            return "I"
+            break;
+          case 2:
+            return "II"
+            break;
+          case 2:
+            return "III"
+            break;
+          default:
+            return this.loyalty
+            break;
+        }
+      }
+    },
+  }
+</script>
