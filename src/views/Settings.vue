@@ -420,7 +420,7 @@
           color="secondary"
         >
           <v-card-text>
-            Create access tokens so external tools can utilize your TarkovTracker progress data to provide you information tailored to your current progress. This feature is currently in BETA.
+            Create access tokens so external tools can utilize your TarkovTracker progress data to provide you information tailored to your current progress. This feature is currently in BETA. You can download OpenAPI <a href="/openapi.yaml">documentation here</a>.
             <v-container
               class="bgdarken text--primary mt-2"
               fluid
