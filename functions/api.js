@@ -296,4 +296,4 @@ app.post('/api/v1/progress/hideout/objective/:objectiveId(\\d+)', async (req, re
 
 
 // Export the express app as a cloud function
-exports.default = functions.region('us-east4').https.onRequest(app)
+exports.default = functions.region('us-east4,us-central1').https.onRequest(app)
