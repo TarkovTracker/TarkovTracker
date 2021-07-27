@@ -29,7 +29,7 @@ async function userLeaveTeam(userId) {
 
 // Should probably rewrite this to use firebase transactions
 // https://firebase.google.com/docs/firestore/manage-data/transactions
-exports.createTeam = functions.region('us-east4,us-central1').https.onCall( async (data, context) => {
+exports.createTeam = functions.region('us-east4', 'us-central1').https.onCall( async (data, context) => {
 	const db = admin.firestore();
   	const systemRef = db.collection('system').doc(context.auth.uid);
   	const myTeamRef = db.collection('team').doc(context.auth.uid);
@@ -61,7 +61,7 @@ exports.createTeam = functions.region('us-east4,us-central1').https.onCall( asyn
 	return { team: context.auth.uid }
 });
 
-exports.joinTeam = functions.region('us-east4,us-central1').https.onCall( async (data, context) => {
+exports.joinTeam = functions.region('us-east4', 'us-central1').https.onCall( async (data, context) => {
 	const db = admin.firestore();
 
 	// Parameters from request
@@ -106,7 +106,7 @@ exports.joinTeam = functions.region('us-east4,us-central1').https.onCall( async 
 	}
 });
 
-exports.kickTeammate = functions.region('us-east4,us-central1').https.onCall( async (data, context) => {
+exports.kickTeammate = functions.region('us-east4', 'us-central1').https.onCall( async (data, context) => {
 	const db = admin.firestore();
 
 	const teammateId = data.id;
@@ -123,7 +123,7 @@ exports.kickTeammate = functions.region('us-east4,us-central1').https.onCall( as
 });
 
 
-exports.leaveTeam = functions.region('us-east4,us-central1').https.onCall( async (data, context) => {
+exports.leaveTeam = functions.region('us-east4', 'us-central1').https.onCall( async (data, context) => {
 	const db = admin.firestore();
 
 	// Reference to the team
@@ -180,7 +180,7 @@ async function removeSytemTeamRef(userId, teamRef) {
 	}
 }
 
-exports.teamChanged = functions.region('us-east4,us-central1').firestore
+exports.teamChanged = functions.region('us-east4', 'us-central1').firestore
     .document('team/{teamId}')
     .onWrite(async (change, context) => {
       var removedMembers = difference(new Set(change.before.data()?.members), new Set(change.after.data()?.members))
@@ -190,7 +190,7 @@ exports.teamChanged = functions.region('us-east4,us-central1').firestore
       }, this)
 });
 
-exports.createToken = functions.region('us-east4,us-central1').https.onCall( async (data, context) => {
+exports.createToken = functions.region('us-east4', 'us-central1').https.onCall( async (data, context) => {
 	const db = admin.firestore();
 
 	if ( data.note == null || !(data.permissions.length > 0)) {
@@ -235,7 +235,7 @@ exports.createToken = functions.region('us-east4,us-central1').https.onCall( asy
 	return { token: token }
 });
 
-exports.revokeToken = functions.region('us-east4,us-central1').https.onCall( async (data, context) => {
+exports.revokeToken = functions.region('us-east4', 'us-central1').https.onCall( async (data, context) => {
 	const db = admin.firestore();
 
 	if ( data.token == null) {
@@ -260,7 +260,7 @@ exports.revokeToken = functions.region('us-east4,us-central1').https.onCall( asy
 	}
 });
 
-exports.deletedUserCleanup = functions.region('us-east4,us-central1').firestore
+exports.deletedUserCleanup = functions.region('us-east4', 'us-central1').firestore
     .document('system/{userId}')
     .onDelete(async (snap, context) => {
       const db = admin.firestore();
@@ -284,7 +284,7 @@ exports.deletedUserCleanup = functions.region('us-east4,us-central1').firestore
 });
 
 // If a token is deleted on its own, make sure its removed from the system document
-exports.deletedTokenCleanup = functions.region('us-east4,us-central1').firestore
+exports.deletedTokenCleanup = functions.region('us-east4', 'us-central1').firestore
 .document('token/{tokenId}')
 .onDelete(async (snap, context) => {
     const db = admin.firestore();
@@ -295,7 +295,7 @@ exports.deletedTokenCleanup = functions.region('us-east4,us-central1').firestore
 	}, {merge: true});
 });
 
-exports.setUpTTUser = functions.region('us-east4,us-central1').auth.user().onCreate((user) => {
+exports.setUpTTUser = functions.region('us-east4', 'us-central1').auth.user().onCreate((user) => {
     const db = admin.firestore();
     const systemRef = db.collection('system').doc(user.uid);
     return systemRef.set({
