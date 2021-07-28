@@ -365,12 +365,12 @@
         relevantTraders.forEach(trader => {reputations[trader] = {value: START_REPUTATION, level: 1, toNextLevel: 0}});
 
         this.$root.questArray.forEach(quest => {
-          if (this.$store.copy('progress/quest_failed', quest.id) == true) {
+          if ('reputationFailure' in quest && this.$store.copy('progress/quest_failed', quest.id) == true) {
             quest.reputationFailure.forEach(reputation => {
               let trader = reputation.trader.toLowerCase();
               reputations[trader].value += reputation.rep;
             });
-          } else if (this.$store.copy('progress/quest_complete', quest.id) == true) {
+          } else if ('reputation' in quest && this.$store.copy('progress/quest_complete', quest.id) == true) {
             quest.reputation.forEach(reputation => {
               let trader = reputation.trader.toLowerCase();
               reputations[trader].value += reputation.rep;
