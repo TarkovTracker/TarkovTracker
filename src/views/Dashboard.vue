@@ -46,7 +46,7 @@
         class="mt-5"
       >
         <v-col
-          v-for="trader in loyaltyLevelStats"
+          v-for="(trader, i) in loyaltyLevelStats"
           :key="i"
           cols="auto"
           class="ml-auto mr-auto"
@@ -359,12 +359,12 @@
       },
       loyaltyLevelStats () {
         const START_REPUTATION = this.$store.get('progress/gameEdition') >= 3 ? 0.2 : 0;
-        let relevantTraders = ['prapor', 'therapist', 'skier', 'peacekeeper', 'mechanic', 'ragman', 'jaeger',]
+        let relevantTraders = ['prapor', 'therapist', 'skier', 'peacekeeper', 'mechanic', 'ragman', 'jaeger']
 
         let reputations = {}
         relevantTraders.forEach(trader => {reputations[trader] = {value: START_REPUTATION, level: 1, toNextLevel: 0}});
 
-        this.questDataDefault.forEach(quest => {
+        this.$root.questArray.forEach(quest => {
           if (this.$store.copy('progress/quest_failed', quest.id) == true) {
             quest.reputationFailure.forEach(reputation => {
               let trader = reputation.trader.toLowerCase();
@@ -376,7 +376,7 @@
               reputations[trader].value += reputation.rep;
             });
           }
-        });
+        }, this);
 
         for (let [trader, reputation] of Object.entries(reputations)) {
           let currentTrader = this.traderDataDefault[trader];
