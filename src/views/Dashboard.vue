@@ -52,7 +52,7 @@
           class="ml-auto mr-auto"
         >
           <loyalty-stat-card 
-            :trader="trader.trader" 
+            :traderId="trader.trader" 
             :loyaltyLevel="trader.loyaltyLevel" 
             :reputation="trader.reputation" 
             :nextLoyaltyRep="trader.nextLoyaltyRep" 
@@ -359,27 +359,31 @@
       },
       loyaltyLevelStats () {
         const START_REPUTATION = this.$store.get('progress/gameEdition') >= 3 ? 0.2 : 0;
-        let relevantTraders = ['prapor', 'therapist', 'skier', 'peacekeeper', 'mechanic', 'ragman', 'jaeger']
 
-        let reputations = {}
-        relevantTraders.forEach(trader => {reputations[trader] = {value: START_REPUTATION, level: 1, toNextLevel: 0}});
+        // All traders except Fence
+        var relevantTraders = Object.values(this.traderDataDefault).filter(trader => trader.id != 7)
+
+        var reputations = {}
+        relevantTraders.forEach(trader => {
+          reputations[trader.id] = {value: START_REPUTATION, level: 1, toNextLevel: 0}
+        }, this);
 
         this.$root.questArray.forEach(quest => {
           if ('reputationFailure' in quest && this.$store.copy('progress/quest_failed', quest.id) == true) {
             quest.reputationFailure.forEach(reputation => {
-              let trader = reputation.trader.toLowerCase();
+              let trader = reputation.trader;
               reputations[trader].value += reputation.rep;
-            });
+            }, this);
           } else if ('reputation' in quest && this.$store.copy('progress/quest_complete', quest.id) == true) {
             quest.reputation.forEach(reputation => {
-              let trader = reputation.trader.toLowerCase();
+              let trader = reputation.trader;
               reputations[trader].value += reputation.rep;
-            });
+            }, this);
           }
         }, this);
 
         for (let [trader, reputation] of Object.entries(reputations)) {
-          let currentTrader = this.traderDataDefault[trader];
+          let currentTrader = this.$root.traderDictionary[trader];
           for (let i = 0; i < currentTrader.loyalty.length; i++) {
             // If we are looking at last possible level and player has more than the required reputation for that level
             if (i === currentTrader.loyalty.length - 1 && currentTrader.loyalty[i].requiredReputation <= reputation.value) {
@@ -393,7 +397,7 @@
         }
 
         for (let [trader, reputation] of Object.entries(reputations)) {
-          let currentTrader = this.traderDataDefault[trader];
+          let currentTrader = this.$root.traderDictionary[trader];
           let maxLoyaltyLevel = currentTrader.loyalty[currentTrader.loyalty.length - 1].level;
           reputation.toNextLevel = reputation.level === maxLoyaltyLevel ? 0 : currentTrader.loyalty[reputation.level].requiredReputation - reputation.value
         }
@@ -401,7 +405,7 @@
         let traderCardData = [];
         for (let [trader, reputation] of Object.entries(reputations)) {
           traderCardData.push({
-            trader: trader,
+            trader: parseInt(trader),
             loyaltyLevel: reputation.level,
             reputation: reputations[trader].value,
             nextLoyaltyRep: reputation.toNextLevel
@@ -489,78 +493,31 @@
         return chartData
       },
       traderChartData () {
-        var praporQuests = 0
-        var praporComplete = 0
-        var therapistQuests = 0
-        var therapistComplete = 0
-        var skierQuests = 0
-        var skierComplete = 0
-        var peacekeeperQuests = 0
-        var peacekeeperComplete = 0
-        var mechanicQuests = 0
-        var mechanicComplete = 0
-        var ragmanQuests = 0
-        var ragmanComplete = 0
-        var jaegerQuests = 0
-        var jaegerComplete = 0
-        var tempQuests = this.questDataDefault
-        var i
-        for (i = 0; i < tempQuests.length; i++) {
-          switch (tempQuests[i].giver.toLowerCase()) {
-            case 'prapor':
-              praporQuests++
-              if (this.$store.get('progress/quest_complete', tempQuests[i].id) == true) praporComplete++
-              break
-            case 'therapist':
-              therapistQuests++
-              if (this.$store.get('progress/quest_complete', tempQuests[i].id) == true) therapistComplete++
-              break
-            case 'skier':
-              skierQuests++
-              if (this.$store.get('progress/quest_complete', tempQuests[i].id) == true) skierComplete++
-              break
-            case 'peacekeeper':
-              peacekeeperQuests++
-              if (this.$store.get('progress/quest_complete', tempQuests[i].id) == true) peacekeeperComplete++
-              break
-            case 'mechanic':
-              mechanicQuests++
-              if (this.$store.get('progress/quest_complete', tempQuests[i].id) == true) mechanicComplete++
-              break
-            case 'ragman':
-              ragmanQuests++
-              if (this.$store.get('progress/quest_complete', tempQuests[i].id) == true) ragmanComplete++
-              break
-            case 'jaeger':
-              jaegerQuests++
-              if (this.$store.get('progress/quest_complete', tempQuests[i].id) == true) jaegerComplete++
-              break
-          }
-        }
+        var labels = []
+        var seriesComplete = []
+        var seriesTotal = []
+        // Loop through each trader
+        Object.values(this.$root.traderDataDefault).forEach((trader) => {
+          var traderTotal = 0
+          var traderComplete = 0
+          // Check all the relevant quests
+          this.$root.questArray.filter(quest => quest.giver == trader.id).forEach((quest) => {
+            traderTotal++
+            if (this.$store.get('progress/quest_complete', quest.id) === true) {
+              traderComplete++
+            }
+          }, this)
+          // Add this traders data to the chart arrays
+          labels.push(trader.locale.en)
+          seriesComplete.push(traderComplete)
+          seriesTotal.push(traderTotal - traderComplete)
+        }, this)
 
         var chartData = {
-          labels: ['Prapor', 'Therapist', 'Skier', 'Peacekeeper', 'Mechanic', 'Ragman', 'Jaeger'],
-          series: [
-            [
-              praporComplete,
-              therapistComplete,
-              skierComplete,
-              peacekeeperComplete,
-              mechanicComplete,
-              ragmanComplete,
-              jaegerComplete,
-            ],
-            [
-              praporQuests - praporComplete,
-              therapistQuests - therapistComplete,
-              skierQuests - skierComplete,
-              peacekeeperQuests - peacekeeperComplete,
-              mechanicQuests - mechanicComplete,
-              ragmanQuests - ragmanComplete,
-              jaegerQuests - jaegerComplete,
-            ],
-          ],
+          labels: labels,
+          series: [seriesComplete, seriesTotal],
         }
+
         return chartData
       },
       traderReputationData () {

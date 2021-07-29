@@ -5,7 +5,7 @@
         <v-row no-gutters>
           <v-col align-self="center" justify="start" cols="auto">
             <v-img
-              :src="traderIcon(trader.locale.en)"
+              :src="traderIcon(id)"
               max-height = "32px"
               max-width = "32px"
               contain

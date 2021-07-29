@@ -24,7 +24,7 @@
       class="mt-1"
     >
       <v-col align="center" cols="12">
-        {{ trader.capitalize() }}
+        {{ name }}
       </v-col>
     </v-row>
     <v-row
@@ -70,8 +70,8 @@
     name: 'LoyaltyStatCard',
 
     props: {
-      trader: {
-        type: String,
+      traderId: {
+        type: Number,
       },
       loyaltyLevel: {
         type: Number,
@@ -86,7 +86,10 @@
 
     computed: {
       avatar: function () {
-        return this.traderIcon(this.trader)
+        return this.traderIcon(this.traderId)
+      },
+      name: function () {
+        return this.$root.traderDictionary[this.traderId].locale.en
       },
       romanLoyalty: function () {
         switch(this.loyaltyLevel) {

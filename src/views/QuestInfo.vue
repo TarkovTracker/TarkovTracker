@@ -121,12 +121,7 @@
                   lg="2"
                 >
                   <div class="mt-1">
-                    <v-icon>emoji_people</v-icon>Given by <router-link
-                      :to="{ name: 'Trader', params: { traderName: thisQuest.giver }}"
-                      class="info-link"
-                    >
-                      {{ thisQuest.giver }}
-                    </router-link>
+                    <v-icon>emoji_people</v-icon>Given by {{ $root.traderDictionary[thisQuest.giver].locale.en }}
                   </div>
                   <div
                     v-if="thisQuest.exp > 0"
@@ -143,12 +138,7 @@
                     </span>
                     <span v-else>
                       <v-icon>mood_bad</v-icon><span class="red--text">{{ repChange.rep }}</span>
-                    </span> with <router-link
-                      :to="{ name: 'Trader', params: { traderName: repChange.trader }}"
-                      class="info-link"
-                    >
-                      {{ repChange.trader }}
-                    </router-link>
+                    </span> with {{ $root.traderDictionary[repChange.trader].locale.en }}
                   </div>
                 </v-col>
               </v-row>

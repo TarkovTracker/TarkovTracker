@@ -36,7 +36,7 @@
     },
     computed: {
       searchList: function () {
-        var searchList = ['Prapor', 'Therapist', 'Skier', 'Peacekeeper', 'Mechanic', 'Ragman', 'Jaeger', 'Factory', 'Customs', 'Woods', 'Shoreline', 'Interchange', 'Reserve', 'Labs']
+        var searchList = []
         var tempQuests = this.$root.questArray
         for (var i = 0; i < tempQuests.length; i++) {
           searchList.push(tempQuests[i].title)
@@ -48,14 +48,8 @@
     },
     methods: {
       searchSite () {
-        if (['Prapor', 'Therapist', 'Skier', 'Peacekeeper', 'Mechanic', 'Ragman', 'Jaeger'].includes(this.selected)) {
-          this.$router.push({ name: 'Trader', params: { traderName: this.selected.toLowerCase() } })
-        } else if (['Factory', 'Customs', 'Woods', 'Shoreline', 'Interchange', 'Reserve', 'Labs'].includes(this.selected)) {
-          this.$router.push({ name: 'Map', params: { mapName: this.selected.toLowerCase() } })
-        } else {
-          if (this.$root.questDictionary[this.selected] != null) {
-            this.$router.push({ name: 'Quest', params: { id: this.$root.questDictionary[this.selected].id } })
-          }
+        if (this.$root.questDictionary[this.selected] != null) {
+          this.$router.push({ name: 'Quest', params: { id: this.$root.questDictionary[this.selected].id } })
         }
         this.selected = null
       },

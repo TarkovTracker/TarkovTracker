@@ -347,27 +347,11 @@ export default {
       // If we got here, we're not complete
       return 0
     },
-    traderIcon(name) {
-      if (name === undefined || name === null) {
+    traderIcon(id) {
+      if (id === undefined || id === null) {
         return ''
-      }
-      switch (name.toLowerCase()) {
-        case 'prapor':
-          return '/img/PraporHeadshot.jpg'
-        case 'therapist':
-          return '/img/TherapistHeadshot.jpg'
-        case 'skier':
-          return '/img/SkierHeadshot.jpg'
-        case 'peacekeeper':
-          return '/img/PeacekeeperHeadshot.jpg'
-        case 'mechanic':
-          return '/img/MechanicHeadshot.jpg'
-        case 'ragman':
-          return '/img/RagmanHeadshot.jpg'
-        case 'jaeger':
-          return '/img/JaegerHeadshot.jpg'
-        case 'fence':
-          return '/img/FenceHeadshot.jpg'
+      }else{
+        return `/img/${this.$root.traderDictionary[id].locale.en}Headshot.jpg`
       }
     },
     isModuleCompleted(moduleFind, levelFind) {
