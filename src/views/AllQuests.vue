@@ -541,7 +541,7 @@
               </v-col>
               <v-col
                   v-else
-                  cols="8"
+                  cols="12"
                   class=""
                 >
                   <tarkov-map :mapId="activeMapTab" :layerControls="true" />
