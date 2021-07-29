@@ -145,11 +145,11 @@
                   class="mr-2"
                 >
                   <img
-                    :src="traderIcon(trader)"
-                    :alt="trader"
+                    :src="traderIcon(trader.id)"
+                    :alt="trader.locale.en"
                   >
                 </v-avatar>
-                  {{ trader }}
+                  {{ trader.locale.en }}
               </v-tab>
             </v-tabs>
           </v-theme-provider>
@@ -562,7 +562,7 @@
         activeTeamTab: 0,
         activeAvailableTab: 0,
         maps: ['Factory', 'Customs', 'Woods', 'Shoreline', 'Interchange', 'Reserve', 'Labs', 'Global'],
-        traders: ['Prapor', 'Therapist', 'Skier', 'Peacekeeper', 'Mechanic', 'Ragman', 'Jaeger'],
+        
         views: [
           {title: 'All', icon: 'mdi-clipboard-check'},
           {title: 'Maps', icon: 'mdi-compass'},
@@ -670,6 +670,10 @@
       totalHidden: function() {
         return Object.values(this.filterCounts).reduce((a, b) => a + b, 0)
       },
+      traders: function() {
+        return Object.values(this.traderDataDefault) // Get an array of traders
+          .filter(trader => trader.id != 7) // Remove Fence from that array
+      },
       primarySortOrder: function() {
         switch(this.primarySort) {
           case 0:
@@ -712,7 +716,7 @@
             break;
 
           case 2: // The 'Traders' view
-            quests = quests.filter(quest => quest.giver.toLowerCase() == this.traders[this.activeTraderTab].toLowerCase())
+            quests = quests.filter(quest => quest.giver == this.traders[this.activeTraderTab].id)
             break;
 
           default:
