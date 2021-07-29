@@ -4,7 +4,7 @@ const admin = require("firebase-admin");
 admin.initializeApp(functions.config().firebase);
 
 // Export the API functions
-exports.apiv1 = require('./api');
+exports.apiv1 = require('./api/v1/api');
 
 async function userLeaveTeam(userId) {
 	const db = admin.firestore();
