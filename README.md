@@ -1,6 +1,8 @@
 # TarkovTracker
 TarkovTracker is a progress tracker meant to help players of Escape From Tarkov. The core goal of the project is to provide insights into what to do next, and make it easier to work with friends as you progress to Epsilon, Kappa, Trader loyalty levels, or a maxed out hideout.
 
+[API Documentation](https://tarkovtracker.github.io/TarkovTracker/)
+
 ## Data Management
 Tarkov Tracker has some prebuilt data baked in. This is the quest and hideout data encoded in JSON. The `questData.json` and `hideoutData.json` files are deployed with the application, and imported at runtime for reference. These files are a git submodule of the https://github.com/TarkovTracker/tarkovdata repository. Structural changes to these files may break TarkovTracker, so for now this data will be manually pulled to newer versions to verify data integrity.
 
