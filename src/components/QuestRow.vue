@@ -132,35 +132,56 @@
           class="align-md-end"
         >
           <span v-if="pageType === 'available' && myselfQuestAvailable(questDetails) === 0">
-            <v-btn
-              large
-              class="success"
-              elevation="2"
-              @click="localQuestComplete(questDetails)"
-            >
-              <v-icon>mdi-check-all</v-icon>
-            </v-btn>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  v-bind="attrs"
+                  v-on="on"
+                  large
+                  class="warning"
+                  elevation="2"
+                  @click="localQuestComplete(questDetails)"
+                >
+                  <v-icon>mdi-check-all</v-icon>
+                </v-btn>
+              </template>
+              <span>Complete this quest</span>
+            </v-tooltip>
           </span>
           <span v-else-if="pageType === 'locked' && myselfQuestAvailable(questDetails) === -1">
-            <v-btn
-              large
-              class="warning"
-              elevation="2"
-              @click="localQuestSkip(questDetails)"
-            >
-              <v-icon>mdi-fast-forward</v-icon>
-            </v-btn>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  v-bind="attrs"
+                  v-on="on"
+                  large
+                  class="warning"
+                  elevation="2"
+                  @click="localQuestComplete(questDetails)"
+                >
+                  <v-icon>mdi-fast-forward</v-icon>
+                </v-btn>
+              </template>
+              <span>Jump to this quest (Complete all prerequisite quests)</span>
+            </v-tooltip>
           </span>
           <span v-else-if="pageType === 'completed' && myselfQuestAvailable(questDetails) === 1">
-            <v-btn
-              large
-              class="error"
-              elevation="2"
-              @click="localQuestUncomplete(questDetails)"
-            >
-              <v-icon>mdi-replay</v-icon>
-            </v-btn>
-          </span>      
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  v-bind="attrs"
+                  v-on="on"
+                  large
+                  class="warning"
+                  elevation="2"
+                  @click="localQuestUncomplete(questDetails)"
+                >
+                  <v-icon>mdi-replay</v-icon>
+                </v-btn>
+              </template>
+              <span>Undo this quest</span>
+            </v-tooltip>
+          </span>
         </v-col>
       </v-row>
       <v-row
@@ -180,7 +201,7 @@
             color="secondary"
             width="fit-content"
           >
-            <span class="text-center">This quest was marked was marked as failed via completion of 
+            <span class="text-center">This quest was marked as failed via completion of
               <span v-for="alternative in questDetails.alternatives">
                 <quest-link :quest-id="alternative" v-if="$store.copy('progress/quest_failed', alternative) === false" />
               </span>

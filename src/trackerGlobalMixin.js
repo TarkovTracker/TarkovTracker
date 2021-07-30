@@ -116,7 +116,6 @@ export default {
       var beforeCount = this.$store.copy('progress/quests_array').filter(x => x.complete).length
 
       var unlockedList = this.calculateUnlockedList(quest, this.$store)
-
       for (var i = unlockedList.length - 1; i >= 0; i--) {
         this.CompleteQuest(unlockedList[i])
       }
@@ -192,7 +191,6 @@ export default {
             unlockSet = new Set([...unlockSet, requiredQuestId, ...this.calculateUnlockedListRecursive(requiredQuestId)])
           }, this)
         }
-
         return [...unlockSet]
       //}
       //catch(err) {
@@ -264,7 +262,7 @@ export default {
               return -1
             }
           }else{
-            
+
             if ( progressStore.copy('progress/quest_failed', quest.require.quests[x]) ) {
               // If a prereq is failed, the quest is blocked
               return -2
