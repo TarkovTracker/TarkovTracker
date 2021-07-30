@@ -23,6 +23,15 @@ export default {
       return this.objectiveArray
         .reduce((a, x) => ({ ...a, [x.id]: x }), {}) // Reduce to a mapping of ID to objective
     },
+    objectiveDictionaryQuests: function() {
+      var objectives = Object.values(this.objectiveDictionary)
+      objectives.forEach((objective) => {
+        objective.quests = this.questArray
+          .filter(quest => quest.objectives.includes(objective))
+          .reduce((acc, x) => acc.concat(x.id), [])
+      }, this)
+      return objectives.reduce((a, x) => ({ ...a, [x.id]: x }), {})
+    },
     hideoutObjectiveArray: function() {
       return this.hideoutDataDefault.modules
         .reduce((acc, x) => acc.concat(x.require), []) // Get a flat list of objectives

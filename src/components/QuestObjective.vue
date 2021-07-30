@@ -1,5 +1,5 @@
 <template>
-  <v-container class="pa-0 mt-1 align-center">
+  <v-container class="pa-0 align-center">
     <span
       class="text-caption tracker-quest-objective"
       :class="{

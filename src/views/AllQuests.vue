@@ -544,7 +544,7 @@
                   cols="12"
                   class=""
                 >
-                  <tarkov-map :mapId="activeMapTab" :layerControls="true" />
+                  <tarkov-map :mapId="activeMapTab" :layerControls="true" :quests="primaryQuests" />
               </v-col>
             </v-row>
           </v-expansion-panel-content>
@@ -886,7 +886,7 @@
         return this.filteredQuests
           .reduce((acc, x) => acc.concat(x.objectives), []) // Get a flat list of objectives
           .filter(y => ['key'].indexOf(y.type) >= 0) // Filter them down to key requirements
-      },
+      }
     },
     mounted () {
       if (this.viewType != null) {
