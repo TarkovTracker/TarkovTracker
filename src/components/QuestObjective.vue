@@ -1,12 +1,8 @@
 <template>
-  <v-container class="pa-0 mt-1 align-center">
+  <v-container fluid class="pa-0">
     <span
       class="text-caption tracker-quest-objective"
-      :class="{
-        'objective-complete': myselfObjectiveComplete(questObjective) == true,
-        'objective-complete-interact': myselfObjectiveComplete(questObjective) == true && $root.questAvailability[questId][0] == 0 && questInteract,
-        'objective-enough': myselfObjectiveEnough(questObjective)
-      }"
+      :class="objectiveClass"
       @mouseover="hoverIndex = questObjective"
       @mouseleave="hoverIndex = null"
     >
@@ -47,25 +43,25 @@
         <b v-for="(specificKey, keyIndex) in questObjective.target">
           <tarkov-item :id="specificKey" format="minimal" />
           <span v-if="keyIndex < questObjective.target.length - 1"> OR </span>
-        </b> needed on {{ questObjective.location }}
+        </b> needed on {{ locationLanguage }}
       </span>
       <!-- Handle standard key situation -->
       <span v-else-if="questObjective.type === 'key'">
         <b>
           <tarkov-item :id="questObjective.target" format="minimal" />
-        </b> needed on {{ questObjective.location }}
+        </b> needed on {{ locationLanguage }}
       </span>
-      <span v-else-if="questObjective.type === 'kill'">Eliminate {{ questObjective.number }} {{ questObjective.target }} <span v-if="questObjective.location != 'Any'">on {{ questObjective.location }}</span><span v-if="questObjective.with"> with <b>{{ questObjective.with.join(", ") }}</b></span></span>
+      <span v-else-if="questObjective.type === 'kill'">Eliminate {{ questObjective.number }} {{ questObjective.target }} <span v-if="questObjective.location >= 0">on {{ locationLanguage }}</span><span v-if="questObjective.with"> with <b>{{ questObjective.with.join(", ") }}</b></span></span>
       <span v-else-if="questObjective.type === 'collect'">Hand over {{ questObjective.number }} <b> <tarkov-item :id="questObjective.target" format="minimal" /></b></span>
       <span v-else-if="questObjective.type === 'find'">Find in raid {{ questObjective.number }} <b><tarkov-item :id="questObjective.target" format="minimal" /></b></span>
-      <span v-else-if="questObjective.type === 'pickup'">Pick-up <b>{{ questObjective.target }}</b> <span v-if="questObjective.hint">({{ questObjective.hint }})</span> on {{ questObjective.location }}</span>
-      <span v-else-if="questObjective.type === 'place'">Place <span v-if="questObjective.number > 1">{{ questObjective.number }} </span> <b><tarkov-item :id="questObjective.target" format="minimal" /></b> <span v-if="questObjective.hint">({{ questObjective.hint }})</span> on {{ questObjective.location }}
+      <span v-else-if="questObjective.type === 'pickup'">Pick-up <b>{{ questObjective.target }}</b> <span v-if="questObjective.hint">({{ questObjective.hint }})</span> on {{ locationLanguage }}</span>
+      <span v-else-if="questObjective.type === 'place'">Place <span v-if="questObjective.number > 1">{{ questObjective.number }} </span> <b><tarkov-item :id="questObjective.target" format="minimal" /></b> <span v-if="questObjective.hint">({{ questObjective.hint }})</span> on {{ locationLanguage }}
       </span>
-      <span v-else-if="questObjective.type === 'mark'">Place <b><tarkov-item :id="questObjective.tool" format="minimal" /></b> at <b>{{ questObjective.target }}</b> <span v-if="questObjective.hint">({{ questObjective.hint }})</span> on {{ questObjective.location }}
+      <span v-else-if="questObjective.type === 'mark'">Place <b><tarkov-item :id="questObjective.tool" format="minimal" /></b> at <b>{{ questObjective.target }}</b> <span v-if="questObjective.hint">({{ questObjective.hint }})</span> on {{ locationLanguage }}
       </span>
       <span v-else-if="questObjective.type === 'reputation'">Reach loyalty level <b>{{ questObjective.number }}</b> with {{ questObjective.target }}</span>
       <span v-else-if="questObjective.type === 'skill'">Reach skill level <b>{{ questObjective.number }}</b> with {{ questObjective.target }}</span>
-      <span v-else-if="questObjective.type === 'locate'">Locate <b>{{ questObjective.target }}</b> on {{ questObjective.location }}</span>
+      <span v-else-if="questObjective.type === 'locate'">Locate <b>{{ questObjective.target }}</b> on {{ locationLanguage }}</span>
       <span v-else-if="questObjective.type === 'warning'"><b>{{ questObjective.target }}</b></span>
       <span v-else>Formatting for {{ questObjective.type }} not completed</span>
 
@@ -111,6 +107,9 @@
       }
     },
     computed: {
+      locationLanguage: function() {
+        return this.$root.mapDictionary[this.questObjective.location].locale.en
+      },
       objectiveIcon: function () {
         // Return the corresponding icon from objectiveIcons, or an alert if it doesnt exist
         return this.objectiveIcons[this.questObjective.type] !== undefined ? this.objectiveIcons[this.questObjective.type] : 'mdi-alert-circle'
@@ -125,6 +124,14 @@
           return this.$store.copy('user/useTeamObjectives') && this.$store.copy('user/useTeammates')
         },
       },
+      objectiveClass: function () {
+        return {
+          'objective-complete': this.myselfObjectiveComplete(this.questObjective) == true,
+          'objective-complete-interact': this.myselfObjectiveComplete(this.questObjective) == true && 
+            this.$root.questAvailability[this.questId][0] == 0 && this.questInteract,
+          'objective-enough': this.myselfObjectiveEnough(this.questObjective)
+        }
+      }
     },
   }
 </script>

@@ -102,9 +102,9 @@
                   mdi-compass
                 </v-icon>
                 <v-badge
-                  :value="activeAvailableTab == 0 && $root.mapAvailability[map.toLowerCase()] >= 1"
+                  :value="activeAvailableTab == 0 && $root.mapAvailability[map] >= 1"
                   color="primary"
-                  :content="$root.mapAvailability[map.toLowerCase()]"
+                  :content="$root.mapAvailability[map]"
                 >
                   {{ map }}
                 </v-badge>
@@ -496,8 +496,94 @@
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
+      <v-expansion-panels 
+        class="mx-3 mt-3"
+        inset
+        v-if = "activeViewTab == 1 && activeAvailableTab == 0 && activeMapTab < (maps.length - 1)"
+        v-model="showObjectiveMap"
+      >
+        <v-expansion-panel>
+          <v-expansion-panel-header
+            disable-icon-rotate
+            class="small-panels py-1 px-3"
+          >
+              <v-row
+                no-gutters
+                class="ml-auto mr-auto"
+                align="center"
+              >
+                <v-col cols="auto">
+                  Objective Map
+                </v-col>
+                <v-col
+                  cols="auto"
+                  class="text--secondary mx-auto"
+                  v-if="$root.mapDictionary[activeMapTab].svg == null && showObjectiveMap == undefined"
+                >
+                  No map yet available for {{ maps[activeMapTab] }}  
+                </v-col>
+                <v-col
+                  align="center"
+                  class="text--secondary mx-auto"
+                  v-if="$root.mapDictionary[activeMapTab].svg != null"
+                >
+                  <span 
+                    v-if="mapObjectiveCount > 0"
+                  >
+                    {{ mapObjectiveCount }} objectives mapped
+                  </span>
+                  <span
+                    v-else
+                  >
+                    No mappable objectives
+                  </span>
+                </v-col>
+                <v-col
+                  v-if="$root.mapDictionary[activeMapTab].svg != null"
+                  cols="auto"
+                  align="end"
+                  class="mr-3"
+                >
+                  <v-btn
+                    v-on:click.stop="swapMapFullscreen()"
+                    x-small
+                  >
+                    <v-icon>
+                      mdi-fullscreen
+                    </v-icon>
+                    Fullscreen
+                  </v-btn>
+                </v-col>
+              </v-row>
+            <template v-slot:actions>
+              <v-icon>
+                mdi-map-marker-radius
+              </v-icon>
+            </template>
+          </v-expansion-panel-header>
+          <v-expansion-panel-content
+            color="contentbackground"
+          >
+            <v-row>
+              <v-col
+                v-if="$root.mapDictionary[activeMapTab].svg == null"
+                class="mx-auto"
+                cols="auto"
+              >
+                Know how to work with Illustrator, or SVGs? Want to help create this map? Head over to <a href="https://github.com/TarkovTracker/tarkovdata/tree/master/maps" target="_blank" class="quest-link">tarkovdata.io</a>!
+              </v-col>
+              <v-col
+                  v-else
+                  cols="12"
+                  class=""
+                >
+                  <tarkov-map :mapId="activeMapTab" :mapControls="true" :quests="primaryQuests" />
+              </v-col>
+            </v-row>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-expansion-panels>
     </v-row>
-
     <v-row>
       <v-card
         width="100%"
@@ -541,6 +627,39 @@
         />
       </v-card>
     </v-row>
+    <v-dialog
+      v-model="fullscreenMap"
+      fullscreen
+      hide-overlay
+      transition="dialog-bottom-transition"
+    >
+     <v-card>
+      <v-toolbar
+        dark
+        color="primary"
+      >
+        <v-btn
+          icon
+          dark
+          @click="swapMapFullscreen()"
+        >
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+        <v-toolbar-title>Objective Map for {{ maps[activeMapTab] }}</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-toolbar-items>
+          <v-btn
+            dark
+            text
+            @click="swapMapFullscreen()"
+          >
+            Close
+          </v-btn>
+        </v-toolbar-items>
+      </v-toolbar>
+      <tarkov-map :mapId="activeMapTab" :mapControls="true" :quests="primaryQuests" :fullscreen="true" />
+     </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -558,11 +677,11 @@
     data () {
       return {
         showPacking: 0,
+        showObjectiveMapOverride: null,
         progressValue: 0,
         activeTeamTab: 0,
         activeAvailableTab: 0,
-        maps: ['Factory', 'Customs', 'Woods', 'Shoreline', 'Interchange', 'Reserve', 'Labs', 'Global'],
-        
+        fullscreenMap: false,
         views: [
           {title: 'All', icon: 'mdi-clipboard-check'},
           {title: 'Maps', icon: 'mdi-compass'},
@@ -600,6 +719,9 @@
       ],
     },
     computed: {
+      maps: function() {
+        return this.$root.mapArray.reduce((acc, x) => acc.concat(x.locale.en), []).concat('Global')
+      },
       onlyKappa: {
         get () {
           return this.$store.copy('user/onlyKappa') || false
@@ -664,6 +786,21 @@
           this.$store.set('user/questTraderTab', value)
         },
       },
+      showObjectiveMap: {
+        get () {
+          const anyMapObjectives = this.mapObjectiveCount > 0
+          return this.showObjectiveMapOverride || anyMapObjectives ? 0 : null
+        },
+        set (value) {
+          this.showObjectiveMapOverride = value
+        },
+      },
+      mapObjectiveCount: function() {
+        return this.primaryQuests
+            .reduce((acc, x) => acc.concat(x.objectives), [])
+            .filter(objective => 'gps' in objective && 'floor' in objective.gps)
+            .length
+      },
       showAnyFromTeam() {
         return (this.activeTeamTab == 0 && this.visibleTeam.length > 1) || this.visibleTeam.length == 1
       },
@@ -706,12 +843,13 @@
             break;
 
           case 1: // The 'Maps' view
-            if( this.activeMapTab == 7 ) {
+            // Global should always be the last tab
+            if( this.activeMapTab == (this.maps.length - 1) ) {
               // We want to see global quests
               quests = quests.filter(quest => this.isQuestOnMap(quest) != false)
             }else{
-              quests = quests.filter(quest => this.$root.questsByMap[this.maps[this.activeMapTab].toLowerCase()].has(quest.id))
-              quests = quests.map(quest => this.isQuestOnMap(quest, this.maps[this.activeMapTab]))
+              quests = quests.filter(quest => this.$root.questsByMap[this.activeMapTab].has(quest.id))
+              quests = quests.map(quest => this.isQuestOnMap(quest, this.activeMapTab))
             }
             break;
 
@@ -830,7 +968,7 @@
         return this.filteredQuests
           .reduce((acc, x) => acc.concat(x.objectives), []) // Get a flat list of objectives
           .filter(y => ['key'].indexOf(y.type) >= 0) // Filter them down to key requirements
-      },
+      }
     },
     mounted () {
       if (this.viewType != null) {
@@ -855,6 +993,9 @@
       }
     },
     methods: {
+      swapMapFullscreen: function () {
+        this.fullscreenMap = !this.fullscreenMap
+      },
       availableTabChange: function (newTab) {
         if ((newTab == 1 || newTab == 2) && this.visibleTeam.length > 1 && this.activeTeamTab == 0) {
           this.activeTeamTab = 1

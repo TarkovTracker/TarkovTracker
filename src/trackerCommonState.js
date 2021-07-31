@@ -23,6 +23,15 @@ export default {
       return this.objectiveArray
         .reduce((a, x) => ({ ...a, [x.id]: x }), {}) // Reduce to a mapping of ID to objective
     },
+    objectiveDictionaryQuests: function() {
+      var objectives = Object.values(this.objectiveDictionary)
+      objectives.forEach((objective) => {
+        objective.quests = this.questArray
+          .filter(quest => quest.objectives.reduce((acc, x) => acc.concat(x.id), []).includes(objective.id))
+          .reduce((acc, x) => acc.concat(x.id), [])
+      }, this)
+      return objectives.reduce((a, x) => ({ ...a, [x.id]: x }), {})
+    },
     hideoutObjectiveArray: function() {
       return this.hideoutDataDefault.modules
         .reduce((acc, x) => acc.concat(x.require), []) // Get a flat list of objectives
@@ -41,6 +50,13 @@ export default {
     traderDictionary: function() {
       return Object.values(this.traderDataDefault)
         .reduce((a, x) => ({ ...a, [x.id]: x }), {}) // Reduce to a mapping of id to trader
+    },
+    mapArray: function() {
+      return Object.values(this.mapDataDefault)
+    },
+    mapDictionary: function() {
+      return Object.values(this.mapDataDefault)
+        .reduce((a, x) => ({ ...a, [x.id]: x }), {}) // Reduce to a mapping of id to map
     },
     me: function() {
       return {
@@ -157,14 +173,13 @@ export default {
       return objectiveAvailability
     },
     questsByMap: function () {
-      //return {'factory': 0, 'customs': 0, 'woods': 0, 'shoreline': 0, 'reserve': 0, 'interchange': 0, 'labs':0}
       var mapSet = {}
-      var maps = ['factory', 'customs', 'woods', 'shoreline', 'interchange', 'reserve', 'labs']
+      var maps = this.mapArray.reduce((acc, x) => acc.concat(x.id), [])
       maps.forEach((map) => {
-        mapSet[map.toLowerCase()] = new Set()
+        mapSet[map] = new Set()
         this.questArrayCopy().forEach((quest) => {
           if(this.isQuestOnMap(quest, map)) {
-            mapSet[map.toLowerCase()].add(quest.id)
+            mapSet[map].add(quest.id)
           }
         }, this)
       }, this)

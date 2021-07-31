@@ -106,10 +106,10 @@
                       </span>
                   </div>
                   <div
-                    v-if="calculateLocation(thisQuest)"
+                    v-if="locationsList"
                     class="mt-1"
                   >
-                    <v-icon>public</v-icon>{{ calculateLocation(thisQuest) }}
+                    <v-icon>public</v-icon>{{ locationsList }}
                   </div>
                   <div
                     v-if="myselfCalculateUnlocked(thisQuest) > 0"
@@ -298,6 +298,16 @@
     computed: {
       thisQuest: function () {
         return this.$root.questDictionaryId[this.id]
+      },
+      // Return a string which is a list of related quest maps
+      locationsList() {
+        var locations = new Set()
+        for (var i = this.thisQuest.objectives.length - 1; i >= 0; i--) {
+          if (this.thisQuest.objectives[i].location >= 0) {
+            locations.add(this.$root.mapDictionary[this.thisQuest.objectives[i].location].locale.en)
+          }
+        }
+        return [...locations].join(', ')
       },
     },
     metaInfo: {

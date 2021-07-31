@@ -8,8 +8,8 @@ const getDefaultState = () => {
     neededTotals: false,
   	teammates: {},
     hideTeammates: [],
-  	useTeammates: false,
-    useTeamObjectives: false,
+  	useTeammates: true,
+    useTeamObjectives: true,
     streamerMode: false,
 
     questViewTab: 0,

@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@mdi/font": "^5.9.55",
+    "d3": "^7.0.0",
     "firebase": "^8.8.0",
     "firebaseui": "^4.8.1",
     "moment": "^2.29.1",
@@ -32,6 +33,7 @@
     "vue-meta": "^2.3.3",
     "vue-router": "^3.5.2",
     "vue-underscore": "^0.1.4",
+    "vue-unique-id": "^3.2.1",
     "vuetify": "^2.5.7",
     "vuex": "^3.6.2",
     "vuex-pathify": "^1.4.1",
