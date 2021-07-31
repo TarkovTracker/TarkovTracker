@@ -523,7 +523,24 @@
                   No map yet available for {{ maps[activeMapTab] }}  
                 </v-col>
                 <v-col
+                  align="center"
+                  class="text--secondary mx-auto"
                   v-if="$root.mapDictionary[activeMapTab].svg != null"
+                >
+                  <span 
+                    v-if="mapObjectiveCount > 0"
+                  >
+                    {{ mapObjectiveCount }} objectives mapped
+                  </span>
+                  <span
+                    v-else
+                  >
+                    No mappable objectives
+                  </span>
+                </v-col>
+                <v-col
+                  v-if="$root.mapDictionary[activeMapTab].svg != null"
+                  cols="auto"
                   align="end"
                   class="mr-3"
                 >
@@ -660,7 +677,7 @@
     data () {
       return {
         showPacking: 0,
-        showObjectiveMap: 0,
+        showObjectiveMapOverride: null,
         progressValue: 0,
         activeTeamTab: 0,
         activeAvailableTab: 0,
@@ -768,6 +785,21 @@
         set (value) {
           this.$store.set('user/questTraderTab', value)
         },
+      },
+      showObjectiveMap: {
+        get () {
+          const anyMapObjectives = this.mapObjectiveCount > 0
+          return this.showObjectiveMapOverride || anyMapObjectives ? 0 : null
+        },
+        set (value) {
+          this.showObjectiveMapOverride = value
+        },
+      },
+      mapObjectiveCount: function() {
+        return this.primaryQuests
+            .reduce((acc, x) => acc.concat(x.objectives), [])
+            .filter(objective => 'gps' in objective && 'floor' in objective.gps)
+            .length
       },
       showAnyFromTeam() {
         return (this.activeTeamTab == 0 && this.visibleTeam.length > 1) || this.visibleTeam.length == 1

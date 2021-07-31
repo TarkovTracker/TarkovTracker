@@ -27,7 +27,7 @@ export default {
       var objectives = Object.values(this.objectiveDictionary)
       objectives.forEach((objective) => {
         objective.quests = this.questArray
-          .filter(quest => quest.objectives.includes(objective))
+          .filter(quest => quest.objectives.reduce((acc, x) => acc.concat(x.id), []).includes(objective.id))
           .reduce((acc, x) => acc.concat(x.id), [])
       }, this)
       return objectives.reduce((a, x) => ({ ...a, [x.id]: x }), {})

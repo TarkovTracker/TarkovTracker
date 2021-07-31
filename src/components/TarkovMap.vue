@@ -18,7 +18,7 @@
           v-bind:style="{ width: (fullscreen ? mapSize + 'vmin' : mapSize + '%'), position: 'relative' }"
         >
           <template
-            v-for="objective in questObjectives.filter(o => hasFloor(o) && o.gps.floor == floors[layerSelect])"
+            v-for="objective in mappedObjectives"
           >
             <div 
               class="objective-glow" 
@@ -105,24 +105,34 @@
           class="my-4"
         >
           <v-col class="text-center">
-            <v-btn-toggle
+            <v-tabs
               v-model="layerSelect"
-              mandatory
+              centered
+              background-color="success"
+              color="white"
+              slider-color="white"
             >
-              <v-btn
-                v-for="floor in floors"
-                :disabled="floors.length == 1"
-                small
+              <template
+                v-for="(floor, floorIndex) in floors"
               >
-                {{ floor.replace('_', ' ') }}
-              </v-btn>
-            </v-btn-toggle>
+                  <v-tab>
+                    <v-badge
+                      :value="questObjectives.filter(o => hasFloor(o) && o.gps.floor == floor).length > 0"
+                      color="primary"
+                      :content="questObjectives.filter(o => hasFloor(o) && o.gps.floor == floor).length"
+                    >
+                    {{ floor.replace('_', ' ') }}
+                    </v-badge>
+                  </v-tab>
+              </template>
+            </v-tabs>
           </v-col>
         </v-row>
         <v-row
           no-gutters
           class="my-4"
-          v-for="floor in floors"
+          v-for="(floor, floorIndex) in floors"
+          v-bind:style="{ opacity: floorIndex == layerSelect ? '1.0' : '.65' }"
         >
           <v-col 
             cols="12" 
@@ -140,26 +150,34 @@
           <template
             v-for="objective in questObjectives.filter(o => hasFloor(o) && o.gps.floor == floor)"
           >
-            <v-row
+            <v-col
               no-gutters
               @mouseover="hoverIndex = objective.id; searchHover = true;"
               @mouseleave="hoverIndex = null; searchHover = null;"
+              cols="12"
             >
-              <v-col
-                cols="auto"
+              <v-row
+                no-gutters
+                align="start"
               >
-                <v-icon>
-                  {{ hoverIndex == objective.id ? 'mdi-map-marker-radius' : 'mdi-map-marker' }}
-                </v-icon>
-              </v-col>
-              <v-col>
-                <quest-objective
-                  :quest-objective="objective"
-                  :quest-interact="false"
-                  :quest-id="objective.quests[0]"
-                />
-              </v-col>
-            </v-row>
+                <v-col
+                  cols="auto"
+                >
+                  <v-icon>
+                    {{ hoverIndex == objective.id ? 'mdi-map-marker-radius' : 'mdi-map-marker' }}
+                  </v-icon>
+                </v-col>
+                <v-col
+                  align="start"
+                >
+                  <quest-objective
+                    :quest-objective="objective"
+                    :quest-interact="true"
+                    :quest-id="objective.quests[0]"
+                  />
+                </v-col>
+              </v-row>
+            </v-col>
           </template>
         </v-row>
         <v-row
@@ -174,18 +192,25 @@
           <template
             v-for="objective in questObjectives.filter(o => !hasFloor(o) && o.type !='key')"
           >
-            <v-row
-              no-gutters
-              class="ml-4"
+            <v-col
+              class="py-0"
+              cols="12"
             >
-              <v-col>
-                <quest-objective
-                  :quest-objective="objective"
-                  :quest-interact="false"
-                  :quest-id="objective.quests[0]"
-                />
-              </v-col>
-            </v-row>
+              <v-row
+                no-gutters
+                align="start"
+              >
+                <v-col
+                  cols="auto"
+                >
+                  <quest-objective
+                    :quest-objective="objective"
+                    :quest-interact="true"
+                    :quest-id="objective.quests[0]"
+                  />
+                </v-col>
+              </v-row>
+            </v-col>
           </template>
         </v-row>
       </v-col>
@@ -225,22 +250,23 @@
 
     mounted() {
       this.draw()
-      document.getElementById(this.$id('svgmap')).addEventListener("click", function(event){
-        var e = document.getElementById(this.$id('svgmap'));
-        var dim = e.getBoundingClientRect();
-        var x = event.clientX - dim.left;
-        var y = event.clientY - dim.top;
-        var pctX = (x / e.clientWidth * 100).toFixed(2)
-        var pctY = (y / e.clientHeight * 100).toFixed(2)
+      // Event block for creating gps data
+      // document.getElementById(this.$id('svgmap')).addEventListener("click", function(event){
+      //   var e = document.getElementById(this.$id('svgmap'));
+      //   var dim = e.getBoundingClientRect();
+      //   var x = event.clientX - dim.left;
+      //   var y = event.clientY - dim.top;
+      //   var pctX = (x / e.clientWidth * 100).toFixed(2)
+      //   var pctY = (y / e.clientHeight * 100).toFixed(2)
         
-        var gps = {
-          leftPercent: parseFloat(pctX),
-          topPercent: parseFloat(pctY),
-          floor: this.floors[this.layerSelect]
-        }
-        console.log(gps);
-        navigator.clipboard.writeText(JSON.stringify(gps, null, 4))
-      }.bind(this));
+      //   var gps = {
+      //     leftPercent: parseFloat(pctX),
+      //     topPercent: parseFloat(pctY),
+      //     floor: this.floors[this.layerSelect]
+      //   }
+      //   console.log(gps);
+      //   navigator.clipboard.writeText(JSON.stringify(gps, null, 4))
+      // }.bind(this));
     },
 
     watch: {
@@ -298,6 +324,14 @@
             return !duplicate;
           })
           .map(objective => ({ ...objective, quests: this.$root.objectiveDictionaryQuests[objective.id].quests}))
+      },
+      mappedObjectives: function () {
+        return this.questObjectives
+          .filter(objective => 
+            objective.quests.some(questId => Object.values(this.$root.questAvailability[questId]).some(tmAvailability => tmAvailability == 0)) && 
+            Object.values(this.$root.objectiveAvailability[objective.id]).some(completed => completed == false)
+          )
+          .filter(o => this.hasFloor(o) && o.gps.floor == this.floors[this.layerSelect])
       },
       elMap: function () {
         // We need a unique element ID per map to make the d3 stuff not overlap
