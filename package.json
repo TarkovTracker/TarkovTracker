@@ -6,7 +6,7 @@
     "serve": "run-s watch",
     "serve:persist": "run-s watch:persist",
     "build": "vue-cli-service build",
-    "preversion": "npm run swagger && git commit -a -m 'Update Swagger API documentation'",
+    "preversion": "npm run swagger && git commit -a -m 'Update Swagger API documentation' || echo 'No OpenAPI changes to commit'",
     "postversion": "git push && git push --tags",
     "lint": "vue-cli-service lint",
     "deploy": "run-s build deploy:firebase",
