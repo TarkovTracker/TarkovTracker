@@ -9,12 +9,15 @@ import { sync } from 'vuex-router-sync'
 import underscore from 'vue-underscore'
 import { get as pathGet, sync as pathSync } from 'vuex-pathify'
 
+import UniqueId from 'vue-unique-id';
+
 import fireapp from './fireapp.js'
 import { db } from './db.js'
 
-
 import trackerGlobalMixin from './trackerGlobalMixin.js'
 import trackerCommonState from './trackerCommonState.js'
+
+Vue.use(UniqueId)
 
 // Add firebase app to vue
 Vue.prototype.$firebase = fireapp
@@ -59,7 +62,9 @@ const vm = new Vue({
   async created () {
     const trackerTreeResponse = await fetch(`https://api.github.com/repos/TarkovTracker/TarkovTracker/git/trees/${ gitHash }`)
     const trackerTreeData = await trackerTreeResponse.json()
-    this.$set(this, 'dataHash', trackerTreeData.tree.filter(x => x.path == 'tarkovdata')[0].sha)
+    if (trackerTreeData.tree) {
+      this.$set(this, 'dataHash', trackerTreeData.tree.filter(x => x.path == 'tarkovdata')[0].sha)
+    }
   },
   methods: {
     // No unique methods to the non-Firestore version (yet!)
@@ -92,7 +97,9 @@ const vmf = new Vue({
   async created () {
     const trackerTreeResponse = await fetch(`https://api.github.com/repos/TarkovTracker/TarkovTracker/git/trees/${ gitHash }`)
     const trackerTreeData = await trackerTreeResponse.json()
-    this.$set(this, 'dataHash', trackerTreeData.tree.filter(x => x.path == 'tarkovdata')[0].sha)
+    if (trackerTreeData.tree) {
+      this.$set(this, 'dataHash', trackerTreeData.tree.filter(x => x.path == 'tarkovdata')[0].sha)
+    }
   },
   // i18n,
   render: h => h(App),

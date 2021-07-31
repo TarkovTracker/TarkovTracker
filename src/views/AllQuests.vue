@@ -509,7 +509,8 @@
           >
               <v-row
                 no-gutters
-                class="mt-1 ml-auto mr-auto"
+                class="ml-auto mr-auto"
+                align="center"
               >
                 <v-col cols="auto">
                   Objective Map
@@ -520,6 +521,21 @@
                   v-if="$root.mapDictionary[activeMapTab].svg == null && showObjectiveMap == undefined"
                 >
                   No map yet available for {{ maps[activeMapTab] }}  
+                </v-col>
+                <v-col
+                  v-if="$root.mapDictionary[activeMapTab].svg != null"
+                  align="end"
+                  class="mr-3"
+                >
+                  <v-btn
+                    v-on:click.stop="swapMapFullscreen()"
+                    x-small
+                  >
+                    <v-icon>
+                      mdi-fullscreen
+                    </v-icon>
+                    Fullscreen
+                  </v-btn>
                 </v-col>
               </v-row>
             <template v-slot:actions>
@@ -544,7 +560,7 @@
                   cols="12"
                   class=""
                 >
-                  <tarkov-map :mapId="activeMapTab" :layerControls="true" :quests="primaryQuests" />
+                  <tarkov-map :mapId="activeMapTab" :mapControls="true" :quests="primaryQuests" />
               </v-col>
             </v-row>
           </v-expansion-panel-content>
@@ -594,6 +610,39 @@
         />
       </v-card>
     </v-row>
+    <v-dialog
+      v-model="fullscreenMap"
+      fullscreen
+      hide-overlay
+      transition="dialog-bottom-transition"
+    >
+     <v-card>
+      <v-toolbar
+        dark
+        color="primary"
+      >
+        <v-btn
+          icon
+          dark
+          @click="swapMapFullscreen()"
+        >
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+        <v-toolbar-title>Objective Map for {{ maps[activeMapTab] }}</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-toolbar-items>
+          <v-btn
+            dark
+            text
+            @click="swapMapFullscreen()"
+          >
+            Close
+          </v-btn>
+        </v-toolbar-items>
+      </v-toolbar>
+      <tarkov-map :mapId="activeMapTab" :mapControls="true" :quests="primaryQuests" :fullscreen="true" />
+     </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -615,6 +664,7 @@
         progressValue: 0,
         activeTeamTab: 0,
         activeAvailableTab: 0,
+        fullscreenMap: false,
         views: [
           {title: 'All', icon: 'mdi-clipboard-check'},
           {title: 'Maps', icon: 'mdi-compass'},
@@ -911,6 +961,9 @@
       }
     },
     methods: {
+      swapMapFullscreen: function () {
+        this.fullscreenMap = !this.fullscreenMap
+      },
       availableTabChange: function (newTab) {
         if ((newTab == 1 || newTab == 2) && this.visibleTeam.length > 1 && this.activeTeamTab == 0) {
           this.activeTeamTab = 1

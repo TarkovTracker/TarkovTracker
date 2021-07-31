@@ -2,11 +2,7 @@
   <v-container class="pa-0 align-center">
     <span
       class="text-caption tracker-quest-objective"
-      :class="{
-        'objective-complete': myselfObjectiveComplete(questObjective) == true,
-        'objective-complete-interact': myselfObjectiveComplete(questObjective) == true && $root.questAvailability[questId][0] == 0 && questInteract,
-        'objective-enough': myselfObjectiveEnough(questObjective)
-      }"
+      :class="objectiveClass"
       @mouseover="hoverIndex = questObjective"
       @mouseleave="hoverIndex = null"
     >
@@ -128,6 +124,14 @@
           return this.$store.copy('user/useTeamObjectives') && this.$store.copy('user/useTeammates')
         },
       },
+      objectiveClass: function () {
+        return {
+          'objective-complete': this.myselfObjectiveComplete(this.questObjective) == true,
+          'objective-complete-interact': this.myselfObjectiveComplete(this.questObjective) == true && 
+            this.$root.questAvailability[this.questId][0] == 0 && this.questInteract,
+          'objective-enough': this.myselfObjectiveEnough(this.questObjective)
+        }
+      }
     },
   }
 </script>
