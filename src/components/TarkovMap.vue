@@ -44,6 +44,7 @@
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-icon
+                  :id="$id(objective.id)"
                   v-bind="attrs"
                   v-on="on"
                   v-bind:style="{ 
