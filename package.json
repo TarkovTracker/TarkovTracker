@@ -6,6 +6,7 @@
     "serve": "run-s watch",
     "serve:persist": "run-s watch:persist",
     "build": "vue-cli-service build",
+    "preversion": "npm run swagger && git commit -a -m 'Update Swagger API documentation'",
     "postversion": "git push && git push --tags",
     "lint": "vue-cli-service lint",
     "deploy": "run-s build deploy:firebase",
@@ -19,7 +20,6 @@
     "watch": "run-p build:watch serve:firebase browsersync",
     "watch:persist": "run-p build:watch serve:firebase:persist browsersync",
     "browsersync": "sleep 15 && browser-sync start --port 5000 --proxy \"localhost:4999\" --files \"dist/*\"",
-    "version": "npm run swagger && git commit -a -m 'Update Swagger API documentation'",
     "updata": "git submodule foreach git pull origin master",
     "swagger": "node functions/api/v1/swagger.js"
   },
