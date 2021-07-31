@@ -19,8 +19,66 @@
                   <div class="font-weight-bold">
                     Quick Facts:
                   </div>
-                  <v-divider />
                 </v-col>
+                <v-col>
+                  <v-tooltip bottom v-if="myselfQuestAvailable(thisQuest) === -1">
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn
+                        v-bind="attrs"
+                        v-on="on"
+                        absolute
+                        top
+                        right
+                        large
+                        class="warning"
+                        elevation="2"
+                        @click="localQuestSkip(thisQuest)"
+                      >
+                        <v-icon>mdi-fast-forward</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>Jump to this quest (Complete all prerequisite quests)</span>
+                  </v-tooltip>
+                  <v-tooltip bottom v-if="myselfQuestAvailable(thisQuest) === 0">
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn
+                        v-bind="attrs"
+                        v-on="on"
+                        absolute
+                        top
+                        right
+                        large
+                        class="warning"
+                        elevation="2"
+                        @click="localQuestComplete(thisQuest)"
+                      >
+                        <v-icon>mdi-check-all</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>Complete this quest</span>
+                  </v-tooltip>
+                  <v-tooltip bottom v-if="myselfQuestAvailable(thisQuest) === 1">
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn
+                        v-bind="attrs"
+                        v-on="on"
+                        absolute
+                        top
+                        right
+                        large
+                        class="warning"
+                        elevation="2"
+                        @click="localQuestUncomplete(thisQuest)"
+                      >
+                        <v-icon>mdi-replay</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>Undo this quest</span>
+                  </v-tooltip>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-divider />
               </v-row>
               <v-row>
                 <v-col
@@ -253,6 +311,18 @@
       ],
     },
     methods: {
+      localQuestComplete (quest) {
+        // Call the common mixin complete quest
+        this.CompleteQuest(quest)
+      },
+      localQuestSkip (quest) {
+        // Call the common mixin skip to quest
+        this.QuestSkip(quest)
+      },
+      localQuestUncomplete (quest) {
+        // Call the common mixin uncomplete quest
+        this.QuestUncomplete(quest)
+      },
     },
   }
 </script>

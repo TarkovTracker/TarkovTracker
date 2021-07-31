@@ -6,6 +6,7 @@
     label="Search"
     style="max-width:300px"
     @keydown.enter="searchSite"
+    @change="searchSite"
   >
     <template
       v-if="$vuetify.breakpoint.mdAndUp"
