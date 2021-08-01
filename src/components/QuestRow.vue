@@ -157,7 +157,7 @@
                   large
                   class="warning"
                   elevation="2"
-                  @click="localQuestComplete(questDetails)"
+                  @click="localQuestSkip(questDetails)"
                 >
                   <v-icon>mdi-fast-forward</v-icon>
                 </v-btn>
