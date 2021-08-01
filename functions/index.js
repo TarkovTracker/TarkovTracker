@@ -49,7 +49,7 @@ exports.createTeam = functions.https.onCall( async (data, context) => {
 	myTeamRef.set({
 		owner: context.auth.uid,
 		password: password,
-		maximumMembers: systemDoc.data()?.teamMax || 5,
+		maximumMembers: systemDoc.data()?.teamMax || 10,
 		members: [context.auth.uid],
 		createdAt: admin.firestore.FieldValue.serverTimestamp()
 	})
