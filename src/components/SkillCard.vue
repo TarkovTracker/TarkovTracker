@@ -2,7 +2,7 @@
   <material-card
     icon="mdi-run"
     icon-small
-    color="info"
+    color="success lighten-1"
   >
     <template v-slot:title>
       {{ skillDetails.name }}
@@ -17,11 +17,7 @@
           <v-icon>lock_open</v-icon>{{ skillDetails.unlocked }} before
         </span>
         <span v-if="skillDetails.type === 'quest'">
-          <span class="info-link">
-            <router-link :to="{ name: 'Quest', params: { id: skillDetails.questId }}">
-              {{ skillDetails.quest }}
-            </router-link>
-          </span>
+          <quest-link :quest-id="skillDetails.questId" />
           <span v-if="skillDetails.nokappa">
             <v-chip
               class="ma-1 font-weight-bold"

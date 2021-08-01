@@ -272,13 +272,15 @@
           <v-card-actions>
             <v-switch
               v-model="useTeammates"
-              :label="`${useTeammates ? 'Show Team Quests' : 'Hide Team Quests'}`"
+              color="success lighten-2"
+              :label="`${useTeammates ? 'Showing Team Quests' : 'Hiding Team Quests'}`"
               class="ml-4"
             />
             <v-switch
               v-model="useTeamObjectives"
               :disabled="!useTeammates"
-              :label="`${useTeamObjectives ? 'Show Team Objectives' : 'Hide Team Objectives'}`"
+              color="success lighten-2"
+              :label="`${useTeamObjectives ? 'Showing Team Objectives' : 'Hiding Team Objectives'}`"
               class="ml-4"
             />
             <v-btn
@@ -416,11 +418,11 @@
         <material-card
           icon="mdi-api"
           icon-small
-          title="TarkovTracker API (BETA)"
+          title="TarkovTracker API"
           color="secondary"
         >
           <v-card-text>
-            Create access tokens so external tools can utilize your TarkovTracker progress data to provide you information tailored to your current progress. This feature is currently in BETA. You can download OpenAPI <a href="/openapi.yaml">documentation here</a>.
+            Create access tokens so external tools can utilize your TarkovTracker progress data to provide you information tailored to your current progress.  You can download OpenAPI <a href="/openapi.yaml" class="info-link">documentation here</a>.
             <v-container
               class="bgdarken text--primary mt-2"
               fluid
@@ -587,6 +589,7 @@
           <v-card-text>
             <v-switch
               v-model="darkMode"
+              color="success lighten-2"
               :label="`${$vuetify.theme.dark ? 'Dark Mode' : 'Light Mode'}`"
               class="ml-4"
             />
@@ -611,13 +614,13 @@
         sm="12"
       >
         <material-card
-          icon="mdi-brightness-6"
+          icon="mdi-gift-open"
           icon-small
           title="Game Edition"
-          color="info"
+          color="secondary"
         >
           <v-card-text>
-            <p>Additional data may be computed from this information (e.g. trader reputation).</p>
+            <p>Additional data may be computed from this information (e.g. trader reputation, stash level).</p>
             <v-select
               v-model="selectedGameEdition"
               :items="gameEditions"
@@ -649,6 +652,7 @@
             Hides your Live Team URL so prying eyes can't get your room code. Remember: Don't open team invite links on stream, and advise others you give the link to the same. If you need a fresh room code, simply leave the team and start a new one.
             <v-switch
               v-model="streamerMode"
+              color="success lighten-2"
               :label="`${streamerMode ? 'Streamer Mode On' : 'Streamer Mode Off'}`"
               class="ml-4"
             />

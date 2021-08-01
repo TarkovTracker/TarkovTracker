@@ -15,6 +15,7 @@
       <v-col cols="2">
         <v-switch
           v-model="hideObtained"
+          color="success lighten-2"
           :label="`${hideObtained ? 'Hide Obtained' : 'Show Obtained'}`"
           class="ml-1"
         />
@@ -22,6 +23,7 @@
       <v-col cols="2">
         <v-switch
           v-model="neededTotals"
+          color="success lighten-2"
           :label="`${neededTotals ? 'Show Totals' : 'Show Details'}`"
           class="ml-1"
         />
