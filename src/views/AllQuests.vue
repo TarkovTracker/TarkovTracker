@@ -632,32 +632,38 @@
       fullscreen
       hide-overlay
       transition="dialog-bottom-transition"
+      scrollable
     >
-     <v-card>
-      <v-toolbar
-        dark
-        color="primary"
-      >
-        <v-btn
-          icon
-          dark
-          @click="swapMapFullscreen()"
+     <v-card
+     >
+       <v-card-text
+        class="px-0 pb-0"
+       >
+        <v-toolbar
+          dense
+          color="primary"
         >
-          <v-icon>mdi-close</v-icon>
-        </v-btn>
-        <v-toolbar-title>Objective Map for {{ maps[activeMapTab] }}</v-toolbar-title>
-        <v-spacer></v-spacer>
-        <v-toolbar-items>
           <v-btn
+            icon
             dark
-            text
             @click="swapMapFullscreen()"
           >
-            Close
+            <v-icon>mdi-close</v-icon>
           </v-btn>
-        </v-toolbar-items>
-      </v-toolbar>
-      <tarkov-map :mapId="activeMapTab" :mapControls="true" :quests="primaryQuests" :fullscreen="true" />
+          <v-toolbar-title>Objective Map for {{ maps[activeMapTab] }}</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-toolbar-items>
+            <v-btn
+              dark
+              text
+              @click="swapMapFullscreen()"
+            >
+              Close
+            </v-btn>
+          </v-toolbar-items>
+        </v-toolbar>
+        <tarkov-map :mapId="activeMapTab" :mapControls="true" :quests="primaryQuests" :fullscreen="true" />
+      </v-card-text>
      </v-card>
     </v-dialog>
   </v-container>

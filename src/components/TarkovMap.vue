@@ -1,9 +1,10 @@
 <template>
   <v-container
     fluid
+    class="pa-0"
   >
     <v-row
-      :style="{ height: (fullscreen ? '100vmin' : '100%') }"
+      v-bind:class="{ 'ma-0': true, 'fullscreen-height': fullscreen, 'normal-height': !fullscreen }"
     >
       <v-col
         cols="12"
@@ -11,7 +12,7 @@
         lg="9"
         xl="8"
         align-self="center"
-        class="pa-0 ma-2"
+        class="pa-0 my-2"
       >
         <div :id="$id('svgmap')"
           class="mx-auto pa-0 map-box"
@@ -181,7 +182,7 @@
           </template>
         </v-row>
         <v-row
-          v-if="fullscreen && questObjectives.filter(o => !hasFloor(o)).length > 0"
+          v-if="fullscreen && questObjectives.filter(o => !hasFloor(o) && o.type !='key').length > 0"
         >
           <v-col 
             cols="12" 
@@ -336,6 +337,9 @@
       elMap: function () {
         // We need a unique element ID per map to make the d3 stuff not overlap
         return this._uid
+      },
+      viewHeightStyle: function () {
+        return this.fullscreen ? 'calc(~100vmin - 48px)' : '100%'
       }
     },
   }
@@ -351,4 +355,10 @@
   background-color: #000
   box-shadow: 0 0 10px 10px #000  /* inner white */
   opacity: 0.25
+
+.fullscreen-height
+  height: calc(100vmin - 48px)
+
+.normal-height
+  height: 100%
 </style>
