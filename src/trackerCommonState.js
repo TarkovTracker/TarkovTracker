@@ -197,10 +197,12 @@ export default {
         }, this)
       }, this)
 
-      mapAvailability['global'] = 0
+      const globalIndex = Object.values(mapAvailability).length
+
+      mapAvailability[globalIndex] = 0
       this.questArrayCopy().forEach((quest) => {
         if (Object.values(this.questAvailability[quest.id]).some(person => person == 0) && this.isQuestOnMap(quest) != false && !this.isQuestMapSpecific(quest)) {
-          mapAvailability['global'] += 1
+          mapAvailability[globalIndex] += 1
         }
       }, this)
       return mapAvailability
