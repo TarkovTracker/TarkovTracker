@@ -55,7 +55,7 @@
     "babel-eslint": "^10.1.0",
     "browser-sync": "^2.27.5",
     "dotenv": "^10.0.0",
-    "eslint": "^7.31.0",
+    "eslint": "^7.32.0",
     "eslint-plugin-vue": "^7.14.0",
     "git-describe": "^4.0.4",
     "lodash": "^4.17.21",
