@@ -96,15 +96,15 @@
               height="36px"
             >
               <v-tab
-                v-for="map in maps"
+                v-for="(map, mapIndex) in maps"
               >
                 <v-icon class="mr-2">
                   mdi-compass
                 </v-icon>
                 <v-badge
-                  :value="activeAvailableTab == 0 && $root.mapAvailability[map] >= 1"
+                  :value="activeAvailableTab == 0 && $root.mapAvailability[mapIndex] >= 1"
                   color="primary"
-                  :content="$root.mapAvailability[map]"
+                  :content="$root.mapAvailability[mapIndex]"
                 >
                   {{ map }}
                 </v-badge>
@@ -974,7 +974,7 @@
         return this.filteredQuests
           .reduce((acc, x) => acc.concat(x.objectives), []) // Get a flat list of objectives
           .filter(y => ['key'].indexOf(y.type) >= 0) // Filter them down to key requirements
-      }
+      },
     },
     mounted () {
       if (this.viewType != null) {
