@@ -59,7 +59,7 @@
       </span>
       <span v-else-if="questObjective.type === 'mark'">Place <b><tarkov-item :id="questObjective.tool" format="minimal" /></b> at <b>{{ questObjective.target }}</b> <span v-if="questObjective.hint">({{ questObjective.hint }})</span> on {{ locationLanguage }}
       </span>
-      <span v-else-if="questObjective.type === 'reputation'">Reach loyalty level <b>{{ questObjective.number }}</b> with {{ questObjective.target }}</span>
+      <span v-else-if="questObjective.type === 'reputation'">Reach loyalty level <b>{{ questObjective.number }}</b> with {{ getTraderName(questObjective.target) }}</span>
       <span v-else-if="questObjective.type === 'skill'">Reach skill level <b>{{ questObjective.number }}</b> with {{ questObjective.target }}</span>
       <span v-else-if="questObjective.type === 'locate'">Locate <b>{{ questObjective.target }}</b> on {{ locationLanguage }}</span>
       <span v-else-if="questObjective.type === 'warning'"><b>{{ questObjective.target }}</b></span>
@@ -81,6 +81,8 @@
   </v-container>
 </template>
 <script>
+  import traderFunctions from "../functions/traderFunctions";
+
   export default {
     name: 'QuestObjective',
     props: {
@@ -133,6 +135,11 @@
         }
       }
     },
+    methods: {
+      getTraderName: function(id) {
+        return traderFunctions.getTraderById(id).locale.en;
+      }
+    }
   }
 </script>
 <style lang="sass">
