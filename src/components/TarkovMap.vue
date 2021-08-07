@@ -268,7 +268,7 @@
       //   }
       //   console.log(gps);
       //   navigator.clipboard.writeText(JSON.stringify(gps, null, 4))
-      }.bind(this));
+      // }.bind(this));
     },
 
     watch: {
