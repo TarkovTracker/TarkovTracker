@@ -250,24 +250,25 @@
     },
 
     mounted() {
+      this.layerSelect = this.$root.mapDictionary[this.mapId].svg.floors.indexOf(this.$root.mapDictionary[this.mapId].svg.defaultFloor)
       this.draw()
-      // Event block for creating gps data
-      // document.getElementById(this.$id('svgmap')).addEventListener("click", function(event){
-      //   var e = document.getElementById(this.$id('svgmap'));
-      //   var dim = e.getBoundingClientRect();
-      //   var x = event.clientX - dim.left;
-      //   var y = event.clientY - dim.top;
-      //   var pctX = (x / e.clientWidth * 100).toFixed(2)
-      //   var pctY = (y / e.clientHeight * 100).toFixed(2)
+      //Event block for creating gps data
+      document.getElementById(this.$id('svgmap')).addEventListener("click", function(event){
+        var e = document.getElementById(this.$id('svgmap'));
+        var dim = e.getBoundingClientRect();
+        var x = event.clientX - dim.left;
+        var y = event.clientY - dim.top;
+        var pctX = (x / e.clientWidth * 100).toFixed(2)
+        var pctY = (y / e.clientHeight * 100).toFixed(2)
         
-      //   var gps = {
-      //     leftPercent: parseFloat(pctX),
-      //     topPercent: parseFloat(pctY),
-      //     floor: this.floors[this.layerSelect]
-      //   }
-      //   console.log(gps);
-      //   navigator.clipboard.writeText(JSON.stringify(gps, null, 4))
-      // }.bind(this));
+        var gps = {
+          leftPercent: parseFloat(pctX),
+          topPercent: parseFloat(pctY),
+          floor: this.floors[this.layerSelect]
+        }
+        console.log(gps);
+        navigator.clipboard.writeText(JSON.stringify(gps, null, 4))
+      }.bind(this));
     },
 
     watch: {
@@ -275,6 +276,7 @@
         this.draw()
       },
       mapId: function (newMap, oldMap) {
+        this.layerSelect = this.$root.mapDictionary[this.mapId].svg.floors.indexOf(this.$root.mapDictionary[this.mapId].svg.defaultFloor)
         this.draw()
       }
     },
