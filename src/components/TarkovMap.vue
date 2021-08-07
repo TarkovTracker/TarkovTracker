@@ -250,8 +250,9 @@
     },
 
     mounted() {
+      this.layerSelect = this.$root.mapDictionary[this.mapId].svg.floors.indexOf(this.$root.mapDictionary[this.mapId].svg.defaultFloor)
       this.draw()
-      // Event block for creating gps data
+      //Event block for creating gps data
       // document.getElementById(this.$id('svgmap')).addEventListener("click", function(event){
       //   var e = document.getElementById(this.$id('svgmap'));
       //   var dim = e.getBoundingClientRect();
@@ -267,7 +268,7 @@
       //   }
       //   console.log(gps);
       //   navigator.clipboard.writeText(JSON.stringify(gps, null, 4))
-      // }.bind(this));
+      }.bind(this));
     },
 
     watch: {
@@ -275,6 +276,7 @@
         this.draw()
       },
       mapId: function (newMap, oldMap) {
+        this.layerSelect = this.$root.mapDictionary[this.mapId].svg.floors.indexOf(this.$root.mapDictionary[this.mapId].svg.defaultFloor)
         this.draw()
       }
     },
