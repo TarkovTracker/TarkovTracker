@@ -62,6 +62,56 @@
       <span v-else-if="questObjective.type === 'reputation'">Reach loyalty level <b>{{ questObjective.number }}</b> with {{ getTraderName(questObjective.target) }}</span>
       <span v-else-if="questObjective.type === 'skill'">Reach skill level <b>{{ questObjective.number }}</b> with {{ questObjective.target }}</span>
       <span v-else-if="questObjective.type === 'locate'">Locate <b>{{ questObjective.target }}</b> on {{ locationLanguage }}</span>
+      <span v-else-if="questObjective.type === 'build'">
+        Build <b><tarkov-item :id="questObjective.target" format="minimal" /></b> with
+        <template
+          v-if="'with' in questObjective && questObjective.with.filter(wItem => wItem.type == 'attachment').length > 0"
+          v-for="attachment in questObjective.with.filter(wItem => wItem.type == 'attachment')"
+        >
+          {{ attachment.value }} {{ attachment.name }},
+        </template>
+        <template
+          v-if="'with' in questObjective && questObjective.with.filter(wItem => wItem.type == 'stat').length > 0"
+          v-for="stat in questObjective.with.filter(wItem => wItem.type == 'stat')"
+        >
+          {{ stat.name }} {{ stat.value }},
+        </template>
+        <template
+          v-if="'with' in questObjective && questObjective.with.filter(wItem => wItem.type == 'part').length > 0"
+          v-for="part in questObjective.with.filter(wItem => wItem.type == 'part')"
+        >
+          <template
+            v-if="Array.isArray(part.id)"
+          >
+            <template
+              v-for="(optionalPart, optionalIndex) in part.id"
+            >
+              <tarkov-item :id="optionalPart.id" format="minimal" />
+              <template
+                v-if="optionalIndex != part.id.length - 1"
+              >
+                OR
+              </template>
+              <template
+                v-else
+              >
+              ,
+              </template>
+            </template>
+          </template>
+          <template
+            v-else
+          >
+            <tarkov-item :id="part.id" format="minimal" />,
+          </template>
+        </template>
+        <template
+          v-if="'with' in questObjective && questObjective.with.filter(wItem => wItem.type == 'cells').length > 0"
+          v-for="cells in questObjective.with.filter(wItem => wItem.type == 'cells')"
+        >
+          total cells {{ cells.value }},
+        </template>
+      </span>
       <span v-else-if="questObjective.type === 'warning'"><b>{{ questObjective.target }}</b></span>
       <span v-else>Formatting for {{ questObjective.type }} not completed</span>
 
@@ -104,6 +154,7 @@
           reputation: 'mdi-thumb-up',
           skill: 'mdi-dumbbell',
           locate: 'mdi-crosshairs-gps',
+          build: 'mdi-progress-wrench',
           warning: 'mdi-alert-circle',
         },
       }
