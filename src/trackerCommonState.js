@@ -152,7 +152,10 @@ export default {
         levelAvailability[quest.id] = {}
         this.team.forEach((member, teamIndex) => {
           // If were not a hidden teammate, and were not a teammate with teammates off
-          levelAvailability[quest.id][teamIndex] = (member.store.copy('progress/level') || 71) >= quest.require.level ? true : false
+          // a quest should be available if it has no level requirement set
+          levelAvailability[quest.id][teamIndex] = (
+              quest.require.level === undefined ||
+            ((member.store.copy('progress/level') || 71) >= quest.require.level)) ? true : false
         }, this)
       }, this)
       return levelAvailability
