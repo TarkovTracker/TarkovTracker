@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@mdi/font": "^5.9.55",
-    "d3": "^7.0.0",
+    "d3": "^7.1.1",
     "firebase": "^8.9.1",
     "firebaseui": "^4.8.1",
     "moment": "^2.29.1",
