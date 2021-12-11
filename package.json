@@ -30,6 +30,7 @@
     "firebaseui": "^4.8.1",
     "moment": "^2.29.1",
     "vue": "^2.6.14",
+    "vue-loader": "^15.9.8",
     "vue-meta": "^2.3.3",
     "vue-router": "^3.5.2",
     "vue-underscore": "^0.1.4",
