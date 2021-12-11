@@ -1,11 +1,12 @@
 <template>
   <v-fade-transition mode="out-in">
-    <template v-if="maintenance_mode == 'true'">
+    <template v-if="maintenance_mode == 'true' && $root.$data.fireVM == true">
       <div class='maintenance-mode'>
         <img src="https://tarkovtracker.io/img/tarkovtrackerlogo-light.png" class="maintenance-logo">
         <h1>TarkovTracker is in maintenace mode</h1>
         <p>We are working on upgrading a backend system which necessitates a short downtime.</p>
         <p>You can check the <a href="https://discord.gg/zeAP4Ng">TarkovTracker Discord server</a> for the latest updates</p>
+        <p>You can <a href="" @click="logout()">log out</a> to use the site without saving your progress in the cloud or browse</p>
       </div> 
     </template>
     <template v-else>
@@ -52,6 +53,15 @@
         app_name: 'web',
         screen_name: metaInfo.title,
       })
+    },
+    methods: {
+      logout () {
+        this.$firebase.auth().signOut().then(() => {
+          // Sign-out successful.
+        }).catch((error) => {
+          // An error happened.
+        })
+      },
     },
   }
 </script>

@@ -47,6 +47,7 @@ const vm = new Vue({
     dataHash: '',
     overallVersion: gitHash,
     vmName: 'Local VM',
+    fireVM: false,
   },
   // This mixin are exlusively used within the root instances. It contains common properties and computed functions for the application.
   mixins: [trackerCommonState],
@@ -82,6 +83,7 @@ const vmf = new Vue({
     progressSubscribe: null,
     userSubscribe: null,
     vmName: 'Fire VM',
+    fireVM: true,
   },
   store: firestore,
   mixins: [trackerCommonState],
