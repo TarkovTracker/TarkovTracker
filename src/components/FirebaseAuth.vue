@@ -1,12 +1,33 @@
 <template>
-  <div id="firebaseui-auth-container" />
+  <div v-if="maintenance_mode == 'true'" class="text-center">
+    <div>The TarkovTracker cloud service is in maintenance mode.</div>
+    <div>Check the <v-icon dark>mdi-discord</v-icon> <a href="https://discord.gg/zeAP4Ng" class="info-link">TarkovTracker Discord server</a> for more information.</div>
+  </div>
+  <div v-else>
+    <div id="firebaseui-auth-container" />
+  </div>
 </template>
 <script>
   import * as firebaseui from 'firebaseui'
   import firebase from 'firebase/app'
+  import fireapp from '@/fireapp.js'
   export default {
     name: 'FirebaseAuth',
+    data () {
+      return {
+        maintenance_mode: false,
+      }
+    },
     mounted () {
+      const remoteConfig = fireapp.remoteConfig();
+      
+      this.maintenance_mode = remoteConfig.getValue("maintenance_mode")._value;
+      remoteConfig.fetchAndActivate()
+      .then(() => {
+        this.maintenance_mode = remoteConfig.getValue("maintenance_mode")._value;
+        console.log(this.maintenance_mode)
+      })
+
       // FirebaseUI config.
       var uiConfig = {
         callbacks: {
@@ -39,9 +60,12 @@
         privacyPolicyUrl: 'https://www.termsfeed.com/live/b6d6f7fd-adc4-4717-8a2b-83daf9d8ddb9',
       }
       // Initialize the FirebaseUI Widget using Firebase.
-      var ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(this.$firebase.auth())
       // The start method will wait until the DOM is loaded.
-      ui.start('#firebaseui-auth-container', uiConfig)
+      if(this.maintenance_mode != 'true') {
+        var ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(this.$firebase.auth())
+        ui.start('#firebaseui-auth-container', uiConfig)
+      }
+      
     },
   }
 </script>
