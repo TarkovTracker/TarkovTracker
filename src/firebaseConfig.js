@@ -5,14 +5,13 @@ const { hostname } = new URL(document.location.href);
 // Use production environment if we're on production URL, otherwise use staging
 const firebaseConfig = (hostname == 'tarkovtracker.io') ? 
 {
-  apiKey: 'AIzaSyAFSSlIkqk8EkBevVz_rVkILTK0z7n7SzQ',
-  authDomain: 'auth.tarkovtracker.io',
-  databaseURL: 'https://tarkovtracker-59ebc-default-rtdb.firebaseio.com',
-  projectId: 'tarkovtracker-59ebc',
-  storageBucket: 'tarkovtracker-59ebc.appspot.com',
-  messagingSenderId: '232806041830',
-  appId: '1:232806041830:web:b6d3473a0465c5d8871327',
-  measurementId: 'G-6TT7F1S3HE',
+  apiKey: "AIzaSyCRgDK1U5wjeQA8RbRFTAj_jprsG4hF0zw",
+  authDomain: "tarkovtracker-production.firebaseapp.com",
+  projectId: "tarkovtracker-production",
+  storageBucket: "tarkovtracker-production.appspot.com",
+  messagingSenderId: "140836645499",
+  appId: "1:140836645499:web:2253dd97b8224a898b90de",
+  measurementId: "G-ZH4YVDFWTJ"
 } : {
   apiKey: "AIzaSyARSzfwWQlvRfyEVVoH6psgnswpxY-qo70",
   authDomain: "tarkovtracker-staging.firebaseapp.com",
