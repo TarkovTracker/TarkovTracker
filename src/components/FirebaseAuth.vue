@@ -25,7 +25,6 @@
       remoteConfig.fetchAndActivate()
       .then(() => {
         this.maintenance_mode = remoteConfig.getValue("maintenance_mode")._value;
-        console.log(this.maintenance_mode)
       })
 
       // FirebaseUI config.

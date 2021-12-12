@@ -301,11 +301,13 @@ export default {
     // Determine if there are any map specific objectives for this quest
     isQuestMapSpecific(quest, mapId = false) {
       var match = false
+      if (mapId !== false) mapId = parseInt(mapId)
+      
       if ('objectives' in quest && quest.objectives.length > 0) {
         quest.objectives.forEach((objective) => {
           if (mapId !== false && objective.location === mapId) {
             match = true
-          }else if (objective.location >= 0) {
+          }else if (mapId === false && objective.location >= 0) {
             match = true
           }
         }, this)

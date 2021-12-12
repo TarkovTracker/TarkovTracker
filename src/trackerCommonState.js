@@ -200,7 +200,8 @@ export default {
         }, this)
       }, this)
 
-      const globalIndex = Object.values(mapAvailability).length
+      //const globalIndex = Object.values(mapAvailability).length
+      const globalIndex = this.$root.mapArray.length
 
       mapAvailability[globalIndex] = 0
       this.questArrayCopy().forEach((quest) => {
