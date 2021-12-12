@@ -6,7 +6,7 @@ const { hostname } = new URL(document.location.href);
 const firebaseConfig = (hostname == 'tarkovtracker.io') ? 
 {
   apiKey: "AIzaSyCRgDK1U5wjeQA8RbRFTAj_jprsG4hF0zw",
-  authDomain: "tarkovtracker-production.firebaseapp.com",
+  authDomain: "auth.tarkovtracker.io",
   projectId: "tarkovtracker-production",
   storageBucket: "tarkovtracker-production.appspot.com",
   messagingSenderId: "140836645499",
