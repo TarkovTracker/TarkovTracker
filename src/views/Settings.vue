@@ -449,10 +449,32 @@
                       outlined
                       elevation="2"
                       small
+                      class="ma-1"
                       @click="copyToClipboard(item.token)"
                     >
                       <v-icon>mdi-clipboard-file-outline</v-icon>
                     </v-btn>
+                    <v-dialog
+                      v-model="dialog"
+                      width="200"
+                    >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          outlined
+                          elevation="2"
+                          small
+                          class="ma-1"
+                          v-bind="attrs"
+                          v-on="on"
+                        >
+                          <v-icon>mdi-qrcode</v-icon>
+                        </v-btn>
+                      </template>
+
+                      <v-card>
+                        <QrcodeVue :value="item.token" level="H" :size="200" render-as="svg" background="#121212" foreground="#ffffff" />
+                      </v-card>
+                    </v-dialog>
                 </template>
                 <template v-slot:item.createdAt="{ item }">
                     <span class="font-weight-bold">
@@ -760,10 +782,12 @@
 <script>
   import moment from 'moment';
   import hideoutFunctions from '../functions/hideoutFunctions';
+  import QrcodeVue from 'qrcode.vue'
 
   export default {
     name: 'SettingsView',
     components: {
+      QrcodeVue
     },
     data () {
       return {

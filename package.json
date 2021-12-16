@@ -29,6 +29,7 @@
     "firebase": "^8.9.1",
     "firebaseui": "^5.0.0",
     "moment": "^2.29.1",
+    "qrcode.vue": "^1.7.0",
     "vue": "^2.6.14",
     "vue-meta": "^2.3.3",
     "vue-router": "^3.5.2",
