@@ -24,7 +24,7 @@
     "swagger": "node functions/api/v1/swagger.js"
   },
   "dependencies": {
-    "@mdi/font": "^5.9.55",
+    "@mdi/font": "^6.5.95",
     "d3": "^7.2.0",
     "firebase": "^8.9.1",
     "firebaseui": "^5.0.0",
