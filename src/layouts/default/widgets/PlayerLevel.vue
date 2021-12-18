@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex justify-center align-center mb-2">
-    <span style="line-height:0px">
+    <span style="line-height:0px" v-if="!mini">
       <img
         :src="groupIcon"
         contain
@@ -17,7 +17,7 @@
         </h1>
       </div>
     </span>
-    <span>
+    <span v-if="!mini">
       <div>
         <v-btn
           icon
@@ -72,6 +72,10 @@
           this.$store.set('progress/level', value)
         },
       },
+
+      ...sync('app', [
+        'mini',
+      ]),
     },
 
     methods: {
