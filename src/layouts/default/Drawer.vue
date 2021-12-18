@@ -28,6 +28,10 @@
 
       <v-divider class="mx-3 mb-2" />
 
+      <player-level />
+
+      <v-divider class="mx-3 mb-2" />
+
       <default-list :items="items" />
 
       <v-divider class="mx-3 mb-2" />
@@ -53,6 +57,9 @@
     components: {
       UserList: () => import(
         './widgets/UserList'
+      ),
+      PlayerLevel: () => import(
+        './widgets/PlayerLevel'
       ),
       DefaultDrawerHeader: () => import(
         /* webpackChunkName: "default-drawer-header" */
