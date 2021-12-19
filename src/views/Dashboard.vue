@@ -174,7 +174,7 @@
         chartPadding: {
           top: 0,
           right: 0,
-          bottom: 0,
+          bottom: 5,
           left: 0,
         },
       },
@@ -185,7 +185,7 @@
         chartPadding: {
           top: 0,
           right: 0,
-          bottom: 0,
+          bottom: 5,
           left: 0,
         },
       },
@@ -448,7 +448,7 @@
           }, this)
 
           // Add this maps data to the chart arrays
-          labels.push(map.locale.en)
+          labels.push(`${map.locale.en}\n${mapComplete}/${mapTotal}`)
           seriesComplete.push(mapComplete)
           seriesTotal.push(mapTotal - mapComplete)
         }, this)
@@ -476,7 +476,7 @@
             }
           }, this)
           // Add this traders data to the chart arrays
-          labels.push(trader.locale.en)
+          labels.push(`${trader.locale.en}\n${traderComplete}/${traderTotal}`)
           seriesComplete.push(traderComplete)
           seriesTotal.push(traderTotal - traderComplete)
         }, this)
