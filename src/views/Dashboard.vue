@@ -174,7 +174,7 @@
         chartPadding: {
           top: 0,
           right: 0,
-          bottom: 10,
+          bottom: 5,
           left: 0,
         },
       },
@@ -185,7 +185,7 @@
         chartPadding: {
           top: 0,
           right: 0,
-          bottom: 10,
+          bottom: 5,
           left: 0,
         },
       },
