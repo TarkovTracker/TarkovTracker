@@ -22,7 +22,7 @@
         <v-btn
           icon
           small
-          @click="changeLevel(1)"
+          @click="incrementLevel()"
         >
           <v-icon class="ma-0">
             mdi-chevron-up
@@ -33,7 +33,7 @@
         <v-btn
           icon
           small
-          @click="changeLevel(-1)"
+          @click="decrementLevel()"
         >
           <v-icon class="ma-0">
             mdi-chevron-down
@@ -57,6 +57,9 @@
 
     computed: {
       levelGroup: function () {
+        if(!this.$root.levelDataDefault[this.selfLevel]) {
+          this.selfLevel = 71
+        }
         return this.$root.levelDataDefault[this.selfLevel].group
       },
 
@@ -66,7 +69,7 @@
 
       selfLevel: {
         get () {
-          return this.$store.copy('progress/level') || 71
+          return this.$store.copy('progress/level')
         },
         set (value) {
           this.$store.set('progress/level', value)
@@ -79,9 +82,21 @@
     },
 
     methods: {
-      changeLevel(change) {
-        this.selfLevel += change
-      }
+      incrementLevel() {
+        if(!this.$root.levelDataDefault[this.selfLevel + 1]) {
+          this.selfLevel = 1
+        } else {
+          this.selfLevel += 1
+        }
+      },
+
+      decrementLevel() {
+        if(!this.$root.levelDataDefault[this.selfLevel - 1]) {
+          this.selfLevel = Object.keys(this.$root.levelDataDefault).pop()
+        } else {
+          this.selfLevel -= 1
+        }
+      },
     },
   }
 </script>
