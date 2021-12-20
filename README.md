@@ -13,14 +13,14 @@ Tarkov Tracker has some prebuilt data baked in. This is the quest and hideout da
 
 ### Setting up Google Cloud Platform and Firebase project
 - [Google Cloud Platform project](https://console.cloud.google.com/)
-- [Google Firebase project](https://https://firebase.google.com/)
+- [Google Firebase project](https://firebase.google.com/)
 
 It is necessary to create Google Cloud Platform project and Firebase project to be able to run **local Firebase emulator**. The reason is
 simply because the Firebase CLI tool authenticates you against Google servers. Nothing will actually be deployed or used within your 
 Google Cloud Platform project, you will not be charged, but it is a necessary step to run and develop this project locally.
 
 1) Create a project within [Google Cloud Platform](https://console.cloud.google.com/) (e.g. 'tarkov-tracker')
-2) Create a project within [Google Firebase](https://https://firebase.google.com/) and link it to your Google Cloud Platform. It should prompt you automatically. 
+2) Create a project within [Google Firebase](https://firebase.google.com/) and link it to your Google Cloud Platform. It should prompt you automatically. 
 
 ### Setting up the environment
 First time setup can be done by running the following:
