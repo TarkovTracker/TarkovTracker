@@ -369,7 +369,7 @@ app.post('/api/v1/progress/hideout/:hideoutId(\\d+)', async (req, res) => {
 			}
 
 			await requesteeProgressRef.set({
-				quests: {[req.params.hideoutId]: updateObject}
+				hideout: {[req.params.hideoutId]: updateObject}
 			}, {merge: true});
 			res.status(200).send()
 		}else{
