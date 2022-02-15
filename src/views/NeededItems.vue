@@ -54,7 +54,7 @@
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'See all the items you will need to collect to complete your quests and upgreade your hideout.' },
+        { name: 'description', content: 'See all the items you will need to collect to complete your quests and upgrade your hideout.' },
       ],
     },
   }
