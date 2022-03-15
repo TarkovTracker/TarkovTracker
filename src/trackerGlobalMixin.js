@@ -224,6 +224,10 @@ export default {
       if (progressStore.copy('progress/quest_complete', quest.id)) {
         return 1
       }
+      // If the player level is below the required quest level, then the quest is not available
+      if(progressStore.get("progress/level") < quest.require.level){
+        return -1
+      }
       // Check each of the prerequisites to see if this quest is unlocked
       if (quest.require.quests) {
         // For each prerequisite
