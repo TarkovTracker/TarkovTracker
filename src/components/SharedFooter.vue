@@ -71,19 +71,32 @@
     },
     methods: {
       trackerCommitRetrieve: async function() {
-        const trackerCommitData = await fetch(`https://api.github.com/repos/TarkovTracker/TarkovTracker/commits/${ this.$root.$data.overallVersion }`)
-        const trackerCommitJson = await trackerCommitData.json()
-        this.trackerCommitTime = trackerCommitJson.commit.author.date
+        try {
+          const trackerCommitData = await fetch(`https://api.github.com/repos/TarkovTracker/TarkovTracker/commits/${ this.$root.$data.overallVersion }`)
+          const trackerCommitJson = await trackerCommitData.json()
+          this.trackerCommitTime = trackerCommitJson.commit.author.date
+        }catch{
+          this.trackerCommitTime = 'Unknown'
+        }
       },
       dataCommitRetrieve: async function() {
-        const dataCommitData = await fetch(`https://api.github.com/repos/TarkovTracker/tarkovdata/commits/${this.$root.$data.dataHash}`)
-        const dataCommitJson = await dataCommitData.json()
-        this.dataCommitTime = dataCommitJson.commit.author.date
+        try{
+          const dataCommitData = await fetch(`https://api.github.com/repos/TarkovTracker/tarkovdata/commits/${this.$root.$data.dataHash}`)
+          const dataCommitJson = await dataCommitData.json()
+          this.dataCommitTime = dataCommitJson.commit.author.date
+        }catch{
+          this.dataCommitTime = 'Unknown'
+        }
+        
       }
     },
     filters: {
       timeSince: function (timestamp) {
-        return moment(timestamp).from(Date.now())
+        if (timestamp == 'Unknown') {
+          return 'Unknown'
+        }else{
+          return moment(timestamp).from(Date.now())
+        }
       },
     }
   }
