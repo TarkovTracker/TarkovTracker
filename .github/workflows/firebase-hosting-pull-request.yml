@@ -6,13 +6,9 @@
 
 name: Deploy to Firebase Hosting on PR
 on: 
-  pull_request_target:
-    types: [opened, synchronize]
-    paths:
-      - 'src/**'
-      - '*.js'
-      - '*.json'
-      - 'tarkovdata'
+  push:
+    branches:
+      - master
 
 jobs:
   build_and_preview:
