@@ -17,5 +17,6 @@ jobs:
         with:
           start: npm run serve:vue
           wait-on: http://localhost:8080/
+          wait-on-timeout: 120
         env:
           CYPRESS_baseUrl: http://localhost:8080/
