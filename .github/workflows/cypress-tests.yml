@@ -16,8 +16,10 @@ jobs:
       # Install NPM dependencies, cache them correctly
       # and run all Cypress tests
       - name: Cypress run
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v4
         with:
+          browser: chrome
+          record: true
           start: npm run serve:vue
           wait-on: http://localhost:8080/
           wait-on-timeout: 120
