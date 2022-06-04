@@ -13,7 +13,7 @@ jobs:
       url: https://tarkovtracker.io
     steps:
       - name: Checkout Ref
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: recursive
 
