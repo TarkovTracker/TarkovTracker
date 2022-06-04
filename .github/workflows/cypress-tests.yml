@@ -1,0 +1,36 @@
+name: Cypress Tests
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+          ref: ${{ github.event.pull_request.head.sha }}
+      # Install NPM dependencies, cache them correctly
+      # and run all Cypress tests
+      - name: Cypress run
+        uses: cypress-io/github-action@v4
+        with:
+          browser: chrome
+          record: true
+          start: npm run serve:vue
+          wait-on: http://localhost:8080/
+          wait-on-timeout: 120
+        env:
+          CYPRESS_baseUrl: http://localhost:8080/
+          # pass the Dashboard record key as an environment variable
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          # pass GitHub token to allow accurately detecting a build vs a re-run build
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: cypress-videos
+          path: cypress/videos
