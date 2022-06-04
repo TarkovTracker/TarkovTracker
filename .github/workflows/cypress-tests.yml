@@ -1,8 +1,14 @@
 name: Cypress Tests
 
 on:
-  - push
-  - pull_request
+  push:
+    branches:
+      - '**'
+    tags:
+      - '**'
+  pull_request:
+    branches:
+      - '**'
 
 jobs:
   cypress-run:
