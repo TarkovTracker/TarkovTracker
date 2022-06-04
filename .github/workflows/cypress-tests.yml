@@ -15,7 +15,7 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
-          start: npm run serve
+          start: npm run vue:serve
           wait-on: http://localhost:8080/
         env:
           CYPRESS_baseUrl: http://localhost:8080/
