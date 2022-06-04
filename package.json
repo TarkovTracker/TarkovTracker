@@ -65,7 +65,7 @@
     "open": "^8.4.0",
     "sass": "^1.44.0",
     "sass-loader": "7.3.1",
-    "shelljs": "^0.8.4",
+    "shelljs": "^0.8.5",
     "vue-chartist": "^2.3.1",
     "vue-cli-plugin-git-describe": "~1.0.0",
     "vue-cli-plugin-sitemap": "~2.3.0",
