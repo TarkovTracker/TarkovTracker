@@ -22,7 +22,8 @@
               centered
             >
               <v-tab
-                v-for="map in maps"
+                v-for="(map, mIndex) in maps"
+                :key="mIndex"
                 :to="'/maps/'+ map.toLowerCase()"
                 exact
                 replace

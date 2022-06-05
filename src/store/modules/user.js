@@ -6,9 +6,9 @@ const getDefaultState = () => {
   return {
     hideObtained: false,
     neededTotals: false,
-  	teammates: {},
+    teammates: {},
     hideTeammates: [],
-  	useTeammates: true,
+    useTeammates: true,
     useTeamObjectives: true,
     streamerMode: false,
 
@@ -20,26 +20,23 @@ const getDefaultState = () => {
     onlyLevels: false,
     primarySort: 0,
     teamSort: 0,
-
   }
 }
-
-const state = getDefaultState()
 
 const mutations = {
 
   ...make.mutations(getDefaultState()),
 
-  write_teamshare (state, teamshare) {
+  write_teamshare(state, teamshare) {
     state.teammates = { ...state.teammates, [teamshare.name]: teamshare }
   },
 
-  delete_teamshare (state, name) {
+  delete_teamshare(state, name) {
     delete state.teammates[name]
     state.teammates = { ...state.teammates }
   },
 
-  reset_state (state) {
+  reset_state(state) {
     Object.assign(state, getDefaultState())
   },
 }
@@ -50,17 +47,17 @@ const getters = {
 
   ...make.getters(getDefaultState()),
 
-	get_static_teammates: (state) => {
-	    return Object.values(state.teammates) || {}
-	},
+  get_static_teammates: (state) => {
+    return Object.values(state.teammates) || {}
+  },
 
-	get_static_teammate: (state) => (name) => {
-	    if (name in state.teammates) {
-	      return state.teammates[name]
-	    } else {
-	      return false
-	   	}
-	},
+  get_static_teammate: (state) => (name) => {
+    if (name in state.teammates) {
+      return state.teammates[name]
+    } else {
+      return false
+    }
+  },
 
   get_hidden_teammates: (state) => {
     if (state && 'hideTeammates' in state) {
@@ -73,7 +70,7 @@ const getters = {
 
 export default {
   namespaced: true,
-  state () {
+  state() {
     return getDefaultState()
   },
   mutations,

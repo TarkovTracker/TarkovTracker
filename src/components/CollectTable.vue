@@ -43,7 +43,7 @@
       disable-pagination
     >
       <!-- Item Name Modifications -->
-      <template v-slot:item.name="{ item }">
+      <template v-slot:[`item.name`]="{ item }">
         <span class="font-weight-bold">
           <tarkov-item :id="item.itemId" :externalLinks="true" />
           <span v-if="'fir' in item && item.fir === true">
@@ -55,7 +55,7 @@
       </template>
 
       <!-- Item Needed Modifications -->
-      <template v-slot:item.number="{ item }">
+      <template v-slot:[`item.number`]="{ item }">
         <v-btn-toggle
           background-color="transparent"
           active-class="none"
@@ -72,11 +72,11 @@
       </template>
 
       <!-- Item For Modications -->
-      <template v-slot:item.for="{ item }">
-        <span v-for="(questNeed, index) in item.for.quests">
+      <template v-slot:[`item.for`]="{ item }">
+        <span v-for="(questNeed, index) in item.for.quests" :key="index">
           <quest-link :quest-id="questNeed.quest.id" />
         </span>
-        <span v-for="(hideoutModule, index) in item.for.hideout">
+        <span v-for="(hideoutModule, index) in item.for.hideout" :key="index">
           {{ hideoutModule.name }}
           <span class="font-weight-bold">
             Level {{ hideoutModule.level }}
@@ -99,7 +99,7 @@
       disable-pagination
     >
       <!-- Item Name Modifications -->
-      <template v-slot:item.name="{ item }">
+      <template v-slot:[`item.name`]="{ item }">
         <v-hover v-slot="{ hover }">
           <span class="font-weight-bold">
             <tarkov-item :id="item.itemId" :fir="item.fir" :externalLinks="true" :linksForce="hover" />
@@ -108,7 +108,7 @@
       </template>
 
       <!-- Item Needed Modifications -->
-      <template v-slot:item.number="{ item }">
+      <template v-slot:[`item.number`]="{ item }">
         <span v-if="item.type === 'quest' ? !$store.get('progress/objective_complete', item.objective) : !$store.get('progress/hideout_objective_complete', item.objective)" class="d-flex justify-center">
           <v-btn-toggle
             background-color="transparent"
@@ -173,7 +173,7 @@
       </template>
 
       <!-- Item For Modications -->
-      <template v-slot:item.unlocked="{ item }">
+      <template v-slot:[`item.unlocked`]="{ item }">
         <div>
           <span v-if="item.type === 'quest'">
             <quest-link :quest-id="item.quest.id" />
@@ -292,8 +292,8 @@
         var haveTotals = onlyMine.reduce((acc, value) =>
           ({ ...acc, [value.itemId]: (acc[value.itemId] + value.have || value.have) }), {})
 
-        var questForTotals = onlyMine.filter(x => x.type === 'quest').reduce((acc, value) =>
-          ({ ...acc, [value.itemId]: (Array.isArray(acc[value.itemId]) ? acc[value.itemId].push(value.quest) : [value.quest]) }), {})
+        // var questForTotals = onlyMine.filter(x => x.type === 'quest').reduce((acc, value) =>
+        //   ({ ...acc, [value.itemId]: (Array.isArray(acc[value.itemId]) ? acc[value.itemId].push(value.quest) : [value.quest]) }), {})
 
         var totals = Object.keys(neededTotals).map(x => new Object({
           itemId: x,
@@ -343,23 +343,6 @@
         }
         if (item.have >= item.number) {
           return 'enough'
-        }
-      },
-
-      filterShow: function (items, search, filter) {
-        if (this.filterString == '') {
-          return true
-        } else {
-          if ('name' in item && item.name.toLowerCase().includes(this.filterString.toLowerCase())) {
-            // Found the filter string in our name, we're a match
-            return true
-          } else if ('for' in item && item.for.toLowerCase().includes(this.filterString.toLowerCase())) {
-            return true
-          } else if ('quest' in item && item.quest.title.toLowerCase().includes(this.filterString.toLowerCase())) {
-            return true
-          } else {
-            return false
-          }
         }
       },
 

@@ -156,14 +156,6 @@
 </template>
 
 <script>
-  // Utilities
-  import { get } from 'vuex-pathify'
-  import Vue from 'vue'
-
-  const lineSmooth = Vue.chartist.Interpolation.cardinal({
-    tension: 0,
-  })
-
   export default {
     name: 'DashboardView',
     data: () => ({
@@ -212,14 +204,12 @@
     }),
     computed: {
       completionStats () {
-        var questProgress = this.$store.get('progress/quests_array')
-        var objectiveProgress = this.$store.get('progress/objectives_array')
         var totalQuests = this.questDataDefault.filter(x => x.deprecated !== true).length
-        var completedQuests = this.questDataDefault.filter((x, y) => this.$store.get('progress/quest_complete', x.id) == true && x.deprecated !== true).length
+        var completedQuests = this.questDataDefault.filter((x) => this.$store.get('progress/quest_complete', x.id) == true && x.deprecated !== true).length
 
         // Quest completion
         var totalKappaQuests = this.questDataDefault.filter(x => x.deprecated !== true && x.nokappa !== true).length - 1
-        var completedKappaQuests = (this.questDataDefault.filter((x, y) => this.$store.get('progress/quest_complete', x.id) == true && x.deprecated !== true && x.nokappa !== true).length || 0)
+        var completedKappaQuests = (this.questDataDefault.filter((x) => this.$store.get('progress/quest_complete', x.id) == true && x.deprecated !== true && x.nokappa !== true).length || 0)
 
         // PMC eliminations
         var totalPMCEliminations = this.$root.objectiveArray.filter(x => x.type.toLowerCase() === 'kill' && x.target.toLowerCase() === 'pmcs').reduce((acc, x) => acc + x.number, 0)
