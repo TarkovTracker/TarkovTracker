@@ -34,25 +34,25 @@ const store = new Vuex.Store({
     vuexAppLocal.plugin,
   ],
   mutations: {
-  	// Root level mutations needed for vuexfire
+    // Root level mutations needed for vuexfire
     ...vuexfireMutations,
   },
 
   actions: {
     // Progress Bind and Unbind
-  	bindProgress: firestoreAction(({ bindFirestoreRef, commit, state }) => {
-  		const progressRef = db.collection('progress').doc(fireapp.auth().currentUser.uid)
-  		progressRef.get()
-  		  .then((docSnapshot) => {
+    bindProgress: firestoreAction(({ bindFirestoreRef, commit, state }) => {
+      const progressRef = db.collection('progress').doc(fireapp.auth().currentUser.uid)
+      progressRef.get()
+        .then((docSnapshot) => {
           // If progress document doesn't exist, set it to the default data
-  		    if (!docSnapshot.exists) {
-  		    	commit('progress/reset_state')
-  		      	progressRef.set(state.progress)
-  		    }
-  		})
+          if (!docSnapshot.exists) {
+            commit('progress/reset_state')
+            progressRef.set(state.progress)
+          }
+        })
       return bindFirestoreRef('progress', db.collection('progress').doc(fireapp.auth().currentUser.uid))
-  	}),
-  	unbindProgress: firestoreAction(({ unbindFirestoreRef }) => {
+    }),
+    unbindProgress: firestoreAction(({ unbindFirestoreRef }) => {
       unbindFirestoreRef('progress')
     }),
 
@@ -64,9 +64,9 @@ const store = new Vuex.Store({
           // If user document doesn't exist, set it to the default data
           if (!docSnapshot.exists) {
             commit('user/reset_state')
-              userRef.set(state.user)
+            userRef.set(state.user)
           }
-      })
+        })
       return bindFirestoreRef('user', db.collection('user').doc(fireapp.auth().currentUser.uid))
     }),
     unbindUser: firestoreAction(({ unbindFirestoreRef }) => {
@@ -74,7 +74,7 @@ const store = new Vuex.Store({
     }),
 
     // Team Bind and Unbind
-    bindFiresys: firestoreAction(({ bindFirestoreRef, commit, state }) => {
+    bindFiresys: firestoreAction(({ bindFirestoreRef }) => {
       return bindFirestoreRef('firesys', db.collection('system').doc(fireapp.auth().currentUser.uid), { maxRefDepth: 1 })
     }),
     unbindFiresys: firestoreAction(({ unbindFirestoreRef }) => {

@@ -28,9 +28,7 @@ export default function makeTeamStore() {
 		actions: {
 			// Progress Bind and Unbind
 			bindProgress: firestoreAction(({
-				bindFirestoreRef,
-				commit,
-				state
+				bindFirestoreRef
 			}, userId) => {
 				return bindFirestoreRef('progress', db.collection('progress').doc(userId))
 			}),
