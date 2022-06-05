@@ -43,7 +43,6 @@
       remoteConfig.fetchAndActivate()
       .then(() => {
         this.maintenance_mode = remoteConfig.getValue("maintenance_mode")._value;
-        console.log(this.maintenance_mode)
       })
     },
     changed (metaInfo) {
@@ -58,9 +57,8 @@
       logout () {
         this.$firebase.auth().signOut().then(() => {
           // Sign-out successful.
-        }).catch((error) => {
+        }).catch(() => {
           // An error happened.
-          console.log(error)
         })
       },
     },
@@ -71,9 +69,9 @@
  color: #FFFFFF
  text-align: center
 .maintenance-logo
-  display:block
-  margin-left:auto
-  margin-right:auto
-  margin-top:64px
-  margin-bottom:16px
+  display: block
+  margin-left: auto
+  margin-right: auto
+  margin-top: 64px
+  margin-bottom: 16px
 </style>
