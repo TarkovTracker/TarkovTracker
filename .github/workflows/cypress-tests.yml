@@ -3,12 +3,10 @@ name: Cypress Tests
 on:
   push:
     branches:
-      - '**'
-    tags:
-      - '**'
+    - master
   pull_request:
     branches:
-      - '**'
+    - master
 
 jobs:
   cypress-run:
