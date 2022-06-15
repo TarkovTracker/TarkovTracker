@@ -21,8 +21,8 @@
                   mdi-checkbox-marked-circle-outline
                 </v-icon>
               </span>
-              <v-avatar @click="visitToolsLink()" title="Show item on Tarkov Tools" class="external-link ml-1" v-if="(externalLinks && hover) || linksForce" size="1.25em">
-                <v-img src="/img/tarkovtoolslogo.png"></v-img>
+              <v-avatar @click="visitToolsLink()" title="Show item on Tarkov.dev" class="external-link ml-1" v-if="(externalLinks && hover) || linksForce" size="1.25em">
+                <v-img src="/img/tarkovdevlogo.png"></v-img>
               </v-avatar>
               <v-avatar @click="visitWikiLink()" title="Show item on EFT Wiki" class="external-link  ml-1" v-if="(externalLinks && hover) || linksForce" size="1.25em">
                 <v-img src="/img/wikilogo.png"></v-img>
@@ -75,7 +75,7 @@
       },
 
       icon: function () {
-        return `https://assets.tarkov-tools.com/${this.id}-icon.jpg`
+        return `https://assets.tarkov.dev/${this.id}-icon.jpg`
       },
 
       // Use tooltip if we're full or details format
@@ -94,7 +94,7 @@
 
     methods: {
       visitToolsLink () {
-        window.open(`https://tarkov-tools.com/item/${this.id}`, '_blank')
+        window.open(`https://tarkov.dev/item/${this.id}`, '_blank')
       },
       visitWikiLink () {
         window.open(`https://escapefromtarkov.fandom.com/wiki/${this.name}`, '_blank')

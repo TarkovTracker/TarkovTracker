@@ -116,9 +116,9 @@
             icon: 'mdi-account-group',
             items: [
               {
-                title: 'Tarkov Tools',
-                image: '/img/tarkovtoolslogo.png',
-                href: 'http://tarkov-tools.com',
+                title: 'Tarkov.dev',
+                image: '/img/tarkovdevlogo.png',
+                href: 'https://tarkov.dev/',
                 noradius: true
               },
               {
