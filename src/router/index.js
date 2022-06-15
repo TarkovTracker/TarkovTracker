@@ -8,18 +8,20 @@ import {
   route
 } from '@/util/routes'
 
-import Trader from '@/views/Trader.vue'
+import Trader from '@/views/TraderPage.vue'
 import TraderQuestTable from '@/views/TraderQuestTable.vue'
 
-import Maps from '@/views/Maps.vue'
+import Maps from '@/views/MapsPage.vue'
 import MapsQuestTable from '@/views/MapsQuestTable.vue'
 
 import AllQuests from '@/views/AllQuests.vue'
 
-import Hideout from '@/views/Hideout.vue'
+import Hideout from '@/views/HideoutPage.vue'
 import HideoutTable from '@/views/HideoutTable.vue'
 
 import QuestInfo from '@/views/QuestInfo.vue'
+
+import Contributors from '@/views/ContributorsPage.vue'
 
 Vue.use(Router)
 Vue.use(Meta)
@@ -94,18 +96,17 @@ const router = new Router({
         component: QuestInfo,
         props: true
       },
-      route('Contributors', null, 'contributors'),
-      // Pages
-      route('Timeline', null, 'components/timeline'),
-      route('UserProfile', null, 'components/profile')
+      {
+        name: 'Contributiors',
+        path: '/contributors',
+        component: Contributors,
+        props: true
+      },
 
     ]),
     layout('Login', [
       route('Error', null, 'error'),
-      // route('Lock', null, 'lock'),
       route('Login', null, 'login')
-      // route('Pricing', null, 'pricing'),
-      // route('Register', null, 'register'),
     ])
   ]
 })
