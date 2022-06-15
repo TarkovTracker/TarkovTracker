@@ -92,8 +92,7 @@
                   >
                     <v-icon>arrow_right</v-icon>Level: {{ thisQuest.require.level }}
                   </div>
-                  <template v-if="'require' in thisQuest && 'loyalty' in thisQuest.require">
-                    <div v-for="(loyalty, llindex) in thisQuest.require.loyalty" :key="llindex" class="mt-1">
+                  <div v-if="'require' in thisQuest && 'loyalty' in thisQuest.require" v-for="(loyalty, llindex) in thisQuest.require.loyalty" class="mt-1">
                       <img
                         class="img"
                         :src="traderIcon(loyalty.trader)"
@@ -106,7 +105,6 @@
                         Loyalty {{loyalty.stage}}
                       </span>
                   </div>
-                  </template>
                   <div
                     v-if="locationsList"
                     class="mt-1"

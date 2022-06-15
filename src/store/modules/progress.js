@@ -29,7 +29,7 @@ const mutations = {
     if (!Array.isArray(id)) {
       id = [id]
     }
-    id.forEach((x) => {
+    id.forEach((x, y) => {
       if (!(x in state.quests)) {
         state.quests = { ...state.quests, [x]: {} }
       }
@@ -42,7 +42,7 @@ const mutations = {
     if (!Array.isArray(id)) {
       id = [id]
     }
-    id.forEach((x) => {
+    id.forEach((x, y) => {
       if (!(x in state.quests)) {
         state.quests = { ...state.quests, [x]: {} }
       }
@@ -55,7 +55,7 @@ const mutations = {
     if (!Array.isArray(id)) {
       id = [id]
     }
-    id.forEach((x) => {
+    id.forEach((x, y) => {
       if (!(x in state.quests)) {
         state.quests = { ...state.quests, [x]: {} }
       }
@@ -69,7 +69,7 @@ const mutations = {
     if (!Array.isArray(id)) {
       id = [id]
     }
-    id.forEach((x) => {
+    id.forEach((x, y) => {
       if (!(x in state.quests)) {
         state.quests = { ...state.quests, [x]: {} }
       }
@@ -83,7 +83,7 @@ const mutations = {
     if (!Array.isArray(id)) {
       id = [id]
     }
-    id.forEach((x) => {
+    id.forEach((x, y) => {
       if (!(x in state.objectives)) {
         state.objectives = { ...state.objectives, [x]: {} }
       }
@@ -96,7 +96,7 @@ const mutations = {
     if (!Array.isArray(id)) {
       id = [id]
     }
-    id.forEach((x) => {
+    id.forEach((x, y) => {
       if (!(x in state.objectives)) {
         state.objectives = { ...state.objectives, [x]: {} }
       }
@@ -145,7 +145,7 @@ const mutations = {
     if (!Array.isArray(id)) {
       id = [id]
     }
-    id.forEach((x) => {
+    id.forEach((x, y) => {
       if (!(x in state.hideout)) {
         state.hideout[x] = {}
       }
@@ -158,7 +158,7 @@ const mutations = {
     if (!Array.isArray(id)) {
       id = [id]
     }
-    id.forEach((x) => {
+    id.forEach((x, y) => {
       if (!(x in state.hideout)) {
         state.hideout[x] = {}
       }
@@ -171,7 +171,7 @@ const mutations = {
     if (!Array.isArray(id)) {
       id = [id]
     }
-    id.forEach((x) => {
+    id.forEach((x, y) => {
       if (!(x in state.hideoutObjectives)) {
         state.hideoutObjectives[x] = {}
       }
@@ -184,7 +184,7 @@ const mutations = {
     if (!Array.isArray(id)) {
       id = [id]
     }
-    id.forEach((x) => {
+    id.forEach((x, y) => {
       if (!(x in state.hideoutObjectives)) {
         state.hideoutObjectives[x] = {}
       }
@@ -401,7 +401,7 @@ const getters = {
 }
 
 const actions = {
-  import_teamshare ({ commit }, teamshare) {
+  import_teamshare ({ commit, state }, teamshare) {
     // Clear everything before importing
     commit('reset_state')
     // quests|objectives

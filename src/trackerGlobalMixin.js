@@ -32,6 +32,15 @@ export default {
       }
       return alternatives
     },
+    // Check if you have enough completion for an objective
+    objectiveHaveEnough(objective) {
+      if ('number' in objective) {
+        if (progressStore.copy('progress/objective_have', objective.id) >= objective.number) {
+          return true
+        }
+      }
+      return false
+    },
     // Mark an entire quest as completed
     CompleteQuest(quest) {
       this.$store.set('progress/complete_quest', quest.id)
@@ -142,9 +151,7 @@ export default {
         // For each quest, check against our baseSet
         this.$root.questArray.forEach((quest) => {
           // Check a flat array of all of the required quests in this quest
-          if (quest.require.quests) {
-            // Do nothing
-          } else {
+          if (quest.require.quests) {} else {
             return
           }
           quest.require.quests.flat().forEach((requiredQuestId) => {
@@ -361,7 +368,7 @@ export default {
         exportTime: Date.now(),
         name: this.$store.copy('progress/shareName') || 'Yourself',
         teamshare: this.$store.copy('progress/export_teamshare'),
-        totalComplete: this.$root.questArray.filter((x) => this.$store.copy('progress/quest_complete', x.id) == true && x.deprecated !== true).length,
+        totalComplete: this.$root.questArray.filter((x, y) => this.$store.copy('progress/quest_complete', x.id) == true && x.deprecated !== true).length,
       }
       return teamshareObject
     },

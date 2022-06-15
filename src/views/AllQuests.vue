@@ -28,8 +28,7 @@
               height="36px"
             >
               <v-tab
-                v-for="(view, viewIndex) in views"
-                :key="`selectview-${viewIndex}`"
+                v-for="view in views"
               >
                 <v-icon class="mr-2">
                   {{ view.icon }}
@@ -98,7 +97,6 @@
             >
               <v-tab
                 v-for="(map, mapIndex) in maps"
-                :key="`selectmap-${mapIndex}`"
               >
                 <v-icon class="mr-2">
                   mdi-compass
@@ -139,8 +137,7 @@
               height="36px"
             >
               <v-tab
-                v-for="(trader, traderIndex) in traders"
-                :key="`selecttrader-${traderIndex}`"
+                v-for="trader in traders"
               >
                 <v-avatar
                   color="primary"
@@ -184,8 +181,7 @@
               height="36px"
             >
               <v-tab
-                v-for="(availability, availIndex) in availabilities"
-                :key="`availability-${availIndex}`"
+                v-for="availability in availabilities"
               >
                 <v-icon class="mr-2">
                   {{ availability.icon }}
@@ -220,7 +216,6 @@
             >
               <v-tab
                 v-for="(teammate, index) in visibleTeam"
-                :key="`teamselector-${index}`"
                 :class="teamTabClasses(teammate, index)"
                 :disabled="index == 0 && [1, 2].includes(activeAvailableTab) && visibleTeam.length > 1"
               >
@@ -826,12 +821,15 @@
         switch(this.primarySort) {
           case 0:
             return 'desc'
+            break;
 
           case 1:
             return 'asc'
+            break;
 
           default:
             return 'desc'
+            break;
         }
       },
       visibleTeam: function() {
@@ -847,6 +845,7 @@
 
         switch(this.activeViewTab) {
           case 0: // The 'All' view
+            quests = quests
             break;
 
           case 1: // The 'Maps' view
@@ -892,12 +891,8 @@
                 quests = quests.filter(quest => this.$root.levelAvailability[quest.id][this.activeTeamTab - 1] == true)
               }
               
-              // This isn't good form for computed properties, but this needs a larger refactor to fix it
-              // eslint-disable-next-line vue/no-side-effects-in-computed-properties 
               this.filterCounts.level = beforeCount - quests.length
             }else{
-              // This isn't good form for computed properties, but this needs a larger refactor to fix it
-              // eslint-disable-next-line vue/no-side-effects-in-computed-properties 
               this.filterCounts.level = 0
             }
             break;
@@ -923,19 +918,16 @@
             break;
 
           default:
+            quests = quests
             break;
         }
 
         // Filter out non-kappa quests
         if(this.onlyKappa) {
-          let beforeCount = quests.length
+          var beforeCount = quests.length
           quests = quests.filter(quest => quest.nokappa != true)
-          // This isn't good form for computed properties, but this needs a larger refactor to fix it
-          // eslint-disable-next-line vue/no-side-effects-in-computed-properties 
           this.filterCounts.kappa = beforeCount - quests.length
         }else{
-          // This isn't good form for computed properties, but this needs a larger refactor to fix it
-          // eslint-disable-next-line vue/no-side-effects-in-computed-properties 
           this.filterCounts.kappa = 0
         }
 
@@ -986,21 +978,21 @@
     },
     mounted () {
       if (this.viewType != null) {
-        let validView = this.views.reduce((acc, x) => acc.concat(x.title.toLowerCase()), []).indexOf(this.viewType.toLowerCase())
+        var validView = this.views.reduce((acc, x) => acc.concat(x.title.toLowerCase()), []).indexOf(this.viewType.toLowerCase())
         if (validView >= 0) {
           this.$store.set('user/questViewTab', validView)
         }
       }
 
       if (this.$store.copy('user/questViewTab') == 1 && this.subView != null) {
-        let validView = this.maps.reduce((acc, x) => acc.concat(x.toLowerCase()), []).indexOf(this.viewType.toLowerCase())
+        var validView = this.maps.reduce((acc, x) => acc.concat(x.toLowerCase()), []).indexOf(this.viewType.toLowerCase())
         if (validView >= 0) {
           this.$store.set('user/questMapTab', validView)
         }
       }
 
       if (this.$store.copy('user/questViewTab') == 2 && this.subView != null) {
-        let validView = this.traders.reduce((acc, x) => acc.concat(x.toLowerCase()), []).indexOf(this.viewType.toLowerCase())
+        var validView = this.traders.reduce((acc, x) => acc.concat(x.toLowerCase()), []).indexOf(this.viewType.toLowerCase())
         if (validView >= 0) {
           this.$store.set('user/questTraderTab', validView)
         }
@@ -1028,9 +1020,11 @@
         switch(this.primarySort) {
           case 0:
             return this.calculateLocked(a)
+            break;
 
           case 1:
             return a.require.level
+            break;
 
           default:
             break;

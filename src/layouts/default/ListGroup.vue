@@ -41,6 +41,9 @@
 </template>
 
 <script>
+  // Utilities
+  import { get } from 'vuex-pathify'
+
   export default {
     name: 'DefaultListGroup',
 

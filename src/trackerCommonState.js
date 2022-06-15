@@ -1,28 +1,29 @@
+import Vue from 'vue'
 import makeTeamStore from './store/teamstore.js'
 
 // Global TarkovTracker Vue Mixin
 export default {
   computed: {
-    questArray: function () {
+    questArray: function() {
       return this.questDataDefault
         .filter(x => x.deprecated !== true)
     },
-    questDictionary: function () {
+    questDictionary: function() {
       return this.questDataDefault.reduce((a, x) => ({ ...a, [x.title]: x }), {})
     },
-    questDictionaryId: function () {
+    questDictionaryId: function() {
       return this.questDataDefault.reduce((a, x) => ({ ...a, [x.id]: x }), {})
     },
-    objectiveArray: function () {
+    objectiveArray: function() {
       return this.questDataDefault
         .filter(x => x.deprecated !== true)
         .reduce((acc, x) => acc.concat(x.objectives), []) // Get a flat list of objectives
     },
-    objectiveDictionary: function () {
+    objectiveDictionary: function() {
       return this.objectiveArray
         .reduce((a, x) => ({ ...a, [x.id]: x }), {}) // Reduce to a mapping of ID to objective
     },
-    objectiveDictionaryQuests: function () {
+    objectiveDictionaryQuests: function() {
       var objectives = Object.values(this.objectiveDictionary)
       objectives.forEach((objective) => {
         objective.quests = this.questArray
@@ -31,33 +32,33 @@ export default {
       }, this)
       return objectives.reduce((a, x) => ({ ...a, [x.id]: x }), {})
     },
-    hideoutObjectiveArray: function () {
+    hideoutObjectiveArray: function() {
       return this.hideoutDataDefault.modules
         .reduce((acc, x) => acc.concat(x.require), []) // Get a flat list of objectives
     },
-    hideoutObjectiveDictionary: function () {
+    hideoutObjectiveDictionary: function() {
       return this.hideoutObjectiveArray
         .reduce((a, x) => ({ ...a, [x.id]: x }), {}) // Reduce to a mapping of ID to objective
     },
-    hideoutStationDictionary: function () {
+    hideoutStationDictionary: function() {
       return this.hideoutDataDefault.stations
         .reduce((a, x) => ({ ...a, [x.id]: x }), {}) // Reduce to a mapping of ID to station
     },
-    itemDictionary: function () {
+    itemDictionary: function() {
       return this.itemDataDefault // Return the existing dictionary of items from tarkovdata
     },
-    traderDictionary: function () {
+    traderDictionary: function() {
       return Object.values(this.traderDataDefault)
         .reduce((a, x) => ({ ...a, [x.id]: x }), {}) // Reduce to a mapping of id to trader
     },
-    mapArray: function () {
+    mapArray: function() {
       return Object.values(this.mapDataDefault)
     },
-    mapDictionary: function () {
+    mapDictionary: function() {
       return Object.values(this.mapDataDefault)
         .reduce((a, x) => ({ ...a, [x.id]: x }), {}) // Reduce to a mapping of id to map
     },
-    me: function () {
+    me: function() {
       return {
         store: this.$store,
         id: this.$store.copy('app/get_user_auth_uid') || 'self',
@@ -69,12 +70,12 @@ export default {
         },
       }
     },
-    staticTeammates: function () {
+    staticTeammates: function() {
       var teammates = []
       var staticTeammates = this.$store.copy('user/get_static_teammates')
 
       if (this.$store.copy('user/useTeammates')) {
-        staticTeammates.forEach((teammate) => {
+        staticTeammates.forEach((teammate, i) => {
           var staticTeammate = teammate
           staticTeammate.dynamic = false
           staticTeammate.store = makeTeamStore()
@@ -85,7 +86,7 @@ export default {
 
       return teammates
     },
-    liveTeammates: function () {
+    liveTeammates: function() {
       var teammates = []
       if (this.$store.copy('app/get_user_auth_uid')) {
         var fireSys = this.$store.copy('firesys')
@@ -112,13 +113,13 @@ export default {
       }
       return teammates
     },
-    teammates: function () {
+    teammates: function() {
       return [...this.liveTeammates, ...this.staticTeammates]
     },
-    team: function () {
+    team: function() {
       return [this.me, ...this.teammates]
     },
-    teamAvailability: function () {
+    teamAvailability: function() {
       var teamAvailability = {}
       // Creats a matrix of quest availability for you and the members of your team
       this.team.forEach((member, teamIndex) => {
@@ -129,7 +130,7 @@ export default {
       }, this)
       return teamAvailability
     },
-    questAvailability: function () {
+    questAvailability: function() {
       // Creats a matrix of quest availability for you and the members of your team
       var questAvailability = {}
       this.questArray.forEach((quest) => {
@@ -144,7 +145,7 @@ export default {
 
       return questAvailability
     },
-    levelAvailability: function () {
+    levelAvailability: function() {
       // Creats a matrix of level availability for you and the members of your team
       var levelAvailability = {}
       this.questArray.forEach((quest) => {
@@ -153,13 +154,13 @@ export default {
           // If were not a hidden teammate, and were not a teammate with teammates off
           // a quest should be available if it has no level requirement set
           levelAvailability[quest.id][teamIndex] = (
-            quest.require.level === undefined ||
+              quest.require.level === undefined ||
             ((member.store.copy('progress/level') || 71) >= quest.require.level)) ? true : false
         }, this)
       }, this)
       return levelAvailability
     },
-    objectiveAvailability: function () {
+    objectiveAvailability: function() {
       // Creats a matrix of objective availability for you and the members of your team
       var objectiveAvailability = {}
       this.objectiveArray.forEach((objective) => {
@@ -180,39 +181,26 @@ export default {
       maps.forEach((map) => {
         mapSet[map] = new Set()
         this.questArrayCopy().forEach((quest) => {
-          if (this.isQuestOnMap(quest, map)) {
+          if(this.isQuestOnMap(quest, map)) {
             mapSet[map].add(quest.id)
           }
         }, this)
       }, this)
       return mapSet
     },
-    // Create a count of the quests available for each map, and globally available quests
     mapAvailability: function () {
       var mapAvailability = {}
-      // Loop through each of the quests we have something for
       Object.keys(this.questsByMap).forEach((map) => {
         mapAvailability[map] = 0
         this.questsByMap[map].forEach((questId) => {
-          // The map is specific to this map
-          if (this.isQuestMapSpecific(this.questDictionaryId[questId], map)) {
-            // If the quest is available for ourself or one of our teammates && is that teammate eligible for the quest by filters 
-            if (Object.values(this.questAvailability[questId]).some(availability => availability === 0)) {
-              var filterOut = false
-              if (this.$store.copy('user/onlyLevels') == true) {
-                // Filter by levels of self and teammates
-
-              }
-
-
-              if (filterOut == false) {
-                mapAvailability[map] += 1
-              }
-            }
+          if (Object.values(this.questAvailability[questId]).some(availability => availability === 0)
+            && this.isQuestMapSpecific(this.questDictionaryId[questId], map)) {
+            mapAvailability[map] += 1
           }
         }, this)
       }, this)
 
+      //const globalIndex = Object.values(mapAvailability).length
       const globalIndex = this.$root.mapArray.length
 
       mapAvailability[globalIndex] = 0
@@ -223,72 +211,72 @@ export default {
       }, this)
       return mapAvailability
     },
-    hideoutNeeded: function () {
+    hideoutNeeded: function() {
       var hideoutNeeded = {}
       this.hideoutDataDefault.modules.forEach((hModule) => {
-        hModule.require.forEach((requirement) => {
-          hideoutNeeded[requirement.id] = {}
-          this.team.forEach((member, teamIndex) => {
-            // If our own objectives, or a dynamic teammate that isn't hidden and showing team is on
-            if ((member.self || member.dynamic) && !(!member.self && this.$store.copy('user/useTeammates') == false)) {
-              hideoutNeeded[requirement.id][teamIndex] = (member.store.copy('progress/hideout_objective_complete', requirement.id) == false)
-            }
+          hModule.require.forEach((requirement) => {
+            hideoutNeeded[requirement.id] = {}
+            	this.team.forEach((member, teamIndex) => {
+                // If our own objectives, or a dynamic teammate that isn't hidden and showing team is on
+            		if ((member.self || member.dynamic) && !(!member.self && this.$store.copy('user/useTeammates') == false)) {
+            			hideoutNeeded[requirement.id][teamIndex] = (member.store.copy('progress/hideout_objective_complete', requirement.id) == false)
+            		}
+		        }, this)
           }, this)
-        }, this)
       }, this)
       return hideoutNeeded
     },
     hideoutItems: function () {
-      var hideoutItems = []
-      // For each hideout module
-      this.hideoutDataDefault.modules.forEach((hModule) => {
-        // For each requirement in each module
-        hModule.require.forEach((requirement) => {
-          // If the requirement type is an item, and anyone needs it
-          if (requirement.type == 'item' && this.hideoutNeeded[requirement.id][0] == true) {
-            hideoutItems.push({
-              itemId: requirement.name,
-              have: this.$store.get('progress/hideout_objective_have', requirement.id),
-              number: requirement.quantity,
-              for: hModule,
-              forLevel: hModule.level,
-              objective: requirement.id,
-              type: 'hideout',
-            })
-          }
-        }, this)
-      }, this)
-      return hideoutItems
-    },
-    questItems: function () {
-      var questItems = []
-      this.questArray.forEach((quest) => {
-        quest.objectives.forEach((objective) => {
-          if (['find', 'collect', 'hideout'].indexOf(objective.type) >= 0 && Object.values(this.objectiveAvailability[objective.id]).some(completed => completed == false)) {
-            var teamHave = {}
-            Object.values(this.objectiveAvailability[objective.id]).forEach((completed, teamIndex) => {
-              if (!completed && teamIndex != 0 && this.team[teamIndex].store.get('progress/objective_have', objective.id) < objective.number) {
-                teamHave[teamIndex] = this.team[teamIndex].store.get('progress/objective_have', objective.id)
+        var hideoutItems = []
+        // For each hideout module
+        this.hideoutDataDefault.modules.forEach((hModule) => {
+            // For each requirement in each module
+            hModule.require.forEach((requirement) => {
+              // If the requirement type is an item, and anyone needs it
+              if (requirement.type == 'item' && this.hideoutNeeded[requirement.id][0] == true) {
+                hideoutItems.push({
+                    itemId: requirement.name,
+                    have: this.$store.get('progress/hideout_objective_have', requirement.id),
+                    number: requirement.quantity,
+                    for: hModule,
+                    forLevel: hModule.level,
+                    objective: requirement.id,
+                    type: 'hideout',
+                })
               }
             }, this)
-            questItems.push(
-              {
-                itemId: objective.target,
-                have: this.$store.get('progress/objective_have', objective.id),
-                teamHave: teamHave,
-                number: objective.number,
-                for: quest.giver,
-                quest: quest,
-                objective: objective.id,
-                fir: (objective.type == 'find'),
-                unlocked: this.calculateUnlocked(quest, this.$store),
-                type: 'quest',
-                nokappa: quest.nokappa,
-              })
-          }
         }, this)
-      }, this)
-      return questItems
+        return hideoutItems
+    },
+    questItems: function () {
+    	var questItems = []
+    	this.questArray.forEach((quest) => {
+    		quest.objectives.forEach((objective) => {
+    			if (['find', 'collect', 'hideout'].indexOf(objective.type) >= 0 && Object.values(this.objectiveAvailability[objective.id]).some(completed => completed == false)) {
+    				var teamHave = {}
+    				Object.values(this.objectiveAvailability[objective.id]).forEach((completed, teamIndex) => {
+    					if (!completed && teamIndex != 0 && this.team[teamIndex].store.get('progress/objective_have', objective.id) < objective.number) {
+    						teamHave[teamIndex] = this.team[teamIndex].store.get('progress/objective_have', objective.id)
+    					}
+    				}, this)
+    				questItems.push(
+	                {
+                    itemId: objective.target,
+	                  have: this.$store.get('progress/objective_have', objective.id),
+	                  teamHave: teamHave,
+	                  number: objective.number,
+	                  for: quest.giver,
+	                  quest: quest,
+	                  objective: objective.id,
+	                  fir: (objective.type == 'find'),
+	                  unlocked: this.calculateUnlocked(quest, this.$store),
+	                  type: 'quest',
+	                  nokappa: quest.nokappa,
+	                })
+    			}
+    		}, this)
+    	}, this)
+    	return questItems
     },
   },
 }

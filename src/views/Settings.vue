@@ -152,7 +152,7 @@
                     cols="4"
                     class="text-center"
                   >
-                    <v-icon>mdi-calendar-clock</v-icon> Created {{ ($store.get('firesys/team@createdAt').toDate() | timeSince(nowTime) || '') }}
+                    <v-icon>mdi-calendar-clock</v-icon> Created {{ $store.get('firesys/team@createdAt').toDate() | timeSince(nowTime) || '' }}
                   </v-col>
                 </v-row>
               </v-container>
@@ -436,12 +436,12 @@
                 disable-pagination
                 hide-default-footer
               >
-                <template v-slot:[`item.permissions`]="{ item }">
-                    <span class="font-weight-bold">
-                      {{ item.permissions.map(perm => availablePermissions[perm].title).join(', ')}}
+                <template v-slot:item.permissions="{ item }">
+                    <span class="font-weight-bold" v-for="(permission, permIndex) in item.permissions">
+                      {{ availablePermissions[permission].title }}{{ permIndex < item.permissions.length - 1 ? ',' : '' }}
                     </span>
                 </template>
-                <template v-slot:[`item.token`]="{ item }">
+                <template v-slot:item.token="{ item }">
                     <span class="font-weight-bold">
                       {{ item.token.substring(0,item.token.length-6).replace(/./g, '*') }}{{ item.token.substring(item.token.length-6) }}
                     </span>
@@ -476,12 +476,12 @@
                       </v-card>
                     </v-dialog>
                 </template>
-                <template v-slot:[`item.createdAt`]="{ item }">
+                <template v-slot:item.createdAt="{ item }">
                     <span class="font-weight-bold">
                       {{ (new Date(item.createdAt.seconds * 1000)) | timeSince(nowTime) }}
                     </span>
                 </template>
-                <template v-slot:[`item.actions`]="{ item }">
+                <template v-slot:item.actions="{ item }">
                     <v-btn
                       outlined
                       elevation="2"
@@ -572,7 +572,7 @@
                           <span>The types of data or actions this token can perform on your behalf</span>
                         </v-tooltip>
                       </v-col>
-                      <v-col cols="auto" v-for="(permission, permIndex) in Object.keys(availablePermissions)" :key="permIndex">
+                      <v-col cols="auto" v-for="permission in Object.keys(availablePermissions)">
                         <v-tooltip top>
                           <template v-slot:activator="{ on, attrs }">
                             <span
@@ -902,7 +902,7 @@
         return ''
       },
       myCompleted: function () {
-        var completedCount = this.questDataDefault.filter((x) => this.$store.get('progress/quest_complete', x.id) === true && x.deprecated !== true).length
+        var completedCount = this.questDataDefault.filter((x, y) => this.$store.get('progress/quest_complete', x.id) === true && x.deprecated !== true).length
         var totalCount = this.questDataDefault.filter(x => x.deprecated !== true).length
         return `${completedCount}/${totalCount}`
       },
@@ -1108,7 +1108,7 @@
         this.creatingTeam = true
         var createTeam = this.$firebase.functions().httpsCallable('createTeam')
         createTeam()
-          .then(() => {
+          .then((result) => {
             // Read result of the Cloud Function.
             this.creatingTeam = false
           }, this)
@@ -1117,7 +1117,7 @@
         this.leavingTeam = true
         var leaveTeam = this.$firebase.functions().httpsCallable('leaveTeam')
         leaveTeam()
-          .then(() => {
+          .then((result) => {
             // Read result of the Cloud Function.
             this.leavingTeam = false
           }, this)
@@ -1128,7 +1128,7 @@
         // this.kickingTeam[teammate.id] = true
         var kickTeammate = this.$firebase.functions().httpsCallable('kickTeammate')
         kickTeammate({ id: teammate.id })
-          .then(() => {
+          .then((result) => {
             // Reactive change the value
             this.$set(this.kickingTeam, teammate.id, false)
           })

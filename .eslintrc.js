@@ -5,6 +5,8 @@ module.exports = {
     node: true,
   },
 
+  extends: 'vuetify',
+
   parserOptions: {
     parser: 'babel-eslint',
   },
@@ -12,9 +14,6 @@ module.exports = {
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'vue/no-parsing-error': [2, {
-      "invalid-first-character-of-tag-name": false
-    }],
     'template-curly-spacing': 'off',
     indent: 'off',
     'no-unused-vars': 'warn',
@@ -32,9 +31,8 @@ module.exports = {
     },
   ],
 
-  extends: [
+  'extends': [
     'plugin:vue/essential',
-    'eslint:recommended',
-    'plugin:cypress/recommended'
+    'eslint:recommended'
   ]
 }

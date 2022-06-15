@@ -35,7 +35,7 @@
     },
     mounted () {
       this.randomizeHint()
-      this.$router.afterEach(() => {
+      this.$router.afterEach((to, from) => {
         this.randomizeHint()
       })
     },

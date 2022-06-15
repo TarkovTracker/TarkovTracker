@@ -27,8 +27,7 @@
               mdi-menu-right
             </v-icon>Level: {{ questDetails.require.level }}
           </div>
-          <template v-if="'require' in questDetails && 'loyalty' in questDetails.require">
-            <div v-for="(loyalty, llindex) in questDetails.require.loyalty" class="mb-1" :key="`qreqtrader-${llindex}`">
+          <div v-if="'require' in questDetails && 'loyalty' in questDetails.require" v-for="(loyalty, llindex) in questDetails.require.loyalty" class="mb-1">
               <img
                 class="img"
                 :src="traderIcon(loyalty.trader)"
@@ -41,8 +40,6 @@
                 Loyalty {{loyalty.stage}}
               </span>
           </div>
-          </template>
-          
           <div v-if="pageType != 'completed' && myselfCalculateUnlocked(questDetails)">
             <v-icon class="mr-1">
               lock_open
@@ -205,7 +202,7 @@
             width="fit-content"
           >
             <span class="text-center">This quest was marked as failed via completion of
-              <span v-for="(alternative, aIndex) in questDetails.alternatives" :key="`qfalt-${aIndex}`">
+              <span v-for="alternative in questDetails.alternatives">
                 <quest-link :quest-id="alternative" v-if="$store.copy('progress/quest_failed', alternative) === false" />
               </span>
             </span>
@@ -230,7 +227,7 @@
             width="fit-content"
           >
             <span class="text-center">Fails alternative quests:
-              <span v-for="(alternative, aIndex) in questDetails.alternatives" :key="`qlalt-${aIndex}`">
+              <span v-for="alternative in questDetails.alternatives">
                 <quest-link :quest-id="alternative" />
               </span>
             </span>
@@ -275,7 +272,7 @@
             width="fit-content"
           >
             <span class="text-center">Uncomplete will also reset alternative quests:
-              <span v-for="(alternative, aIndex) in questDetails.alternatives" :key="`qalt-${aIndex}`">
+              <span v-for="alternative in questDetails.alternatives">
                 <quest-link :quest-id="alternative" />
               </span>
             </span>

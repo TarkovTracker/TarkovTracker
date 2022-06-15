@@ -45,7 +45,7 @@
 </template>
 
 <script>
-  import { sync } from 'vuex-pathify'
+  import { get, sync } from 'vuex-pathify'
   export default {
     name: 'PlayerLevel',
 
@@ -57,6 +57,9 @@
 
     computed: {
       levelGroup: function () {
+        if(!this.$root.levelDataDefault[this.selfLevel]) {
+          this.selfLevel = 71
+        }
         return this.$root.levelDataDefault[this.selfLevel].group
       },
 
@@ -69,9 +72,6 @@
           return this.$store.copy('progress/level')
         },
         set (value) {
-          if (!this.$root.levelDataDefault[value]) {
-            value = 1
-          }
           this.$store.set('progress/level', value)
         },
       },

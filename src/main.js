@@ -6,7 +6,8 @@ import './plugins'
 import localstore from './store/localstore.js'
 import firestore from './store/firestore.js'
 import { sync } from 'vuex-router-sync'
-import { _ } from 'vue-underscore';
+import underscore from 'vue-underscore'
+import { get as pathGet, sync as pathSync } from 'vuex-pathify'
 
 import UniqueId from 'vue-unique-id';
 
@@ -36,8 +37,6 @@ Vue.mixin(trackerGlobalMixin)
 
 sync(localstore, router)
 
-// GIT_DESCRIBE comes from vue-cli-plugin-git-describe
-// eslint-disable-next-line no-undef
 const gitHash = GIT_DESCRIBE.hash.replace(/g/,'')
 
 const vm = new Vue({
@@ -124,14 +123,14 @@ const vmf = new Vue({
       var bindFiresys = firestore.set('bindFiresys!')
 
       return Promise.all([bindProgress, bindUser, bindFiresys]).then(() => {
-        this.progressSubscribe = this.$store.subscribe((mutation) => {
+        this.progressSubscribe = this.$store.subscribe((mutation, state) => {
           const mutationPath = mutation.type.split('/')
           if (mutationPath.length > 1 && mutationPath[0] === 'progress') {
             this.uploadLocalProgress()
           }
         })
 
-        this.userSubscribe = this.$store.subscribe((mutation) => {
+        this.userSubscribe = this.$store.subscribe((mutation, state) => {
           const mutationPath = mutation.type.split('/')
           if (mutationPath.length > 1 && mutationPath[0] === 'user') {
             this.uploadLocalUser()

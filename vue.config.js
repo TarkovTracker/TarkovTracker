@@ -3,9 +3,6 @@
 module.exports = {
   devServer: {
     disableHostCheck: true,
-    stats: {
-      chunks: false,
-    }
   },
 
   configureWebpack: {

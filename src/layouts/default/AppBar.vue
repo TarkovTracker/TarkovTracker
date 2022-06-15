@@ -34,7 +34,7 @@
 
 <script>
   // Utilities
-  import { sync } from 'vuex-pathify'
+  import { get, sync } from 'vuex-pathify'
 
   export default {
     name: 'DefaultBar',

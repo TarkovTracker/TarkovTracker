@@ -14,7 +14,7 @@ jobs:
       url: https://tarkovtracker-staging.web.app/
     steps:
       - name: Checkout Ref
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
         with:
           submodules: recursive
 
@@ -48,7 +48,7 @@ jobs:
 
       - name: Build Changelog
         id: github_release
-        uses: mikepenz/release-changelog-builder-action@v3.0.0
+        uses: mikepenz/release-changelog-builder-action@v2.7.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

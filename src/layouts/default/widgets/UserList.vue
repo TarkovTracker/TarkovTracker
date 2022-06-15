@@ -6,6 +6,7 @@
 </template>
 
 <script>
+  import { get, sync } from 'vuex-pathify'
   export default {
     name: 'UserList',
 
@@ -66,7 +67,6 @@
           // Sign-out successful.
         }).catch((error) => {
           // An error happened.
-          console.log(error)
         })
       },
     },
