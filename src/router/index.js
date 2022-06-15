@@ -23,6 +23,8 @@ import QuestInfo from '@/views/QuestInfo.vue'
 
 import Contributors from '@/views/ContributorsPage.vue'
 
+import Skills from '@/views/SkillsPage.vue'
+
 Vue.use(Router)
 Vue.use(Meta)
 
@@ -89,7 +91,6 @@ const router = new Router({
           }
         ]
       },
-      route('Skills', null, 'skills'),
       {
         name: 'Quest',
         path: '/quest/:id',
@@ -100,6 +101,12 @@ const router = new Router({
         name: 'Contributiors',
         path: '/contributors',
         component: Contributors,
+        props: true
+      },
+      {
+        name: 'Skills',
+        path: '/skills',
+        component: Skills,
         props: true
       },
 
