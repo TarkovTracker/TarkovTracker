@@ -1,6 +1,6 @@
 <template>
-  <v-app 
-    :style="{background: $vuetify.theme.themes[theme].background}" 
+  <v-app
+    :style="{background: $vuetify.theme.themes[theme].background}"
     :class="appClass"
   >
     <default-bar />
@@ -32,7 +32,7 @@
       DefaultView: () => import(
         /* webpackChunkName: "default-view" */
         './View'
-      ),
+      )
     },
     computed: {
       selectedFont: {
@@ -52,7 +52,7 @@
           'font-roboto': this.selectedFont == 1
         }
       }
-    },
+    }
   }
 </script>
 <style lang="sass">

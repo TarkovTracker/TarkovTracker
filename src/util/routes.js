@@ -6,7 +6,7 @@ export function abort (code = 404) {
   return {
     name: 'FourOhFour',
     path: '*',
-    component: () => error(code),
+    component: () => error(code)
   }
 }
 
@@ -26,13 +26,13 @@ export function layout (layout = 'Default', children, path = '') {
       /* webpackChunkName: "layout-[request]" */
       `@/layouts/${dir}/Index`
     ),
-    path,
+    path
   }
 }
 
 export function redirect (
   path = '*',
-  rhandler,
+  rhandler
 ) {
   if (typeof path === 'function') {
     rhandler = path
@@ -48,7 +48,7 @@ export function redirect (
         : rpath
 
       return `/${url}`
-    },
+    }
   }
 }
 
@@ -69,6 +69,6 @@ export function route (name, component, path = '') {
   return {
     name,
     components,
-    path,
+    path
   }
 }

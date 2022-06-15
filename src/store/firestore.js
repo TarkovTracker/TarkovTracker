@@ -22,20 +22,20 @@ const vuexAppLocal = new VuexPersistence({
   reducer: (state) => ({
     app: {
       ...state.app,
-      user_auth: undefined,
-    },
-  }),
+      user_auth: undefined
+    }
+  })
 })
 
 const store = new Vuex.Store({
   modules,
   plugins: [
     pathify.plugin,
-    vuexAppLocal.plugin,
+    vuexAppLocal.plugin
   ],
   mutations: {
     // Root level mutations needed for vuexfire
-    ...vuexfireMutations,
+    ...vuexfireMutations
   },
 
   actions: {
@@ -79,8 +79,8 @@ const store = new Vuex.Store({
     }),
     unbindFiresys: firestoreAction(({ unbindFirestoreRef }) => {
       unbindFirestoreRef('firesys')
-    }),
-  },
+    })
+  }
 })
 
 export default store

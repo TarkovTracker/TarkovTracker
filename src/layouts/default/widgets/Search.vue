@@ -32,18 +32,18 @@
     name: 'DefaultSearch',
     data () {
       return {
-        selected: null,
+        selected: null
       }
     },
     computed: {
       searchList: function () {
-        var searchList = []
-        var tempQuests = this.$root.questArray
-        for (var i = 0; i < tempQuests.length; i++) {
+        const searchList = []
+        const tempQuests = this.$root.questArray
+        for (let i = 0; i < tempQuests.length; i++) {
           searchList.push(tempQuests[i].title)
         }
         return searchList
-      },
+      }
     },
     watch: {
     },
@@ -53,7 +53,7 @@
           this.$router.push({ name: 'Quest', params: { id: this.$root.questDictionary[this.selected].id } })
         }
         this.selected = null
-      },
-    },
+      }
+    }
   }
 </script>

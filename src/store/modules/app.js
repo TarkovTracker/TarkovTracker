@@ -19,7 +19,7 @@ const mutations = {
 
 	clear_user_auth (state) {
 		state.user_auth = null
-	},
+	}
 }
 
 const actions = {}
@@ -33,7 +33,7 @@ const getters = {
       } else {
         return null
       }
-  },
+  }
 }
 
 export default {
@@ -41,5 +41,5 @@ export default {
   state,
   mutations,
   actions,
-  getters,
+  getters
 }

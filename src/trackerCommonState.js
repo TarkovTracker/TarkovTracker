@@ -23,7 +23,7 @@ export default {
         .reduce((a, x) => ({ ...a, [x.id]: x }), {}) // Reduce to a mapping of ID to objective
     },
     objectiveDictionaryQuests: function () {
-      var objectives = Object.values(this.objectiveDictionary)
+      const objectives = Object.values(this.objectiveDictionary)
       objectives.forEach((objective) => {
         objective.quests = this.questArray
           .filter(quest => quest.objectives.reduce((acc, x) => acc.concat(x.id), []).includes(objective.id))
@@ -65,17 +65,17 @@ export default {
         self: true,
         version: {
           major: this.$root.$data.overallVersion,
-          data: this.$root.$data.dataHash,
-        },
+          data: this.$root.$data.dataHash
+        }
       }
     },
     staticTeammates: function () {
-      var teammates = []
-      var staticTeammates = this.$store.copy('user/get_static_teammates')
+      const teammates = []
+      const staticTeammates = this.$store.copy('user/get_static_teammates')
 
       if (this.$store.copy('user/useTeammates')) {
         staticTeammates.forEach((teammate) => {
-          var staticTeammate = teammate
+          const staticTeammate = teammate
           staticTeammate.dynamic = false
           staticTeammate.store = makeTeamStore()
           staticTeammate.store.set('progress/import_teamshare!', staticTeammate.teamshare)
@@ -86,14 +86,14 @@ export default {
       return teammates
     },
     liveTeammates: function () {
-      var teammates = []
+      const teammates = []
       if (this.$store.copy('app/get_user_auth_uid')) {
-        var fireSys = this.$store.copy('firesys')
+        const fireSys = this.$store.copy('firesys')
         if (fireSys && fireSys.team && fireSys.team.members) {
-          var hideTeammates = this.$store.copy('user/get_hidden_teammates')
+          const hideTeammates = this.$store.copy('user/get_hidden_teammates')
           fireSys.team.members.forEach((userId) => {
             if (userId != this.$store.copy('app/get_user_auth_uid')) {
-              var dynamicTeammate = {
+              const dynamicTeammate = {
                 dynamic: true,
                 id: userId,
                 store: makeTeamStore(),
@@ -101,8 +101,8 @@ export default {
                 hide: hideTeammates ? hideTeammates.includes(userId) : false,
                 version: {
                   major: this.$root.$data.overallVersion,
-                  data: this.$root.$data.dataHash,
-                },
+                  data: this.$root.$data.dataHash
+                }
               }
               dynamicTeammate.store.set('bindProgress!', userId)
               teammates.push(dynamicTeammate)
@@ -119,7 +119,7 @@ export default {
       return [this.me, ...this.teammates]
     },
     teamAvailability: function () {
-      var teamAvailability = {}
+      const teamAvailability = {}
       // Creats a matrix of quest availability for you and the members of your team
       this.team.forEach((member, teamIndex) => {
         teamAvailability[teamIndex] = {}
@@ -131,7 +131,7 @@ export default {
     },
     questAvailability: function () {
       // Creats a matrix of quest availability for you and the members of your team
-      var questAvailability = {}
+      const questAvailability = {}
       this.questArray.forEach((quest) => {
         questAvailability[quest.id] = {}
         this.team.forEach((member, teamIndex) => {
@@ -146,22 +146,22 @@ export default {
     },
     levelAvailability: function () {
       // Creats a matrix of level availability for you and the members of your team
-      var levelAvailability = {}
+      const levelAvailability = {}
       this.questArray.forEach((quest) => {
         levelAvailability[quest.id] = {}
         this.team.forEach((member, teamIndex) => {
           // If were not a hidden teammate, and were not a teammate with teammates off
           // a quest should be available if it has no level requirement set
-          levelAvailability[quest.id][teamIndex] = (
+          levelAvailability[quest.id][teamIndex] = !!((
             quest.require.level === undefined ||
-            ((member.store.copy('progress/level') || 71) >= quest.require.level)) ? true : false
+            ((member.store.copy('progress/level') || 71) >= quest.require.level)))
         }, this)
       }, this)
       return levelAvailability
     },
     objectiveAvailability: function () {
       // Creats a matrix of objective availability for you and the members of your team
-      var objectiveAvailability = {}
+      const objectiveAvailability = {}
       this.objectiveArray.forEach((objective) => {
         objectiveAvailability[objective.id] = {}
         this.team.forEach((member, teamIndex) => {
@@ -175,8 +175,8 @@ export default {
       return objectiveAvailability
     },
     questsByMap: function () {
-      var mapSet = {}
-      var maps = this.mapArray.reduce((acc, x) => acc.concat(x.id), [])
+      const mapSet = {}
+      const maps = this.mapArray.reduce((acc, x) => acc.concat(x.id), [])
       maps.forEach((map) => {
         mapSet[map] = new Set()
         this.questArrayCopy().forEach((quest) => {
@@ -189,21 +189,20 @@ export default {
     },
     // Create a count of the quests available for each map, and globally available quests
     mapAvailability: function () {
-      var mapAvailability = {}
+      const mapAvailability = {}
       // Loop through each of the quests we have something for
       Object.keys(this.questsByMap).forEach((map) => {
         mapAvailability[map] = 0
         this.questsByMap[map].forEach((questId) => {
           // The map is specific to this map
           if (this.isQuestMapSpecific(this.questDictionaryId[questId], map)) {
-            // If the quest is available for ourself or one of our teammates && is that teammate eligible for the quest by filters 
+            // If the quest is available for ourself or one of our teammates && is that teammate eligible for the quest by filters
             if (Object.values(this.questAvailability[questId]).some(availability => availability === 0)) {
-              var filterOut = false
+              const filterOut = false
               if (this.$store.copy('user/onlyLevels') == true) {
                 // Filter by levels of self and teammates
 
               }
-
 
               if (filterOut == false) {
                 mapAvailability[map] += 1
@@ -224,7 +223,7 @@ export default {
       return mapAvailability
     },
     hideoutNeeded: function () {
-      var hideoutNeeded = {}
+      const hideoutNeeded = {}
       this.hideoutDataDefault.modules.forEach((hModule) => {
         hModule.require.forEach((requirement) => {
           hideoutNeeded[requirement.id] = {}
@@ -239,7 +238,7 @@ export default {
       return hideoutNeeded
     },
     hideoutItems: function () {
-      var hideoutItems = []
+      const hideoutItems = []
       // For each hideout module
       this.hideoutDataDefault.modules.forEach((hModule) => {
         // For each requirement in each module
@@ -253,7 +252,7 @@ export default {
               for: hModule,
               forLevel: hModule.level,
               objective: requirement.id,
-              type: 'hideout',
+              type: 'hideout'
             })
           }
         }, this)
@@ -261,11 +260,11 @@ export default {
       return hideoutItems
     },
     questItems: function () {
-      var questItems = []
+      const questItems = []
       this.questArray.forEach((quest) => {
         quest.objectives.forEach((objective) => {
           if (['find', 'collect', 'hideout'].indexOf(objective.type) >= 0 && Object.values(this.objectiveAvailability[objective.id]).some(completed => completed == false)) {
-            var teamHave = {}
+            const teamHave = {}
             Object.values(this.objectiveAvailability[objective.id]).forEach((completed, teamIndex) => {
               if (!completed && teamIndex != 0 && this.team[teamIndex].store.get('progress/objective_have', objective.id) < objective.number) {
                 teamHave[teamIndex] = this.team[teamIndex].store.get('progress/objective_have', objective.id)
@@ -283,12 +282,12 @@ export default {
                 fir: (objective.type == 'find'),
                 unlocked: this.calculateUnlocked(quest, this.$store),
                 type: 'quest',
-                nokappa: quest.nokappa,
+                nokappa: quest.nokappa
               })
           }
         }, this)
       }, this)
       return questItems
-    },
-  },
+    }
+  }
 }

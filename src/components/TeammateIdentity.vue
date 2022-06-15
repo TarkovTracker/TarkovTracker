@@ -26,16 +26,16 @@
 
     props: {
       teammate: {
-        type: Object,
+        type: Object
       },
       left: {
         type: Boolean,
-        default: false,
-      },
+        default: false
+      }
     },
 
     computed: {
-    },
+    }
   }
 </script>
 <style lang="sass">

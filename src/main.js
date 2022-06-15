@@ -6,9 +6,9 @@ import './plugins'
 import localstore from './store/localstore.js'
 import firestore from './store/firestore.js'
 import { sync } from 'vuex-router-sync'
-import { _ } from 'vue-underscore';
+import { _ } from 'vue-underscore'
 
-import UniqueId from 'vue-unique-id';
+import UniqueId from 'vue-unique-id'
 
 import fireapp from './fireapp.js'
 import { db } from './db.js'
@@ -38,7 +38,7 @@ sync(localstore, router)
 
 // GIT_DESCRIBE comes from vue-cli-plugin-git-describe
 // eslint-disable-next-line no-undef
-const gitHash = GIT_DESCRIBE.hash.replace(/g/,'')
+const gitHash = GIT_DESCRIBE.hash.replace(/g/, '')
 
 const vm = new Vue({
   router,
@@ -48,7 +48,7 @@ const vm = new Vue({
     dataHash: '',
     overallVersion: gitHash,
     vmName: 'Local VM',
-    fireVM: false,
+    fireVM: false
   },
   // This mixin are exlusively used within the root instances. It contains common properties and computed functions for the application.
   mixins: [trackerCommonState],
@@ -72,7 +72,7 @@ const vm = new Vue({
     // No unique methods to the non-Firestore version (yet!)
   },
   // i18n,
-  render: h => h(App),
+  render: h => h(App)
 })
 
 const vmf = new Vue({
@@ -84,14 +84,14 @@ const vmf = new Vue({
     progressSubscribe: null,
     userSubscribe: null,
     vmName: 'Fire VM',
-    fireVM: true,
+    fireVM: true
   },
   store: firestore,
   mixins: [trackerCommonState],
   mounted () {
     // Set the theme to the user's choice
     this.$vuetify.theme.dark = this.$store.get('app/dark')
-    
+
     // Allow iframe use of the site, but make sure they dont keep drawer hidden
     if (window.self == window.top) {
       this.$store.set('app/drawer', true)
@@ -119,9 +119,9 @@ const vmf = new Vue({
       }
     }, 250),
     bindFirestore () {
-      var bindProgress = firestore.set('bindProgress!')
-      var bindUser = firestore.set('bindUser!')
-      var bindFiresys = firestore.set('bindFiresys!')
+      const bindProgress = firestore.set('bindProgress!')
+      const bindUser = firestore.set('bindUser!')
+      const bindFiresys = firestore.set('bindFiresys!')
 
       return Promise.all([bindProgress, bindUser, bindFiresys]).then(() => {
         this.progressSubscribe = this.$store.subscribe((mutation) => {
@@ -151,8 +151,8 @@ const vmf = new Vue({
       if (this.userSubscribe) {
         this.userSubscribe()
       }
-    },
-  },
+    }
+  }
 })
 
 fireapp.auth().onAuthStateChanged(user => {

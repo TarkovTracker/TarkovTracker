@@ -60,12 +60,12 @@
   export default {
     props: {
       availability: {
-        type: String,
-      },
+        type: String
+      }
     },
     data () {
       return {
-        activeHideoutTab: 0,
+        activeHideoutTab: 0
       }
     },
     metaInfo: {
@@ -75,11 +75,11 @@
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'Track needed items & progression routes for upgrading your hideout in Escape From Tarkov.' },
-      ],
+        { name: 'description', content: 'Track needed items & progression routes for upgrading your hideout in Escape From Tarkov.' }
+      ]
     },
     methods: {
-    },
+    }
   }
 </script>
 <style lang="sass">

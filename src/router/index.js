@@ -5,7 +5,7 @@ import Meta from 'vue-meta'
 import { trailingSlash } from '@/util/helpers'
 import {
   layout,
-  route,
+  route
 } from '@/util/routes'
 
 import Trader from '@/views/Trader.vue'
@@ -51,9 +51,9 @@ const router = new Router({
         children: [
           {
             path: '/trader/:traderName/:availability',
-            component: TraderQuestTable,
-          },
-        ],
+            component: TraderQuestTable
+          }
+        ]
       },
       { path: '/maps', redirect: '/maps/factory' },
       {
@@ -65,15 +65,15 @@ const router = new Router({
           {
             name: 'Map',
             path: '/maps/:mapName',
-            component: MapsQuestTable,
-          },
-        ],
+            component: MapsQuestTable
+          }
+        ]
       },
       {
         name: 'Quests',
         path: '/quests',
         component: AllQuests,
-        props: true,
+        props: true
       },
       { path: '/hideout', redirect: '/hideout/available' },
       {
@@ -83,31 +83,31 @@ const router = new Router({
         children: [
           {
             path: '/hideout/:availability',
-            component: HideoutTable,
-          },
-        ],
+            component: HideoutTable
+          }
+        ]
       },
       route('Skills', null, 'skills'),
       {
         name: 'Quest',
         path: '/quest/:id',
         component: QuestInfo,
-        props: true,
+        props: true
       },
       route('Contributors', null, 'contributors'),
       // Pages
       route('Timeline', null, 'components/timeline'),
-      route('UserProfile', null, 'components/profile'),
+      route('UserProfile', null, 'components/profile')
 
     ]),
     layout('Login', [
       route('Error', null, 'error'),
       // route('Lock', null, 'lock'),
-      route('Login', null, 'login'),
+      route('Login', null, 'login')
       // route('Pricing', null, 'pricing'),
       // route('Register', null, 'register'),
-    ]),
-  ],
+    ])
+  ]
 })
 
 router.beforeEach((to, from, next) => {

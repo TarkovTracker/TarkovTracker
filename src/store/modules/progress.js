@@ -1,14 +1,14 @@
 // This Storage Module is for User's progress and other data that may be shared in a team or via a public endpoint
 import { make } from 'vuex-pathify'
-import hideoutFunctions from "../../functions/hideoutFunctions";
+import hideoutFunctions from '../../functions/hideoutFunctions'
 
 const getDefaultState = () => {
-  let hideoutWithStash = {};
-  hideoutWithStash[hideoutFunctions.getHideoutModule("stash", 1).id] = {
+  const hideoutWithStash = {}
+  hideoutWithStash[hideoutFunctions.getHideoutModule('stash', 1).id] = {
     complete: true,
     timeComplete: new Date().getTime()
-  };
-  let defaultState = {
+  }
+  const defaultState = {
     quests: {},
     objectives: {},
     hideout: hideoutWithStash,
@@ -16,9 +16,9 @@ const getDefaultState = () => {
     shareName: null,
     dataVersion: 2,
     level: 71,
-    gameEdition: 1,
+    gameEdition: 1
   }
-  return defaultState;
+  return defaultState
 }
 
 const mutations = {
@@ -243,7 +243,7 @@ const mutations = {
 
   reset_state (state) {
     Object.assign(state, getDefaultState())
-  },
+  }
 }
 
 const getters = {
@@ -268,9 +268,9 @@ const getters = {
 
   complete_hideout: (state) => (id) => {
     if (state.hideout[id] && state.hideout[id].complete) {
-      return state.hideout[id].complete;
+      return state.hideout[id].complete
     }
-    return false;
+    return false
   },
 
   hideout_array: (state) => {
@@ -370,15 +370,15 @@ const getters = {
   },
 
   export_progress: (state) => {
-    var stateCopy = JSON.parse(JSON.stringify(state))
+    const stateCopy = JSON.parse(JSON.stringify(state))
 
     return stateCopy
   },
 
   export_teamshare: (state, getters) => {
-    var teamshareString = ''
+    let teamshareString = ''
 
-    var questStrings = []
+    const questStrings = []
     Object.keys(state.quests).forEach((quest) => {
       if (getters.quest_complete(quest)) {
         questStrings.push(quest)
@@ -387,7 +387,7 @@ const getters = {
     teamshareString += questStrings.join(',')
     teamshareString += '|'
 
-    var objectiveStrings = []
+    const objectiveStrings = []
     Object.keys(state.objectives).forEach((objective) => {
       if (getters.objective_have(objective) > 0) {
         objectiveStrings.push(`${objective}:${getters.objective_complete(objective) ? '1' : '0'}:${getters.objective_have(objective)}`)
@@ -397,7 +397,7 @@ const getters = {
     })
     teamshareString += objectiveStrings.join(',')
     return teamshareString
-  },
+  }
 }
 
 const actions = {
@@ -405,11 +405,11 @@ const actions = {
     // Clear everything before importing
     commit('reset_state')
     // quests|objectives
-    var sections = teamshare.split('|')
+    const sections = teamshare.split('|')
 
     // quest1,quest2,quest3,quest4
-    var quests = sections[0].split(',')
-    var questCompletes = []
+    const quests = sections[0].split(',')
+    const questCompletes = []
     quests.forEach((quest) => {
       if (quest && quest != '') {
         questCompletes.push(quest)
@@ -417,11 +417,11 @@ const actions = {
     })
     commit('complete_quest', questCompletes)
 
-    var objectives = sections[1].split(',')
-    var objectiveCompletes = []
-    var objectiveHaves = []
+    const objectives = sections[1].split(',')
+    const objectiveCompletes = []
+    const objectiveHaves = []
     objectives.forEach((objective) => {
-      var objectiveParts = objective.split(':')
+      const objectiveParts = objective.split(':')
       if (objectiveParts[0] && objectiveParts[0] != '') {
         if (objectiveParts.length > 2) {
           // We have completion and have data
@@ -438,7 +438,7 @@ const actions = {
     commit('set_objective_have',
     {
       id: objectiveHaves.map(x => x.id),
-      amount: objectiveHaves.map(x => x.have),
+      amount: objectiveHaves.map(x => x.have)
     })
   },
 
@@ -450,7 +450,7 @@ const actions = {
         // Reset everything before we start
         commit('reset_state')
         // For each quest in old quest progress
-        var questCompletes = []
+        const questCompletes = []
         extraState.questData.quests.forEach((x, y) => {
           // If the index was marked as complete, complete it in progress store
           if ('completed' in x && x.completed == true) {
@@ -465,8 +465,8 @@ const actions = {
       if (extraState.questData && 'objectives' in extraState.questData) {
         // For each quest in old quest progress
 
-        var objectiveCompletes = []
-        var objectiveHaves = []
+        const objectiveCompletes = []
+        const objectiveHaves = []
         extraState.questData.objectives.forEach((x, y) => {
           // If the index was marked as complete, complete it in progress store
           if ('completed' in x && x.completed == true) {
@@ -481,13 +481,13 @@ const actions = {
         commit('set_objective_have',
         {
           id: objectiveHaves.map(x => x.id),
-          amount: objectiveHaves.map(x => x.have),
+          amount: objectiveHaves.map(x => x.have)
         })
       }
 
       if (extraState.hideoutData && 'modules' in extraState.hideoutData) {
         // For each quest in old quest progress
-        var hideoutCompletes = []
+        const hideoutCompletes = []
         extraState.hideoutData.modules.forEach((x, y) => {
           // If the index was marked as complete, complete it in progress store
           if (x && 'completed' in x && x.completed == true) {
@@ -499,8 +499,8 @@ const actions = {
 
       if (extraState.hideoutData && 'objectives' in extraState.hideoutData) {
         // For each quest in old quest progress
-        var hideoutObjectivesCompletes = []
-        var hideoutObjectivesHaves = []
+        const hideoutObjectivesCompletes = []
+        const hideoutObjectivesHaves = []
         extraState.hideoutData.objectives.forEach((x, y) => {
           // If the index was marked as complete, complete it in progress store
           if ('completed' in x && x.completed == true) {
@@ -515,12 +515,12 @@ const actions = {
         commit('set_hideout_objective_have',
           {
             id: hideoutObjectivesHaves.map(x => x.id),
-            amount: hideoutObjectivesHaves.map(x => x.have),
+            amount: hideoutObjectivesHaves.map(x => x.have)
           })
       }
       commit('set_data_version', 1)
     }
-  },
+  }
 }
 
 export default {
@@ -530,5 +530,5 @@ export default {
   },
   mutations,
   actions,
-  getters,
+  getters
 }

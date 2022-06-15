@@ -14,7 +14,7 @@
             >
             </v-img>
           </v-col>
-          
+
           <v-col align-self="center" justify="start" cols="auto">
               <span class="align-self-center"><span v-if="count">{{ count.toLocaleString() }} </span>{{ name }}
                 <v-icon small class="icon-align" v-if="fir" title="Found in Raid status required">
@@ -41,27 +41,27 @@
 
     props: {
       id: {
-        type: String,
+        type: String
       },
       count: {
         type: Number,
-        default: null,
+        default: null
       },
       format: {
         type: String,
-        default: "full",
+        default: 'full'
       },
       fir: {
         type: Boolean,
-        default: false,
+        default: false
       },
       externalLinks: {
         type: Boolean,
-        default: false,
+        default: false
       },
       linksForce: {
         type: Boolean,
-        default: false,
+        default: false
       }
     },
 
@@ -74,19 +74,19 @@
         return this.item ? this.item.name : this.id
       },
 
-      icon: function() {
+      icon: function () {
         return `https://assets.tarkov-tools.com/${this.id}-icon.jpg`
       },
 
       // Use tooltip if we're full or details format
-      useImage: function() {
+      useImage: function () {
         return this.format == 'full' || this.format == 'small'
       },
 
       imageSize: function () {
         if (this.format == 'full') {
           return '64px'
-        }else{
+        } else {
           return '32px'
         }
       }
@@ -94,12 +94,12 @@
 
     methods: {
       visitToolsLink () {
-        window.open(`https://tarkov-tools.com/item/${this.id}`, "_blank");
+        window.open(`https://tarkov-tools.com/item/${this.id}`, '_blank')
       },
       visitWikiLink () {
-        window.open(`https://escapefromtarkov.fandom.com/wiki/${this.name}`, "_blank");
-      },
-    },
+        window.open(`https://escapefromtarkov.fandom.com/wiki/${this.name}`, '_blank')
+      }
+    }
   }
 </script>
 <style lang="sass">

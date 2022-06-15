@@ -10,11 +10,11 @@ import 'firebase/remote-config'
 const fireapp = firebase
   .initializeApp(firebaseConfig)
 
-const remoteConfig = fireapp.remoteConfig();
-remoteConfig.settings.minimumFetchIntervalMillis = 1800000;
+const remoteConfig = fireapp.remoteConfig()
+remoteConfig.settings.minimumFetchIntervalMillis = 1800000
 remoteConfig.defaultConfig = {
-  "maintenance_mode": false
-};
+  maintenance_mode: false
+}
 
 if (window.location.hostname === 'localhost') {
   fireapp.firestore().useEmulator('localhost', 8081)

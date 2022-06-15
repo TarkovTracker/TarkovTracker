@@ -124,16 +124,16 @@
   </v-container>
 </template>
 <script>
-import traderFunctions from "../functions/traderFunctions";
+import traderFunctions from '../functions/traderFunctions'
 
 export default {
   name: 'QuestObjective',
   props: {
     questObjective: Object,
     questInteract: Boolean,
-    questId: Number,
+    questId: Number
   },
-  data() {
+  data () {
     return {
       hoverIndex: null,
       objectiveIcons: {
@@ -148,8 +148,8 @@ export default {
         skill: 'mdi-dumbbell',
         locate: 'mdi-crosshairs-gps',
         build: 'mdi-progress-wrench',
-        warning: 'mdi-alert-circle',
-      },
+        warning: 'mdi-alert-circle'
+      }
     }
   },
   computed: {
@@ -168,9 +168,9 @@ export default {
       }
     },
     useTeamObjectives: {
-      get() {
+      get () {
         return this.$store.copy('user/useTeamObjectives') && this.$store.copy('user/useTeammates')
-      },
+      }
     },
     objectiveClass: function () {
       return {
@@ -183,7 +183,7 @@ export default {
   },
   methods: {
     getTraderName: function (id) {
-      return traderFunctions.getTraderById(id).locale.en;
+      return traderFunctions.getTraderById(id).locale.en
     }
   }
 }

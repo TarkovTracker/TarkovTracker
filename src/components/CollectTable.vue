@@ -145,7 +145,7 @@
           </v-btn-toggle>
         </span>
         <div v-if="item.teamHave && Object.keys(item.teamHave).length > 0" class="d-flex justify-center mt-1">
-              
+
               <v-tooltip top>
                 <template v-slot:activator="{ on, attrs }">
                   <v-icon
@@ -239,8 +239,8 @@
     // components: {Badge},
     props: {
       targetType: {
-        type: Array,
-      },
+        type: Array
+      }
     },
     data () {
       return {
@@ -250,14 +250,14 @@
           [
             { text: 'Item', value: 'name' },
             { text: 'Needed', value: 'number' },
-            { text: 'For', value: 'unlocked' },
+            { text: 'For', value: 'unlocked' }
           ],
         totalsHeaders:
           [
             { text: 'Item', value: 'name', width: '40%' },
             { text: 'Needed', value: 'number' },
-            { text: 'For', value: 'for' },
-          ],
+            { text: 'For', value: 'for' }
+          ]
       }
     },
     computed: {
@@ -280,22 +280,21 @@
       },
 
       totalsResult: function () {
-        var onlyMine = this.obtainedResult.filter(x => x.type == 'quest' ?
-          this.$store.copy('progress/objective_complete', x.objective) == false
-          :
-          this.$store.copy('progress/hideout_objective_complete', x.objective) == false
+        const onlyMine = this.obtainedResult.filter(x => x.type == 'quest'
+          ? this.$store.copy('progress/objective_complete', x.objective) == false
+          : this.$store.copy('progress/hideout_objective_complete', x.objective) == false
         )
 
-        var neededTotals = onlyMine.reduce((acc, value) =>
+        const neededTotals = onlyMine.reduce((acc, value) =>
           ({ ...acc, [value.itemId]: (acc[value.itemId] + value.number || value.number) }), {})
 
-        var haveTotals = onlyMine.reduce((acc, value) =>
+        const haveTotals = onlyMine.reduce((acc, value) =>
           ({ ...acc, [value.itemId]: (acc[value.itemId] + value.have || value.have) }), {})
 
         // var questForTotals = onlyMine.filter(x => x.type === 'quest').reduce((acc, value) =>
         //   ({ ...acc, [value.itemId]: (Array.isArray(acc[value.itemId]) ? acc[value.itemId].push(value.quest) : [value.quest]) }), {})
 
-        var totals = Object.keys(neededTotals).map(x => new Object({
+        const totals = Object.keys(neededTotals).map(x => new Object({
           itemId: x,
           number: neededTotals[x],
           have: haveTotals[x],
@@ -305,8 +304,8 @@
               .map(z => new Object({ quest: z.quest, objective: z.objective })),
             hideout: onlyMine
               .filter(y => y.itemId == x && y.type == 'hideout')
-              .map(z => new Object({ name: this.$root.hideoutStationDictionary[z.for.stationId].locales.en, level: z.forLevel, objective: z.objective })),
-          },
+              .map(z => new Object({ name: this.$root.hideoutStationDictionary[z.for.stationId].locales.en, level: z.forLevel, objective: z.objective }))
+          }
         }))
         return totals
       },
@@ -317,7 +316,7 @@
         },
         set (value) {
           this.$store.set('user/hideObtained', value)
-        },
+        }
       },
 
       neededTotals: {
@@ -326,12 +325,12 @@
         },
         set (value) {
           this.$store.set('user/neededTotals', value)
-        },
-      },
+        }
+      }
     },
 
     mounted () {
-      //this.refreshPage()
+      // this.refreshPage()
     },
 
     methods: {
@@ -370,7 +369,7 @@
           event_category: 'Collection',
           event_label: `Increased item count of ${item.name}`,
           quests_previously: this.$store.get('progress/quests_array').filter(x => x.complete).length,
-          objective_id: item.objective,
+          objective_id: item.objective
         })
       },
 
@@ -384,12 +383,12 @@
           event_category: 'Collection',
           event_label: `Toggled item count of ${item.name}`,
           quests_previously: this.$store.get('progress/quests_array').filter(x => x.complete).length,
-          objective_id: item.objective,
+          objective_id: item.objective
         })
       },
 
       toggleQuestObjectiveHaveCount (objective) {
-        var objectiveNeed = this.$root.objectiveDictionary[objective].number
+        const objectiveNeed = this.$root.objectiveDictionary[objective].number
         if (this.$store.get('progress/objective_have', objective) >= objectiveNeed) {
           this.$store.set('progress/set_objective_have', { id: objective, amount: 0 })
         } else {
@@ -398,7 +397,7 @@
       },
 
       toggleHideoutObjectiveHaveCount (objective) {
-        var objectiveNeed = this.$root.hideoutObjectiveDictionary[objective].quantity
+        const objectiveNeed = this.$root.hideoutObjectiveDictionary[objective].quantity
         if (this.$store.get('progress/hideout_objective_have', objective) >= objectiveNeed) {
           this.$store.set('progress/set_hideout_objective_have', { id: objective, amount: 0 })
         } else {
@@ -419,7 +418,7 @@
           event_category: 'Collection',
           event_label: `Toggled total item count of ${item.name}`,
           quests_previously: this.$store.get('progress/quests_array').filter(x => x.complete).length,
-          objective_id: item.objective,
+          objective_id: item.objective
         })
       },
 
@@ -441,10 +440,10 @@
           event_category: 'Collection',
           event_label: `Decreased item count of ${item.name}`,
           quests_previously: this.$store.get('progress/quests_array').filter(x => x.complete).length,
-          objective_id: item.objective,
+          objective_id: item.objective
         })
-      },
-    },
+      }
+    }
   }
 </script>
 <style lang="sass">

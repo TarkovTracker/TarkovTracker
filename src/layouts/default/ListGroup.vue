@@ -45,14 +45,14 @@
     name: 'DefaultListGroup',
 
     components: {
-      DefaultListItem: () => import('./ListItem'),
+      DefaultListItem: () => import('./ListItem')
     },
 
     props: {
       item: {
         type: Object,
-        default: () => ({}),
-      },
+        default: () => ({})
+      }
     },
 
     computed: {
@@ -63,7 +63,7 @@
         const matches = this.item.title.match(/\b(\w)/g)
 
         return matches.join('')
-      },
+      }
     },
 
     methods: {
@@ -74,12 +74,12 @@
           acc.push(
             cur.items
               ? this.genGroup(cur.items)
-              : cur.to.slice(1, -1),
+              : cur.to.slice(1, -1)
           )
 
           return acc
         }, []).join('|')
-      },
-    },
+      }
+    }
   }
 </script>

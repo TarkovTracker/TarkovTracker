@@ -7,5 +7,5 @@ module.exports = {
   EN_LOCALE_ONLY,
   IN_BROWSER,
   IS_DEBUG,
-  IS_PROD,
+  IS_PROD
 }

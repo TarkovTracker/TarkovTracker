@@ -7,7 +7,7 @@
         <p>We are working on upgrading a backend system which necessitates a short downtime.</p>
         <p>You can check the <a href="https://discord.gg/zeAP4Ng">TarkovTracker Discord server</a> for the latest updates</p>
         <p>You can <a href="" @click="logout()">log out</a> to use the site without saving your progress in the cloud or browse</p>
-      </div> 
+      </div>
     </template>
     <template v-else>
       <router-view />
@@ -24,7 +24,7 @@
     name: 'TarkovTracker',
     data () {
       return {
-        maintenance_mode: false,
+        maintenance_mode: false
       }
     },
     metaInfo: {
@@ -33,16 +33,16 @@
       htmlAttrs: { lang: 'en' },
       meta: [
         { charset: 'utf-8' },
-        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      ],
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' }
+      ]
     },
-    mounted() {
-      const remoteConfig = fireapp.remoteConfig();
-      
-      this.maintenance_mode = remoteConfig.getValue("maintenance_mode")._value;
+    mounted () {
+      const remoteConfig = fireapp.remoteConfig()
+
+      this.maintenance_mode = remoteConfig.getValue('maintenance_mode')._value
       remoteConfig.fetchAndActivate()
       .then(() => {
-        this.maintenance_mode = remoteConfig.getValue("maintenance_mode")._value;
+        this.maintenance_mode = remoteConfig.getValue('maintenance_mode')._value
       })
     },
     changed (metaInfo) {
@@ -50,7 +50,7 @@
       this.$analytics.logEvent('page_view')
       this.$analytics.logEvent('screen_view', {
         app_name: 'web',
-        screen_name: metaInfo.title,
+        screen_name: metaInfo.title
       })
     },
     methods: {
@@ -60,8 +60,8 @@
         }).catch(() => {
           // An error happened.
         })
-      },
-    },
+      }
+    }
   }
 </script>
 <style lang="sass">

@@ -68,7 +68,7 @@
       DefaultList: () => import(
         /* webpackChunkName: "default-list" */
         './List'
-      ),
+      )
     },
 
     data () {
@@ -77,38 +77,38 @@
           {
             title: 'Overview',
             icon: 'mdi-view-dashboard',
-            to: '/',
+            to: '/'
           },
           {
             title: 'Quests',
             icon: 'mdi-clipboard-check',
-            to: '/quests',
+            to: '/quests'
           },
           {
             title: 'Needed Items',
             icon: 'mdi-clipboard-text',
-            to: '/gather',
+            to: '/gather'
           },
           {
             title: 'Hideout',
             icon: 'mdi-home',
-            to: '/hideout',
+            to: '/hideout'
           },
           {
             title: 'Skills',
             icon: 'mdi-run',
-            to: '/skills',
+            to: '/skills'
           },
           {
             title: 'Contributors',
             icon: 'mdi-glass-mug-variant',
-            to: '/contributors',
+            to: '/contributors'
           },
           {
             title: 'Settings',
             icon: 'mdi-cogs',
-            to: '/settings',
-          },
+            to: '/settings'
+          }
         ],
         communityItems: [
           {
@@ -119,23 +119,23 @@
                 title: 'Tarkov Tools',
                 image: '/img/tarkovtoolslogo.png',
                 href: 'http://tarkov-tools.com',
-                noradius: true,
+                noradius: true
               },
               {
                 title: 'Rat Scanner',
                 image: '/img/ratscannerlogo.png',
                 href: 'https://github.com/RatScanner/RatScanner/',
-                noradius: true,
+                noradius: true
               },
               {
                 title: 'Tarkov Guru',
                 image: '/img/tarkovgurulogo.png',
                 href: 'https://tarkov.guru/',
-                noradius: true,
-              },
-            ],
-          },
-        ],
+                noradius: true
+              }
+            ]
+          }
+        ]
       }
     },
 
@@ -146,16 +146,16 @@
     },
 
     props: {
-      miniOverride: Boolean,
+      miniOverride: Boolean
     },
 
     computed: {
       ...sync('app', [
         'mini',
         'dark',
-        'drawer',
-      ]),
-    },
+        'drawer'
+      ])
+    }
   }
 </script>
 

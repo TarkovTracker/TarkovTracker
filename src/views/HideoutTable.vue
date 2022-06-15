@@ -32,18 +32,18 @@
 
   export default {
     components: {
-      HideoutModule: () => import('../components/HideoutModule.vue'),
+      HideoutModule: () => import('../components/HideoutModule.vue')
     },
     props: {
       availability: {
-        type: String,
-      },
+        type: String
+      }
     },
     data () {
       return {
         availableModules: [],
         currentModules: [],
-        lockedModules: [],
+        lockedModules: []
       }
     },
     computed: {
@@ -57,7 +57,7 @@
         } else {
           return []
         }
-      },
+      }
     },
     metaInfo: {
       // Children can override the title.
@@ -66,8 +66,8 @@
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'Track needed items & progression routes for upgrading your hideout in Escape From Tarkov.' },
-      ],
+        { name: 'description', content: 'Track needed items & progression routes for upgrading your hideout in Escape From Tarkov.' }
+      ]
     },
     mounted () {
       this.refreshHideout()
@@ -81,20 +81,20 @@
         this.availableModules = []
         this.currentModules = []
         this.lockedModules = []
-        var tempHideout = this.hideoutDataDefault.modules
+        const tempHideout = this.hideoutDataDefault.modules
 
         if (this.$store.get('progress/dataVersion') < 2) {
           for (let level = 1; level <= this.$store.get('progress/gameEdition'); level++) {
-            let module = hideoutFunctions.getHideoutModule("stash", level);
+            const module = hideoutFunctions.getHideoutModule('stash', level)
             if (!this.$store.get('progress/hideout_complete', module.id)) {
-              this.$store.set('progress/complete_hideout', module.id);
-              hideoutFunctions.completeModuleObjective(this.$store, 'stash', level);
+              this.$store.set('progress/complete_hideout', module.id)
+              hideoutFunctions.completeModuleObjective(this.$store, 'stash', level)
             }
           }
-          this.$store.set('progress/set_data_version', 2);
+          this.$store.set('progress/set_data_version', 2)
         }
 
-        var uniqueModules = new Set()
+        const uniqueModules = new Set()
         // Scan all of the default hideout data and get unique modules
         for (let i = tempHideout.length - 1; i >= 0; i--) {
           if (this.$root.hideoutStationDictionary[tempHideout[i].stationId].disabled != true) {
@@ -122,7 +122,7 @@
         // Check for currently completed modules
         for (const curModule of uniqueModules) {
           // Check the highest level of this module we've completed
-          let highestCurrent = this.highestCompleted(curModule)
+          const highestCurrent = this.highestCompleted(curModule)
           if (highestCurrent >= 1) {
             // Find the module object
             for (let i = tempHideout.length - 1; i >= 0; i--) {
@@ -130,7 +130,7 @@
                 this.currentModules.push(tempHideout[i])
 
                 // Is there an upgraded version of this module?
-                let upgradedModule = hideoutFunctions.getHideoutModule(tempHideout[i].module, tempHideout[i].level + 1)
+                const upgradedModule = hideoutFunctions.getHideoutModule(tempHideout[i].module, tempHideout[i].level + 1)
                 if (upgradedModule != null) {
                   if (!(this.isModuleLocked(upgradedModule.module, upgradedModule.level))) {
                     // Upgraded module is not locked, so add it to the available modules
@@ -145,13 +145,13 @@
         }
       },
       isModuleLocked (moduleName, moduleLevel) {
-        var tempHideout = this.hideoutDataDefault.modules
-        var isLocked = false
+        const tempHideout = this.hideoutDataDefault.modules
+        let isLocked = false
         // Loop through all the modules until we find the level 1 version of this
-        for (var z = tempHideout.length - 1; z >= 0; z--) {
+        for (let z = tempHideout.length - 1; z >= 0; z--) {
           if (tempHideout[z].module == moduleName && tempHideout[z].level == moduleLevel) {
             // Loop through all the requirements for this, and find modules that could block
-            for (var x = tempHideout[z].require.length - 1; x >= 0; x--) {
+            for (let x = tempHideout[z].require.length - 1; x >= 0; x--) {
               if (tempHideout[z].require[x].type == 'module') {
                 // Check if the module required is completed, and if not, mark this as a locked module
                 if (this.isModuleCompleted(tempHideout[z].require[x].name, tempHideout[z].require[x].quantity) == false) {
@@ -164,17 +164,17 @@
         return isLocked
       },
       highestCompleted (moduleName) {
-        var tempHideout = this.hideoutDataDefault.modules
+        const tempHideout = this.hideoutDataDefault.modules
         // Find the correct module first
-        var highestFound = 0
-        for (var z = tempHideout.length - 1; z >= 0; z--) {
+        let highestFound = 0
+        for (let z = tempHideout.length - 1; z >= 0; z--) {
           // Check the module name and level
           if (tempHideout[z].module == moduleName && this.$store.get('progress/hideout_complete', tempHideout[z].id) && tempHideout[z].level > highestFound) {
             highestFound = tempHideout[z].level
           }
         }
         return highestFound
-      },
-    },
+      }
+    }
   }
 </script>

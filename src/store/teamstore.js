@@ -15,15 +15,15 @@ import * as modules from './modules/teamstore.js'
 
 Vue.use(Vuex)
 
-export default function makeTeamStore() {
-	var teamStore = new Vuex.Store({
+export default function makeTeamStore () {
+	const teamStore = new Vuex.Store({
 		modules,
 		plugins: [
-			pathify.plugin,
+			pathify.plugin
 		],
 		mutations: {
 			// Root level mutations needed for vuexfire
-			...vuexfireMutations,
+			...vuexfireMutations
 		},
 		actions: {
 			// Progress Bind and Unbind
@@ -36,8 +36,8 @@ export default function makeTeamStore() {
 				unbindFirestoreRef
 			}) => {
 				unbindFirestoreRef('progress')
-			}),
-		},
+			})
+		}
 	})
 	return teamStore
 }

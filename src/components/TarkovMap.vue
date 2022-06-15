@@ -99,40 +99,39 @@
   </v-container>
 </template>
 
-
 <script>
 export default {
   name: 'TarkovMap',
 
-  data() {
+  data () {
     return {
       layerSelect: 0,
       hover: {},
       searchHover: null,
       hoverIndex: null,
-      mapSizeOverride: null,
+      mapSizeOverride: null
     }
   },
 
   props: {
     mapId: {
-      type: Number,
+      type: Number
     },
     mapControls: {
-      type: Boolean,
+      type: Boolean
     },
     fullscreen: {
-      type: Boolean,
+      type: Boolean
     },
     quests: {
-      type: Array,
+      type: Array
     }
   },
 
-  mounted() {
+  mounted () {
     this.layerSelect = this.$root.mapDictionary[this.mapId].svg.floors.indexOf(this.$root.mapDictionary[this.mapId].svg.defaultFloor)
     this.draw()
-    //Event block for creating gps data
+    // Event block for creating gps data
     // document.getElementById(this.$id('svgmap')).addEventListener("click", function(event){
     //   var e = document.getElementById(this.$id('svgmap'));
     //   var dim = e.getBoundingClientRect();
@@ -163,18 +162,18 @@ export default {
 
   methods: {
     draw: function () {
-      const d3 = require("d3");
+      const d3 = require('d3')
       d3.svg(this.svgFile).then(function (xml) {
-        d3.select(this.$idRef('svgmap')).selectAll("svg").remove()
+        d3.select(this.$idRef('svgmap')).selectAll('svg').remove()
 
         d3.select(this.$idRef('svgmap')).node().appendChild(xml.documentElement)
         this.floors.forEach((floor, index) => {
           if (index > this.layerSelect) {
-            d3.select(this.$idRef('svgmap')).select("svg").select(`#${floor}`).style("opacity", 0.02)
+            d3.select(this.$idRef('svgmap')).select('svg').select(`#${floor}`).style('opacity', 0.02)
           }
         }, this)
-        d3.select(this.$idRef('svgmap')).select("svg")
-      }.bind(this));
+        d3.select(this.$idRef('svgmap')).select('svg')
+      }.bind(this))
     },
     hasFloor: function (objective) {
       return 'gps' in objective && 'floor' in objective.gps
@@ -183,12 +182,12 @@ export default {
 
   computed: {
     mapSize: {
-      get() {
+      get () {
         return this.mapSizeOverride || (this.fullscreen ? 100 : 75)
       },
-      set(value) {
+      set (value) {
         this.mapSizeOverride = value
-      },
+      }
     },
     svgFile: function () {
       return `/svg/${this.$root.mapDictionary[this.mapId].svg.file}`
@@ -198,13 +197,13 @@ export default {
     },
     questObjectives: function () {
       // Get a flat list of unduplicated objectives from our quests
-      const seen = new Set();
+      const seen = new Set()
       return this.quests
         .reduce((acc, x) => acc.concat(x.objectives), [])
         .filter(objective => {
-          const duplicate = seen.has(objective.id);
-          seen.add(objective.id);
-          return !duplicate;
+          const duplicate = seen.has(objective.id)
+          seen.add(objective.id)
+          return !duplicate
         })
         .map(objective => ({ ...objective, quests: this.$root.objectiveDictionaryQuests[objective.id].quests }))
     },
@@ -223,7 +222,7 @@ export default {
     viewHeightStyle: function () {
       return this.fullscreen ? 'calc(~100vmin - 48px)' : '100%'
     }
-  },
+  }
 }
 </script>
 <style lang="sass">

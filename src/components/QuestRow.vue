@@ -42,7 +42,7 @@
               </span>
           </div>
           </template>
-          
+
           <div v-if="pageType != 'completed' && myselfCalculateUnlocked(questDetails)">
             <v-icon class="mr-1">
               lock_open
@@ -289,28 +289,28 @@
   export default {
     name: 'QuestRow',
     components: {
-      QuestObjective: () => import('./QuestObjective.vue'),
+      QuestObjective: () => import('./QuestObjective.vue')
     },
     props: {
       questDetails: Object,
       pageType: String,
-      teamState: Boolean,
+      teamState: Boolean
     },
     data () {
       return {
       }
     },
     computed: {
-      availability: function() {
-        var availability = []
+      availability: function () {
+        const availability = []
         this.$root.team.forEach((member, memberIndex) => {
           availability.push({
             identity: member,
-            status: this.$root.questAvailability[this.questDetails.id][memberIndex] >= 0 ? this.$root.questAvailability[this.questDetails.id][memberIndex] : 0 - this.calculateUnlocked(this.questDetails, member.store),
+            status: this.$root.questAvailability[this.questDetails.id][memberIndex] >= 0 ? this.$root.questAvailability[this.questDetails.id][memberIndex] : 0 - this.calculateUnlocked(this.questDetails, member.store)
           })
         }, this)
         return availability
-      },
+      }
     },
     methods: {
       teamBadgeClass (availability) {
@@ -331,13 +331,13 @@
           return {
             'tarkov-with-team': availability.filter(y => y.identity.self && y.status == 0).length == 1,
             'tarkov-ahead-team': availability.filter(y => y.identity.self && y.status > 0).length == 1,
-            'tarkov-behind-team': availability.filter(y => y.identity.self && y.status < 0).length == 1,
+            'tarkov-behind-team': availability.filter(y => y.identity.self && y.status < 0).length == 1
           }
         } else {
           return {
             'tarkov-with-team': true,
             'tarkov-ahead-team': false,
-            'tarkov-behind-team': false,
+            'tarkov-behind-team': false
           }
         }
       },
@@ -356,8 +356,8 @@
       localQuestUncomplete (quest) {
         // Call the common mixin uncomplete quest
         this.QuestUncomplete(quest)
-      },
-    },
+      }
+    }
   }
 </script>
 <style lang="sass">

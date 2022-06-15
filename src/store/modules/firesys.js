@@ -8,13 +8,13 @@ const state = {
 }
 
 const mutations = {
-	...make.mutations(state),
+	...make.mutations(state)
 }
 
 const actions = {}
 
 const getters = {
-  ...make.getters(state),
+  ...make.getters(state)
 }
 
 export default {
@@ -22,5 +22,5 @@ export default {
   state,
   mutations,
   actions,
-  getters,
+  getters
 }

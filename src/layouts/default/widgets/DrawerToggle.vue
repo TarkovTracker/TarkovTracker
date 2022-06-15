@@ -21,7 +21,7 @@
 
     computed: {
 
-      mini: sync('app/mini'),
-    },
+      mini: sync('app/mini')
+    }
   }
 </script>

@@ -28,7 +28,7 @@
             <v-container>
               <v-row>
                 <!-- If we have keys needed, set up the grid for that -->
-                <v-col 
+                <v-col
                   v-if="bringKeys.length > 0"
                   :lg="3"
                   :sm="12"
@@ -61,7 +61,7 @@
                 </v-col>
 
                 <!-- If we have items needed, set up that grid -->
-                <v-col 
+                <v-col
                   v-if="Object.keys(bringItems).length != 0"
                   :lg="3"
                   :sm="12"
@@ -123,12 +123,12 @@
   export default {
     name: 'MapTabsTable',
     components: {
-      QuestRow: () => import('../components/QuestRow.vue'),
+      QuestRow: () => import('../components/QuestRow.vue')
     },
     props: {
       mapName: {
-        type: String,
-      },
+        type: String
+      }
     },
     data () {
       return {
@@ -141,23 +141,23 @@
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'Plan your raid, seeing available quests by map, as well as items, keys, and friends you need to bring with you.' },
-      ],
+        { name: 'description', content: 'Plan your raid, seeing available quests by map, as well as items, keys, and friends you need to bring with you.' }
+      ]
     },
     computed: {
       bringItems: function () {
-        var allItems = this.sortHere
+        const allItems = this.sortHere
           .filter(w => w.myAvailability == 0) // Only include quests that we're on, not teammates
           .reduce((acc, x) => acc.concat(x.objectives), []) // Get a flat list of objectives
           .reduce((items, item) => items.find(x => x.id === item.id) ? [...items] : [...items, item], []) // Filter out duplicate objective IDs in the case of things like Chemical Pt 4
           .filter(y => ['place', 'mark'].indexOf(y.type) >= 0) // Filter them down to things that need items
           .filter(z => z.completed == false) // Only include the item if the objective is incomplete
 
-        var markItems = allItems
+        const markItems = allItems
           .filter(x => x.type == 'mark') // Find all the mark objectives
           .reduce((acc, y) => acc.concat(y.tool), []) // Get the array of tools from mark objectives
 
-        var placeItems = allItems
+        const placeItems = allItems
           .filter(x => x.type == 'place') // Find all the place objectives
           .reduce((acc, y) => acc.concat(Array(y.number).fill(y.target)), []) // Get the array of targets from place objectives, and add it the number of times we need
 
@@ -182,28 +182,28 @@
         return this.sortHere.concat(this.sortAnywhere)
       },
       available_quests: function () {
-        var available_quests = []
-        var useTeammates = this.$store.copy('user/useTeammates') || false
-        var extraTeammates = Object.values(this.$root.team).slice(1).filter(teammate => !teammate.hide)
+        const available_quests = []
+        let useTeammates = this.$store.copy('user/useTeammates') || false
+        const extraTeammates = Object.values(this.$root.team).slice(1).filter(teammate => !teammate.hide)
         // Get the default quest list by value instead of reference
-        var tempQuests = this.$root.questArrayCopy()
+        const tempQuests = this.$root.questArrayCopy()
         if (extraTeammates == null || extraTeammates.length < 1) {
           useTeammates = false
         }
         questLoop:
-          for (var i = 0; i < tempQuests.length; i++) {
-            var currentQuest = Object.create(tempQuests[i])
+          for (let i = 0; i < tempQuests.length; i++) {
+            let currentQuest = Object.create(tempQuests[i])
             if (currentQuest.deprecated == true) {
               // Don't show this quest - its deprecated
               continue questLoop
             }
 
             // Get and keep my availability for future use
-            var myAvailability = this.myselfQuestAvailable(currentQuest)
+            const myAvailability = this.myselfQuestAvailable(currentQuest)
             // Get truthiness of whether we should use this map
-            var available = (myAvailability == 0)
+            let available = (myAvailability == 0)
             // Check if the quest has objectives on this map, and if so return a filtered version
-            var isMapMatch = this.isQuestOnMap(currentQuest, this.mapName)
+            const isMapMatch = this.isQuestOnMap(currentQuest, this.mapName)
             if (isMapMatch != false) {
               // Use the filtered version of the quest for this map
               currentQuest = isMapMatch
@@ -213,19 +213,19 @@
             }
 
             // Initialize availability array with yourself
-            var availability = [{
+            const availability = [{
               identity: this.$root.teammates[0],
-              status: myAvailability >= 0 ? myAvailability : 0 - this.myselfCalculateUnlocked(currentQuest),
+              status: myAvailability >= 0 ? myAvailability : 0 - this.myselfCalculateUnlocked(currentQuest)
             }]
             // If we are using teammates, and have teammates
             if (useTeammates && extraTeammates.length > 0) {
               // Loop through our teammates to check each one
-              for (var x = extraTeammates.length - 1; x >= 0; x--) {
+              for (let x = extraTeammates.length - 1; x >= 0; x--) {
                 // Check if any of the teammates need this quest
-                var theirAvailability = this.isQuestAvailable(currentQuest, extraTeammates[x].store)
+                const theirAvailability = this.isQuestAvailable(currentQuest, extraTeammates[x].store)
                 availability.push({
                   identity: extraTeammates[x],
-                  status: theirAvailability >= 0 ? theirAvailability : 0 - this.calculateUnlocked(currentQuest, extraTeammates[x].store),
+                  status: theirAvailability >= 0 ? theirAvailability : 0 - this.calculateUnlocked(currentQuest, extraTeammates[x].store)
                 })
                 if (theirAvailability == 0) {
                   // This teammate has this quest available, mark the quest as available
@@ -241,18 +241,18 @@
 
               // Pass availability as helper for figuring out things to bring
               currentQuest.myAvailability = this.myselfQuestAvailable(currentQuest)
-              for (var z = currentQuest.objectives.length - 1; z >= 0; z--) {
+              for (let z = currentQuest.objectives.length - 1; z >= 0; z--) {
                 currentQuest.objectives[z].completed = this.$store.copy('progress/objective_complete', currentQuest.objectives[z].id)
               }
               available_quests.push(currentQuest)
             }
           }
         return available_quests
-      },
+      }
     },
     mounted () {
     },
     methods: {
-    },
+    }
   }
 </script>

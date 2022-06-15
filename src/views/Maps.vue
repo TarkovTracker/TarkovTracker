@@ -52,14 +52,14 @@
   export default {
     props: {
       mapName: {
-        type: String,
-      },
+        type: String
+      }
     },
     data () {
       return {
         progressValue: 0,
         activeTraderTab: 0,
-        maps: ['Factory', 'Customs', 'Woods', 'Shoreline', 'Interchange', 'Reserve', 'Labs'],
+        maps: ['Factory', 'Customs', 'Woods', 'Shoreline', 'Interchange', 'Reserve', 'Labs']
       }
     },
     metaInfo: {
@@ -69,14 +69,14 @@
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'Plan your raid, seeing available quests by map, as well as items, keys, and friends you need to bring with you.' },
-      ],
+        { name: 'description', content: 'Plan your raid, seeing available quests by map, as well as items, keys, and friends you need to bring with you.' }
+      ]
     },
     computed: {
     },
     mounted () {
     },
     methods: {
-    },
+    }
   }
 </script>

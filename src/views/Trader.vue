@@ -94,29 +94,29 @@
   export default {
     props: {
       traderName: {
-        type: String,
+        type: String
       },
       availability: {
-        type: String,
-      },
+        type: String
+      }
     },
     data () {
       return {
-        activeTraderTab: 0,
+        activeTraderTab: 0
       }
     },
     computed: {
       traderProgress: function () {
-        var traderQuests = this.questDataDefault
+        const traderQuests = this.questDataDefault
           .filter(quest => quest.giver.toLowerCase() === this.properTraderName.toLowerCase())
 
-        var traderComplete = traderQuests
+        const traderComplete = traderQuests
           .filter(quest => this.$store.get('progress/quest_complete', quest.id) === true)
 
         return (traderComplete.length / traderQuests.length) * 100
       },
       properTraderName: function () {
-        var traderName
+        let traderName
         switch (this.traderName.toLowerCase()) {
           case 'prapor':
             traderName = 'Prapor'
@@ -146,7 +146,7 @@
         return traderName
       },
       traderLink: function () {
-        var traderLink
+        let traderLink
         switch (this.traderName.toLowerCase()) {
           case 'prapor':
             traderLink = 'https://escapefromtarkov.gamepedia.com/Prapor'
@@ -171,7 +171,7 @@
             break
         }
         return traderLink
-      },
+      }
     },
     mounted () {
     },
@@ -184,9 +184,9 @@
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'View and manage quests by Trader' },
-      ],
-    },
+        { name: 'description', content: 'View and manage quests by Trader' }
+      ]
+    }
   }
 </script>
 <style lang="sass">

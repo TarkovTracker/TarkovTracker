@@ -115,7 +115,7 @@
     data () {
       return {
         activeSkillsTab: 0,
-        needed_skills: [],
+        needed_skills: []
       }
     },
     metaInfo: {
@@ -125,8 +125,8 @@
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'Keep track of the skills you need to level in Escape From Tarkov to continue your progression.' },
-      ],
+        { name: 'description', content: 'Keep track of the skills you need to level in Escape From Tarkov to continue your progression.' }
+      ]
     },
     computed: {
       sortAllUnlocked: function () {
@@ -137,7 +137,7 @@
       },
       sortHideout: function () {
         return this.needed_skills.slice().filter(x => x.type === 'hideout')
-      },
+      }
     },
     mounted () {
       this.refreshPage()
@@ -149,14 +149,14 @@
         this.refreshHideout()
       },
       refreshQuests () {
-        var tempQuests = this.questDataDefault
-        var i
+        const tempQuests = this.questDataDefault
+        let i
         for (i = 0; i < tempQuests.length; i++) {
           if (tempQuests[i].deprecated === true) {
             // Don't show this quest - its deprecated
             continue
           }
-          for (var x = tempQuests[i].objectives.length - 1; x >= 0; x--) {
+          for (let x = tempQuests[i].objectives.length - 1; x >= 0; x--) {
             if (tempQuests[i].objectives[x].type === 'skill' && this.$store.get('progress/objective_complete', tempQuests[i].objectives[x].id) === false) {
               this.needed_skills.push(
                 {
@@ -168,18 +168,18 @@
                   objective: tempQuests[i].objectives[x].id,
                   unlocked: this.calculateUnlocked(tempQuests[i], this.$store),
                   type: 'quest',
-                  nokappa: tempQuests[i].nokappa,
+                  nokappa: tempQuests[i].nokappa
                 })
             }
           }
         }
       },
       refreshHideout () {
-        var tempHideout = this.hideoutDataDefault
+        const tempHideout = this.hideoutDataDefault
 
-        for (var i = tempHideout.length - 1; i >= 0; i--) {
+        for (let i = tempHideout.length - 1; i >= 0; i--) {
           if (this.$store.get('progress/hideout_complete', tempHideout[i].id) === false) {
-            for (var x = tempHideout[i].require.length - 1; x >= 0; x--) {
+            for (let x = tempHideout[i].require.length - 1; x >= 0; x--) {
               if (tempHideout[i].require[x].type === 'skill' && this.$store.get('progress/hideout_objective_complete', tempHideout[i].require[x].id) === false) {
                 this.needed_skills.push({
                   name: tempHideout[i].require[x].name,
@@ -187,14 +187,14 @@
                   for: tempHideout[i].module,
                   forLevel: tempHideout[i].level,
                   objective: tempHideout[i].require[x].id,
-                  type: 'hideout',
+                  type: 'hideout'
                 })
               }
             }
           }
         }
-      },
-    },
+      }
+    }
   }
 </script>
 <style lang="sass">

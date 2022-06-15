@@ -284,17 +284,17 @@
   export default {
     name: 'QuestInfo',
     components: {
-      QuestObjective: () => import('../components/QuestObjective.vue'),
+      QuestObjective: () => import('../components/QuestObjective.vue')
     },
     props: {
       id: {
-        type: String,
-      },
+        type: String
+      }
     },
     data () {
       return {
         hoverQuest: null,
-        hoverIndex: null,
+        hoverIndex: null
       }
     },
     computed: {
@@ -302,15 +302,15 @@
         return this.$root.questDictionaryId[this.id]
       },
       // Return a string which is a list of related quest maps
-      locationsList() {
-        var locations = new Set()
-        for (var i = this.thisQuest.objectives.length - 1; i >= 0; i--) {
+      locationsList () {
+        const locations = new Set()
+        for (let i = this.thisQuest.objectives.length - 1; i >= 0; i--) {
           if (this.thisQuest.objectives[i].location >= 0) {
             locations.add(this.$root.mapDictionary[this.thisQuest.objectives[i].location].locale.en)
           }
         }
         return [...locations].join(', ')
-      },
+      }
     },
     metaInfo: {
       // Children can override the title.
@@ -319,8 +319,8 @@
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'See Tarkov quest details including objectives, requirements, and rewards.' },
-      ],
+        { name: 'description', content: 'See Tarkov quest details including objectives, requirements, and rewards.' }
+      ]
     },
     methods: {
       localQuestComplete (quest) {
@@ -334,8 +334,8 @@
       localQuestUncomplete (quest) {
         // Call the common mixin uncomplete quest
         this.QuestUncomplete(quest)
-      },
-    },
+      }
+    }
   }
 </script>
 <style lang="sass">

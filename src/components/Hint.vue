@@ -29,8 +29,8 @@
           'Learn & customize the advanced controls for Tarkov',
           'Playing with others can help make the game less brutal',
           "Save weapon parts you like even if you don't keep the weapon",
-          'You can submit feature requests on the TarkovTracker discord',
-        ],
+          'You can submit feature requests on the TarkovTracker discord'
+        ]
       }
     },
     mounted () {
@@ -42,7 +42,7 @@
     methods: {
       randomizeHint () {
         this.currentHint = this.hintList[Math.floor(Math.random() * this.hintList.length)]
-      },
-    },
+      }
+    }
   }
 </script>

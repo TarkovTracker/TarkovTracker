@@ -12,6 +12,6 @@
 
 <script>
   export default {
-    name: 'DefaultGoHome',
+    name: 'DefaultGoHome'
   }
 </script>

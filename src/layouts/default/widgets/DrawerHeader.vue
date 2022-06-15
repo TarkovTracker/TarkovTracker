@@ -34,7 +34,7 @@
     computed: {
       logoImage () {
         // If we're not on official tarkovtracker environment, show dev logo
-        if (this.$firebase.options.projectId != "tarkovtracker-production") {
+        if (this.$firebase.options.projectId != 'tarkovtracker-production') {
           return '/img/tarkovtrackerlogo-development.png'
         }
 
@@ -46,8 +46,8 @@
       },
 
       ...sync('app', [
-        'mini',
-      ]),
-    },
+        'mini'
+      ])
+    }
   }
 </script>

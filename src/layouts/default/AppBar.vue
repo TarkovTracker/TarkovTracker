@@ -47,17 +47,17 @@
       DefaultSearch: () => import(
         /* webpackChunkName: "default-search" */
         './widgets/Search'
-      ),
+      )
     },
 
     computed: {
       ...sync('app', [
         'drawer',
-        'mini',
+        'mini'
       ]),
       currentRouteName () {
         return this.$route.name
-      },
-    },
+      }
+    }
   }
 </script>

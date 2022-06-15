@@ -27,14 +27,14 @@
 
     components: {
       DefaultListGroup: () => import('./ListGroup'),
-      DefaultListItem: () => import('./ListItem'),
+      DefaultListItem: () => import('./ListItem')
     },
 
     props: {
       items: {
         type: Array,
-        default: () => ([]),
-      },
-    },
+        default: () => ([])
+      }
+    }
   }
 </script>

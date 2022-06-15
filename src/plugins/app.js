@@ -15,6 +15,6 @@ for (const file of requireComponent.keys()) {
 
   Vue.component(
     componentConfig.default.name,
-    componentConfig.default || componentConfig,
+    componentConfig.default || componentConfig
   )
 }

@@ -150,7 +150,7 @@
       return {
         ttPatronData: [],
         contributorData: [],
-        tarkovdataContributorData: [],
+        tarkovdataContributorData: []
       }
     },
     computed: {
@@ -169,7 +169,7 @@
       // Grab the list of members of TarkovTracker org to fill in missing contributor since open source
       const orgMemberResponse = await fetch('https://api.github.com/orgs/TarkovTracker/members')
       const orgMemberData = await orgMemberResponse.json()
-      
+
       // Add any org members to contributor list that are missing
       orgMemberData.forEach((member) => {
         if (this.contributorData.filter(contrib => contrib.id == member.id).length == 0) {
@@ -178,7 +178,7 @@
       }, this)
 
       // Remove any bot accounts
-      this.contributorData = contributorData.filter(contrib => contrib.type != "Bot")
+      this.contributorData = contributorData.filter(contrib => contrib.type != 'Bot')
 
       // Grab the list of contributors from tarkovdata repo
       const tarkovdataContributorResponse = await fetch('https://api.github.com/repos/TarkovTracker/tarkovdata/contributors')
@@ -194,8 +194,8 @@
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'Check out the people who contribute & make TarkovTracker possible - and maybe pitch in yourself!' },
-      ],
-    },
+        { name: 'description', content: 'Check out the people who contribute & make TarkovTracker possible - and maybe pitch in yourself!' }
+      ]
+    }
   }
 </script>

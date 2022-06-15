@@ -18,14 +18,14 @@
 
     props: {
       questId: {
-        type: Number,
-      },
+        type: Number
+      }
     },
 
     computed: {
       quest: function () {
         return this.$root.questDictionaryId[this.questId]
-      },
-    },
+      }
+    }
   }
 </script>

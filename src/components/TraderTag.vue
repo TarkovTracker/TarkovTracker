@@ -29,12 +29,12 @@ export default {
 
   props: {
     id: {
-      type: Number,
+      type: Number
     },
     loyalty: {
       type: Number,
-      default: null,
-    },
+      default: null
+    }
   },
 
   computed: {
@@ -44,16 +44,16 @@ export default {
     romanLoyalty: function () {
       switch (this.loyalty) {
         case 1:
-          return "I"
+          return 'I'
         case 2:
-          return "II"
+          return 'II'
         case 3:
-          return "III"
+          return 'III'
         default:
           return this.loyalty
       }
     }
-  },
+  }
 }
 </script>
 <style lang="sass">

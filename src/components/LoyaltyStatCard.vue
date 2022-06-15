@@ -71,17 +71,17 @@
 
     props: {
       traderId: {
-        type: Number,
+        type: Number
       },
       loyaltyLevel: {
-        type: Number,
+        type: Number
       },
       reputation: {
-        type: Number,
+        type: Number
       },
       nextLoyaltyRep: {
-        type: Number,
-      },
+        type: Number
+      }
     },
 
     computed: {
@@ -92,17 +92,17 @@
         return this.$root.traderDictionary[this.traderId].locale.en
       },
       romanLoyalty: function () {
-        switch(this.loyaltyLevel) {
+        switch (this.loyaltyLevel) {
           case 1:
-            return "I"
+            return 'I'
           case 2:
-            return "II"
+            return 'II'
           case 3:
-            return "III"
+            return 'III'
           default:
             return this.loyaltyLevel
         }
       }
-    },
+    }
   }
 </script>

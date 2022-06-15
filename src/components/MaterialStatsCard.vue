@@ -23,7 +23,7 @@
   export default {
     name: 'MaterialStatCard',
 
-    props: { value: String },
+    props: { value: String }
   }
 </script>
 

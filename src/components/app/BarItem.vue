@@ -12,18 +12,18 @@
               attrs: this.$attrs,
               class: {
                 'black--text': !hover,
-                'white--text secondary elevation-12': hover,
+                'white--text secondary elevation-12': hover
               },
               props: {
                 activeClass: '',
                 dark: hover,
                 link: true,
-                ...this.$attrs,
-              },
+                ...this.$attrs
+              }
             }, this.$slots.default)
-          },
-        },
+          }
+        }
       })
-    },
+    }
   }
 </script>

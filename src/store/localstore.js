@@ -14,7 +14,7 @@ const vuexLocal = new VuexPersistence({
   key: 'vuex',
   storage: window.localStorage,
   // Keep all modules stored here except for app, which works across localstore and firestore
-  modules: Object.keys(modules).filter(x => x != 'app'),
+  modules: Object.keys(modules).filter(x => x != 'app')
 })
 
 // Use localstorage for 'app' module things like dark mode
@@ -27,9 +27,9 @@ const vuexAppLocal = new VuexPersistence({
   reducer: (state) => ({
     app: {
       ...state.app,
-      user_auth: undefined,
-    },
-  }),
+      user_auth: undefined
+    }
+  })
 })
 
 const store = new Vuex.Store({
@@ -37,8 +37,8 @@ const store = new Vuex.Store({
   plugins: [
     pathify.plugin,
     vuexAppLocal.plugin,
-    vuexLocal.plugin,
-  ],
+    vuexLocal.plugin
+  ]
 })
 
 export default store

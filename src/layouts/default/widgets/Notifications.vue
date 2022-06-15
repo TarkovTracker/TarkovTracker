@@ -55,8 +55,8 @@
         'You have 5 new tasks',
         'You\'re now friends with Andrew',
         'Another Notification',
-        'Another one',
-      ],
-    }),
+        'Another one'
+      ]
+    })
   }
 </script>

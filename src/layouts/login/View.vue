@@ -21,7 +21,7 @@
     data: () => ({}),
 
     computed: {
-      path: get('route/path'),
-    },
+      path: get('route/path')
+    }
   }
 </script>

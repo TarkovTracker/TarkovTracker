@@ -780,8 +780,8 @@
   </v-container>
 </template>
 <script>
-  import moment from 'moment';
-  import hideoutFunctions from '../functions/hideoutFunctions';
+  import moment from 'moment'
+  import hideoutFunctions from '../functions/hideoutFunctions'
   import QrcodeVue from 'qrcode.vue'
 
   export default {
@@ -818,15 +818,15 @@
         revokingToken: {},
 
         availablePermissions: {
-          'GP': {
+          GP: {
             title: 'Get Progression',
             description: 'Allows access to read your general progression information, including your TarkovTracker display name, quest progress, hideout progress'
           },
-          'TP': {
+          TP: {
             title: 'Get Team Progression',
             description: 'Allows access to read a virtual copy of your team\'s progress, including display names, quest, and hideout progress'
           },
-          'WP': {
+          WP: {
             title: 'Write Progression',
             description: 'Allows access to update your TarkovTracker progress data on your behalf'
           }
@@ -837,57 +837,57 @@
             text: 'Note',
             align: 'start',
             sortable: false,
-            value: 'note',
+            value: 'note'
           },
           {
             text: 'Permissions',
             align: 'end',
             sortable: false,
-            value: 'permissions',
+            value: 'permissions'
           },
           {
             text: 'Token',
             align: 'center',
             sortable: false,
-            value: 'token',
+            value: 'token'
           },
           {
             text: '# Calls',
             align: 'end',
             sortable: true,
-            value: 'calls',
+            value: 'calls'
           },
           {
             text: 'Created',
             align: 'end',
             sortable: true,
-            value: 'createdAt',
+            value: 'createdAt'
           },
           {
             text: 'Actions',
             align: 'end',
             sortable: false,
-            value: 'actions',
-          },
+            value: 'actions'
+          }
         ],
         gameEditions: [
           { title: 'Standard Edition', value: 1 },
           { title: 'Left Behind Edition', value: 2 },
           { title: 'Prepare for Escape Edition', value: 3 },
-          { title: 'Edge of Darkness Limited Edition', value: 4 },
+          { title: 'Edge of Darkness Limited Edition', value: 4 }
         ],
         fontOptions: [
           { title: 'Share Tech Mono', value: 0 },
-          { title: 'Roboto', value: 1 },
+          { title: 'Roboto', value: 1 }
         ],
-        nowTime: null,
+        nowTime: null
       }
     },
     computed: {
       shareURL () {
         if (this.shareName && !!this.shareName) {
-          var teamshareObject = this.$root.generateTeamshareData()
-          var encodedShare = `${window.location.href.split('?')[0]}?teamshare=${encodeURIComponent(this.packExport(teamshareObject))}&c=${encodeURIComponent(this.myCompleted)}`
+          const teamshareObject = this.$root.generateTeamshareData()
+          const encodedShare = `${window.location.href.split('?')[0]}?teamshare=${encodeURIComponent(this.packExport(teamshareObject))}&c=${encodeURIComponent(this.myCompleted)}`
           return encodedShare
         } else {
           return ''
@@ -902,8 +902,8 @@
         return ''
       },
       myCompleted: function () {
-        var completedCount = this.questDataDefault.filter((x) => this.$store.get('progress/quest_complete', x.id) === true && x.deprecated !== true).length
-        var totalCount = this.questDataDefault.filter(x => x.deprecated !== true).length
+        const completedCount = this.questDataDefault.filter((x) => this.$store.get('progress/quest_complete', x.id) === true && x.deprecated !== true).length
+        const totalCount = this.questDataDefault.filter(x => x.deprecated !== true).length
         return `${completedCount}/${totalCount}`
       },
       inLiveTeam: function () {
@@ -927,15 +927,15 @@
           return this.$store.copy('progress/gameEdition') || 1
         },
         set (value) {
-          this.$store.set('progress/gameEdition', value);
+          this.$store.set('progress/gameEdition', value)
           for (let level = 1; level <= 4; level++) {
-            let stash = hideoutFunctions.getHideoutModule("stash", level);
+            const stash = hideoutFunctions.getHideoutModule('stash', level)
             if (value >= level && !this.$store.get('progress/hideout_complete', stash.id)) {
-              this.$store.set('progress/complete_hideout', stash.id);
-              hideoutFunctions.completeModuleObjective(this.$store, "stash", level);
+              this.$store.set('progress/complete_hideout', stash.id)
+              hideoutFunctions.completeModuleObjective(this.$store, 'stash', level)
             } else if (value < level && this.$store.get('progress/hideout_complete', stash.id)) {
-              this.$store.set('progress/uncomplete_hideout', stash.id);
-              hideoutFunctions.uncompleteModuleObjective(this.$store, "stash", level);
+              this.$store.set('progress/uncomplete_hideout', stash.id)
+              hideoutFunctions.uncompleteModuleObjective(this.$store, 'stash', level)
             }
           }
         }
@@ -955,7 +955,7 @@
         set (value) {
           this.$vuetify.theme.dark = value
           return this.$store.set('app/dark', value)
-        },
+        }
       },
       shareName: {
         get () {
@@ -963,7 +963,7 @@
         },
         set (value) {
           this.$store.set('progress/shareName', value)
-        },
+        }
       },
       useTeammates: {
         get () {
@@ -971,7 +971,7 @@
         },
         set (value) {
           this.$store.set('user/useTeammates', value)
-        },
+        }
       },
       useTeamObjectives: {
         get () {
@@ -979,7 +979,7 @@
         },
         set (value) {
           this.$store.set('user/useTeamObjectives', value)
-        },
+        }
       },
       streamerMode: {
         get () {
@@ -987,12 +987,12 @@
         },
         set (value) {
           this.$store.set('user/streamerMode', value)
-        },
+        }
       },
       firesys: {
         get () {
           return this.$store.copy('firesys')
-        },
+        }
       },
       hiddenTeammates: {
         get () {
@@ -1000,19 +1000,19 @@
         },
         set (value) {
           this.$store.set('user/hideTeammates', value)
-        },
-      },
+        }
+      }
     },
     watch: {
     },
     mounted () {
-      var teamIdUrl = this.$route.query.team
-      var teamCodeUrl = this.$route.query.teamcode
-      var teamshareUrl = this.$route.query.teamshare
+      const teamIdUrl = this.$route.query.team
+      const teamCodeUrl = this.$route.query.teamcode
+      const teamshareUrl = this.$route.query.teamshare
       if (teamIdUrl && teamCodeUrl) {
         if (this.$store.get('app/get_user_auth_uid')) {
           this.joiningTeam = true
-          var joinTeam = this.$firebase.functions().httpsCallable('joinTeam')
+          const joinTeam = this.$firebase.functions().httpsCallable('joinTeam')
           joinTeam({ id: teamIdUrl, password: teamCodeUrl })
             .then((result) => {
               this.joiningTeam = false
@@ -1027,14 +1027,14 @@
           this.joinAuthNotify = true
         }
       } else if (teamshareUrl != null) {
-        var unpackedTeamshare = this.unpackExport(teamshareUrl)
+        const unpackedTeamshare = this.unpackExport(teamshareUrl)
         this.$store.set('user/write_teamshare', unpackedTeamshare)
         this.$store.set('user/useTeammates', true)
         this.$router.push({ path: '/settings' })
       }
 
       this.updateNow()
-      setInterval(this.updateNow.bind(this) , 1000)
+      setInterval(this.updateNow.bind(this), 1000)
     },
     metaInfo: {
       // Children can override the title.
@@ -1043,8 +1043,8 @@
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'Manage your TarkovTracker preferences, or join a team to share your progression' },
-      ],
+        { name: 'description', content: 'Manage your TarkovTracker preferences, or join a team to share your progression' }
+      ]
     },
     filters: {
       timeSince: function (timestamp, now) {
@@ -1053,17 +1053,17 @@
       timeSinceTeammate: function (teammate, now) {
         if (teammate.self || teammate.dynamic) {
           return 'Live'
-        }else{
+        } else {
           return moment(teammate.exportTime).from(now)
         }
-      },
+      }
     },
     methods: {
       updateNow () {
         this.nowTime = Date.now()
       },
       unpackExport (encodedExport) {
-        var pako = require('pako')
+        const pako = require('pako')
         // eslint-disable-next-line
         var u8_2 = new Uint8Array(atob(encodedExport).split('').map(function (c) {
           return c.charCodeAt(0)
@@ -1071,31 +1071,31 @@
         return JSON.parse(pako.inflate(u8_2, { to: 'string' }))
       },
       calculateCompletedQuests (teammate) {
-        var tempQuests = this.questDataDefault
-        var progressQuestArray = teammate.store.get('progress/quests_array')
+        const tempQuests = this.questDataDefault
+        const progressQuestArray = teammate.store.get('progress/quests_array')
         return progressQuestArray.filter(y => y.complete === true).length + '/' + tempQuests.filter(x => x.deprecated !== true).length
       },
       generateExportData () {
-        var dataExport = {
+        const dataExport = {
           version: {
             major: this.$root.$data.overallVersion,
-            data: this.$root.$data.dataHash,
+            data: this.$root.$data.dataHash
           },
           exportTime: Date.now(),
-          progress: this.$store.get('progress/export_progress'),
+          progress: this.$store.get('progress/export_progress')
         }
         return dataExport
       },
       packExport (myExport) {
-        var pako = require('pako')
-        var deflated = String.fromCharCode.apply(null, pako.deflate(JSON.stringify(myExport), { level: 9 }))
+        const pako = require('pako')
+        const deflated = String.fromCharCode.apply(null, pako.deflate(JSON.stringify(myExport), { level: 9 }))
         return btoa(deflated)
       },
       updateExport () {
         this.dataExport = this.packExport(this.generateExportData())
         navigator.clipboard.writeText(this.dataExport)
       },
-      copyToClipboard(text) {
+      copyToClipboard (text) {
         navigator.clipboard.writeText(text)
       },
       copyShareURL () {
@@ -1106,7 +1106,7 @@
       },
       createTeam () {
         this.creatingTeam = true
-        var createTeam = this.$firebase.functions().httpsCallable('createTeam')
+        const createTeam = this.$firebase.functions().httpsCallable('createTeam')
         createTeam()
           .then(() => {
             // Read result of the Cloud Function.
@@ -1115,7 +1115,7 @@
       },
       leaveTeam () {
         this.leavingTeam = true
-        var leaveTeam = this.$firebase.functions().httpsCallable('leaveTeam')
+        const leaveTeam = this.$firebase.functions().httpsCallable('leaveTeam')
         leaveTeam()
           .then(() => {
             // Read result of the Cloud Function.
@@ -1126,7 +1126,7 @@
         // Since we're making a new field within the object, we need to make it reactive
         this.$set(this.kickingTeam, teammate.id, true)
         // this.kickingTeam[teammate.id] = true
-        var kickTeammate = this.$firebase.functions().httpsCallable('kickTeammate')
+        const kickTeammate = this.$firebase.functions().httpsCallable('kickTeammate')
         kickTeammate({ id: teammate.id })
           .then(() => {
             // Reactive change the value
@@ -1135,14 +1135,14 @@
       },
       createToken () {
         this.creatingToken = true
-        var createToken = this.$firebase.functions().httpsCallable('createToken')
+        const createToken = this.$firebase.functions().httpsCallable('createToken')
         createToken({ note: this.apiTokenNote, permissions: this.apiSelectedPermissions })
           .then((result) => {
             // Read result of the Cloud Function.
             console.log(result)
             this.creatingToken = false
-            if(!result.data.error) {
-              this.apiTokenNote = ""
+            if (!result.data.error) {
+              this.apiTokenNote = ''
               this.apiSelectedPermissions = []
             }
           }, this)
@@ -1151,7 +1151,7 @@
         // Since we're making a new field within the object, we need to make it reactive
         this.$set(this.revokingToken, token, true)
         // this.kickingTeam[teammate.id] = true
-        var revokeToken = this.$firebase.functions().httpsCallable('revokeToken')
+        const revokeToken = this.$firebase.functions().httpsCallable('revokeToken')
         revokeToken({ token: token })
           .then((result) => {
             // Reactive change the value
@@ -1160,7 +1160,7 @@
           })
       },
       importData () {
-        var dataImport = this.unpackExport(this.dataImport)
+        const dataImport = this.unpackExport(this.dataImport)
         if (dataImport.version) {
           if (dataImport.progress) {
             // Use the vuex import mutation
@@ -1173,8 +1173,8 @@
               'progress/migrations!',
               {
                 questData: dataImport.questProgress,
-                hideoutData: dataImport.hideoutProgress,
-              },
+                hideoutData: dataImport.hideoutProgress
+              }
             )
           }
           // Seems legit
@@ -1200,19 +1200,19 @@
       deleteAccount () {
         if (this.deleteConfirmText == this.deleteSuccessText) {
           // WARNING THIS COMLETELY DELETE THE FIREBASE ACCOUNT, AND WILL IMMEDIATELY TRIGGER DATA DELETION FUNCTION
-          var user = this.$firebase.auth().currentUser;
-          user.delete().then(function() {
+          const user = this.$firebase.auth().currentUser
+          user.delete().then(function () {
             // User deleted.
             this.deleteConfirmText = ''
             this.deleteConfirmError = false
-          }.bind(this)).catch(function(error) {
+          }.bind(this)).catch(function (error) {
             this.deleteConfirmError = true
             this.deleteConfirmText = `${error}`
-          }.bind(this));
+          }.bind(this))
         } else {
           this.deleteConfirmError = true
         }
-      },
-    },
+      }
+    }
   }
 </script>

@@ -19,7 +19,7 @@ const getDefaultState = () => {
     onlyKappa: false,
     onlyLevels: false,
     primarySort: 0,
-    teamSort: 0,
+    teamSort: 0
   }
 }
 
@@ -27,18 +27,18 @@ const mutations = {
 
   ...make.mutations(getDefaultState()),
 
-  write_teamshare(state, teamshare) {
+  write_teamshare (state, teamshare) {
     state.teammates = { ...state.teammates, [teamshare.name]: teamshare }
   },
 
-  delete_teamshare(state, name) {
+  delete_teamshare (state, name) {
     delete state.teammates[name]
     state.teammates = { ...state.teammates }
   },
 
-  reset_state(state) {
+  reset_state (state) {
     Object.assign(state, getDefaultState())
-  },
+  }
 }
 
 const actions = {}
@@ -65,15 +65,15 @@ const getters = {
     } else {
       return []
     }
-  },
+  }
 }
 
 export default {
   namespaced: true,
-  state() {
+  state () {
     return getDefaultState()
   },
   mutations,
   actions,
-  getters,
+  getters
 }

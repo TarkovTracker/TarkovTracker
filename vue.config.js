@@ -4,12 +4,12 @@ module.exports = {
   devServer: {
     disableHostCheck: true,
     stats: {
-      chunks: false,
+      chunks: false
     }
   },
 
   configureWebpack: {
-    devtool: 'source-map',
+    devtool: 'source-map'
   },
 
   lintOnSave: true,
@@ -20,5 +20,5 @@ module.exports = {
     gitDescribe: {
       variableName: 'GIT_DESCRIBE'
     }
-  },
+  }
 }

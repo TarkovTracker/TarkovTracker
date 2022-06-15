@@ -15,20 +15,20 @@
     name: 'FirebaseAuth',
     data () {
       return {
-        maintenance_mode: false,
+        maintenance_mode: false
       }
     },
     mounted () {
-      const remoteConfig = fireapp.remoteConfig();
-      
-      this.maintenance_mode = remoteConfig.getValue("maintenance_mode")._value;
+      const remoteConfig = fireapp.remoteConfig()
+
+      this.maintenance_mode = remoteConfig.getValue('maintenance_mode')._value
       remoteConfig.fetchAndActivate()
       .then(() => {
-        this.maintenance_mode = remoteConfig.getValue("maintenance_mode")._value;
+        this.maintenance_mode = remoteConfig.getValue('maintenance_mode')._value
       })
 
       // FirebaseUI config.
-      var uiConfig = {
+      const uiConfig = {
         callbacks: {
           signInSuccessWithAuthResult: function (authResult, redirectUrl) {
             // User successfully signed in.
@@ -39,7 +39,7 @@
           uiShown: function () {
             // The widget is rendered.
             // Hide the loader.
-          },
+          }
         },
         signInSuccessUrl: '/',
         signInOptions: [
@@ -49,23 +49,22 @@
           firebase.auth.TwitterAuthProvider.PROVIDER_ID,
           {
             provider: 'microsoft.com',
-            loginHintKey: 'login_hint',
-          },
+            loginHintKey: 'login_hint'
+          }
         ],
         signInFlow: 'popup',
         // Terms of Service
         tosUrl: 'https://www.termsfeed.com/live/d3a09e33-cd8e-4e08-8533-9c7a270d9ac1',
         // Privacy policy url/callback.
-        privacyPolicyUrl: 'https://www.termsfeed.com/live/b6d6f7fd-adc4-4717-8a2b-83daf9d8ddb9',
+        privacyPolicyUrl: 'https://www.termsfeed.com/live/b6d6f7fd-adc4-4717-8a2b-83daf9d8ddb9'
       }
       // Initialize the FirebaseUI Widget using Firebase.
       // The start method will wait until the DOM is loaded.
-      if(this.maintenance_mode != 'true') {
-        var ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(this.$firebase.auth())
+      if (this.maintenance_mode != 'true') {
+        const ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(this.$firebase.auth())
         ui.start('#firebaseui-auth-container', uiConfig)
       }
-      
-    },
+    }
   }
 </script>
 <style lang="sass">

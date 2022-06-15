@@ -13,7 +13,7 @@
         class="d-block d-md-flex"
       >
 
-        <default-drawer 
+        <default-drawer
           :miniOverride="true"
         />
 
@@ -45,12 +45,12 @@
       // TODO: Add optional image background to default layout
       LoginView: () => import(
         './View'
-      ),
+      )
     },
     computed: {
       theme () {
         return (this.$vuetify.theme.dark) ? 'dark' : 'light'
-      },
-    },
+      }
+    }
   }
 </script>

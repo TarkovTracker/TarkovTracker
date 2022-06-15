@@ -10,7 +10,7 @@
  export function loadFonts () {
    WebFontLoader.load({
      google: {
-       families: ['Share+Tech+Mono&display=swap'],
-     },
+       families: ['Share+Tech+Mono&display=swap']
+     }
    })
  }

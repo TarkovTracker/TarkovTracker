@@ -101,16 +101,16 @@
       icon: String,
       iconSmall: Boolean,
       subtitle: String,
-      title: String,
+      title: String
     },
 
     computed: {
       _headerWidth () {
         if (this.fullHeader) {
           return '100%'
-        }else if(this.headerWidth) {
+        } else if (this.headerWidth) {
           return this.headerWidth
-        }else{
+        } else {
           return undefined
         }
       },
@@ -121,7 +121,7 @@
           this.$slots.title ||
           this.$slots.subtitle
         )
-      },
-    },
+      }
+    }
   }
 </script>

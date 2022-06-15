@@ -61,9 +61,9 @@ export default {
   name: 'HideoutModule',
   props: {
     moduleDetails: Object,
-    pageType: String,
+    pageType: String
   },
-  data() {
+  data () {
     return {
 
     }
@@ -79,26 +79,26 @@ export default {
       } else {
         return 'success'
       }
-    },
+    }
   },
   methods: {
-    getLockedLevels(module) {
-      let lockedLevels = [];
-      let MAX_ITERATIONS = 10;
+    getLockedLevels (module) {
+      const lockedLevels = []
+      const MAX_ITERATIONS = 10
       for (let level = module.level + 1; level < MAX_ITERATIONS; level++) {
-        let nextLevelModule = hideoutFunctions.getHideoutModule(module.module, level);
+        const nextLevelModule = hideoutFunctions.getHideoutModule(module.module, level)
         if (!nextLevelModule) {
-          break;
+          break
         }
         lockedLevels.push(level)
       }
-      return lockedLevels;
+      return lockedLevels
     },
-    refreshHideout() {
+    refreshHideout () {
       this.$emit('hideoutStateChanged')
     },
-    haveRequirement(requirement) {
-      var have = false
+    haveRequirement (requirement) {
+      let have = false
       if (this.pageType == 'current') {
         have = true
       } else {
@@ -111,24 +111,24 @@ export default {
 
       return { 'objective-enough': have }
     },
-    modificationDisabled(module) {
-      return module.module.toLowerCase() === 'stash' && module.level <= this.$store.get('progress/gameEdition');
+    modificationDisabled (module) {
+      return module.module.toLowerCase() === 'stash' && module.level <= this.$store.get('progress/gameEdition')
     },
-    clickUncompleteModule(moduleData) {
+    clickUncompleteModule (moduleData) {
       this.uncompleteModule(moduleData.module, moduleData.level)
     },
-    uncompleteModule(moduleName, moduleLevel) {
-      var tempHideout = this.hideoutDataDefault.modules
+    uncompleteModule (moduleName, moduleLevel) {
+      const tempHideout = this.hideoutDataDefault.modules
 
       // Ignore any upgrades/downgrades on Stash upgrade if user has EOD edition
       if (moduleName.toLowerCase() === 'stash' && moduleLevel <= this.$store.get('progress/gameEdition')) {
-        return;
+        return
       }
 
-      var tempModuleData = hideoutFunctions.getHideoutModule(moduleName, moduleLevel)
+      const tempModuleData = hideoutFunctions.getHideoutModule(moduleName, moduleLevel)
 
       if (!this.$store.get('progress/complete_hideout', tempModuleData.id)) {
-        return;
+        return
       }
 
       // Mark all hideouts that require this module also as incomplete (in case of downgrading modules while already having
@@ -136,59 +136,59 @@ export default {
       tempHideout.forEach(module => {
         module.require.forEach(requirement => {
           if (requirement.type === 'module' && requirement.name === moduleName && requirement.quantity === moduleLevel) {
-            this.uncompleteModule(module.module, module.level);
+            this.uncompleteModule(module.module, module.level)
           }
-        });
-      });
+        })
+      })
 
-      hideoutFunctions.uncompleteModule(this.$store, tempModuleData.id);
-      hideoutFunctions.uncompleteModuleObjective(this.$store, moduleName, moduleLevel);
+      hideoutFunctions.uncompleteModule(this.$store, tempModuleData.id)
+      hideoutFunctions.uncompleteModuleObjective(this.$store, moduleName, moduleLevel)
 
       this.refreshHideout()
 
       this.$analytics.logEvent('module_uncomplete', {
         event_category: 'Hideout',
         event_label: `Uncompleted ${moduleName}`,
-        quests_previously: this.$store.get('progress/quests_array').filter(x => x.complete).length,
+        quests_previously: this.$store.get('progress/quests_array').filter(x => x.complete).length
       })
     },
-    clickCompleteModuleLevel(moduleName, moduleLevel) {
-      this.completeModule(moduleName, moduleLevel);
+    clickCompleteModuleLevel (moduleName, moduleLevel) {
+      this.completeModule(moduleName, moduleLevel)
     },
-    clickCompleteModule(moduleData) {
+    clickCompleteModule (moduleData) {
       this.completeModule(moduleData.module, moduleData.level)
     },
-    completeModule(moduleName, moduleLevel) {
+    completeModule (moduleName, moduleLevel) {
       // Ignore any upgrades/downgrades on Stash upgrade if user has EOD edition
       if (moduleName.toLowerCase() === 'stash' && moduleLevel <= this.$store.get('progress/gameEdition')) {
-        return;
+        return
       }
 
-      var tempModuleData = hideoutFunctions.getHideoutModule(moduleName, moduleLevel)
+      const tempModuleData = hideoutFunctions.getHideoutModule(moduleName, moduleLevel)
 
       if (this.$store.get('progress/complete_hideout', tempModuleData.id)) {
-        return;
+        return
       }
 
       // Mark all requirements as complete (in case of completing locked modules)
       tempModuleData.require.forEach(requirement => {
         if (requirement.type === 'module') {
-          this.completeModule(requirement.name, requirement.quantity);
+          this.completeModule(requirement.name, requirement.quantity)
         }
-      });
+      })
 
-      hideoutFunctions.completeModule(this.$store, tempModuleData.id);
-      hideoutFunctions.completeModuleObjective(this.$store, moduleName, moduleLevel);
+      hideoutFunctions.completeModule(this.$store, tempModuleData.id)
+      hideoutFunctions.completeModuleObjective(this.$store, moduleName, moduleLevel)
 
       this.refreshHideout()
 
       this.$analytics.logEvent('module_complete', {
         event_category: 'Hideout',
         event_label: `Completed ${moduleName}`,
-        quests_previously: this.$store.get('progress/quests_array').filter(x => x.complete).length,
+        quests_previously: this.$store.get('progress/quests_array').filter(x => x.complete).length
       })
-    },
-  },
+    }
+  }
 
 }
 </script>

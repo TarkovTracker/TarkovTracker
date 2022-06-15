@@ -220,33 +220,33 @@
         '#4CAF50',
         '#ff9800',
         '#E91E63',
-        '#FF5252',
+        '#FF5252'
       ],
       menu: false,
-      saveImage: '',
+      saveImage: ''
     }),
 
     computed: {
       ...sync('app', [
         'drawer',
         'drawerImage',
-        'mini',
+        'mini'
       ]),
       ...sync('user', [
         'drawer@gradient',
-        'drawer@image',
+        'drawer@image'
       ]),
       ...get('user', [
         'images',
-        'gradients',
-      ]),
+        'gradients'
+      ])
     },
 
     watch: {
       color (val) {
         this.$vuetify.theme.themes[this.isDark ? 'dark' : 'light'].primary = val
-      },
-    },
+      }
+    }
   }
 </script>
 

@@ -46,8 +46,8 @@
     props: {
       item: {
         type: Object,
-        default: () => ({}),
-      },
+        default: () => ({})
+      }
     },
 
     computed: {
@@ -62,7 +62,7 @@
         const matches = this.item.title.match(/\b(\w)/g)
 
         return matches.join('')
-      },
-    },
+      }
+    }
   }
 </script>

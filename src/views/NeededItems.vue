@@ -28,24 +28,24 @@
         {
           text: 'All',
           icon: 'mdi-all-inclusive',
-          target: ['find', 'collect', 'hideout'],
+          target: ['find', 'collect', 'hideout']
         },
         {
           text: 'Find In Raid',
           icon: 'mdi-checkbox-marked-circle-outline',
-          target: ['find'],
+          target: ['find']
         },
         {
           text: 'Handover',
           icon: 'mdi-close-circle-outline',
-          target: ['collect'],
+          target: ['collect']
         },
         {
           text: 'Hideout',
           icon: 'mdi-home',
-          target: ['hideout'],
-        },
-      ],
+          target: ['hideout']
+        }
+      ]
     }),
     metaInfo: {
       // Children can override the title.
@@ -54,8 +54,8 @@
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'See all the items you will need to collect to complete your quests and upgrade your hideout.' },
-      ],
-    },
+        { name: 'description', content: 'See all the items you will need to collect to complete your quests and upgrade your hideout.' }
+      ]
+    }
   }
 </script>

@@ -60,7 +60,7 @@
         return this.$root.levelDataDefault[this.selfLevel].group
       },
 
-      groupIcon: function() {
+      groupIcon: function () {
         return `/img/LevelGroup${this.levelGroup}.png`
       },
 
@@ -73,30 +73,30 @@
             value = 1
           }
           this.$store.set('progress/level', value)
-        },
+        }
       },
 
       ...sync('app', [
-        'mini',
-      ]),
+        'mini'
+      ])
     },
 
     methods: {
-      incrementLevel() {
-        if(!this.$root.levelDataDefault[this.selfLevel + 1]) {
+      incrementLevel () {
+        if (!this.$root.levelDataDefault[this.selfLevel + 1]) {
           this.selfLevel = 1
         } else {
           this.selfLevel += 1
         }
       },
 
-      decrementLevel() {
-        if(!this.$root.levelDataDefault[this.selfLevel - 1]) {
+      decrementLevel () {
+        if (!this.$root.levelDataDefault[this.selfLevel - 1]) {
           this.selfLevel = Object.keys(this.$root.levelDataDefault).pop()
         } else {
           this.selfLevel -= 1
         }
-      },
-    },
+      }
+    }
   }
 </script>

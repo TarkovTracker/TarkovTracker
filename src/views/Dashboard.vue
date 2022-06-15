@@ -65,11 +65,11 @@
           cols="auto"
           class="ml-auto mr-auto"
         >
-          <loyalty-stat-card 
-            :traderId="trader.trader" 
-            :loyaltyLevel="trader.loyaltyLevel" 
-            :reputation="trader.reputation" 
-            :nextLoyaltyRep="trader.nextLoyaltyRep" 
+          <loyalty-stat-card
+            :traderId="trader.trader"
+            :loyaltyLevel="trader.loyaltyLevel"
+            :reputation="trader.reputation"
+            :nextLoyaltyRep="trader.nextLoyaltyRep"
           />
         </v-col>
       </v-row>
@@ -167,8 +167,8 @@
           top: 0,
           right: 0,
           bottom: 5,
-          left: 0,
-        },
+          left: 0
+        }
       },
       mapChartOptions: {
         stackBars: true,
@@ -178,8 +178,8 @@
           top: 0,
           right: 0,
           bottom: 5,
-          left: 0,
-        },
+          left: 0
+        }
       },
       chartsResponsiveOptions: [
         ['screen and (min-width: 801px) and (max-width: 1024px)', {
@@ -188,8 +188,8 @@
             labelInterpolationFnc: function (value) {
               // Will return Mon, Tue, Wed etc. on medium screens
               return value.slice(0, 3)
-            },
-          },
+            }
+          }
         }],
         ['screen and (max-width: 800px)', {
           showLine: false,
@@ -197,77 +197,77 @@
             labelInterpolationFnc: function (value) {
               // Will return M, T, W etc. on small screens
               return value[0]
-            },
-          },
-        }],
-      ],
+            }
+          }
+        }]
+      ]
     }),
     computed: {
       completionStats () {
-        var totalQuests = this.questDataDefault.filter(x => x.deprecated !== true).length
-        var completedQuests = this.questDataDefault.filter((x) => this.$store.get('progress/quest_complete', x.id) == true && x.deprecated !== true).length
+        const totalQuests = this.questDataDefault.filter(x => x.deprecated !== true).length
+        const completedQuests = this.questDataDefault.filter((x) => this.$store.get('progress/quest_complete', x.id) == true && x.deprecated !== true).length
 
         // Quest completion
-        var totalKappaQuests = this.questDataDefault.filter(x => x.deprecated !== true && x.nokappa !== true).length - 1
-        var completedKappaQuests = (this.questDataDefault.filter((x) => this.$store.get('progress/quest_complete', x.id) == true && x.deprecated !== true && x.nokappa !== true).length || 0)
+        const totalKappaQuests = this.questDataDefault.filter(x => x.deprecated !== true && x.nokappa !== true).length - 1
+        const completedKappaQuests = (this.questDataDefault.filter((x) => this.$store.get('progress/quest_complete', x.id) == true && x.deprecated !== true && x.nokappa !== true).length || 0)
 
         // PMC eliminations
-        var totalPMCEliminations = this.$root.objectiveArray.filter(x => x.type.toLowerCase() === 'kill' && x.target.toLowerCase() === 'pmcs').reduce((acc, x) => acc + x.number, 0)
-        var completePMCEliminations = (this.$root.objectiveArray.filter(x => x.type.toLowerCase() === 'kill' && x.target.toLowerCase() === 'pmcs').reduce((acc, x) => this.$store.get('progress/objective_complete', x.id) ? acc + x.number : acc + this.$store.get('progress/objective_have', x.id), 0) || 0)
+        const totalPMCEliminations = this.$root.objectiveArray.filter(x => x.type.toLowerCase() === 'kill' && x.target.toLowerCase() === 'pmcs').reduce((acc, x) => acc + x.number, 0)
+        const completePMCEliminations = (this.$root.objectiveArray.filter(x => x.type.toLowerCase() === 'kill' && x.target.toLowerCase() === 'pmcs').reduce((acc, x) => this.$store.get('progress/objective_complete', x.id) ? acc + x.number : acc + this.$store.get('progress/objective_have', x.id), 0) || 0)
 
         // Scav eliminations
-        var totalScavEliminations = this.$root.objectiveArray.filter(x => x.type.toLowerCase() === 'kill' && x.target.toLowerCase() === 'scavs').reduce((acc, x) => acc + x.number, 0)
-        var completeScavEliminations = (this.$root.objectiveArray.filter(x => x.type.toLowerCase() === 'kill' && x.target.toLowerCase() === 'scavs').reduce((acc, x) => this.$store.get('progress/objective_complete', x.id) ? acc + x.number : acc + this.$store.get('progress/objective_have', x.id), 0) || 0)
+        const totalScavEliminations = this.$root.objectiveArray.filter(x => x.type.toLowerCase() === 'kill' && x.target.toLowerCase() === 'scavs').reduce((acc, x) => acc + x.number, 0)
+        const completeScavEliminations = (this.$root.objectiveArray.filter(x => x.type.toLowerCase() === 'kill' && x.target.toLowerCase() === 'scavs').reduce((acc, x) => this.$store.get('progress/objective_complete', x.id) ? acc + x.number : acc + this.$store.get('progress/objective_have', x.id), 0) || 0)
 
         // Quest items
-        var totalQuestItems = this.$root.objectiveArray.filter(x => (x.type.toLowerCase() === 'find' || x.type.toLowerCase() === 'collect') && !['5449016a4bdc2d6f028b456f', '569668774bdc2da2298b4568', '5696686a4bdc2da3298b456a'].includes(x.target.toLowerCase())).reduce((acc, x) => acc + x.number, 0)
-        var completeQuestItems = (this.$root.objectiveArray.filter(x => (x.type.toLowerCase() === 'find' || x.type.toLowerCase() === 'collect') && !['5449016a4bdc2d6f028b456f', '569668774bdc2da2298b4568', '5696686a4bdc2da3298b456a'].includes(x.target.toLowerCase())).reduce((acc, x) => this.$store.get('progress/objective_complete', x.id) ? acc + x.number : acc + this.$store.get('progress/objective_have', x.id), 0) || 0)
+        const totalQuestItems = this.$root.objectiveArray.filter(x => (x.type.toLowerCase() === 'find' || x.type.toLowerCase() === 'collect') && !['5449016a4bdc2d6f028b456f', '569668774bdc2da2298b4568', '5696686a4bdc2da3298b456a'].includes(x.target.toLowerCase())).reduce((acc, x) => acc + x.number, 0)
+        const completeQuestItems = (this.$root.objectiveArray.filter(x => (x.type.toLowerCase() === 'find' || x.type.toLowerCase() === 'collect') && !['5449016a4bdc2d6f028b456f', '569668774bdc2da2298b4568', '5696686a4bdc2da3298b456a'].includes(x.target.toLowerCase())).reduce((acc, x) => this.$store.get('progress/objective_complete', x.id) ? acc + x.number : acc + this.$store.get('progress/objective_have', x.id), 0) || 0)
 
         // FIR Items
-        var totalFIRItems = this.$root.objectiveArray.filter(x => (x.type.toLowerCase() === 'find') && !['5449016a4bdc2d6f028b456f', '569668774bdc2da2298b4568', '5696686a4bdc2da3298b456a'].includes(x.target.toLowerCase())).reduce((acc, x) => acc + x.number, 0)
-        var completeFIRItems = (this.$root.objectiveArray.filter(x => (x.type.toLowerCase() === 'find') && !['5449016a4bdc2d6f028b456f', '569668774bdc2da2298b4568', '5696686a4bdc2da3298b456a'].includes(x.target.toLowerCase())).reduce((acc, x) => this.$store.get('progress/objective_complete', x.id) ? acc + x.number : acc + this.$store.get('progress/objective_have', x.id), 0) || 0)
+        const totalFIRItems = this.$root.objectiveArray.filter(x => (x.type.toLowerCase() === 'find') && !['5449016a4bdc2d6f028b456f', '569668774bdc2da2298b4568', '5696686a4bdc2da3298b456a'].includes(x.target.toLowerCase())).reduce((acc, x) => acc + x.number, 0)
+        const completeFIRItems = (this.$root.objectiveArray.filter(x => (x.type.toLowerCase() === 'find') && !['5449016a4bdc2d6f028b456f', '569668774bdc2da2298b4568', '5696686a4bdc2da3298b456a'].includes(x.target.toLowerCase())).reduce((acc, x) => this.$store.get('progress/objective_complete', x.id) ? acc + x.number : acc + this.$store.get('progress/objective_have', x.id), 0) || 0)
 
         // Handover Items
-        var totalHandoverItems = this.$root.objectiveArray.filter(x => (x.type.toLowerCase() === 'collect') && !['5449016a4bdc2d6f028b456f', '569668774bdc2da2298b4568', '5696686a4bdc2da3298b456a'].includes(x.target.toLowerCase())).reduce((acc, x) => acc + x.number, 0)
-        var completeHandoverItems = (this.$root.objectiveArray.filter(x => (x.type.toLowerCase() === 'collect') && !['5449016a4bdc2d6f028b456f', '569668774bdc2da2298b4568', '5696686a4bdc2da3298b456a'].includes(x.target.toLowerCase())).reduce((acc, x) => this.$store.get('progress/objective_complete', x.id) ? acc + x.number : acc + this.$store.get('progress/objective_have', x.id), 0) || 0)
+        const totalHandoverItems = this.$root.objectiveArray.filter(x => (x.type.toLowerCase() === 'collect') && !['5449016a4bdc2d6f028b456f', '569668774bdc2da2298b4568', '5696686a4bdc2da3298b456a'].includes(x.target.toLowerCase())).reduce((acc, x) => acc + x.number, 0)
+        const completeHandoverItems = (this.$root.objectiveArray.filter(x => (x.type.toLowerCase() === 'collect') && !['5449016a4bdc2d6f028b456f', '569668774bdc2da2298b4568', '5696686a4bdc2da3298b456a'].includes(x.target.toLowerCase())).reduce((acc, x) => this.$store.get('progress/objective_complete', x.id) ? acc + x.number : acc + this.$store.get('progress/objective_have', x.id), 0) || 0)
 
         // Placed items
-        var totalPlacedItems = this.$root.objectiveArray.filter(x => (x.type.toLowerCase() === 'place' || x.type.toLowerCase() === 'mark')).reduce((acc, x) => acc + x.number, 0)
-        var completePlacedItems = (this.$root.objectiveArray.filter(x => (x.type.toLowerCase() === 'place' || x.type.toLowerCase() === 'mark')).reduce((acc, x) => this.$store.get('progress/objective_complete', x.id) ? acc + x.number : acc + this.$store.get('progress/objective_have', x.id), 0) || 0)
+        const totalPlacedItems = this.$root.objectiveArray.filter(x => (x.type.toLowerCase() === 'place' || x.type.toLowerCase() === 'mark')).reduce((acc, x) => acc + x.number, 0)
+        const completePlacedItems = (this.$root.objectiveArray.filter(x => (x.type.toLowerCase() === 'place' || x.type.toLowerCase() === 'mark')).reduce((acc, x) => this.$store.get('progress/objective_complete', x.id) ? acc + x.number : acc + this.$store.get('progress/objective_have', x.id), 0) || 0)
 
         // Pickup items
-        var totalPickupItems = this.$root.objectiveArray.filter(x => (x.type.toLowerCase() === 'pickup')).reduce((acc, x) => acc + x.number, 0)
-        var completePickupItems = (this.$root.objectiveArray.filter(x => (x.type.toLowerCase() === 'pickup')).reduce((acc, x) => this.$store.get('progress/objective_complete', x.id) ? acc + x.number : acc + this.$store.get('progress/objective_have', x.id), 0) || 0)
+        const totalPickupItems = this.$root.objectiveArray.filter(x => (x.type.toLowerCase() === 'pickup')).reduce((acc, x) => acc + x.number, 0)
+        const completePickupItems = (this.$root.objectiveArray.filter(x => (x.type.toLowerCase() === 'pickup')).reduce((acc, x) => this.$store.get('progress/objective_complete', x.id) ? acc + x.number : acc + this.$store.get('progress/objective_have', x.id), 0) || 0)
 
         // Quest EXP gained
-        var completeExpGained = this.$root.questArray.reduce((acc, x) => (this.$store.get('progress/quest_complete', x.id) ? acc + x.exp : acc), 0)
+        const completeExpGained = this.$root.questArray.reduce((acc, x) => (this.$store.get('progress/quest_complete', x.id) ? acc + x.exp : acc), 0)
 
-        var questTimeline = this.$root.questArray.map(x => new Object({ ...x, timeComplete: this.$store.get('progress/quest_time_complete', x.id) }))
+        const questTimeline = this.$root.questArray.map(x => new Object({ ...x, timeComplete: this.$store.get('progress/quest_time_complete', x.id) }))
 
-        var firstQuestComplete = Math.min(...questTimeline.map(x => x.timeComplete).filter(x => x != null))
+        const firstQuestComplete = Math.min(...questTimeline.map(x => x.timeComplete).filter(x => x != null))
 
-        var timelineQuestsComplete = questTimeline.filter(x => x.timeComplete != null).length
+        const timelineQuestsComplete = questTimeline.filter(x => x.timeComplete != null).length
 
-        var questsPerDay = Math.ceil(timelineQuestsComplete / Math.ceil((Date.now() - firstQuestComplete) / 86400000))
+        const questsPerDay = Math.ceil(timelineQuestsComplete / Math.ceil((Date.now() - firstQuestComplete) / 86400000))
 
-        var daysSinceFirstQuest = Math.ceil((Date.now() - firstQuestComplete) / 86400000)
+        const daysSinceFirstQuest = Math.ceil((Date.now() - firstQuestComplete) / 86400000)
 
-        var objectiveTimeline = this.$root.objectiveArray.map(x => new Object({ ...x, timeComplete: this.$store.get('progress/objective_time_complete', x.id) }))
+        const objectiveTimeline = this.$root.objectiveArray.map(x => new Object({ ...x, timeComplete: this.$store.get('progress/objective_time_complete', x.id) }))
 
-        var firstObjectiveComplete = Math.min(...objectiveTimeline.map(x => x.timeComplete).filter(x => x != null))
+        const firstObjectiveComplete = Math.min(...objectiveTimeline.map(x => x.timeComplete).filter(x => x != null))
 
-        var timelineObjectivesComplete = objectiveTimeline.filter(x => x.timeComplete != null).length
+        const timelineObjectivesComplete = objectiveTimeline.filter(x => x.timeComplete != null).length
 
-        var objectivesPerDay = Math.ceil(timelineObjectivesComplete / Math.ceil((Date.now() - firstObjectiveComplete) / 86400000))
+        const objectivesPerDay = Math.ceil(timelineObjectivesComplete / Math.ceil((Date.now() - firstObjectiveComplete) / 86400000))
 
-        let cardsData = [
+        const cardsData = [
           {
             actionIcon: 'mdi-help-circle',
             actionText: `${completedKappaQuests}/${totalKappaQuests} Kappa`,
             color: 'var(--v-accent-base)',
             icon: 'mdi-check-all',
             title: 'Completed Quests',
-            value: `${completedQuests}/${totalQuests}`,
+            value: `${completedQuests}/${totalQuests}`
           },
           {
             actionIcon: 'mdi-help-circle',
@@ -275,7 +275,7 @@
             color: 'var(--v-accent-base)',
             icon: 'mdi-target-account',
             title: 'PMC Eliminations',
-            value: `${completePMCEliminations}/${totalPMCEliminations}`,
+            value: `${completePMCEliminations}/${totalPMCEliminations}`
           },
           {
             actionIcon: 'mdi-help-circle',
@@ -283,7 +283,7 @@
             color: 'var(--v-accent-base)',
             icon: 'mdi-target-account',
             title: 'Scav Eliminations',
-            value: `${completeScavEliminations}/${totalScavEliminations}`,
+            value: `${completeScavEliminations}/${totalScavEliminations}`
           },
           {
             actionIcon: 'mdi-help-circle',
@@ -291,7 +291,7 @@
             color: 'var(--v-accent-base)',
             icon: 'mdi-briefcase-search',
             title: 'Quest Items',
-            value: `${completeQuestItems}/${totalQuestItems}`,
+            value: `${completeQuestItems}/${totalQuestItems}`
           },
           {
             actionIcon: 'mdi-help-circle',
@@ -299,7 +299,7 @@
             color: 'var(--v-accent-base)',
             icon: 'mdi-checkbox-marked-circle-outline',
             title: 'Found In Raid Items',
-            value: `${completeFIRItems}/${totalFIRItems}`,
+            value: `${completeFIRItems}/${totalFIRItems}`
           },
           {
             actionIcon: 'mdi-help-circle',
@@ -307,7 +307,7 @@
             color: 'var(--v-accent-base)',
             icon: 'mdi-close-circle-outline',
             title: 'Handover Items',
-            value: `${completeHandoverItems}/${totalHandoverItems}`,
+            value: `${completeHandoverItems}/${totalHandoverItems}`
           },
           {
             actionIcon: 'mdi-help-circle',
@@ -315,7 +315,7 @@
             color: 'var(--v-accent-base)',
             icon: 'mdi-arrow-down-drop-circle-outline',
             title: 'Placed Objectives',
-            value: `${completePlacedItems}/${totalPlacedItems}`,
+            value: `${completePlacedItems}/${totalPlacedItems}`
           },
           {
             actionIcon: 'mdi-help-circle',
@@ -323,7 +323,7 @@
             color: 'var(--v-accent-base)',
             icon: 'mdi-arrow-up-drop-circle-outline',
             title: 'Pickup Objectives',
-            value: `${completePickupItems}/${totalPickupItems}`,
+            value: `${completePickupItems}/${totalPickupItems}`
           },
           {
             actionIcon: 'mdi-help-circle',
@@ -331,7 +331,7 @@
             color: 'var(--v-accent-base)',
             icon: 'mdi-star-half-full',
             title: 'Quest EXP',
-            value: `${completeExpGained.toLocaleString()}`,
+            value: `${completeExpGained.toLocaleString()}`
           },
           {
             actionIcon: 'mdi-help-circle',
@@ -339,7 +339,7 @@
             color: 'var(--v-accent-base)',
             icon: 'mdi-calendar-check',
             title: 'Days Since First Quest',
-            value: `${daysSinceFirstQuest}`,
+            value: `${daysSinceFirstQuest}`
           },
           {
             actionIcon: 'mdi-help-circle',
@@ -347,7 +347,7 @@
             color: 'var(--v-accent-base)',
             icon: 'mdi-timer',
             title: 'Quests Per Day',
-            value: `${questsPerDay}`,
+            value: `${questsPerDay}`
           },
           {
             actionIcon: 'mdi-help-circle',
@@ -355,39 +355,39 @@
             color: 'var(--v-accent-base)',
             icon: 'mdi-timer',
             title: 'Objectives Per Day',
-            value: `${objectivesPerDay}`,
-          },
-        ];
+            value: `${objectivesPerDay}`
+          }
+        ]
 
         return cardsData
       },
       loyaltyLevelStats () {
-        const START_REPUTATION = this.$store.get('progress/gameEdition') >= 3 ? 0.2 : 0;
+        const START_REPUTATION = this.$store.get('progress/gameEdition') >= 3 ? 0.2 : 0
 
         // All traders except Fence
-        var relevantTraders = Object.values(this.traderDataDefault).filter(trader => trader.id != 7)
+        const relevantTraders = Object.values(this.traderDataDefault).filter(trader => trader.id != 7)
 
-        var reputations = {}
+        const reputations = {}
         relevantTraders.forEach(trader => {
-          reputations[trader.id] = {value: START_REPUTATION, level: 1, toNextLevel: 0}
-        }, this);
+          reputations[trader.id] = { value: START_REPUTATION, level: 1, toNextLevel: 0 }
+        }, this)
 
         this.$root.questArray.forEach(quest => {
           if ('reputationFailure' in quest && this.$store.copy('progress/quest_failed', quest.id) == true) {
             quest.reputationFailure.forEach(reputation => {
-              let trader = reputation.trader;
-              reputations[trader].value += reputation.rep;
-            }, this);
+              const trader = reputation.trader
+              reputations[trader].value += reputation.rep
+            }, this)
           } else if ('reputation' in quest && this.$store.copy('progress/quest_complete', quest.id) == true) {
             quest.reputation.forEach(reputation => {
-              let trader = reputation.trader;
-              reputations[trader].value += reputation.rep;
-            }, this);
+              const trader = reputation.trader
+              reputations[trader].value += reputation.rep
+            }, this)
           }
-        }, this);
+        }, this)
 
-        for (let [trader, reputation] of Object.entries(reputations)) {
-          let currentTrader = this.$root.traderDictionary[trader];
+        for (const [trader, reputation] of Object.entries(reputations)) {
+          const currentTrader = this.$root.traderDictionary[trader]
           for (let i = 0; i < currentTrader.loyalty.length; i++) {
             // If we are looking at last possible level and player has more than the required reputation for that level
             if (i === currentTrader.loyalty.length - 1 && currentTrader.loyalty[i].requiredReputation <= reputation.value) {
@@ -395,19 +395,19 @@
             // If player has enough reputation for the given level, but not more than what is required for the next level
             } else if (currentTrader.loyalty[i].requiredReputation <= reputation.value && currentTrader.loyalty[i + 1].requiredReputation > reputation.value) {
               reputation.level = currentTrader.loyalty[i].level
-              break;
+              break
             }
           }
         }
 
-        for (let [trader, reputation] of Object.entries(reputations)) {
-          let currentTrader = this.$root.traderDictionary[trader];
-          let maxLoyaltyLevel = currentTrader.loyalty[currentTrader.loyalty.length - 1].level;
+        for (const [trader, reputation] of Object.entries(reputations)) {
+          const currentTrader = this.$root.traderDictionary[trader]
+          const maxLoyaltyLevel = currentTrader.loyalty[currentTrader.loyalty.length - 1].level
           reputation.toNextLevel = reputation.level === maxLoyaltyLevel ? 0 : currentTrader.loyalty[reputation.level].requiredReputation - reputation.value
         }
 
-        let traderCardData = [];
-        for (let [trader, reputation] of Object.entries(reputations)) {
+        const traderCardData = []
+        for (const [trader, reputation] of Object.entries(reputations)) {
           traderCardData.push({
             trader: parseInt(trader),
             loyaltyLevel: reputation.level,
@@ -420,14 +420,14 @@
       },
       // Tally up the data for the map objective completion chart
       mapChartData () {
-        var labels = []
-        var seriesComplete = []
-        var seriesTotal = []
+        const labels = []
+        const seriesComplete = []
+        const seriesTotal = []
 
         // Loop through each map we have in maps.json
         this.$root.mapArray.forEach((map) => {
-          var mapTotal = 0
-          var mapComplete = 0
+          let mapTotal = 0
+          let mapComplete = 0
 
           // Check all the relevant objectives and add
           this.$root.objectiveArray.filter(objective => objective.location == map.id).forEach((objective) => {
@@ -443,21 +443,21 @@
           seriesTotal.push(mapTotal - mapComplete)
         }, this)
 
-        var chartData = {
+        const chartData = {
           labels: labels,
-          series: [seriesComplete, seriesTotal],
+          series: [seriesComplete, seriesTotal]
         }
 
         return chartData
       },
       traderChartData () {
-        var labels = []
-        var seriesComplete = []
-        var seriesTotal = []
+        const labels = []
+        const seriesComplete = []
+        const seriesTotal = []
         // Loop through each trader
         Object.values(this.$root.traderDataDefault).forEach((trader) => {
-          var traderTotal = 0
-          var traderComplete = 0
+          let traderTotal = 0
+          let traderComplete = 0
           // Check all the relevant quests
           this.$root.questArray.filter(quest => quest.giver == trader.id).forEach((quest) => {
             traderTotal++
@@ -471,45 +471,45 @@
           seriesTotal.push(traderTotal - traderComplete)
         }, this)
 
-        var chartData = {
+        const chartData = {
           labels: labels,
-          series: [seriesComplete, seriesTotal],
+          series: [seriesComplete, seriesTotal]
         }
 
         return chartData
       },
       traderReputationData () {
-        const EOD_START_REP = 0.2;
-        let reputations = {
-          'Prapor': 0,
-          'Therapist': 0,
-          'Skier': 0,
-          'Peacekeeper': 0,
-          'Mechanic': 0,
-          'Ragman': 0,
-          'Jaeger': 0,
-        };
+        const EOD_START_REP = 0.2
+        const reputations = {
+          Prapor: 0,
+          Therapist: 0,
+          Skier: 0,
+          Peacekeeper: 0,
+          Mechanic: 0,
+          Ragman: 0,
+          Jaeger: 0
+        }
         for (let i = 0; i < this.questDataDefault.length; i++) {
-          let quest = this.questDataDefault[i];
+          const quest = this.questDataDefault[i]
           if (this.$store.get('progress/quest_complete', quest.id) == true) {
-            for (var j = 0; j < quest.reputation.length; j++) {
-              let trader = quest.reputation[j].trader;
-              reputations[trader] += quest.reputation[j].rep;
+            for (let j = 0; j < quest.reputation.length; j++) {
+              const trader = quest.reputation[j].trader
+              reputations[trader] += quest.reputation[j].rep
             }
           }
         }
-        var chartData = {
+        const chartData = {
           labels: Object.keys(reputations),
           series: [
-            Object.values(reputations).map(value => {return value + EOD_START_REP}),
-            Object.values(reputations),
-          ],
+            Object.values(reputations).map(value => { return value + EOD_START_REP }),
+            Object.values(reputations)
+          ]
         }
-        return chartData;
+        return chartData
       }
     },
     methods: {
-    },
+    }
   }
 </script>
 <style lang="sass">

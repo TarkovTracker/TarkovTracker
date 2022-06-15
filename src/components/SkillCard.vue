@@ -48,14 +48,14 @@
   export default {
     name: 'SkillCard',
     props: {
-      skillDetails: Object,
+      skillDetails: Object
     },
     data () {
       return {
       }
     },
     methods: {
-    },
+    }
   }
 </script>
 <style lang="sass">

@@ -243,7 +243,7 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-expansion-panels 
+      <v-expansion-panels
         class="mx-3 mt-2"
         inset
       >
@@ -264,7 +264,7 @@
                 >
                   <v-fade-transition leave-absolute>
                     <span v-if="!open">
-                      Hiding {{ totalHidden }} quests 
+                      Hiding {{ totalHidden }} quests
                       <span v-if="onlyKappa && filterCounts.kappa > 0">
                         ({{ filterCounts.kappa }} Non-Kappa)
                       </span>
@@ -275,7 +275,7 @@
                         - Hiding {{ $root.team.filter(teammate => teammate.hide).length }} teammates
                       </span>
                     </span>
-                    
+
                   </v-fade-transition>
                 </v-col>
               </v-row>
@@ -294,7 +294,7 @@
               no-gutters
               class="mt-1 ml-auto mr-auto"
             >
-              <v-col 
+              <v-col
                 lg="3"
                 md="8"
                 xs="12"
@@ -417,7 +417,7 @@
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
-      <v-expansion-panels 
+      <v-expansion-panels
         class="mx-3 mt-3"
         inset
         v-show = "(bringKeys.length > 0 && activeViewTab == 1 && activeAvailableTab == 0) || (Object.keys(bringItems).length != 0 && activeViewTab == 1 && activeAvailableTab == 0)"
@@ -436,7 +436,7 @@
                   cols="auto"
                   class="text--secondary ml-auto mr-auto"
                 >
-                  Items to bring  
+                  Items to bring
                 </v-col>
               </v-row>
             <template v-slot:actions>
@@ -450,7 +450,7 @@
           >
               <v-row>
                 <!-- If we have keys needed, set up the grid for that -->
-                <v-col 
+                <v-col
                   v-if="bringKeys.length > 0 && activeViewTab == 1 && activeAvailableTab == 0"
                   :lg="3"
                   :sm="12"
@@ -483,7 +483,7 @@
                 </v-col>
 
                 <!-- If we have items needed, set up that grid -->
-                <v-col 
+                <v-col
                   v-if="Object.keys(bringItems).length != 0 && activeViewTab == 1 && activeAvailableTab == 0"
                   :lg="3"
                   :sm="12"
@@ -501,7 +501,7 @@
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
-      <v-expansion-panels 
+      <v-expansion-panels
         class="mx-3 mt-3"
         inset
         v-if = "activeViewTab == 1 && activeAvailableTab == 0 && activeMapTab < (maps.length - 1)"
@@ -525,14 +525,14 @@
                   class="text--secondary mx-auto"
                   v-if="$root.mapDictionary[activeMapTab].svg == null && showObjectiveMap == undefined"
                 >
-                  No map yet available for {{ maps[activeMapTab] }}  
+                  No map yet available for {{ maps[activeMapTab] }}
                 </v-col>
                 <v-col
                   align="center"
                   class="text--secondary mx-auto"
                   v-if="$root.mapDictionary[activeMapTab].svg != null"
                 >
-                  <span 
+                  <span
                     v-if="mapObjectiveCount > 0"
                   >
                     {{ mapObjectiveCount }} objectives mapped
@@ -675,15 +675,15 @@
 </template>
 
 <script>
-  import orderBy from 'lodash/orderBy';
+  import orderBy from 'lodash/orderBy'
   export default {
     props: {
       viewType: {
-        type: String,
+        type: String
       },
       subView: {
-        type: String,
-      },
+        type: String
+      }
     },
     data () {
       return {
@@ -694,14 +694,14 @@
         activeAvailableTab: 0,
         fullscreenMap: false,
         views: [
-          {title: 'All', icon: 'mdi-clipboard-check'},
-          {title: 'Maps', icon: 'mdi-compass'},
-          {title: 'Traders', icon: 'mdi-account'}
+          { title: 'All', icon: 'mdi-clipboard-check' },
+          { title: 'Maps', icon: 'mdi-compass' },
+          { title: 'Traders', icon: 'mdi-account' }
         ],
         availabilities: [
-          {title: 'Available', icon: 'mdi-clipboard-text'},
-          {title: 'Locked', icon: 'mdi-lock'},
-          {title: 'Completed', icon: 'mdi-clipboard-check'}
+          { title: 'Available', icon: 'mdi-clipboard-text' },
+          { title: 'Locked', icon: 'mdi-lock' },
+          { title: 'Completed', icon: 'mdi-clipboard-check' }
         ],
         filterCounts: {
           kappa: 0,
@@ -716,7 +716,7 @@
           { title: 'With Normal Sorting', value: 0 },
           { title: 'Before My Quests', value: 1 },
           { title: 'After My Quests', value: 2 }
-        ],
+        ]
       }
     },
     metaInfo: {
@@ -726,11 +726,11 @@
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'Find quests, plan your raid, and collaborate with your team to complete tasks. All the information you\'ll need including items to bring!' },
-      ],
+        { name: 'description', content: 'Find quests, plan your raid, and collaborate with your team to complete tasks. All the information you\'ll need including items to bring!' }
+      ]
     },
     computed: {
-      maps: function() {
+      maps: function () {
         return this.$root.mapArray.reduce((acc, x) => acc.concat(x.locale.en), []).concat('Global')
       },
       onlyKappa: {
@@ -739,7 +739,7 @@
         },
         set (value) {
           this.$store.set('user/onlyKappa', value)
-        },
+        }
       },
       onlyLevels: {
         get () {
@@ -747,7 +747,7 @@
         },
         set (value) {
           this.$store.set('user/onlyLevels', value)
-        },
+        }
       },
       selfLevel: {
         get () {
@@ -755,7 +755,7 @@
         },
         set (value) {
           this.$store.set('progress/level', value)
-        },
+        }
       },
       primarySort: {
         get () {
@@ -763,7 +763,7 @@
         },
         set (value) {
           this.$store.set('user/primarySort', value)
-        },
+        }
       },
       teamSort: {
         get () {
@@ -771,7 +771,7 @@
         },
         set (value) {
           this.$store.set('user/teamSort', value)
-        },
+        }
       },
       activeViewTab: {
         get () {
@@ -779,7 +779,7 @@
         },
         set (value) {
           this.$store.set('user/questViewTab', value)
-        },
+        }
       },
       activeMapTab: {
         get () {
@@ -787,7 +787,7 @@
         },
         set (value) {
           this.$store.set('user/questMapTab', value)
-        },
+        }
       },
       activeTraderTab: {
         get () {
@@ -795,7 +795,7 @@
         },
         set (value) {
           this.$store.set('user/questTraderTab', value)
-        },
+        }
       },
       showObjectiveMap: {
         get () {
@@ -804,26 +804,26 @@
         },
         set (value) {
           this.showObjectiveMapOverride = value
-        },
+        }
       },
-      mapObjectiveCount: function() {
+      mapObjectiveCount: function () {
         return this.primaryQuests
             .reduce((acc, x) => acc.concat(x.objectives), [])
             .filter(objective => 'gps' in objective && 'floor' in objective.gps)
             .length
       },
-      showAnyFromTeam() {
+      showAnyFromTeam () {
         return (this.activeTeamTab == 0 && this.visibleTeam.length > 1) || this.visibleTeam.length == 1
       },
-      totalHidden: function() {
+      totalHidden: function () {
         return Object.values(this.filterCounts).reduce((a, b) => a + b, 0)
       },
-      traders: function() {
+      traders: function () {
         return Object.values(this.traderDataDefault) // Get an array of traders
           .filter(trader => trader.id != 7) // Remove Fence from that array
       },
-      primarySortOrder: function() {
-        switch(this.primarySort) {
+      primarySortOrder: function () {
+        switch (this.primarySort) {
           case 0:
             return 'desc'
 
@@ -834,144 +834,144 @@
             return 'desc'
         }
       },
-      visibleTeam: function() {
-        if(this.$root.team.length > 1) {
+      visibleTeam: function () {
+        if (this.$root.team.length > 1) {
           return ['Team', ...this.$root.team]
-        }else{
+        } else {
           return this.$root.team
         }
       },
-      filteredQuests: function() {
+      filteredQuests: function () {
         // Get a copy of all quests
-        var quests = this.$root.questArrayCopy()
+        let quests = this.$root.questArrayCopy()
 
-        switch(this.activeViewTab) {
+        switch (this.activeViewTab) {
           case 0: // The 'All' view
-            break;
+            break
 
           case 1: // The 'Maps' view
             // Global should always be the last tab
-            if( this.activeMapTab == (this.maps.length - 1) ) {
+            if (this.activeMapTab == (this.maps.length - 1)) {
               // We want to see global quests
               quests = quests.filter(quest => this.isQuestOnMap(quest) != false)
-            }else{
+            } else {
               quests = quests.filter(quest => this.$root.questsByMap[this.activeMapTab].has(quest.id))
               quests = quests.map(quest => this.isQuestOnMap(quest, this.activeMapTab))
             }
-            break;
+            break
 
           case 2: // The 'Traders' view
             quests = quests.filter(quest => quest.giver == this.traders[this.activeTraderTab].id)
-            break;
+            break
 
           default:
 
-            break;
+            break
         }
 
-        switch(this.activeAvailableTab) {
+        switch (this.activeAvailableTab) {
           case 0: // The 'Available' view
-            if ( this.showAnyFromTeam ) {
+            if (this.showAnyFromTeam) {
               // Were viewing ourself, normal use case, show everything available currently
               quests = quests.filter(quest => Object.values(this.$root.questAvailability[quest.id]).includes(0))
-            }else{
+            } else {
               // We specifically want to see what another teammate has available
               quests = quests.filter(quest => this.$root.questAvailability[quest.id][this.activeTeamTab - 1] == 0)
             }
 
             // If we're choosing to limit by levels
             if (this.onlyLevels) {
-              var beforeCount = quests.length
-              if (this.showAnyFromTeam ) {
+              const beforeCount = quests.length
+              if (this.showAnyFromTeam) {
                 // Check if any member who has the quest available is also level appropriate
                 quests = quests.filter(quest => this.$root.team.some((teammate, index) => {
                   return this.$root.questAvailability[quest.id][index] == 0 &&
                   this.$root.levelAvailability[quest.id][index] == true
                 }))
-              }else{
+              } else {
                 quests = quests.filter(quest => this.$root.levelAvailability[quest.id][this.activeTeamTab - 1] == true)
               }
-              
+
               // This isn't good form for computed properties, but this needs a larger refactor to fix it
-              // eslint-disable-next-line vue/no-side-effects-in-computed-properties 
+              // eslint-disable-next-line vue/no-side-effects-in-computed-properties
               this.filterCounts.level = beforeCount - quests.length
-            }else{
+            } else {
               // This isn't good form for computed properties, but this needs a larger refactor to fix it
-              // eslint-disable-next-line vue/no-side-effects-in-computed-properties 
+              // eslint-disable-next-line vue/no-side-effects-in-computed-properties
               this.filterCounts.level = 0
             }
-            break;
+            break
 
           case 1: // The 'Locked' view (show locked specifically for yourself)
-            if ( this.showAnyFromTeam ) {
+            if (this.showAnyFromTeam) {
               // Were viewing ourself, normal use case, show everything available currently
               quests = quests.filter(quest => this.$root.questAvailability[quest.id][0] <= -1)
-            }else{
+            } else {
               // We specifically want to see what another teammate has available
               quests = quests.filter(quest => this.$root.questAvailability[quest.id][this.activeTeamTab - 1] <= -1)
             }
-            break;
+            break
 
           case 2: // The 'Completed' view (show completed specifically for yourself)
-            if ( this.showAnyFromTeam ) {
+            if (this.showAnyFromTeam) {
               // Were viewing ourself, normal use case, show everything available currently
               quests = quests.filter(quest => this.$root.questAvailability[quest.id][0] == 1)
-            }else{
+            } else {
               // We specifically want to see what another teammate has available
               quests = quests.filter(quest => this.$root.questAvailability[quest.id][this.activeTeamTab - 1] == 1)
             }
-            break;
+            break
 
           default:
-            break;
+            break
         }
 
         // Filter out non-kappa quests
-        if(this.onlyKappa) {
-          let beforeCount = quests.length
+        if (this.onlyKappa) {
+          const beforeCount = quests.length
           quests = quests.filter(quest => quest.nokappa != true)
           // This isn't good form for computed properties, but this needs a larger refactor to fix it
-          // eslint-disable-next-line vue/no-side-effects-in-computed-properties 
+          // eslint-disable-next-line vue/no-side-effects-in-computed-properties
           this.filterCounts.kappa = beforeCount - quests.length
-        }else{
+        } else {
           // This isn't good form for computed properties, but this needs a larger refactor to fix it
-          // eslint-disable-next-line vue/no-side-effects-in-computed-properties 
+          // eslint-disable-next-line vue/no-side-effects-in-computed-properties
           this.filterCounts.kappa = 0
         }
 
-        quests = orderBy(quests, [function(quest) { return this.questTeamSort(quest) }.bind(this), function(quest) { return this.questPrimarySort(quest) }.bind(this)], ['asc', this.primarySortOrder])
-        //quests.sort( (a, b) => (this.questPrimarySort(a, b)) || this.questTeamSort(a, b) )
+        quests = orderBy(quests, [function (quest) { return this.questTeamSort(quest) }.bind(this), function (quest) { return this.questPrimarySort(quest) }.bind(this)], ['asc', this.primarySortOrder])
+        // quests.sort( (a, b) => (this.questPrimarySort(a, b)) || this.questTeamSort(a, b) )
 
         return quests
       },
-      primaryQuests: function() {
+      primaryQuests: function () {
         // We're viewing the maps tab, the primary quests are just map specific
         if (this.activeViewTab == 1) {
           return this.filteredQuests.filter(quest => this.isQuestMapSpecific(quest))
-        }else{
+        } else {
           return this.filteredQuests
         }
       },
-      globalQuests: function() {
+      globalQuests: function () {
         if (this.activeViewTab == 1) {
           return this.filteredQuests.filter(quest => this.isQuestMapSpecific(quest) != true)
-        }else{
+        } else {
           return []
         }
       },
       bringItems: function () {
-        var allItems = this.filteredQuests
+        const allItems = this.filteredQuests
           .filter(quest => this.$root.questAvailability[quest.id][0] == 0) // Only include quests that we're on, not teammates
           .reduce((acc, x) => acc.concat(x.objectives), []) // Get a flat list of objectives
           .reduce((items, item) => items.find(x => x.id === item.id) ? [...items] : [...items, item], []) // Filter out duplicate objective IDs in the case of things like Chemical Pt 4
           .filter(y => ['place', 'mark'].indexOf(y.type) >= 0) // Filter them down to things that need items
           .filter(objective => this.$root.objectiveAvailability[objective.id][0] == false) // Only include the item if the objective is incomplete
 
-        var markItems = allItems
+        const markItems = allItems
           .filter(x => x.type == 'mark') // Find all the mark objectives
           .reduce((acc, y) => acc.concat(y.tool), []) // Get the array of tools from mark objectives
 
-        var placeItems = allItems
+        const placeItems = allItems
           .filter(x => x.type == 'place') // Find all the place objectives
           .reduce((acc, y) => acc.concat(Array(y.number).fill(y.target)), []) // Get the array of targets from place objectives, and add it the number of times we need
 
@@ -982,25 +982,25 @@
         return this.filteredQuests
           .reduce((acc, x) => acc.concat(x.objectives), []) // Get a flat list of objectives
           .filter(y => ['key'].indexOf(y.type) >= 0) // Filter them down to key requirements
-      },
+      }
     },
     mounted () {
       if (this.viewType != null) {
-        let validView = this.views.reduce((acc, x) => acc.concat(x.title.toLowerCase()), []).indexOf(this.viewType.toLowerCase())
+        const validView = this.views.reduce((acc, x) => acc.concat(x.title.toLowerCase()), []).indexOf(this.viewType.toLowerCase())
         if (validView >= 0) {
           this.$store.set('user/questViewTab', validView)
         }
       }
 
       if (this.$store.copy('user/questViewTab') == 1 && this.subView != null) {
-        let validView = this.maps.reduce((acc, x) => acc.concat(x.toLowerCase()), []).indexOf(this.viewType.toLowerCase())
+        const validView = this.maps.reduce((acc, x) => acc.concat(x.toLowerCase()), []).indexOf(this.viewType.toLowerCase())
         if (validView >= 0) {
           this.$store.set('user/questMapTab', validView)
         }
       }
 
       if (this.$store.copy('user/questViewTab') == 2 && this.subView != null) {
-        let validView = this.traders.reduce((acc, x) => acc.concat(x.toLowerCase()), []).indexOf(this.viewType.toLowerCase())
+        const validView = this.traders.reduce((acc, x) => acc.concat(x.toLowerCase()), []).indexOf(this.viewType.toLowerCase())
         if (validView >= 0) {
           this.$store.set('user/questTraderTab', validView)
         }
@@ -1024,8 +1024,8 @@
         }
       },
 
-      questPrimarySort: function(a) {
-        switch(this.primarySort) {
+      questPrimarySort: function (a) {
+        switch (this.primarySort) {
           case 0:
             return this.calculateLocked(a)
 
@@ -1033,35 +1033,35 @@
             return a.require.level
 
           default:
-            break;
+            break
         }
         return 0
       },
 
-      questTeamSort: function(a) {
-        switch(this.teamSort) {
+      questTeamSort: function (a) {
+        switch (this.teamSort) {
           case 0:
-            break;
+            break
 
           case 1:
             // Only using this sort when viewing available quests, doesn't make sense on locked or completed
-            if(this.activeAvailableTab == 0) {
+            if (this.activeAvailableTab == 0) {
               return !(this.$root.questAvailability[a.id][0] != 0)
             }
-            break;
+            break
 
           case 2:
-            if(this.activeAvailableTab == 0) {
+            if (this.activeAvailableTab == 0) {
               return (this.$root.questAvailability[a.id][0] != 0)
             }
-            break;
+            break
 
           default:
-            break;
+            break
         }
         return 0
       }
-    },
+    }
   }
 </script>
 <style lang="sass">

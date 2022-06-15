@@ -37,27 +37,27 @@
     props: {
       data: {
         type: Object,
-        default: () => ({}),
+        default: () => ({})
       },
       eventHandlers: {
         type: Array,
-        default: () => ([]),
+        default: () => ([])
       },
       options: {
         type: Object,
-        default: () => ({}),
+        default: () => ({})
       },
       ratio: String,
       responsiveOptions: {
         type: Array,
-        default: () => ([]),
+        default: () => ([])
       },
       type: {
         type: String,
         required: true,
-        validator: v => ['Bar', 'Line', 'Pie'].includes(v),
-      },
-    },
+        validator: v => ['Bar', 'Line', 'Pie'].includes(v)
+      }
+    }
   }
 </script>
 

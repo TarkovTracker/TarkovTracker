@@ -52,8 +52,8 @@
         { title: 'Profile' },
         { title: 'Settings' },
         { divider: true },
-        { title: 'Log out' },
-      ],
-    }),
+        { title: 'Log out' }
+      ]
+    })
   }
 </script>

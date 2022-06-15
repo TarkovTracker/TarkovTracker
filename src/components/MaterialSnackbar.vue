@@ -29,18 +29,18 @@
     props: {
       dismissible: {
         type: Boolean,
-        default: true,
+        default: true
       },
       type: {
         type: String,
-        default: '',
+        default: ''
       },
-      value: Boolean,
+      value: Boolean
     },
 
     data () {
       return {
-        internalValue: this.value,
+        internalValue: this.value
       }
     },
 
@@ -54,8 +54,8 @@
         if (val === oldVal) return
 
         this.internalValue = val
-      },
-    },
+      }
+    }
   }
 </script>
 

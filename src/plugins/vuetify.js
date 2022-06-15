@@ -16,7 +16,7 @@ const colorTheme = {
   success: '#242F35',
   warning: '#242F35',
   error: '#FF0000',
-  failure: '#540000',
+  failure: '#540000'
 
 }
 
@@ -51,14 +51,14 @@ const themeDark = {
 export default new Vuetify({
   breakpoint: { mobileBreakpoint: 960 },
   icons: {
-    values: { expand: 'mdi-menu-down' },
+    values: { expand: 'mdi-menu-down' }
   },
   theme: {
     dark: localstore.get('app/dark'),
     options: { customProperties: true },
     themes: {
       dark: themeDark,
-      light: themeLight,
-    },
-  },
+      light: themeLight
+    }
+  }
 })
