@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "run-s watch",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
+    "lint": "eslint src/ --ext .js,.vue",
     "deploy": "run-s build deploy:firebase",
     "browsersync": "sleep 15 && browser-sync start --port 5000 --proxy \"localhost:4999\" --files \"dist/*\"",
     "build:dev": "vue-cli-service build --mode development",
