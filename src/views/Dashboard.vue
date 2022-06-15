@@ -5,20 +5,6 @@
       tag="section"
     >
       <v-row>
-        <v-col>
-          <v-banner
-            outlined
-            rounded
-            icon="mdi-bullhorn-outline"
-            color="blue"
-            class="text-center"
-          >
-            <div>TarkovTracker and several other community tools are working on updating for the .12.12 patch.</div>
-            <div>If you see any incorrect or outdated information, please let us know on <span style="white-space:nowrap"><v-icon dark>mdi-discord</v-icon><a href="https://discord.gg/zeAP4Ng">Discord</a> or <v-icon dark>mdi-github</v-icon><a href="http://tarkovdata.io">GitHub</a></span></div>
-          </v-banner>
-        </v-col>
-      </v-row>
-      <v-row>
         <v-col cols="12">
           <v-row>
             <v-col
