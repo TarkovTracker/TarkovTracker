@@ -152,7 +152,7 @@
                     cols="4"
                     class="text-center"
                   >
-                    <v-icon>mdi-calendar-clock</v-icon> Created {{ ($store.get('firesys/team@createdAt').toDate() | timeSince(nowTime) || '') }}
+                    <v-icon>mdi-calendar-clock</v-icon> Created {{ $store.get('firesys/team@createdAt').toDate() | timeSince(nowTime) }}
                   </v-col>
                 </v-row>
               </v-container>
