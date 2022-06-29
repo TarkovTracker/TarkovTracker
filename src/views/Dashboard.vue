@@ -5,6 +5,20 @@
       tag="section"
     >
       <v-row>
+        <v-col>
+          <v-banner
+            outlined
+            rounded
+            icon="mdi-bullhorn-outline"
+            color="info"
+            class="text-center secondary black--text"
+          >
+            <div>TarkovTracker is actively being updated for the 12.12.30 wipe as new quest data becomes available.</div>
+            <div>If you see any incorrect or outdated information, please let us know on <span style="white-space:nowrap"><v-icon dark>mdi-discord</v-icon><a href="https://discord.gg/zeAP4Ng">Discord</a> or <v-icon dark>mdi-github</v-icon><a href="http://tarkovdata.io">GitHub</a></span></div>
+          </v-banner>
+        </v-col>
+      </v-row>
+      <v-row>
         <v-col cols="12">
           <v-row>
             <v-col
