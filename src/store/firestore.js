@@ -74,11 +74,11 @@ const store = new Vuex.Store({
     }),
 
     // Team Bind and Unbind
-    bindFiresys: firestoreAction(({ bindFirestoreRef }) => {
-      return bindFirestoreRef('firesys', db.collection('system').doc(fireapp.auth().currentUser.uid), { maxRefDepth: 1 })
+    bindFiresys: firestoreAction(async ({ bindFirestoreRef }) => {
+        bindFirestoreRef('firesys', db.collection('system').doc(fireapp.auth().currentUser.uid), { maxRefDepth: 1, wait: false })
     }),
     unbindFiresys: firestoreAction(({ unbindFirestoreRef }) => {
-      unbindFirestoreRef('firesys')
+        unbindFirestoreRef('firesys')
     })
   }
 })
