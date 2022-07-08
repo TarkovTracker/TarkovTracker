@@ -1,6 +1,6 @@
 {
   "name": "tarkov-tracker",
-  "version": "2.3.20",
+  "version": "2.3.21",
   "private": true,
   "scripts": {
     "serve": "run-s watch",
