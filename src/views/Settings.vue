@@ -1021,6 +1021,7 @@
               } else {
                 this.$store.set('user/useTeammates', true)
                 this.$router.push({ path: '/settings' })
+                this.$store.set('bindFiresys!')
               }
             }, this)
         } else {
@@ -1111,6 +1112,7 @@
           .then(() => {
             // Read result of the Cloud Function.
             this.creatingTeam = false
+            this.$store.set('bindFiresys!')
           }, this)
       },
       leaveTeam () {
@@ -1120,6 +1122,7 @@
           .then(() => {
             // Read result of the Cloud Function.
             this.leavingTeam = false
+            this.$store.set('bindFiresys!')
           }, this)
       },
       kickTeammate (teammate) {
