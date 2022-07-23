@@ -63,9 +63,10 @@
       <span v-else-if="questObjective.type === 'skill'">Reach skill level <b>{{ questObjective.number }}</b> with {{
           questObjective.target
       }}</span>
-      <span v-else-if="questObjective.type === 'locate'">Locate <b>{{ questObjective.target }}</b> on {{
-          locationLanguage
-      }}</span>
+      <span v-else-if="questObjective.type === 'locate'">
+          Locate <b>{{ questObjective.target }}</b> <span v-if="questObjective.hint">({{ questObjective.hint }})</span> 
+          on {{ locationLanguage }}
+      </span>
       <span v-else-if="questObjective.type === 'build'">
         Build <b>
           <tarkov-item :id="questObjective.target" format="minimal" />
