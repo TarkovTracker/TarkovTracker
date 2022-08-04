@@ -17,28 +17,32 @@ const verifyBearer = async (req, res, next) => {
 
 	// If no auth, 401
 	if (authHeader == null) {
-		res.status(401).send()
+		res.status(401).json({"error": "No Authorization header sent"}).send()
 	}
 
 	// If auth broken, 400
 	if (authHeader.split(' ')[1] == null) {
-		res.status(400).send()
+		res.status(400).json({"error": "No bearer token set"}).send()
 	}else{
 		var authToken = authHeader.split(' ')[1]
 	}
 
 	// Check if token is valid
-	const tokenRef = db.collection('token').doc(authToken);
-	const tokenDoc = await tokenRef.get();
-	if (tokenDoc.exists) {
-		const callIncrement = admin.firestore.FieldValue.increment(1);
-		tokenRef.update({ calls: callIncrement });
-		req.apiToken = tokenDoc.data()
-		next()
-	}else{
-		res.status(401).send()
+	try {
+		const tokenRef = db.collection('token').doc(authToken);
+		const tokenDoc = await tokenRef.get();
+		if (tokenDoc.exists) {
+			const callIncrement = admin.firestore.FieldValue.increment(1);
+			tokenRef.update({ calls: callIncrement });
+			req.apiToken = tokenDoc.data()
+			next()
+		}else{
+			res.status(401).send()
+		}
+	}catch (error) {
+		functions.logger.error("Unknown error with Authorization header:", authHeader);
+		res.status(400).json({"error": "Unknown error with Authorization header"}).send()
 	}
-
 
 }
 
@@ -126,11 +130,11 @@ app.get('/api/v1/team/progress', async (req, res) => {
     var userDoc = null;
 
     var systemPromise = systemRef.get().then((result) => {
-    	systemDoc = result
+			systemDoc = result
     })
 
     var userPromise = userRef.get().then((result) => {
-    	userDoc = result
+			userDoc = result
     })
 
 		// Get the system and user doc simultaneously
