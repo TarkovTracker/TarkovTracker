@@ -199,9 +199,9 @@ export default {
           unlockers.delete(unlockQuestId)
         }
       })
-
+      
       // Map the uncompleted unlockers to their respective quests and return
-      return [...unlockers].map(x => this.questDataDefault[x])
+      return [...unlockers].map(x => this.$root.questDictionaryId[x]);
     },
 
     myselfCalculateUnlocked (quest) {
