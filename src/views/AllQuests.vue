@@ -518,7 +518,7 @@
                 align="center"
               >
                 <v-col cols="auto">
-                  Objective Map
+                  Objective Map <span v-show="this.activeMapTab != this.mapDataDefault.factory.id">{{ timeValue }}</span>
                 </v-col>
                 <v-col
                   cols="auto"
@@ -693,6 +693,8 @@
         activeTeamTab: 0,
         activeAvailableTab: 0,
         fullscreenMap: false,
+        timeValue: '',
+        timeCounter: 0,
         views: [
           { title: 'All', icon: 'mdi-clipboard-check' },
           { title: 'Maps', icon: 'mdi-compass' },
@@ -1061,6 +1063,33 @@
         }
         return 0
       }
+    },
+
+    watch: {
+        timeCounter: {
+            handler(value) {
+                setTimeout(() => {
+                    var oneHour = 60*60*1000;
+                    var currentDate = new Date();
+
+                    // Tarkov's time runs at 7 times the speed ...
+                    var timeAtTarkovSpeed = (currentDate.getTime() * 7) % (24*oneHour);
+                    // ... and it is offset by 3 hours from UTC (because that's Moscow's time zone)
+                    var tarkovTime = new Date(timeAtTarkovSpeed + (3*oneHour));
+
+                    var tarkovHour = tarkovTime.getUTCHours();
+                    var tarkovMinute = tarkovTime.getUTCMinutes();
+                    var tarkovSecondHour = (tarkovHour+12) % 24;
+
+                    this.timeValue = 
+                        tarkovHour.toString().padStart(2,'0')+':'+tarkovMinute.toString().padStart(2,'0')
+                        +" / "+
+                        tarkovSecondHour.toString().padStart(2,'0')+':'+tarkovMinute.toString().padStart(2,'0');
+                    this.timeCounter++;
+                }, 3000);
+            },
+            immediate: true
+        }
     }
   }
 </script>
