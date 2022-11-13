@@ -9,6 +9,10 @@ service cloud.firestore {
     match /progress/{userId} {
       allow read, update, delete, create: if request.auth != null && request.auth.uid == userId;
     }
+
+    match /level/{userId} {
+      allow read, update, delete, create: if request.auth != null && request.auth.uid == userId;
+    }
     
     match /user/{userId} {
       allow read, update, delete, create: if request.auth != null && request.auth.uid == userId;
