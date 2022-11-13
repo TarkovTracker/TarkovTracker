@@ -1,0 +1,59 @@
+{
+  // This file supports JSON5 notation. See https://json5.org/
+  hello_world: 'Hallo Welt!',
+  site_name: 'Tarkov Tracker',
+  app_bar: {
+    overflow_menu: {
+      language: 'Sprache'
+    }
+  },
+  page: {
+    dashboard: {
+      title: 'Armaturenbrett',
+      stats: {
+        allQuests: {
+          stat: 'Erledigte Quests',
+          details: 'Die Anzahl der Quests, die Sie abgeschlossen haben.'
+        },
+        questItems: {
+          stat: 'Quest-Gegenstände',
+          details: 'Beinhaltet FIR- und Nicht-FIR-Sammlungselemente.'
+        },
+        allObjectives: {
+          stat: 'Quest-Ziele',
+          details: 'Die Gesamtheit der einzigartigen Ziele innerhalb der Quests.'
+        }
+      }
+    },
+    settings: {
+      title: 'Einstellungen'
+    },
+    login: {
+      title: 'Anmeldung'
+    },
+    not_found: {
+      title: 'Seite nicht gefunden',
+      not_found_description: 'Entschuldigung, diese Seite konnte nicht gefunden werden!'
+    }
+  },
+  footer: {
+    call_to_action: {
+      discord_phrase: 'Melden Sie Fehler/fordern Sie Funktionen auf {discord} an',
+      github_phrase: 'Tragen Sie zum Open-Source-Projekt auf {github} bei',
+      patreon_phrase: 'Unterstütze das Projekt auf {patreon}',
+      discord: 'Discord',
+      github: 'GitHub',
+      patreon: 'Patreon',
+    },
+    ukraine: {
+      support_link: 'Unterstützen Sie die Ukraine',
+      support_phrase: '{support_ukraine} über das ICRC'
+    }
+  },
+  navigation_drawer: {
+    home: 'Heim',
+    settings: 'Einstellungen',
+    login: 'Einloggen',
+    level: 'Ebene',
+  }
+}

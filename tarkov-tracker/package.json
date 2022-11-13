@@ -1,0 +1,49 @@
+{
+  "name": "tarkov-tracker",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "serve": "vite preview",
+    "build": "vite build",
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src",
+    "dev": "vite",
+    "format": "prettier .  --write",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.6.9",
+    "@mdi/font": "5.9.55",
+    "@vue/apollo-composable": "^4.0.0-alpha.18",
+    "@vueuse/core": "^8.7.3",
+    "chart.js": "^3.8.0",
+    "firebase": "^9.8.3",
+    "firebaseui": "^6.0.1",
+    "graphql": "^16.5.0",
+    "graphql-tag": "^2.12.6",
+    "lodash-es": "^4.17.21",
+    "pinia": "^2.0.14",
+    "pinia-plugin-persistedstate": "^1.6.1",
+    "roboto-fontface": "*",
+    "vue": "^3.2.25",
+    "vue-chartjs": "^4.1.1",
+    "vue-i18n": "^9.1.10",
+    "vue-router": "^4.0.16",
+    "vuetify": "^3.0.0-beta.10",
+    "webfontloader": "^1.0.0"
+  },
+  "devDependencies": {
+    "@intlify/vite-plugin-vue-i18n": "^3.4.0",
+    "@vitejs/plugin-vue": "^2.3.3",
+    "eslint": "^8.17.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-vue": "^9.1.1",
+    "prettier": "2.6.2",
+    "sass": "^1.52.3",
+    "vite": "^2.9.9",
+    "vite-plugin-eslint": "^1.6.1",
+    "vite-plugin-firebase": "^0.3.2",
+    "vite-plugin-vuetify": "^1.0.0-alpha.0",
+    "vue-cli-plugin-vuetify": "~2.5.1",
+    "vue-eslint-parser": "^9.0.2"
+  }
+}
