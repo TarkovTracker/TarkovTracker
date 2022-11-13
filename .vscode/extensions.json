@@ -1,0 +1,7 @@
+{
+  "recommendations": [
+    "apollographql.vscode-apollo",
+    "vue.volar",
+    "antfu.vite"
+  ]
+}
