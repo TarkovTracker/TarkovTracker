@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { computed, watch} from 'vue'
+import {  watch} from 'vue'
 import { fireuser } from '@/plugins/firebase'
 //import { set } from 'lodash-es'
 
@@ -49,12 +49,12 @@ let actions = {
   }
 }
 
-const useRemoteTarkovStore = defineStore('remoteTarkov', {
+export const useTarkovStore = defineStore('swapTarkov', {
   // Use the shared default state
   state: () => (JSON.parse(JSON.stringify(defaultState))),
   getters: getters,
   actions: actions,
-  firestore: [
+  fireswap: [
     {
         // The JSON path of the store to bind to
         path: '.',
@@ -62,59 +62,54 @@ const useRemoteTarkovStore = defineStore('remoteTarkov', {
         document: 'progress/{uid}',
         // The number of miliseconds to debounce changes to the firestore document
         debouncems: 250,
-    },
-    {
-      path: 'testPath',
-      document: 'level/{uid}',
-      debouncems: 250,
+        // The local storage key to persist the store to when unbound
+        localKey: 'progress',
     }
     ]
   }
 )
 
-const useLocalTarkovStore = defineStore('localTarkov', {
-  // Use the shared default state
-  state: () => (JSON.parse(JSON.stringify(defaultState))),
-  // Create a new copy of the getters and actions
-  getters: getters,
-  actions: actions,
-  persist: {
-    // Persist the local version in localstore under this key
-    key: 'localTarkov',
-  }
-})
+// const useLocalTarkovStore = defineStore('localTarkov', {
+//   // Use the shared default state
+//   state: () => (JSON.parse(JSON.stringify(defaultState))),
+//   // Create a new copy of the getters and actions
+//   getters: getters,
+//   actions: actions,
+//   persist: {
+//     // Persist the local version in localstore under this key
+//     key: 'localTarkov',
+//   }
+// })
 
 // Watch for fireuser state changing and bind/unbind the remoteTarkov store
 watch(
   () => fireuser.loggedIn,
   (newValue) => {
-    const remoteTarkovStore = useRemoteTarkovStore()
+    const tarkovStore = useTarkovStore()
     if(newValue) {
-      if (typeof remoteTarkovStore.firebindAll === 'function') {
+      if (typeof tarkovStore.firebindAll === 'function') {
         console.log("Bound remoteTarkov store")
-        remoteTarkovStore.firebindAll()
+        tarkovStore.firebindAll()
       } else {
         console.log("No remoteTarkov store to bind")
       }
     }else{
-      if (typeof remoteTarkovStore.fireunbindAll === 'function') {
+      if (typeof tarkovStore.fireunbindAll === 'function') {
         console.log("Unbound remoteTarkov store")
-        remoteTarkovStore.fireunbindAll()
+        tarkovStore.fireunbindAll()
       } else {
         console.log("No remoteTarkov store to unbind")
       }
     }
   },
-  // Immediately trigger the watch
-  { immediate: true }
 )
 
 
 
 // Select the store to utilize based on the current user's state
-const whichStore = computed(() => {
-  return fireuser.loggedIn ? useRemoteTarkovStore() : useLocalTarkovStore()
-})
 
 // Export the selected store as a function which looks like normal pinia usage
-export function useTarkovStore() {return whichStore}
+// export function useTarkovStore() {return computed(() => {
+//   return fireuser.loggedIn ? usetarkovStore() : useLocalTarkovStore()
+// })
+// }

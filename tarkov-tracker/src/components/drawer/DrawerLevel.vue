@@ -46,7 +46,7 @@ const { mdAndDown } = useDisplay()
 const tarkovStore = useTarkovStore();
 const appStore = useAppStore();
 
-const groupIcon = computed(() => { return `/img/levelgroups/${Math.floor(tarkovStore.value.playerLevel / 5) + 1}.png` })
+const groupIcon = computed(() => { return `/img/levelgroups/${Math.floor(tarkovStore.playerLevel / 5) + 1}.png` })
 
 </script>
 <style lang="scss" scoped>
