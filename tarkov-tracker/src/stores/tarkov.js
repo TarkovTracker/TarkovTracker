@@ -69,18 +69,6 @@ export const useTarkovStore = defineStore('swapTarkov', {
   }
 )
 
-// const useLocalTarkovStore = defineStore('localTarkov', {
-//   // Use the shared default state
-//   state: () => (JSON.parse(JSON.stringify(defaultState))),
-//   // Create a new copy of the getters and actions
-//   getters: getters,
-//   actions: actions,
-//   persist: {
-//     // Persist the local version in localstore under this key
-//     key: 'localTarkov',
-//   }
-// })
-
 // Watch for fireuser state changing and bind/unbind the remoteTarkov store
 watch(
   () => fireuser.loggedIn,
@@ -103,13 +91,3 @@ watch(
     }
   },
 )
-
-
-
-// Select the store to utilize based on the current user's state
-
-// Export the selected store as a function which looks like normal pinia usage
-// export function useTarkovStore() {return computed(() => {
-//   return fireuser.loggedIn ? usetarkovStore() : useLocalTarkovStore()
-// })
-// }
