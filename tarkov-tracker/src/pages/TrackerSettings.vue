@@ -1,14 +1,26 @@
 <template>
   <v-container>
     <v-row justify="center">
-      <v-col
-        v-if="fireuser.uid != null"
-        cols="12"
-        sm="8"
-        md="6"
-        lg="4"
-        xl="4"
-      >
+      <v-col v-if="fireuser.uid != null" cols="12" sm="12" md="12" lg="12" xl="12">
+        <icon-card icon="mdi-key-chain" icon-background="tertiary" icon-color="white">
+          <template #stat>
+            {{ $t('page.settings.card.apitokens.title') }}
+          </template>
+          <template #content>
+            <i18n-t keypath="page.settings.card.apitokens.description">
+              <template #openAPI_documentation>
+                <a href="https://tarkovtracker.github.io/TarkovTracker/" target="_blank" class="info-link">
+                  <v-icon class="mr-1" size="16">mdi-file-document</v-icon>{{
+                      $t('page.settings.card.apitokens.openAPI_documentation')
+                  }}
+                </a>
+              </template>
+            </i18n-t>
+            <api-tokens />
+          </template>
+        </icon-card>
+      </v-col>
+      <v-col v-if="fireuser.uid != null" cols="12" sm="8" md="6" lg="4" xl="4">
         <icon-card icon="mdi-eye" icon-background="secondary" icon-color="white">
           <template #stat>
             {{ $t('page.settings.card.streamermode.title') }}
@@ -18,25 +30,16 @@
             <v-container>
               <v-row justify="center">
                 <v-col cols="12">
-                  <v-switch
-                    v-model="streamerMode"
-                    hide-details
-                    density="compact"
-                    :label="streamerMode ? $t('page.settings.card.streamermode.modeOn') : $t('page.settings.card.streamermode.modeOff')"
-                  ></v-switch>
+                  <v-switch v-model="streamerMode" hide-details density="compact"
+                    :label="streamerMode ? $t('page.settings.card.streamermode.modeOn') : $t('page.settings.card.streamermode.modeOff')">
+                  </v-switch>
                 </v-col>
               </v-row>
             </v-container>
           </template>
         </icon-card>
       </v-col>
-      <v-col
-        cols="12"
-        sm="8"
-        md="6"
-        lg="4"
-        xl="4"
-      >
+      <v-col cols="12" sm="8" md="6" lg="4" xl="4">
         <icon-card icon="mdi-gift-open" icon-background="secondary" icon-color="white">
           <template #stat>
             {{ $t('page.settings.card.gameedition.title') }}
@@ -46,27 +49,15 @@
             <v-container>
               <v-row justify="center">
                 <v-col cols="12">
-                  <v-select
-                    v-model="currentGameEdition"
-                    density="compact"
-                    :items="gameEditions"
-                    :label="$t('page.settings.card.gameedition.select')"
-                    variant="outlined"
-                    hide-details
-                  ></v-select>
+                  <v-select v-model="currentGameEdition" density="compact" :items="gameEditions"
+                    :label="$t('page.settings.card.gameedition.select')" variant="outlined" hide-details></v-select>
                 </v-col>
               </v-row>
             </v-container>
           </template>
         </icon-card>
       </v-col>
-      <v-col
-        cols="12"
-        sm="8"
-        md="6"
-        lg="4"
-        xl="4"
-      >
+      <v-col cols="12" sm="8" md="6" lg="4" xl="4">
         <icon-card icon="mdi-restart-alert" icon-background="warning" icon-color="white">
           <template #stat>
             {{ $t('page.settings.card.reset.title') }}
@@ -95,33 +86,45 @@ import { useTarkovStore } from "@/stores/tarkov.js";
 const IconCard = defineAsyncComponent(() =>
   import("@/components/IconCard.vue")
 )
+const ApiTokens = defineAsyncComponent(() =>
+  import("@/components/settings/ApiTokens.vue")
+)
 const tarkovStore = useTarkovStore();
 
 const gameEditions = [
-          { title: 'Standard Edition', value: 1 },
-          { title: 'Left Behind Edition', value: 2 },
-          { title: 'Prepare for Escape Edition', value: 3 },
-          { title: 'Edge of Darkness Limited Edition', value: 4 }
+  { title: 'Standard Edition', value: 1 },
+  { title: 'Left Behind Edition', value: 2 },
+  { title: 'Prepare for Escape Edition', value: 3 },
+  { title: 'Edge of Darkness Limited Edition', value: 4 }
 ]
 
 const currentGameEdition = computed({
   get() {
-    return tarkovStore.value.getGameEdition
+    return tarkovStore.getGameEdition
   },
   set(newValue) {
-    tarkovStore.value.setGameEdition(newValue)
+    tarkovStore.setGameEdition(newValue)
   }
 })
 
 const streamerMode = computed({
   get() {
-    return tarkovStore.value.getStreamerMode
+    return tarkovStore.getStreamerMode
   },
   set(newValue) {
-    tarkovStore.value.setStreamerMode(newValue)
+    tarkovStore.setStreamerMode(newValue)
   }
 })
 
 </script>
 <style lang="scss" scoped>
+a:link,
+a:active,
+a:visited {
+  color: rgba(var(--v-theme-link), 1)
+}
+
+.info-link {
+  text-decoration: none;
+}
 </style>

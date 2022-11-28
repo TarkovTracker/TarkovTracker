@@ -12,7 +12,9 @@ import { createVuetify } from 'vuetify'
 const colorTheme = {
   primary: '#0A0A09',
   secondary: '#9A8866',
+  secondary_dark: '#2c261c',
   accent: '#242F35',
+  tertiary: '#39230a',
   info: '#181817',
   success: '#242F35',
   warning: '#391111',

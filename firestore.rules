@@ -10,8 +10,8 @@ service cloud.firestore {
       allow read, update, delete, create: if request.auth != null && request.auth.uid == userId;
     }
 
-    match /level/{userId} {
-      allow read, update, delete, create: if request.auth != null && request.auth.uid == userId;
+    match /token/{tokenId} {
+      allow read: if (request.auth != null && request.auth.uid == resource.data.owner);
     }
     
     match /user/{userId} {

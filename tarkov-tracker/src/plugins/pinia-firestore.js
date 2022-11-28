@@ -1,3 +1,4 @@
+import { toRef } from 'vue'
 import { fireapp, fireuser } from '@/plugins/firebase'
 import { doc, onSnapshot, getFirestore, setDoc } from "firebase/firestore";
 import { debounce, set, get } from 'lodash-es'
@@ -39,10 +40,10 @@ export function PiniaFireswap(context) {
             } else {
               // Set each key individually to avoid breaking reactivity
               Object.keys(context.store.$state).forEach((key) => {
-                delete context.store.$state[key]
+                context.store.$patch({ [key]: undefined })
               })
               Object.keys(localStore).forEach((key) => {
-                context.store.$state[key] = localStore[key]
+                context.store.$patch({ [key]: localStore[key] })
               })
             }
           } else {
@@ -57,10 +58,10 @@ export function PiniaFireswap(context) {
                 // If we can't reset the store, set it to the defaultState we captured at plugin load
                 const defaultState = JSON.parse(context.options.fireswap[fsIndex].defaultState)
                 Object.keys(context.store.$state).forEach((key) => {
-                  delete context.store.$state[key]
+                  context.store.$patch({ [key]: undefined })
                 })
                 Object.keys(defaultState).forEach((key) => {
-                  context.store.$state[key] = defaultState[key]
+                  context.store.$patch({ [key]: defaultState[key] })
                 })
               }
             }
@@ -73,7 +74,7 @@ export function PiniaFireswap(context) {
         context.options.fireswap[fsIndex].loadLocal()
 
         // Add the binding 
-        if (context.store.firebind === undefined) {
+        if (typeof context.store.firebind == 'undefined') {
           context.store.firebind = {}
         }
         context.store.firebind[fsIndex] = function() {
@@ -95,10 +96,10 @@ export function PiniaFireswap(context) {
               } else {
                 // Clear the store, then set each key in data into the store
                 Object.keys(context.store.$state).forEach((key) => {
-                  delete context.store.$state[key]
+                  context.store.$patch({ [key]: undefined })
                 })
                 Object.keys(data).forEach((key) => {
-                  context.store.$state[key] = data[key]
+                  context.store.$patch({ [key]: data[key] })
                 })
               }
     
@@ -136,7 +137,9 @@ export function PiniaFireswap(context) {
     
         // Debounced function to update the firestore document a maximum of once every 250ms
         const uploadDocument = debounce(function (state) {
-          setDoc(parseDoc(fireswapSetting.document), state)
+            setDoc(parseDoc(fireswapSetting.document), state).catch(e => {
+              console.error("Error updating document: ", e)
+            })
         }, fireswapSetting.debouncems || 250)
     
         context.store.$subscribe(function (mutation, state) {

@@ -1,53 +1,7 @@
 import { defineStore } from 'pinia'
 import {  watch} from 'vue'
 import { fireuser } from '@/plugins/firebase'
-//import { set } from 'lodash-es'
-
-const defaultState = {
-  testPath: {
-    test: 'test',
-    level: 1
-  },
-  level: 1,
-  gameEdition: 1,
-  streamerMode: false,
-}
-
-let getters = {
-  // State getters
-  playerLevel(state) {
-    return state.level
-  },
-
-  getGameEdition(state) {
-    return state.gameEdition
-  },
-
-  getStreamerMode(state) {
-    return state.streamerMode
-  }
-}
-
-let actions = {
-  // State mutations or setters
-  incrementLevel() {
-    this.level++
-    this.testPath.level++
-  },
-  
-  decrementLevel() {
-    this.level--
-    this.testPath.level--
-  },
-
-  setGameEdition(edition) {
-    this.gameEdition = edition
-  },
-
-  setStreamerMode(mode) {
-    this.streamerMode = mode
-  }
-}
+import { getters, actions, defaultState } from '@/shared_state.js'
 
 export const useTarkovStore = defineStore('swapTarkov', {
   // Use the shared default state
@@ -90,4 +44,5 @@ watch(
       }
     }
   },
+  { immediate: true }
 )

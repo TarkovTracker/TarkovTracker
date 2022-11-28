@@ -46,6 +46,14 @@
           description: 'Hides your team invite codes from view, so you can show off your progress without letting people join your live team.',
           modeOn: 'On',
           modeOff: 'Off'
+        },
+        apitokens: {
+          title: 'API Tokens',
+          description: 'TarkovTracker hosts a public API that allows other tools to access the progress you store here. You can generate an API token to allow other tools to access your data. View the {openAPI_documentation}',
+          new_token_expand: 'Create a token',
+          submit_new_token: 'Create token',
+          openAPI_documentation: 'OpenAPI documentation',
+          show_tokens: 'Show my tokens',
         }
       }
     },

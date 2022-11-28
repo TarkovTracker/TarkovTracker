@@ -1,6 +1,6 @@
 <template>
   <!-- The main app space. -->
-  <v-app>
+  <v-app color="rgba(0, 0, 0, 1)">
     <!-- Layout will be rendered as part of the router view below -->
     <router-view />
   </v-app>
@@ -29,7 +29,9 @@ onMounted(() => {
     font-family: 'Share Tech Mono', sans-serif !important;
     font-display: swap;
   }
-  font-family: 'Share Tech Mono', sans-serif !important;
+
+  font-family: 'Share Tech Mono',
+  sans-serif !important;
   font-display: swap;
 }
 </style>
