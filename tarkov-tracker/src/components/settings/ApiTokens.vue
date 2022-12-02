@@ -1,7 +1,7 @@
 <template>
   <v-container>
     These are my tokens
-    {{ systemStore.tokens.length }}
+    <token-card v-for="token in systemStore.tokens" :key="token" :token="token" />
   </v-container>
   <v-container v-if="showNewTokenForm">
     <!-- Form to create a user API token -->
@@ -43,10 +43,12 @@
   </v-snackbar>
 </template>
 <script setup>
-import { ref, computed } from "vue";
+import { ref, defineAsyncComponent } from "vue";
 import { fireapp } from "@/plugins/firebase";
 import { useSystemStore } from "@/stores/system.js";
-
+const TokenCard = defineAsyncComponent(() =>
+  import("@/components/settings/TokenCard.vue")
+)
 // New token form
 const newTokenForm = ref(null);
 const validNewToken = ref(false);
