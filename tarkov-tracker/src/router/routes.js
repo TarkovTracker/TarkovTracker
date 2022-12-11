@@ -1,13 +1,13 @@
 const routes = [
   {
     // Standard Layout
-    path: '',
+    path: '/',
     component: () => import("@/components/layout/StandardLayout.vue"),
     children: [
       {
         // Default route
         name: 'dashboard',
-        path: '',
+        path: '/',
         alias: ['/', '/dashboard'],
         meta: { background: 'sunset' },
         component: () => import("@/pages/TrackerDashboard.vue"),

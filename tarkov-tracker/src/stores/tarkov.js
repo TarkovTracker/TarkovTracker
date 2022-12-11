@@ -30,17 +30,17 @@ watch(
     const tarkovStore = useTarkovStore()
     if(newValue) {
       if (typeof tarkovStore.firebindAll === 'function') {
-        console.log("Bound remoteTarkov store")
+        console.debug("Bound remoteTarkov store")
         tarkovStore.firebindAll()
       } else {
-        console.log("No remoteTarkov store to bind")
+        console.debug("No remoteTarkov store to bind")
       }
     }else{
       if (typeof tarkovStore.fireunbindAll === 'function') {
-        console.log("Unbound remoteTarkov store")
+        console.debug("Unbound remoteTarkov store")
         tarkovStore.fireunbindAll()
       } else {
-        console.log("No remoteTarkov store to unbind")
+        console.debug("No remoteTarkov store to unbind")
       }
     }
   },

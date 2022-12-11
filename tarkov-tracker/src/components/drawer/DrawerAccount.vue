@@ -13,7 +13,6 @@
             <v-list-item v-bind="props" :title="fireuser.displayName" :prepend-avatar="fireuser.photoURL"></v-list-item>
           </template>
         </template>
-        <drawer-item icon="mdi-account-group" locale-key="team" to="/team" />
         <drawer-item icon="mdi-lock" locale-key="logout" @click.stop="logout" />
       </v-list-group>
     </template>

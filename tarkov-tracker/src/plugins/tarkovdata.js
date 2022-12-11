@@ -1,5 +1,5 @@
 import { useQuery, provideApolloClient } from "@vue/apollo-composable";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import apolloClient from "./apollo";
 import gql from "graphql-tag";
 
@@ -7,116 +7,56 @@ provideApolloClient(apolloClient);
 
 const TarkovDataPlugin = {
   install(app) {
-    let loadingState = {}
-    let errorState = {}
-    let resultState = {}
+    const queryErrors = ref(null)
+    const queryResults = ref(null)
 
-    // Take the result of a query and place the parts in their respective state object
-    const tasksReturn = useQuery(taskQuery);
-    loadingState.tasks = tasksReturn.loading
-    errorState.tasks = tasksReturn.error
-    resultState.tasks = tasksReturn.result
-
-    const tradersReturn = useQuery(traderQuery);
-    loadingState.traders = tradersReturn.loading
-    errorState.traders = tradersReturn.error
-    resultState.traders = tradersReturn.result
-
-    const levelsReturn = useQuery(levelQuery);
-    loadingState.levels = levelsReturn.loading
-    errorState.levels = levelsReturn.error
-    resultState.levels = levelsReturn.result
-
-    const mapsReturn = useQuery(mapQuery);
-    loadingState.maps = mapsReturn.loading
-    errorState.maps = mapsReturn.error
-    resultState.maps = mapsReturn.result
+    const { onResult, onError, loading } = useQuery(tarkovDataQuery, null, { fetchPolicy: "network-only" });
+    onResult((result) => {
+      queryResults.value = result.data
+      console.debug(queryResults)
+    });
+    onError((error) => {
+      queryErrors.value = error
+      console.error(queryErrors)
+    });
 
     // Create a computed property for each state object
     const tasks = computed(() => {
-      return resultState.tasks.value?.tasks;
+      return queryResults.value?.tasks || [];
     });
 
     const objectives = computed(() => {
       return tasks.value?.reduce(
         (acc, task) => acc.concat(task.objectives),
         []
-      );
+      ) || [];
     });
 
     const levels = computed(() => {
-      return resultState.levels.value?.playerLevels;
+      return queryResults.value?.playerLevels;
     });
 
     const maps = computed(() => {
-      return resultState.maps.value?.maps;
+      return queryResults.value?.maps;
     });
 
     const traders = computed(() => {
-      return resultState.traders.value?.traders;
+      return queryResults.value?.traders;
     });
 
-    const dataLoading = computed(() => {
-      return Object.values(loadingState).some(state => state.value);
-    })
-
-    const dataError = computed(() => {
-      return Object.values(errorState).some(state => state.value);
-    })
+    const error = computed(() => {
+      return queryErrors.value !== null;
+    });
 
     // Provide data from tarkovdata
-    app.provide("tarkov-data", { tasks, objectives, maps, levels, traders, dataLoading, dataError });
+    app.provide("tarkov-data", { tasks, objectives, maps, levels, traders, loading, error });
   },
 };
 
 export { TarkovDataPlugin };
 
-const traderQuery = gql`
-  query TraderList {
-    traders {
-      id
-      name
-      resetTime
-      levels {
-        id
-        level
-        requiredPlayerLevel
-        requiredReputation
-        requiredCommerce
-        insuranceRate
-        payRate
-        repairCostMultiplier
-      }
-      tarkovDataId
-    }
-  }
-`
-
-const levelQuery = gql`
-  query LevelList {
-    playerLevels {
-      level
-      exp
-    }
-  }
-`
-const mapQuery = gql`
-  query MapList {
-    maps {
-      id
-      name
-      tarkovDataId
-      enemies
-      wiki
-      raidDuration
-      players
-      description
-    }
-  }
-`
-
-const taskQuery = gql`
-  query TaskList {
+const tarkovDataQuery = gql`
+  query TarkovData {
     tasks {
       id
       tarkovDataId
@@ -393,6 +333,36 @@ const taskQuery = gql`
           name
         }
       }
+    }
+    maps {
+      id
+      name
+      tarkovDataId
+      enemies
+      wiki
+      raidDuration
+      players
+      description
+    }
+    playerLevels {
+      level
+      exp
+    }
+    traders {
+      id
+      name
+      resetTime
+      levels {
+        id
+        level
+        requiredPlayerLevel
+        requiredReputation
+        requiredCommerce
+        insuranceRate
+        payRate
+        repairCostMultiplier
+      }
+      tarkovDataId
     }
   }
 `

@@ -1,14 +1,9 @@
 <template>
-  <v-list-item id="app-logo-item" class="flex flex-column mt-1" :ripple="false" to="/" >
-    <v-list-item-avatar
-      :class="appStore.drawerUseRail(mdAndDown) ? 'v-logo-rail' : 'v-logo-full'"
-      style="height: auto; margin: 20px 0"
-    >
-      <v-img
-        :src="logo"
-        lazy-src="/favicon-32x32.png"
-      />
-    </v-list-item-avatar>
+  <v-list-item id="app-logo-item" class="flex flex-column mt-1" :ripple="false" to="/">
+    <div :class="appStore.drawerUseRail(mdAndDown) ? 'v-logo-rail' : 'v-logo-full'"
+      style="height: auto; margin: 20px auto">
+      <v-img :src="logo" lazy-src="/favicon-32x32.png" />
+    </div>
     <div v-if="!appStore.drawerUseRail(mdAndDown)">
       <div class="text-h5 text-center mt-2 font-weight-medium">
         {{ $t('site_name') }}

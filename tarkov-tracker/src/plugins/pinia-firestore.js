@@ -16,7 +16,7 @@ export function PiniaFireswap(context) {
   if (context.options.fireswap) {
     // Loop through each firestore setting in the array
     context.options.fireswap.forEach((fireswapSetting, fsIndex) => {
-      console.log('fireswapSetting', fireswapSetting)
+      console.debug('fireswapSetting', fireswapSetting)
       if (fireswapSetting.document && fireswapSetting.localKey) {
         // Create a default state for the fireswap setting
         if (fireswapSetting.path && fireswapSetting.path !== '.') {
@@ -29,9 +29,9 @@ export function PiniaFireswap(context) {
         context.options.fireswap[fsIndex].loadLocal = function() {
           // Set a lock to prevent a subscribe mutation from firing while we load
           context.options.fireswap[fsIndex].lock = true
-          console.log('Set lock to true on loadLocal for fireswap', fsIndex)
+          console.debug('Set lock to true on loadLocal for fireswap', fsIndex)
           if (localStorage.getItem(context.options.fireswap[fsIndex].localKey)) {
-            console.log("Loading local version of " + context.options.fireswap[fsIndex].localKey)
+            console.debug("Loading local version of " + context.options.fireswap[fsIndex].localKey)
             // Load the localstorage version of the store
             const localStore = JSON.parse(localStorage.getItem(context.options.fireswap[fsIndex].localKey))
             // Set the path to the local store version
@@ -67,7 +67,7 @@ export function PiniaFireswap(context) {
             }
           }
           // Remove the lock
-          console.log('Set lock to false on loadLocal for fireswap', fsIndex)
+          console.debug('Set lock to false on loadLocal for fireswap', fsIndex)
           context.options.fireswap[fsIndex].lock = false
         }
         // Run the loadLocal function at startup
@@ -79,7 +79,7 @@ export function PiniaFireswap(context) {
         }
         context.store.firebind[fsIndex] = function() {
           // Bind the store to a snapshot from the options
-          console.log("Binding to firestore document: " + fireswapSetting.document)
+          console.debug("Binding to firestore document: " + fireswapSetting.document)
           context.options.fireswap[fsIndex].unsubscribe = onSnapshot(
             parseDoc(fireswapSetting.document), 
             (snapshot) => {
@@ -137,7 +137,9 @@ export function PiniaFireswap(context) {
     
         // Debounced function to update the firestore document a maximum of once every 250ms
         const uploadDocument = debounce(function (state) {
-            setDoc(parseDoc(fireswapSetting.document), state).catch(e => {
+           // Get rid of any undefined values via stringify+parse
+            const stateCopy = JSON.parse(JSON.stringify(state))
+            setDoc(parseDoc(fireswapSetting.document), stateCopy).catch(e => {
               console.error("Error updating document: ", e)
             })
         }, fireswapSetting.debouncems || 250)
@@ -155,7 +157,7 @@ export function PiniaFireswap(context) {
           } else if (typeof context.options.fireswap[fsIndex].unsubscribe == 'undefined' && !context.options.fireswap[fsIndex].lock) {
             // If we're not bound, then update local storage instead
             // If the path is . then we're updating based on the root of the store
-            console.log(context.options.fireswap[fsIndex].lock)
+            console.debug(context.options.fireswap[fsIndex].lock)
             if (fireswapSetting.path && fireswapSetting.path !== '.') {
               localStorage.setItem(fireswapSetting.localKey, JSON.stringify(get(state, fireswapSetting.path)))
             } else {

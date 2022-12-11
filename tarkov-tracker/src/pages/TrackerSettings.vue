@@ -2,12 +2,12 @@
   <v-container>
     <v-row justify="center">
       <v-col v-if="fireuser.uid != null" cols="12" sm="12" md="12" lg="12" xl="12">
-        <icon-card icon="mdi-key-chain" icon-background="tertiary" icon-color="white">
-          <template #stat>
+        <fitted-card icon="mdi-key-chain" icon-color="white">
+          <template #title>
             {{ $t('page.settings.card.apitokens.title') }}
           </template>
           <template #content>
-            <i18n-t keypath="page.settings.card.apitokens.description">
+            <i18n-t keypath="page.settings.card.apitokens.description" scope="global">
               <template #openAPI_documentation>
                 <a href="https://tarkovtracker.github.io/TarkovTracker/" target="_blank" class="info-link">
                   <v-icon class="mr-1" size="16">mdi-file-document</v-icon>{{
@@ -18,11 +18,11 @@
             </i18n-t>
             <api-tokens />
           </template>
-        </icon-card>
+        </fitted-card>
       </v-col>
-      <v-col v-if="fireuser.uid != null" cols="12" sm="8" md="6" lg="4" xl="4">
-        <icon-card icon="mdi-eye" icon-background="secondary" icon-color="white">
-          <template #stat>
+      <v-col v-if="fireuser.uid != null" cols="12" sm="12" md="6" lg="4" xl="4">
+        <fitted-card icon="mdi-eye" icon-color="white">
+          <template #title>
             {{ $t('page.settings.card.streamermode.title') }}
           </template>
           <template #content>
@@ -37,11 +37,11 @@
               </v-row>
             </v-container>
           </template>
-        </icon-card>
+        </fitted-card>
       </v-col>
-      <v-col cols="12" sm="8" md="6" lg="4" xl="4">
-        <icon-card icon="mdi-gift-open" icon-background="secondary" icon-color="white">
-          <template #stat>
+      <v-col cols="12" sm="12" md="6" lg="4" xl="4">
+        <fitted-card icon="mdi-gift-open" icon-color="white">
+          <template #title>
             {{ $t('page.settings.card.gameedition.title') }}
           </template>
           <template #content>
@@ -55,11 +55,11 @@
               </v-row>
             </v-container>
           </template>
-        </icon-card>
+        </fitted-card>
       </v-col>
-      <v-col cols="12" sm="8" md="6" lg="4" xl="4">
-        <icon-card icon="mdi-restart-alert" icon-background="warning" icon-color="white">
-          <template #stat>
+      <v-col cols="12" sm="12" md="6" lg="4" xl="4">
+        <fitted-card icon="mdi-restart-alert" icon-color="white">
+          <template #title>
             {{ $t('page.settings.card.reset.title') }}
           </template>
           <template #content>
@@ -74,7 +74,7 @@
               </v-row>
             </v-container>
           </template>
-        </icon-card>
+        </fitted-card>
       </v-col>
     </v-row>
   </v-container>
@@ -85,6 +85,9 @@ import { defineAsyncComponent, computed } from 'vue'
 import { useTarkovStore } from "@/stores/tarkov.js";
 const IconCard = defineAsyncComponent(() =>
   import("@/components/IconCard.vue")
+)
+const FittedCard = defineAsyncComponent(() =>
+  import("@/components/FittedCard.vue")
 )
 const ApiTokens = defineAsyncComponent(() =>
   import("@/components/settings/ApiTokens.vue")

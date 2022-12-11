@@ -8,15 +8,16 @@
       "cwd": "${workspaceRoot}/tarkov-tracker",
       "runtimeExecutable": "npm",
       "runtimeArgs": [
-          "run", "dev",
+        "run",
+        "dev",
       ]
     },
     {
-        "type": "chrome",
-        "request": "launch",
-        "name": "Launch Chrome against localhost",
-        "url": "http://localhost:3000",
-        "webRoot": "${workspaceFolder}/tarkov-tracker/src"
+      "type": "chrome",
+      "request": "launch",
+      "name": "Launch Chrome against localhost",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}/tarkov-tracker/src"
     }
   ]
 }

@@ -1,16 +1,13 @@
 <template>
-  <v-list-item 
-    :class="itemClass"
-    :to="props.to"
-  >
-    <v-icon :icon="props.icon"/>
+  <v-list-item :class="itemClass" :to="props.to" :active="props.to === $route.path">
+    <v-icon :icon="props.icon" />
     <v-list-item-title v-if="!appStore.drawerUseRail(mdAndDown)" :class="titleClass" style="display: inline-flex;">
-    <template v-if="props.localeKey">
-      {{ $t(`navigation_drawer.${props.localeKey}`) }}
-    </template>
-    <template v-else-if="props.text">
-      {{ props.text }}
-    </template>
+      <template v-if="props.localeKey">
+        {{ $t(`navigation_drawer.${props.localeKey}`) }}
+      </template>
+      <template v-else-if="props.text">
+        {{ props.text }}
+      </template>
     </v-list-item-title>
   </v-list-item>
 </template>

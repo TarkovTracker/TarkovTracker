@@ -4,7 +4,7 @@
       <v-row justify="center" style="font-size: 12px">
         <v-col cols="12" md="4" align-self="center">
           <div>
-            <i18n-t keypath="footer.call_to_action.discord_phrase">
+            <i18n-t keypath="footer.call_to_action.discord_phrase" scope="global">
               <template #discord>
                 <a href="https://discord.gg/zeAP4Ng" target="_blank" class="info-link">
                   <v-icon class="mr-1">mdi-discord</v-icon>{{ $t('footer.call_to_action.discord') }}
@@ -13,7 +13,7 @@
             </i18n-t>
           </div>
           <div class="mt-1">
-            <i18n-t keypath="footer.call_to_action.github_phrase">
+            <i18n-t keypath="footer.call_to_action.github_phrase" scope="global">
               <template #github>
                 <a href="https://github.com/TarkovTracker/TarkovTracker" target="_blank" class="info-link">
                   <v-icon class="mr-1">mdi-github</v-icon>{{ $t('footer.call_to_action.github') }}
@@ -22,7 +22,7 @@
             </i18n-t>
           </div>
           <div class="mt-1">
-            <i18n-t keypath="footer.call_to_action.patreon_phrase">
+            <i18n-t keypath="footer.call_to_action.patreon_phrase" scope="global">
               <template #patreon>
                 <a href="https://www.patreon.com/apologist" target="_blank" class="info-link">
                   <v-icon class="mr-1">mdi-patreon</v-icon>{{ $t('footer.call_to_action.patreon') }}
@@ -34,7 +34,7 @@
         </v-col>
         <v-col cols="12" md="4" align-self="center">
           <v-img src="/img/UkraineDove.svg" class="custom-svg" alt="Ukraine Dove" />
-          <i18n-t keypath="footer.ukraine.support_phrase">
+          <i18n-t keypath="footer.ukraine.support_phrase" scope="global">
             <template #support_ukraine>
               <a href="https://www.icrc.org/en/donate/ukraine" target="_blank" class="info-link">{{
                   $t('footer.ukraine.support_link')

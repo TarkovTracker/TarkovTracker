@@ -54,6 +54,18 @@
           submit_new_token: 'Create token',
           openAPI_documentation: 'OpenAPI documentation',
           show_tokens: 'Show my tokens',
+          create_token_success: 'Successfully created a new API token.',
+          create_token_error: 'Failed to create a new API token.',
+          no_tokens: 'You do not have any TarkovTracker API tokens.',
+          token_column: 'Token',
+          note_column: 'Note',
+          created_column: 'Created',
+          permissions_column: 'Permissions',
+          permission: {
+            'GP': 'Get Personal Progress',
+            'TP': 'Get Team Progress',
+            'WP': 'Write Progress',
+          }
         }
       }
     },
@@ -61,11 +73,21 @@
       title: 'Team',
       card: {
         manageteam: {
-          title: 'Manage Team',
-          description: 'Invite players to your team, or join a team.',
+          title: 'Team Members',
           button: 'Manage Team'
-          },
+        },
+        teamoptions: {
+          title: 'Team Options',
+          button: 'Team Options'
+        },
+        myteam: {
+          title: 'My Team',
+          button: 'View Team',
+          create_new_team: 'Create a new team',
+          disband_team: 'Disband team',
+          leave_team: 'Leave team',
         }
+      },
     },
     login: {
       title: 'Login'
@@ -101,6 +123,6 @@
     login: 'Log In',
     logout: 'Log Out',
     level: 'Level',
-    team: 'Manage Team'
+    team: 'Team'
   }
 }
