@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row justify="center">
-      <v-col v-if="fireuser.uid != null" cols="12" sm="12" md="12" lg="12" xl="12">
+      <v-col v-if="fireuser.loggedIn" cols="12" sm="12" md="12" lg="12" xl="12">
         <fitted-card icon="mdi-key-chain" icon-color="white">
           <template #title>
             {{ $t('page.settings.card.apitokens.title') }}
@@ -20,7 +20,7 @@
           </template>
         </fitted-card>
       </v-col>
-      <v-col v-if="fireuser.uid != null" cols="12" sm="12" md="6" lg="4" xl="4">
+      <v-col v-if="fireuser.loggedIn" cols="12" sm="12" md="6" lg="4" xl="4">
         <fitted-card icon="mdi-eye" icon-color="white">
           <template #title>
             {{ $t('page.settings.card.streamermode.title') }}

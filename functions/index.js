@@ -125,6 +125,7 @@ exports.leaveTeam = functions.https.onCall(async (data, context) => {
 					// We are the room owner, which means we need to disband the team
 					// For each member, remove the team from their system document and then delete the team document
 					teamDoc.data()?.members.forEach((member) => {
+						functions.logger.log("Removing team from member", { member: member, team: originalTeam });
 						transaction.update(db.collection('system').doc(member), {
 							team: admin.firestore.FieldValue.delete()
 						})

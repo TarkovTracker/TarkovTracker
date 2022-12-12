@@ -1,6 +1,6 @@
 <template>
   <v-list nav bg-color="transparent" class="mx-auto">
-    <template v-if="fireuser.uid != null">
+    <template v-if="fireuser.loggedIn">
       <v-list-group>
         <template #activator="{ props }">
           <template v-if="appStore.drawerUseRail(mdAndDown)">

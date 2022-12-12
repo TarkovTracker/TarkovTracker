@@ -21,7 +21,7 @@ import pinia from './plugins/pinia'
 import apolloClient from './plugins/apollo'
 
 // tarkovdata
-import { TarkovDataPlugin } from './plugins/tarkovdata'
+//import { TarkovDataPlugin } from './plugins/tarkovdata'
 
 // Base app component
 import App from './App.vue'
@@ -33,6 +33,6 @@ createApp(App)
   .use(router)
   .use(vuetify)
   .use(i18n)
-  .use(TarkovDataPlugin)
+  //.use(TarkovDataPlugin)
   .provide(DefaultApolloClient, apolloClient)
   .mount('#app')

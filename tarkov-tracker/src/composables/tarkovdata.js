@@ -1,76 +1,74 @@
 import { useQuery, provideApolloClient } from "@vue/apollo-composable";
 import { computed, ref } from "vue";
-import { fireapp, fireuser } from '@/plugins/firebase'
+import { fireuser } from '@/plugins/firebase'
 import { useSystemStore } from '@/stores/system'
-import apolloClient from "./apollo";
+import apolloClient from "@/plugins/apollo";
 import gql from "graphql-tag";
 
 provideApolloClient(apolloClient);
 
-const TarkovDataPlugin = {
-  install(app) {
-    const queryErrors = ref(null)
-    const queryResults = ref(null)
-    const lastQueryTime = ref(null)
+const queryErrors = ref(null)
+const queryResults = ref(null)
+const lastQueryTime = ref(null)
 
-    const { onResult, onError, loading } = useQuery(tarkovDataQuery, null, { fetchPolicy: "network-only", pollInterval: 300000, });
-    onResult((result) => {
-      lastQueryTime.value = Date.now()
-      queryResults.value = result.data
-      console.debug(queryResults)
-    });
-    onError((error) => {
-      queryErrors.value = error
-      console.error(queryErrors)
-    });
+const { onResult, onError, loading } = useQuery(tarkovDataQuery, null, { fetchPolicy: "network-only", pollInterval: 300000, });
+onResult((result) => {
+  lastQueryTime.value = Date.now()
+  queryResults.value = result.data
+  console.debug(queryResults)
+});
+onError((error) => {
+  queryErrors.value = error
+  console.error(queryErrors)
+});
 
-    // Create a computed property for each state object
-    const tasks = computed(() => {
-      return queryResults.value?.tasks || [];
-    });
+// Create a computed property for each state object
+const tasks = computed(() => {
+  return queryResults.value?.tasks || [];
+});
 
-    const objectives = computed(() => {
-      return tasks.value?.reduce(
-        (acc, task) => acc.concat(task.objectives),
-        []
-      ) || [];
-    });
+const objectives = computed(() => {
+  return tasks.value?.reduce(
+    (acc, task) => acc.concat(task.objectives),
+    []
+  ) || [];
+});
 
-    const levels = computed(() => {
-      return queryResults.value?.playerLevels;
-    });
+const levels = computed(() => {
+  return queryResults.value?.playerLevels;
+});
 
-    const maps = computed(() => {
-      return queryResults.value?.maps;
-    });
+const maps = computed(() => {
+  return queryResults.value?.maps;
+});
 
-    const traders = computed(() => {
-      return queryResults.value?.traders;
-    });
+const traders = computed(() => {
+  return queryResults.value?.traders;
+});
 
-    const error = computed(() => {
-      return queryErrors.value !== null;
-    });
+const error = computed(() => {
+  return queryErrors.value !== null;
+});
 
-    // Team data
-    const team = computed(() => {
-      if (fireuser.loggedIn) {
-        const systemStore = useSystemStore()
-        if (systemStore.team) {
-          return systemStore.team
-        }
-        return true
-      } else {
-        return false
-      }
-    });
+// Team data
+const team = computed(() => {
+  if (fireuser.loggedIn) {
+    const systemStore = useSystemStore()
+    if (systemStore.team) {
+      return systemStore.team != null
+    }
+    return true
+  } else {
+    return false
+  }
+});
 
-    // Provide data from tarkovdata
-    app.provide("tarkov-data", { tasks, objectives, maps, levels, traders, loading, error, team });
-  },
-};
-
-export { TarkovDataPlugin };
+// We keep the state outside of the function so that it acts as a singleton
+export function useTarkovData() {
+  return {
+    tasks, objectives, maps, levels, traders, loading, error, team
+  };
+}
 
 const tarkovDataQuery = gql`
   query TarkovData {

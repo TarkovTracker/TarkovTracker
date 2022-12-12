@@ -48,6 +48,7 @@ import { useAppStore } from "@/stores/app.js";
 import { useDisplay } from 'vuetify'
 import { useRoute } from 'vue-router'
 import { reactive } from 'vue'
+import { useTarkovData } from '@/composables/tarkovdata.js'
 
 const state = reactive({ menu: null })
 
@@ -63,7 +64,7 @@ const OverflowMenu = defineAsyncComponent(() =>
   import("/src/components/layout/OverflowMenu.vue")
 )
 
-const { loading: dataLoading, error: dataError } = inject('tarkov-data')
+const { loading: dataLoading, error: dataError } = useTarkovData()
 
 // Change how the navigation bar is modified based upon the screen size
 // Either change between open/close or rail/full
