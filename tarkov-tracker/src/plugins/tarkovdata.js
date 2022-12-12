@@ -9,9 +9,11 @@ const TarkovDataPlugin = {
   install(app) {
     const queryErrors = ref(null)
     const queryResults = ref(null)
+    const lastQueryTime = ref(null)
 
-    const { onResult, onError, loading } = useQuery(tarkovDataQuery, null, { fetchPolicy: "network-only" });
+    const { onResult, onError, loading } = useQuery(tarkovDataQuery, null, { fetchPolicy: "network-only", pollInterval: 300000, });
     onResult((result) => {
+      lastQueryTime.value = Date.now()
       queryResults.value = result.data
       console.debug(queryResults)
     });

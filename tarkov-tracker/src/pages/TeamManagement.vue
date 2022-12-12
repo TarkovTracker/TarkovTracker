@@ -1,7 +1,8 @@
 <template>
+  <tracker-tip v-if="true" tip="team"></tracker-tip>
   <v-container v-if="fireuser.loggedIn">
     <v-row justify="center">
-      <v-col cols="12">
+      <v-col cols="12" v-if="systemStore.userTeam">
         <team-members></team-members>
       </v-col>
       <v-col cols="12" sm="12" md="12" lg="6" xl="6">
@@ -15,6 +16,7 @@
 </template>
 <script setup>
 import { fireuser } from '@/plugins/firebase'
+import { useSystemStore } from '@/stores/system.js'
 import { defineAsyncComponent } from 'vue'
 const IconCard = defineAsyncComponent(() =>
   import("@/components/IconCard.vue")
@@ -28,6 +30,11 @@ const TeamOptions = defineAsyncComponent(() =>
 const MyTeam = defineAsyncComponent(() =>
   import("@/components/teams/MyTeam.vue")
 )
+const TrackerTip = defineAsyncComponent(() =>
+  import("@/components/TrackerTip.vue")
+)
+
+const systemStore = useSystemStore();
 
 </script>
 <style lang="scss" scoped>

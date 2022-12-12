@@ -112,29 +112,45 @@ exports.revokeToken = functions.https.onCall(async (data, context) => {
 exports.leaveTeam = functions.https.onCall(async (data, context) => {
 	const db = admin.firestore();
 
-	// Reference to the team
-	const systemRef = db.collection('system').doc(context.auth.uid);
-	const systemDoc = await systemRef.get();
-	if (systemDoc?.data()?.team) {
-		// We are in a team, time to get out
-		const teamRef = systemDoc.data().team;
-		const teamDoc = await teamRef.get();
-		if (teamDoc?.data()?.owner == context.auth.uid) {
-			// We are the room owner, remove ourself directly
-			await removeSytemTeamRef(context.auth.uid, teamRef)
-			// Update the team to no members to trigger removals for everyone else
-			await teamRef.update({
-				members: []
-			});
-			//await db.collection('team').doc(context.auth.uid).delete()
-			return { team: false }
-		} else {
-			// We are just a member
-			await userLeaveTeam(context.auth.uid)
-			return { team: false }
-		}
-	} else {
-		return { error: 'You are not in a team' }
+	try {
+		await db.runTransaction(async (transaction) => {
+			const systemRef = db.collection('system').doc(context.auth.uid);
+			const systemDoc = await transaction.get(systemRef);
+			const originalTeam = systemDoc?.data()?.team;
+			if (systemDoc?.data()?.team) {
+				// We are in a team, time to get out
+				const teamRef = db.collection('team').doc(systemDoc.data().team);
+				const teamDoc = await transaction.get(teamRef);
+				if (teamDoc?.data()?.owner == context.auth.uid) {
+					// We are the room owner, which means we need to disband the team
+					// For each member, remove the team from their system document and then delete the team document
+					teamDoc.data()?.members.forEach((member) => {
+						transaction.update(db.collection('system').doc(member), {
+							team: admin.firestore.FieldValue.delete()
+						})
+					})
+
+					transaction.delete(teamRef)
+				} else {
+					// We are not the room owner, remove ourself from the team
+					transaction.update(teamRef, {
+						members: admin.firestore.FieldValue.arrayRemove(context.auth.uid)
+					})
+					transaction.update(systemRef, {
+						team: admin.firestore.FieldValue.delete()
+					})
+				}
+			} else {
+				// We are not in a team, oops
+				throw new Error('User is not in a team')
+			}
+			functions.logger.log("Left team", { user: context.auth.uid, team: originalTeam });
+		});
+
+		return { left: true }
+	} catch (e) {
+		functions.logger.error("Failed to leave team", { owner: context.auth.uid, error: e });
+		return { error: 'Error during team leave', timestamp: Date.now() }
 	}
 });
 

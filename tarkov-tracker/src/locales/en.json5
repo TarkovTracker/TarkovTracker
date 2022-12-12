@@ -4,7 +4,9 @@
   site_name: 'Tarkov Tracker',
   app_bar: {
     overflow_menu: {
-      language: 'Language'
+      language: 'Language',
+      reset_tips: 'Unhide all tips',
+      hide_all_tips: 'Hide all tips',
     }
   },
   menu: {
@@ -77,7 +79,7 @@
           button: 'Manage Team'
         },
         teamoptions: {
-          title: 'Team Options',
+          title: 'Team Integration Options',
           button: 'Team Options'
         },
         myteam: {
@@ -86,6 +88,12 @@
           create_new_team: 'Create a new team',
           disband_team: 'Disband team',
           leave_team: 'Leave team',
+          create_team_success: 'Successfully created a new team.',
+          create_team_error: 'Failed to create a new team.',
+          disband_team_success: 'Successfully disbanded your team.',
+          leave_team_success: 'Successfully left your team.',
+          leave_team_error: 'Failed to leave your team.',
+          no_team: 'You are not currently in a team.',
         }
       },
     },
@@ -124,5 +132,16 @@
     logout: 'Log Out',
     level: 'Level',
     team: 'Team'
+  },
+  tips: {
+    hide_tip: 'Hide this tip',
+    default: {
+      title: 'Tip',
+      description: 'Oops! This tip seems to be missing. Please report this bug on Discord.'
+    },
+    team: {
+      title: 'Team',
+      description: 'Create a team to track your progress with friends. You can share a URL for others to join your team. You will be able to see your teammates\' progress, the items they need, and plan raids together.'
+    },
   }
 }
