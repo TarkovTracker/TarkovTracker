@@ -11,7 +11,13 @@ export const defaultState = {
 export const getters = {
   // The tokens the user has
   showTip: (state) => { return (tipKey) => !state.allTipsHidden && !state.hideTips?.[tipKey] },
-  hiddenTipCount: (state) => { return Object.keys(state.hideTips).length || 0 },
+  hiddenTipCount: (state) => {
+    if (!state.hideTips) {
+      return 0
+    } else {
+      return Object.keys(state.hideTips).length
+    }
+  },
   hideAllTips: (state) => { return state.allTipsHidden || false },
 }
 

@@ -1,6 +1,10 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+
+    function memberOfTeam(){
+      return request.auth.uid in resource.data.members || request.auth.uid == resource.data.owner;
+    }
     
     match /system/{userId} {
       allow read: if request.auth != null && request.auth.uid == userId;
@@ -10,12 +14,17 @@ service cloud.firestore {
       allow read, update, delete, create: if request.auth != null && request.auth.uid == userId;
     }
 
-    match /token/{tokenId} {
-      allow read: if (request.auth != null && request.auth.uid == resource.data.owner);
-    }
-    
     match /user/{userId} {
       allow read, update, delete, create: if request.auth != null && request.auth.uid == userId;
     }
+
+    match /token/{tokenId} {
+      allow read: if (request.auth != null && request.auth.uid == resource.data.owner);
+    }
+
+    match /team/{teamId} {
+      allow read: if (memberOfTeam());
+    }
+    
   }
 }

@@ -24,14 +24,17 @@
     </div>
     <div class="mt-1">
       <!-- Button to copy the token into clipboard -->
-      <v-btn @click="copyToken" variant="outlined" icon="mdi-content-copy" class="mx-1" color="secondary"
-        size="x-small"></v-btn>
+      <v-btn
+variant="outlined" icon="mdi-content-copy" class="mx-1" color="secondary" size="x-small"
+        @click="copyToken"></v-btn>
       <!-- Button to toggle a QR code for the token -->
-      <v-btn @click="showQR = !showQR" variant="outlined" icon="mdi-qrcode" class="mx-1" color="secondary"
-        size="x-small"></v-btn>
+      <v-btn
+variant="outlined" icon="mdi-qrcode" class="mx-1" color="secondary" size="x-small"
+        @click="showQR = !showQR"></v-btn>
       <!-- Button to delete the token -->
-      <v-btn @click="deleteToken" variant="outlined" icon="mdi-delete" class="mx-1" color="secondary"
-        :disabled="deleting" :loading="deleting" size="x-small"></v-btn>
+      <v-btn
+variant="outlined" icon="mdi-delete" class="mx-1" color="secondary" :disabled="deleting"
+        :loading="deleting" size="x-small" @click="deleteToken"></v-btn>
     </div>
   </v-sheet>
 </template>

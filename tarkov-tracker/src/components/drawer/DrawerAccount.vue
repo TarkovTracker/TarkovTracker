@@ -4,7 +4,8 @@
       <v-list-group>
         <template #activator="{ props }">
           <template v-if="appStore.drawerUseRail(mdAndDown)">
-            <v-avatar v-bind="props" class="mx-auto" size="24"
+            <v-avatar
+v-bind="props" class="mx-auto" size="24"
               :class="appStore.drawerUseRail(mdAndDown) ? 'd-flex fake-link' : ''">
               <v-img :src="fireuser.photoURL" />
             </v-avatar>

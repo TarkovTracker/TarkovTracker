@@ -2,10 +2,15 @@ import { useQuery, provideApolloClient } from "@vue/apollo-composable";
 import { computed, ref } from "vue";
 import { fireuser } from '@/plugins/firebase'
 import { useSystemStore } from '@/stores/system'
+import { useDocument } from 'vuefire'
+import { doc, collection } from 'firebase/firestore'
+import { useFirestore } from 'vuefire'
 import apolloClient from "@/plugins/apollo";
-import gql from "graphql-tag";
+import tarkovDataQuery from "@/utils/tarkovdataquery.js"
 
-provideApolloClient(apolloClient);
+provideApolloClient(apolloClient)
+
+const firedb = useFirestore()
 
 const queryErrors = ref(null)
 const queryResults = ref(null)
@@ -50,18 +55,39 @@ const error = computed(() => {
   return queryErrors.value !== null;
 });
 
-// Team data
-const team = computed(() => {
+const teamRef = computed(() => {
   if (fireuser.loggedIn) {
     const systemStore = useSystemStore()
     if (systemStore.team) {
-      return systemStore.team != null
+      console.log("Team ref now " + systemStore.team)
+      return doc(collection(firedb, 'team'), systemStore.team)
+    } else {
+      console.log("Team ref now null")
+      return null
     }
-    return true
   } else {
-    return false
+    console.log("Team ref now null")
+    return null
   }
 });
+
+// // Team data
+// const team = computed(() => {
+
+//   //return teamDoc
+//   //return null
+// });
+//const team = ref(null)
+//const team = useDocument(teamRef)
+const team = ref(null)
+
+useDocument(teamRef, {
+  target: team,
+  reset: () => {
+    console.log("Resetting team connection")
+    return {}
+  }
+})
 
 // We keep the state outside of the function so that it acts as a singleton
 export function useTarkovData() {
@@ -69,315 +95,3 @@ export function useTarkovData() {
     tasks, objectives, maps, levels, traders, loading, error, team
   };
 }
-
-const tarkovDataQuery = gql`
-  query TarkovData {
-    tasks {
-      id
-      tarkovDataId
-      name
-      trader {
-        id
-        name
-      }
-      map {
-        id
-        name
-      }
-      experience
-      wikiLink
-      minPlayerLevel
-      taskRequirements {
-        task {
-          id
-          name
-        }
-        status
-      }
-      traderLevelRequirements {
-        trader {
-          id
-          name
-        }
-        level
-      }
-      objectives {
-        id
-        description
-        type
-        maps {
-          id
-          name
-        }
-        optional
-        __typename
-        ... on TaskObjectiveBuildItem {
-          item {
-            id
-            name
-          }
-          containsAll {
-            id
-            name
-          }
-          containsOne {
-            id
-            name
-          }
-          attributes {
-            name
-            requirement {
-              compareMethod
-              value
-            }
-          }
-        }
-        ... on TaskObjectiveExperience {
-          healthEffect {
-            bodyParts
-            effects
-            time {
-              compareMethod
-              value
-            }
-          }
-        }
-        ... on TaskObjectiveExtract {
-          exitStatus
-          zoneNames
-        }
-        ... on TaskObjectiveItem {
-          item {
-            id
-            name
-          }
-          count
-          foundInRaid
-          dogTagLevel
-          maxDurability
-          minDurability
-        }
-        ... on TaskObjectiveMark {
-          markerItem {
-            id
-            name
-          }
-        }
-        ... on TaskObjectivePlayerLevel {
-          playerLevel
-        }
-        ... on TaskObjectiveQuestItem {
-          questItem {
-            id
-            name
-          }
-          count
-        }
-        ... on TaskObjectiveShoot {
-          shotType
-          target
-          count
-          zoneNames
-          bodyParts
-          usingWeapon {
-            id
-            name
-          }
-          usingWeaponMods {
-            id
-            name
-          }
-          wearing {
-            id
-            name
-          }
-          notWearing {
-            id
-            name
-          }
-          distance {
-            compareMethod
-            value
-          }
-          playerHealthEffect {
-            bodyParts
-            effects
-            time {
-              compareMethod
-              value
-            }
-          }
-          enemyHealthEffect {
-            bodyParts
-            effects
-            time {
-              compareMethod
-              value
-            }
-          }
-        }
-        ... on TaskObjectiveSkill {
-          skillLevel {
-            name
-            level
-          }
-        }
-        ... on TaskObjectiveTaskStatus {
-          task {
-            id
-            name
-          }
-          status
-        }
-        ... on TaskObjectiveTraderLevel {
-          trader {
-            id
-            name
-          }
-          level
-        }
-      }
-      startRewards {
-        traderStanding {
-          trader {
-            id
-            name
-          }
-          standing
-        }
-        items {
-          count
-          item {
-            id
-            name
-            containsItems {
-              item {
-                id
-                name
-              }
-              count
-            }
-          }
-        }
-        offerUnlock {
-          id
-          trader {
-            id
-            name
-          }
-          level
-          item {
-            id
-            name
-            containsItems {
-              count
-              item {
-                id
-                name
-              }
-            }
-          }
-        }
-        skillLevelReward {
-          name
-          level
-        }
-        traderUnlock {
-          id
-          name
-        }
-      }
-      finishRewards {
-        traderStanding {
-          trader {
-            id
-            name
-          }
-          standing
-        }
-        items {
-          count
-          item {
-            id
-            name
-            containsItems {
-              item {
-                id
-                name
-              }
-              count
-            }
-          }
-        }
-        offerUnlock {
-          id
-          trader {
-            id
-            name
-          }
-          level
-          item {
-            id
-            name
-            containsItems {
-              count
-              item {
-                id
-                name
-              }
-            }
-          }
-        }
-        skillLevelReward {
-          name
-          level
-        }
-        traderUnlock {
-          id
-          name
-        }
-      }
-      factionName
-      neededKeys {
-        keys {
-          id
-          name
-        }
-        map {
-          id
-          name
-        }
-      }
-    }
-    maps {
-      id
-      name
-      tarkovDataId
-      enemies
-      wiki
-      raidDuration
-      players
-      description
-    }
-    playerLevels {
-      level
-      exp
-    }
-    traders {
-      id
-      name
-      resetTime
-      levels {
-        id
-        level
-        requiredPlayerLevel
-        requiredReputation
-        requiredCommerce
-        insuranceRate
-        payRate
-        repairCostMultiplier
-      }
-      tarkovDataId
-    }
-  }
-`

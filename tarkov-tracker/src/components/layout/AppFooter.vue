@@ -50,7 +50,8 @@
           reserved.
         </div>
         <div class="mt-2">
-          TarkovTracker &copy; 2020 - {{ new Date().getFullYear() }} <router-link :to="{ path: '/contributors' }"
+          TarkovTracker &copy; 2020 - {{ new Date().getFullYear() }} <router-link
+:to="{ path: '/contributors' }"
             class="info-link">TarkovTracker contributors</router-link>
         </div>
         <div class="mt-0">

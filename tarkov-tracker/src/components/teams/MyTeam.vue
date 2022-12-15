@@ -11,6 +11,24 @@
           </v-col>
         </v-row>
       </template>
+      <template v-else>
+        <v-container>
+          <v-row no-gutters>
+            <v-col>
+              <!-- Show the Team's invite URL -->
+              <v-text-field v-model="teamUrl" variant="outlined" label="Team Invite URL" hide-details="auto"
+                readonly></v-text-field>
+            </v-col>
+            <v-col cols="auto">
+              <!-- Button to copy the invite URL to clipboard -->
+              <v-btn v-if="systemStore.userTeamIsOwn" variant="outlined" class="mx-1" style="height:100%"
+                @click="copyUrl">
+                <v-icon>mdi-content-copy</v-icon>
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-container>
+      </template>
       <v-container class="align-left mt-2" fluid>
         <v-row align="start">
           <!-- Button to show the new token form -->
@@ -46,10 +64,11 @@
   </v-snackbar>
 </template>
 <script setup>
-import { defineAsyncComponent, ref } from 'vue'
+import { defineAsyncComponent, ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { fireapp } from "@/plugins/firebase";
 import { useSystemStore } from "@/stores/system.js";
+import { useTarkovData } from '@/composables/tarkovdata'
 const FittedCard = defineAsyncComponent(() =>
   import("@/components/FittedCard.vue")
 )
@@ -62,6 +81,7 @@ const creatingTeam = ref(false);
 const createTeamResult = ref(null);
 const createTeamSnackbar = ref(false);
 const createTeam = async () => {
+  creatingTeam.value = true;
   try {
     createTeamResult.value = await fireapp.functions().httpsCallable("createTeam")({});
     createTeamResult.value = t('page.team.card.myteam.create_team_success');
@@ -71,6 +91,7 @@ const createTeam = async () => {
     console.error(error)
     createTeamSnackbar.value = true;
   }
+  creatingTeam.value = false;
 }
 
 // Leave team
@@ -78,6 +99,7 @@ const leavingTeam = ref(false);
 const leaveTeamResult = ref(null);
 const leaveTeamSnackbar = ref(false);
 const leaveTeam = async () => {
+  leavingTeam.value = true;
   try {
     leaveTeamResult.value = await fireapp.functions().httpsCallable("leaveTeam")({});
     if (systemStore.userTeamIsOwn) {
@@ -91,7 +113,27 @@ const leaveTeam = async () => {
     console.error(error)
     leaveTeamSnackbar.value = true;
   }
+  leavingTeam.value = false;
 }
+
+const { team } = useTarkovData()
+
+const copyUrl = () => {
+  if (teamUrl.value) {
+    navigator.clipboard.writeText(teamUrl.value);
+  } else {
+    console.error('No team URL to copy');
+  }
+}
+
+const teamUrl = computed(() => {
+  if (team?.value?.owner && team?.value?.password) {
+    return `${window.location.href.split('?')[0]}?team=${encodeURIComponent(team.value.owner)}&code=${encodeURIComponent(team.value.password)}`;
+  } else {
+    return '';
+  }
+
+})
 
 </script>
 <style lang="scss" scoped>

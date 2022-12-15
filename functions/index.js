@@ -126,20 +126,20 @@ exports.leaveTeam = functions.https.onCall(async (data, context) => {
 					// For each member, remove the team from their system document and then delete the team document
 					teamDoc.data()?.members.forEach((member) => {
 						functions.logger.log("Removing team from member", { member: member, team: originalTeam });
-						transaction.update(db.collection('system').doc(member), {
-							team: admin.firestore.FieldValue.delete()
-						})
+						transaction.set(db.collection('system').doc(member), {
+							team: null
+						}, { merge: true })
 					})
 
 					transaction.delete(teamRef)
 				} else {
 					// We are not the room owner, remove ourself from the team
-					transaction.update(teamRef, {
+					transaction.set(teamRef, {
 						members: admin.firestore.FieldValue.arrayRemove(context.auth.uid)
-					})
-					transaction.update(systemRef, {
-						team: admin.firestore.FieldValue.delete()
-					})
+					}, { merge: true })
+					transaction.set(systemRef, {
+						team: null
+					}, { merge: true })
 				}
 			} else {
 				// We are not in a team, oops
@@ -245,9 +245,9 @@ exports.createTeam = functions.https.onCall(async (data, context) => {
 			})
 
 			// Set our team to our own team
-			transaction.update(systemRef, {
+			transaction.set(systemRef, {
 				team: context.auth.uid
-			})
+			}, { merge: true })
 		});
 		functions.logger.info("Created team", { owner: context.auth.uid })
 		return { team: context.auth.uid }

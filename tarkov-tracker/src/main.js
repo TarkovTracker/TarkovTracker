@@ -20,8 +20,9 @@ import pinia from './plugins/pinia'
 // Apollo GraphQL client
 import apolloClient from './plugins/apollo'
 
-// tarkovdata
-//import { TarkovDataPlugin } from './plugins/tarkovdata'
+// VueFire
+import { VueFire, VueFireAuth } from 'vuefire'
+import { fireapp } from './plugins/firebase'
 
 // Base app component
 import App from './App.vue'
@@ -33,6 +34,11 @@ createApp(App)
   .use(router)
   .use(vuetify)
   .use(i18n)
-  //.use(TarkovDataPlugin)
+  .use(VueFire, {
+    firebaseApp: fireapp,
+    modules: [
+      VueFireAuth(),
+    ],
+  })
   .provide(DefaultApolloClient, apolloClient)
   .mount('#app')

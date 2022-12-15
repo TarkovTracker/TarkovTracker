@@ -2,7 +2,7 @@
   <tracker-tip v-if="true" tip="team"></tracker-tip>
   <v-container v-if="fireuser.loggedIn">
     <v-row justify="center">
-      <v-col cols="12" v-if="systemStore.userTeam">
+      <v-col v-if="systemStore.userTeam" cols="12">
         <team-members></team-members>
       </v-col>
       <v-col cols="12" sm="12" md="12" lg="6" xl="6">
