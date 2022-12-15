@@ -2,11 +2,11 @@
   <icon-card icon="mdi-account-group" icon-background="secondary" icon-color="white">
     <template #stat>
       {{ $t('page.team.card.manageteam.title') }}
-      {{ team?.owner ? team?.owner : 'No owner' }}
+      {{ teamStore.teamOwner ? teamStore.teamOwner : 'No owner' }}
     </template>
     <template #content>
-      <template v-if="team?.members">
-        <template v-for="teammate in team?.members" :key="teammate">
+      <template v-if="teamStore.teamMembers">
+        <template v-for="teammate in teamStore.teamMembers" :key="teammate">
           {{ teammate }}
         </template>
       </template>
@@ -20,7 +20,7 @@ const IconCard = defineAsyncComponent(() =>
   import("@/components/IconCard.vue")
 )
 
-const { team } = useTarkovData()
+const { teamStore } = useTarkovData()
 
 </script>
 <style lang="scss" scoped>

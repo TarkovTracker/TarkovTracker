@@ -2,7 +2,7 @@
   <v-container>
     <template v-if="systemStore.userTokenCount == 0">{{ $t('page.settings.card.apitokens.no_tokens') }}</template>
     <v-row no-gutters>
-      <v-col v-for="(token, index) in systemStore.tokens" :key="index" cols="12" sm="12" md="6" lg="6" xl="6">
+      <v-col v-for="(token, index) in systemStore.userTokens" :key="index" cols="12" sm="12" md="6" lg="6" xl="6">
         <token-card :token="token" class="ma-2" />
       </v-col>
     </v-row>
@@ -14,12 +14,10 @@
         <v-text-field v-model="tokenName" :rules="tokenNameRules" label="Token Description" required density="compact">
         </v-text-field>
         <!-- For each available permission flag, display it as a checkbox -->
-        <v-checkbox
-v-for="(permission, permissionKey) in availablePermissions" :key="permission"
+        <v-checkbox v-for="(permission, permissionKey) in availablePermissions" :key="permission"
           v-model="selectedPermissions" :label="permission.title" :value="permissionKey" density="compact" hide-details>
         </v-checkbox>
-        <v-btn
-:disabled="!validNewToken || selectedPermissionsCount == 0 || creatingToken" color="success" class="mr-4"
+        <v-btn :disabled="!validNewToken || selectedPermissionsCount == 0 || creatingToken" color="success" class="mr-4"
           :loading="creatingToken" append-icon="mdi-key-plus" @click="createToken">
           {{ $t('page.settings.card.apitokens.submit_new_token') }}
         </v-btn>
@@ -29,8 +27,7 @@ v-for="(permission, permissionKey) in availablePermissions" :key="permission"
   <v-container class="align-left" fluid>
     <v-row align="start">
       <!-- Button to show the new token form -->
-      <v-btn
-v-if="!showNewTokenForm" variant="outlined" class="mx-1" prepend-icon="mdi-unfold-more-horizontal"
+      <v-btn v-if="!showNewTokenForm" variant="outlined" class="mx-1" prepend-icon="mdi-unfold-more-horizontal"
         @click="showNewTokenForm = true">
         {{ $t('page.settings.card.apitokens.new_token_expand') }}
       </v-btn>
@@ -50,12 +47,15 @@ v-if="!showNewTokenForm" variant="outlined" class="mx-1" prepend-icon="mdi-unfol
 import { ref, defineAsyncComponent, computed } from "vue";
 import { useI18n } from 'vue-i18n'
 import { fireapp } from "@/plugins/firebase";
-import { useSystemStore } from "@/stores/system.js";
+import { useTarkovData } from '@/composables/tarkovdata'
 import availablePermissions from "@/utils/api_permissions.js";
 const TokenCard = defineAsyncComponent(() =>
   import("@/components/settings/TokenCard.vue")
 )
 const { t } = useI18n({ useScope: 'global' })
+
+const { systemStore } = useTarkovData()
+
 // New token form
 const newTokenForm = ref(null);
 const validNewToken = ref(false);
@@ -88,7 +88,7 @@ const createToken = async () => {
 };
 
 // Tokens
-const systemStore = useSystemStore();
+//const systemStore = useSystemStore();
 </script>
 <style lang="scss" scoped>
 

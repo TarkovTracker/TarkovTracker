@@ -127,7 +127,8 @@ exports.leaveTeam = functions.https.onCall(async (data, context) => {
 					teamDoc.data()?.members.forEach((member) => {
 						functions.logger.log("Removing team from member", { member: member, team: originalTeam });
 						transaction.set(db.collection('system').doc(member), {
-							team: null
+							team: null,
+							lastLeftTeam: admin.firestore.FieldValue.serverTimestamp()
 						}, { merge: true })
 					})
 
@@ -138,7 +139,8 @@ exports.leaveTeam = functions.https.onCall(async (data, context) => {
 						members: admin.firestore.FieldValue.arrayRemove(context.auth.uid)
 					}, { merge: true })
 					transaction.set(systemRef, {
-						team: null
+						team: null,
+						lastLeftTeam: admin.firestore.FieldValue.serverTimestamp()
 					}, { merge: true })
 				}
 			} else {
@@ -147,7 +149,7 @@ exports.leaveTeam = functions.https.onCall(async (data, context) => {
 			}
 			functions.logger.log("Left team", { user: context.auth.uid, team: originalTeam });
 		});
-
+		functions.logger.log("Finished leave team", { user: context.auth.uid })
 		return { left: true }
 	} catch (e) {
 		functions.logger.error("Failed to leave team", { owner: context.auth.uid, error: e });

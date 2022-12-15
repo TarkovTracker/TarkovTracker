@@ -16,7 +16,8 @@
 </template>
 <script setup>
 import { fireuser } from '@/plugins/firebase'
-import { useSystemStore } from '@/stores/system.js'
+//import { useSystemStore } from '@/stores/system.js'
+import { useTarkovData } from '@/composables/tarkovdata'
 import { defineAsyncComponent } from 'vue'
 const IconCard = defineAsyncComponent(() =>
   import("@/components/IconCard.vue")
@@ -34,7 +35,7 @@ const TrackerTip = defineAsyncComponent(() =>
   import("@/components/TrackerTip.vue")
 )
 
-const systemStore = useSystemStore();
+const { systemStore } = useTarkovData()
 
 </script>
 <style lang="scss" scoped>

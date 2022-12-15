@@ -1,13 +1,8 @@
 <template>
-  <v-container
-    class="fill-height"
-  >
-    <v-row 
-      align="center"
-      class="fill-height"
-    >
+  <v-container class="fill-height">
+    <v-row align="center" class="fill-height">
       <v-col cols="12">
-        
+
         <div v-if="fireuser?.uid" class="text-center">You are already signed in!</div>
         <div v-show="fireuser?.uid == null" id="firebaseui-auth-container"></div>
       </v-col>
@@ -45,7 +40,7 @@ const uiConfig = {
   signInSuccessUrl: '/',
   signInOptions: [
     // Leave the lines as is for the providers you want to offer your users.
-    firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+    firebase.auth.GoogleAuthProvider.PROVIDER_ID
   ],
   signInFlow: 'popup',
   // Terms of Service

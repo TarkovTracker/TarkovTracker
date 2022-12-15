@@ -67,14 +67,14 @@
 import { defineAsyncComponent, ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { fireapp } from "@/plugins/firebase";
-import { useSystemStore } from "@/stores/system.js";
 import { useTarkovData } from '@/composables/tarkovdata'
 const FittedCard = defineAsyncComponent(() =>
   import("@/components/FittedCard.vue")
 )
 
 const { t } = useI18n({ useScope: 'global' })
-const systemStore = useSystemStore();
+const { teamStore, systemStore } = useTarkovData()
+//const systemStore = useSystemStore();
 
 // Create new team
 const creatingTeam = ref(false);
@@ -116,7 +116,7 @@ const leaveTeam = async () => {
   leavingTeam.value = false;
 }
 
-const { team } = useTarkovData()
+
 
 const copyUrl = () => {
   if (teamUrl.value) {
@@ -127,8 +127,8 @@ const copyUrl = () => {
 }
 
 const teamUrl = computed(() => {
-  if (team?.value?.owner && team?.value?.password) {
-    return `${window.location.href.split('?')[0]}?team=${encodeURIComponent(team.value.owner)}&code=${encodeURIComponent(team.value.password)}`;
+  if (teamStore.teamOwner && teamStore.teamPassword) {
+    return `${window.location.href.split('?')[0]}?team=${encodeURIComponent(teamStore.owner)}&code=${encodeURIComponent(teamStore.teamPassword)}`;
   } else {
     return '';
   }
