@@ -2,7 +2,6 @@
   <icon-card icon="mdi-account-group" icon-background="secondary" icon-color="white">
     <template #stat>
       {{ $t('page.team.card.manageteam.title') }}
-      {{ teamStore.teamOwner ? teamStore.teamOwner : 'No owner' }}
     </template>
     <template #content>
       <template v-if="teamStore.teamMembers">

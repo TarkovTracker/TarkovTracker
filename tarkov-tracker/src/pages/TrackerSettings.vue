@@ -30,8 +30,7 @@
             <v-container>
               <v-row justify="center">
                 <v-col cols="12">
-                  <v-switch
-v-model="streamerMode" hide-details density="compact"
+                  <v-switch v-model="streamerMode" hide-details density="compact"
                     :label="streamerMode ? $t('page.settings.card.streamermode.modeOn') : $t('page.settings.card.streamermode.modeOff')">
                   </v-switch>
                 </v-col>
@@ -50,8 +49,7 @@ v-model="streamerMode" hide-details density="compact"
             <v-container>
               <v-row justify="center">
                 <v-col cols="12">
-                  <v-select
-v-model="currentGameEdition" density="compact" :items="gameEditions"
+                  <v-select v-model="currentGameEdition" density="compact" :items="gameEditions"
                     :label="$t('page.settings.card.gameedition.select')" variant="outlined" hide-details></v-select>
                 </v-col>
               </v-row>
@@ -85,6 +83,7 @@ v-model="currentGameEdition" density="compact" :items="gameEditions"
 import { fireuser } from '@/plugins/firebase'
 import { defineAsyncComponent, computed } from 'vue'
 import { useTarkovStore } from "@/stores/tarkov.js";
+import { useUserStore } from "@/stores/user.js";
 const IconCard = defineAsyncComponent(() =>
   import("@/components/IconCard.vue")
 )
@@ -95,6 +94,7 @@ const ApiTokens = defineAsyncComponent(() =>
   import("@/components/settings/ApiTokens.vue")
 )
 const tarkovStore = useTarkovStore();
+const userStore = useUserStore();
 
 const gameEditions = [
   { title: 'Standard Edition', value: 1 },
@@ -114,10 +114,10 @@ const currentGameEdition = computed({
 
 const streamerMode = computed({
   get() {
-    return tarkovStore.getStreamerMode
+    return userStore.getStreamerMode
   },
   set(newValue) {
-    tarkovStore.setStreamerMode(newValue)
+    userStore.setStreamerMode(newValue)
   }
 })
 

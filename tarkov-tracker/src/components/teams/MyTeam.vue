@@ -16,7 +16,7 @@
           <v-row no-gutters>
             <v-col>
               <!-- Show the Team's invite URL -->
-              <v-text-field v-model="teamUrl" variant="outlined" label="Team Invite URL" hide-details="auto"
+              <v-text-field v-model="visibleUrl" variant="outlined" label="Team Invite URL" hide-details="auto"
                 readonly></v-text-field>
             </v-col>
             <v-col cols="auto">
@@ -68,6 +68,7 @@ import { defineAsyncComponent, ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { fireapp } from "@/plugins/firebase";
 import { useTarkovData } from '@/composables/tarkovdata'
+import { useUserStore } from '@/stores/user'
 const FittedCard = defineAsyncComponent(() =>
   import("@/components/FittedCard.vue")
 )
@@ -128,13 +129,21 @@ const copyUrl = () => {
 
 const teamUrl = computed(() => {
   if (teamStore.teamOwner && teamStore.teamPassword) {
-    return `${window.location.href.split('?')[0]}?team=${encodeURIComponent(teamStore.owner)}&code=${encodeURIComponent(teamStore.teamPassword)}`;
+    return `${window.location.href.split('?')[0]}?team=${encodeURIComponent(teamStore.teamOwner)}&code=${encodeURIComponent(teamStore.teamPassword)}`;
   } else {
     return '';
   }
-
 })
 
+const userStore = useUserStore();
+
+const visibleUrl = computed(() => {
+  if (userStore.getStreamerMode) {
+    return t('page.team.card.myteam.url_hidden');
+  } else {
+    return teamUrl.value;
+  }
+})
 </script>
 <style lang="scss" scoped>
 

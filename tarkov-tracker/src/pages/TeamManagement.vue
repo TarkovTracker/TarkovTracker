@@ -1,7 +1,12 @@
 <template>
-  <tracker-tip v-if="true" tip="team"></tracker-tip>
+  <tracker-tip tip="team"></tracker-tip>
   <v-container v-if="fireuser.loggedIn">
-    <v-row justify="center">
+    <v-row justify="center" v-if="route?.query?.team && route?.query?.code">
+      <v-col cols="12">
+        <team-invite></team-invite>
+      </v-col>
+    </v-row>
+    <v-row justify="center" v-if="fireuser.loggedIn">
       <v-col v-if="systemStore.userTeam" cols="12">
         <team-members></team-members>
       </v-col>
@@ -16,8 +21,8 @@
 </template>
 <script setup>
 import { fireuser } from '@/plugins/firebase'
-//import { useSystemStore } from '@/stores/system.js'
 import { useTarkovData } from '@/composables/tarkovdata'
+import { useRoute } from 'vue-router'
 import { defineAsyncComponent } from 'vue'
 const IconCard = defineAsyncComponent(() =>
   import("@/components/IconCard.vue")
@@ -34,9 +39,12 @@ const MyTeam = defineAsyncComponent(() =>
 const TrackerTip = defineAsyncComponent(() =>
   import("@/components/TrackerTip.vue")
 )
+const TeamInvite = defineAsyncComponent(() =>
+  import("@/components/teams/TeamInvite.vue")
+)
 
 const { systemStore } = useTarkovData()
-
+const route = useRoute()
 </script>
 <style lang="scss" scoped>
 

@@ -5,6 +5,7 @@ import { fireuser } from '@/plugins/firebase'
 export const defaultState = {
   allTipsHidden: false,
   hideTips: {},
+  streamerMode: false,
 }
 
 // Getters are for reading store state in a uniform manner
@@ -19,6 +20,9 @@ export const getters = {
     }
   },
   hideAllTips: (state) => { return state.allTipsHidden || false },
+  getStreamerMode(state) {
+    return state.streamerMode || false
+  }
 }
 
 // Actions are for mutations and setters
@@ -38,6 +42,10 @@ export const actions = {
   enableHideAllTips() {
     this.allTipsHidden = true
   },
+
+  setStreamerMode(mode) {
+    this.streamerMode = mode
+  }
 }
 
 export const useUserStore = defineStore('swapUser', {

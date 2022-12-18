@@ -4,7 +4,6 @@
 export const defaultState = {
   level: 1,
   gameEdition: 1,
-  streamerMode: false,
 }
 
 // Getters are for reading store state in a uniform manner
@@ -17,10 +16,6 @@ export const getters = {
   getGameEdition(state) {
     return state.gameEdition || 1
   },
-
-  getStreamerMode(state) {
-    return state.streamerMode || false
-  }
 }
 
 // Actions are for mutations and setters
@@ -32,7 +27,7 @@ export const actions = {
       this.level = 2
     }
   },
-  
+
   decrementLevel() {
     if (this.level) {
       this.level--
@@ -44,8 +39,4 @@ export const actions = {
   setGameEdition(edition) {
     this.gameEdition = edition
   },
-
-  setStreamerMode(mode) {
-    this.streamerMode = mode
-  }
 }

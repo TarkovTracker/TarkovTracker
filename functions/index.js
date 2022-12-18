@@ -260,3 +260,5 @@ exports.createTeam = functions.https.onCall(async (data, context) => {
 
 
 });
+
+//exports.tarkovdata = require('./tarkovdata.js');

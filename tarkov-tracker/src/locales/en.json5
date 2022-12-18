@@ -94,6 +94,12 @@
           leave_team_success: 'Successfully left your team.',
           leave_team_error: 'Failed to leave your team.',
           no_team: 'You are not currently in a team.',
+          url_hidden: 'Hidden for Streamer mode.',
+        },
+        teaminvite: {
+          description: 'You have received an invite to a TarkovTracker team',
+          accept: 'Accept',
+          decline: 'Decline',
         }
       },
     },
@@ -109,13 +115,13 @@
     call_to_action: {
       discord_phrase: 'Report bugs/request features on {discord}',
       github_phrase: 'Contribute to the open source project on {github}',
-      patreon_phrase: 'Support the project on {patreon}',
+      patreon_phrase: 'Support project costs on {patreon}',
       discord: 'Discord',
       github: 'GitHub',
       patreon: 'Patreon',
     },
     ukraine: {
-      support_link: 'Support Ukraine',
+      support_link: 'Support Ukrainians',
       support_phrase: '{support_ukraine} via the ICRC'
     }
   },

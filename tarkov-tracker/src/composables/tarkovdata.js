@@ -1,15 +1,14 @@
 import { useQuery, provideApolloClient } from "@vue/apollo-composable";
 import { computed, ref, watch } from "vue";
-import { fireuser } from '@/plugins/firebase'
+import { fireuser, fireapp } from '@/plugins/firebase'
 import { doc, collection, onSnapshot } from 'firebase/firestore'
-import { useFirestore } from 'vuefire'
 import apolloClient from "@/plugins/apollo";
 import tarkovDataQuery from "@/utils/tarkovdataquery.js"
 import { defineStore } from 'pinia'
 
 provideApolloClient(apolloClient)
 
-const firedb = useFirestore()
+const firedb = fireapp.firestore()
 
 const queryErrors = ref(null)
 const queryResults = ref(null)
@@ -108,6 +107,7 @@ function startStoreWatcher(store, ref, unsubscribe) {
       unsubscribe.value = onSnapshot(newRef, (snapshot) => {
         console.debug(`${store.$id} data changed`)
         const snapshotData = snapshot.data()
+        debugger
         store.$patch(snapshotData)
         clearState(store, snapshotData)
       }, (error) => {
@@ -129,37 +129,6 @@ function startStoreWatcher(store, ref, unsubscribe) {
 }
 
 startStoreWatcher(systemStore, systemRef, systemUnsubscribe)
-
-// watch(systemRef, async (newSystemRef) => {
-//   // Start listening to the new systemRef
-//   if (newSystemRef) {
-//     if (systemUnsubscribe.value) {
-//       console.debug("Unsubscribing from system")
-//       systemUnsubscribe.value()
-//     }
-//     console.debug("System ref changed to " + newSystemRef)
-//     systemUnsubscribe.value = onSnapshot(newSystemRef, (snapshot) => {
-//       console.debug("System data changed")
-//       const systemStore = useSystemStore()
-//       const snapshotData = snapshot.data()
-//       systemStore.$patch(snapshotData)
-//       clearState(systemStore, snapshotData)
-//     }, (error) => {
-//       if (error.code == 'permission-denied' && systemUnsubscribe.value) {
-//         console.debug("Unsubscribing from system")
-//         systemUnsubscribe.value()
-//         clearState(systemStore, {})
-//       }
-//     });
-//   } else {
-//     if (systemUnsubscribe.value) {
-//       console.debug("Unsubscribing from system")
-//       systemUnsubscribe.value()
-//     }
-//     console.debug("System ref changed to null")
-//     clearState(systemStore, {})
-//   }
-// }, { immediate: true });
 
 const teamRef = computed(() => {
   if (fireuser.loggedIn) {

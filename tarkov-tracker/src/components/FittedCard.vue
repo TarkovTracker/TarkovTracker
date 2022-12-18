@@ -1,5 +1,6 @@
 <template>
-  <v-sheet rounded class="elevation-2 mt-2 pt-2 corner-highlight-parent" color="rgba(33,33,33,1)">
+  <v-sheet rounded class="elevation-2 pt-2 corner-highlight-parent" :class="{ 'fill-height': props.fillHeight }"
+    color="rgba(33,33,33,1)">
     <div class="text-h5">
       <span :class="highlightClasses">
         <v-icon :color="props.iconColor">{{ props.icon }}</v-icon>
@@ -31,6 +32,11 @@ const props = defineProps({
   highlightColor: {
     type: String,
     default: "accent",
+    required: false,
+  },
+  fillHeight: {
+    type: Boolean,
+    default: true,
     required: false,
   },
 });
