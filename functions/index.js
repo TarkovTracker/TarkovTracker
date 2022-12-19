@@ -168,45 +168,46 @@ function difference(setA, setB) {
 exports.joinTeam = functions.https.onCall(async (data, context) => {
 	const db = admin.firestore();
 
-	// Parameters from request
-	const teamId = data.id;
-	const password = data.password;
+	try {
+		await db.runTransaction(async (transaction) => {
+			const systemRef = db.collection('system').doc(context.auth.uid);
+			const systemDoc = await transaction.get(systemRef);
 
-	if (!context?.auth?.uid) {
-		return { error: 'No authentication' }
-	}
+			if (systemDoc?.data()?.team) {
+				// We are already in a team, oops
+				throw new Error('User is already in a team')
+			}
 
-	if (teamId == context.auth.uid) {
-		return { error: 'Can\'t join your own team' }
-	}
+			const teamRef = db.collection('team').doc(data.id);
+			const teamDoc = await transaction.get(teamRef);
 
-	// Reference to the team
-	const teamRef = db.collection('team').doc(teamId);
-	const teamDoc = await teamRef.get();
-	if (teamDoc?.data()?.password == password) {
-		if (teamDoc?.data()?.members.length >= teamDoc?.data()?.maximumMembers) {
-			return { error: 'Team is full' }
-		}
-		// We have the right info, we can join the team
-		const systemRef = db.collection('system').doc(context.auth.uid);
-		const systemDoc = await systemRef.get();
-		if (teamRef.isEqual(systemDoc?.data()?.team)) {
-			// We're already in this team
-			return { error: 'Already in this team' }
-		} else if (systemDoc?.data()?.team) {
-			// We're in another team, leave it
-			await userLeaveTeam(context.auth.uid)
-		}
-		// Should be good to join a team now
-		systemRef.update({
-			team: teamRef
-		}, { merge: true })
-		const unionRes = await teamRef.update({
-			members: admin.firestore.FieldValue.arrayUnion(context.auth.uid)
+			if (!teamDoc?.exists) {
+				// Team doesn't exist, oops
+				throw new Error('Team doesn\'t exist')
+			}
+
+			if (teamDoc?.data()?.password != data.password) {
+				// Wrong password, oops
+				throw new Error('Wrong password')
+			}
+
+			if (teamDoc?.data()?.members.length >= 4) {
+				// Team is full, oops
+				throw new Error('Team is full')
+			}
+			// Add the user to the team
+			transaction.set(teamRef, {
+				members: admin.firestore.FieldValue.arrayUnion(context.auth.uid)
+			}, { merge: true })
+			transaction.set(systemRef, {
+				team: data.id
+			}, { merge: true })
 		});
-		return { team: teamId }
-	} else {
-		return { error: 'Team doesn\'t exist, or incorrect password' }
+		functions.logger.log("Joined team", { user: context.auth.uid, team: data.id });
+		return { joined: true }
+	} catch (e) {
+		functions.logger.error("Failed to join team", { user: context.auth.uid, team: data.id, error: e });
+		return { error: 'Error during team join', timestamp: Date.now() }
 	}
 });
 
@@ -257,8 +258,6 @@ exports.createTeam = functions.https.onCall(async (data, context) => {
 		functions.logger.error("Failed to create team", { owner: context.auth.uid, error: e });
 		return { error: 'Error during team creation', timestamp: Date.now() }
 	}
-
-
 });
 
 //exports.tarkovdata = require('./tarkovdata.js');

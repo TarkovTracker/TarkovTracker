@@ -6,6 +6,10 @@ export const defaultState = {
   allTipsHidden: false,
   hideTips: {},
   streamerMode: false,
+  teamHide: {},
+  questTeamHideAll: false,
+  itemsTeamHideAll: false,
+  mapTeamHideAll: false,
 }
 
 // Getters are for reading store state in a uniform manner
@@ -22,7 +26,11 @@ export const getters = {
   hideAllTips: (state) => { return state.allTipsHidden || false },
   getStreamerMode(state) {
     return state.streamerMode || false
-  }
+  },
+  teamIsHidden: (state) => { return (teamId) => state.questTeamHideAll || state.teamHide?.[teamId] || false },
+  questTeamAllHidden: (state) => { return state.questTeamHideAll || false },
+  itemsTeamAllHidden: (state) => { return state.itemsTeamHideAll || false },
+  mapTeamAllHidden: (state) => { return state.mapTeamHideAll || false },
 }
 
 // Actions are for mutations and setters
@@ -45,6 +53,29 @@ export const actions = {
 
   setStreamerMode(mode) {
     this.streamerMode = mode
+  },
+
+  toggleHidden(teamId) {
+    if (!this.teamHide) {
+      this.teamHide = {}
+    }
+    if (this.teamHide?.[teamId]) {
+      this.teamHide[teamId] = false
+    } else {
+      this.teamHide[teamId] = true
+    }
+  },
+
+  setQuestTeamHideAll(hide) {
+    this.questTeamHideAll = hide
+  },
+
+  setItemsTeamHideAll(hide) {
+    this.itemsTeamHideAll = hide
+  },
+
+  setMapTeamHideAll(hide) {
+    this.mapTeamHideAll = hide
   }
 }
 

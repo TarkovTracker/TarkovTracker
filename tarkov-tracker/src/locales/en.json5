@@ -76,11 +76,22 @@
       card: {
         manageteam: {
           title: 'Team Members',
-          button: 'Manage Team'
+          button: 'Manage Team',
+          membercard: {
+            name_column: 'Name',
+            this_is_you: '(This is you)',
+            level_column: 'Level',
+          }
         },
         teamoptions: {
           title: 'Team Integration Options',
-          button: 'Team Options'
+          button: 'Team Options',
+          quest_hide_all: 'Hide all team members\' quests',
+          quest_show_all: 'Show team members\' quests',
+          items_hide_all: 'Hide team members\' needed items',
+          items_show_all: 'Show team members\' needed items',
+          map_hide_all: 'Hide team members\' map objectives',
+          map_show_all: 'Show team members\' map objectives',
         },
         myteam: {
           title: 'My Team',
@@ -95,11 +106,16 @@
           leave_team_error: 'Failed to leave your team.',
           no_team: 'You are not currently in a team.',
           url_hidden: 'Hidden for Streamer mode.',
+          team_invite_url_label: 'Team Invite URL',
+          display_name_label: 'Team Display Name',
         },
         teaminvite: {
           description: 'You have received an invite to a TarkovTracker team',
           accept: 'Accept',
           decline: 'Decline',
+          leave_error: 'Failed to leave your existing team.',
+          join_error: 'Failed to join the team.',
+          join_success: 'Successfully joined the team.',
         }
       },
     },

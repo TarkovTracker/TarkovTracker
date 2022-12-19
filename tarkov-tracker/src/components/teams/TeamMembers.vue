@@ -5,21 +5,29 @@
     </template>
     <template #content>
       <template v-if="teamStore.teamMembers">
-        <template v-for="teammate in teamStore.teamMembers" :key="teammate">
-          {{ teammate }}
-        </template>
+        <v-container>
+          <v-row>
+            <v-col v-for="teammate in teamStore.teamMembers" :key="teammate" cols="12" sm="12" md="6" lg="4" xl="4">
+              <teammember-card :teammember="teammate"></teammember-card>
+            </v-col>
+          </v-row>
+        </v-container>
       </template>
     </template>
   </icon-card>
 </template>
 <script setup>
 import { defineAsyncComponent } from 'vue'
-import { useTarkovData } from '@/composables/tarkovdata'
+import { useLiveData } from '@/composables/livedata'
 const IconCard = defineAsyncComponent(() =>
   import("@/components/IconCard.vue")
 )
+const TeammemberCard = defineAsyncComponent(() =>
+  import("@/components/teams/TeammemberCard.vue")
+)
 
-const { teamStore } = useTarkovData()
+const { useTeamStore } = useLiveData()
+const teamStore = useTeamStore()
 
 </script>
 <style lang="scss" scoped>

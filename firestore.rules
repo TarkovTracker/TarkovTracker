@@ -2,6 +2,12 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    function memberOfSameTeam(userId){
+      let teamroom = get(/databases/$(database)/documents/system/$(request.auth.uid)).data.team;
+      let targetTeamroom = get(/databases/$(database)/documents/system/$(userId)).data.team;
+      return teamroom == targetTeamroom
+    }
+
     function memberOfTeam(){
       return request.auth.uid in resource.data.members || request.auth.uid == resource.data.owner;
     }
@@ -11,7 +17,8 @@ service cloud.firestore {
     }
     
     match /progress/{userId} {
-      allow read, update, delete, create: if request.auth != null && request.auth.uid == userId;
+      allow update, delete, create: if request.auth != null && request.auth.uid == userId;
+      allow read: if (request.auth != null && request.auth.uid == userId) || (memberOfSameTeam(userId));
     }
 
     match /user/{userId} {

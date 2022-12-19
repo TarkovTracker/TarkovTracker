@@ -47,14 +47,15 @@
 import { ref, defineAsyncComponent, computed } from "vue";
 import { useI18n } from 'vue-i18n'
 import { fireapp } from "@/plugins/firebase";
-import { useTarkovData } from '@/composables/tarkovdata'
+import { useLiveData } from '@/composables/livedata'
 import availablePermissions from "@/utils/api_permissions.js";
 const TokenCard = defineAsyncComponent(() =>
   import("@/components/settings/TokenCard.vue")
 )
 const { t } = useI18n({ useScope: 'global' })
 
-const { systemStore } = useTarkovData()
+const { useSystemStore } = useLiveData()
+const systemStore = useSystemStore()
 
 // New token form
 const newTokenForm = ref(null);

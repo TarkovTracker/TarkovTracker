@@ -21,7 +21,7 @@
 </template>
 <script setup>
 import { fireuser } from '@/plugins/firebase'
-import { useTarkovData } from '@/composables/tarkovdata'
+import { useLiveData } from '@/composables/livedata'
 import { useRoute } from 'vue-router'
 import { defineAsyncComponent } from 'vue'
 const IconCard = defineAsyncComponent(() =>
@@ -43,7 +43,8 @@ const TeamInvite = defineAsyncComponent(() =>
   import("@/components/teams/TeamInvite.vue")
 )
 
-const { systemStore } = useTarkovData()
+const { useSystemStore } = useLiveData()
+const systemStore = useSystemStore()
 const route = useRoute()
 </script>
 <style lang="scss" scoped>

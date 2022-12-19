@@ -4,15 +4,49 @@
       {{ $t('page.team.card.teamoptions.title') }}
     </template>
     <template #content>
-      {{ $t('page.team.card.streamermode.description') }}
+      <v-container>
+        <v-row>
+          <v-col cols="12">
+            <v-switch v-model="questHideAll" :label="$t(questHideAllLabel)" inset true-icon="mdi-eye-off"
+              false-icon="mdi-eye" :color="questHideAllColor" hide-details density="compact"></v-switch>
+            <v-switch v-model="itemsHideAll" :label="$t(itemsHideAllLabel)" inset true-icon="mdi-eye-off"
+              false-icon="mdi-eye" :color="itemsHideAllColor" hide-details density="compact"></v-switch>
+            <v-switch v-model="mapHideAll" :label="$t(mapHideAllLabel)" inset true-icon="mdi-eye-off"
+              false-icon="mdi-eye" :color="mapHideAllColor" hide-details density="compact"></v-switch>
+          </v-col>
+        </v-row>
+      </v-container>
     </template>
   </fitted-card>
 </template>
 <script setup>
-import { defineAsyncComponent } from 'vue'
+import { defineAsyncComponent, computed } from 'vue'
+import { useUserStore } from '@/stores/user'
 const FittedCard = defineAsyncComponent(() =>
   import("@/components/FittedCard.vue")
 )
+const userStore = useUserStore()
+
+const questHideAll = computed({
+  get: () => userStore.questTeamAllHidden,
+  set: (value) => userStore.setQuestTeamHideAll(value)
+})
+const questHideAllLabel = computed(() => userStore.questTeamAllHidden ? 'page.team.card.teamoptions.quest_hide_all' : 'page.team.card.teamoptions.quest_show_all')
+const questHideAllColor = computed(() => userStore.questTeamAllHidden ? 'error' : 'success')
+
+const itemsHideAll = computed({
+  get: () => userStore.itemsTeamAllHidden,
+  set: (value) => userStore.setItemsTeamHideAll(value)
+})
+const itemsHideAllLabel = computed(() => userStore.itemsTeamAllHidden ? 'page.team.card.teamoptions.items_hide_all' : 'page.team.card.teamoptions.items_show_all')
+const itemsHideAllColor = computed(() => userStore.itemsTeamAllHidden ? 'error' : 'success')
+
+const mapHideAll = computed({
+  get: () => userStore.mapTeamAllHidden,
+  set: (value) => userStore.setMapTeamHideAll(value)
+})
+const mapHideAllLabel = computed(() => userStore.mapTeamAllHidden ? 'page.team.card.teamoptions.map_hide_all' : 'page.team.card.teamoptions.map_show_all')
+const mapHideAllColor = computed(() => userStore.mapTeamAllHidden ? 'error' : 'success')
 
 </script>
 <style lang="scss" scoped>

@@ -13,11 +13,24 @@
       </template>
       <template v-else>
         <v-container>
-          <v-row no-gutters>
+          <v-row>
             <v-col>
               <!-- Show the Team's invite URL -->
-              <v-text-field v-model="visibleUrl" variant="outlined" label="Team Invite URL" hide-details="auto"
-                readonly></v-text-field>
+              <v-text-field v-model="displayName" variant="outlined"
+                :label="$t('page.team.card.myteam.display_name_label')" hide-details="auto"></v-text-field>
+            </v-col>
+            <v-col cols="auto">
+              <!-- Button to copy the invite URL to clipboard -->
+              <v-btn variant="outlined" class="mx-1" style="height:100%" @click="clearDisplayName">
+                <v-icon>mdi-backspace</v-icon>
+              </v-btn>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <!-- Show the Team's invite URL -->
+              <v-text-field v-model="visibleUrl" variant="outlined"
+                :label="$t('page.team.card.myteam.team_invite_url_label')" hide-details="auto" readonly></v-text-field>
             </v-col>
             <v-col cols="auto">
               <!-- Button to copy the invite URL to clipboard -->
@@ -37,7 +50,7 @@
             {{ $t('page.team.card.myteam.create_new_team') }}
           </v-btn>
           <v-btn v-if="systemStore.userTeam != null" :disabled="leavingTeam" :loading="leavingTeam" variant="outlined"
-            class="mx-1" prepend-icon="mdi-account-group" @click="leaveTeam">
+            class="mx-1" prepend-icon="mdi-account-off" @click="leaveTeam">
             {{ systemStore.userTeamIsOwn ? $t('page.team.card.myteam.disband_team') :
                 $t('page.team.card.myteam.leave_team')
             }}
@@ -66,16 +79,18 @@
 <script setup>
 import { defineAsyncComponent, ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { fireapp } from "@/plugins/firebase";
-import { useTarkovData } from '@/composables/tarkovdata'
+import { fireapp, fireuser } from "@/plugins/firebase";
+import { useLiveData } from '@/composables/livedata'
 import { useUserStore } from '@/stores/user'
+import { useTarkovStore } from '@/stores/tarkov'
 const FittedCard = defineAsyncComponent(() =>
   import("@/components/FittedCard.vue")
 )
 
 const { t } = useI18n({ useScope: 'global' })
-const { teamStore, systemStore } = useTarkovData()
-//const systemStore = useSystemStore();
+const { useTeamStore, useSystemStore } = useLiveData()
+const teamStore = useTeamStore();
+const systemStore = useSystemStore();
 
 // Create new team
 const creatingTeam = ref(false);
@@ -144,6 +159,20 @@ const visibleUrl = computed(() => {
     return teamUrl.value;
   }
 })
+
+const tarkovStore = useTarkovStore();
+const displayName = computed({
+  get() {
+    return tarkovStore.getDisplayName || fireuser.uid.substring(0, 6);
+  },
+  set(newName) {
+    tarkovStore.setDisplayName(newName);
+  }
+})
+
+const clearDisplayName = () => {
+  tarkovStore.setDisplayName("");
+}
 </script>
 <style lang="scss" scoped>
 

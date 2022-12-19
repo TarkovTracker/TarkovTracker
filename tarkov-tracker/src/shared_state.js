@@ -4,6 +4,7 @@
 export const defaultState = {
   level: 1,
   gameEdition: 1,
+  displayName: null,
 }
 
 // Getters are for reading store state in a uniform manner
@@ -16,6 +17,15 @@ export const getters = {
   getGameEdition(state) {
     return state.gameEdition || 1
   },
+
+  getDisplayName(state) {
+    // If an empty string, return null
+    if (state.displayName === "") {
+      return null
+    } else {
+      return state.displayName || null
+    }
+  }
 }
 
 // Actions are for mutations and setters
@@ -39,4 +49,10 @@ export const actions = {
   setGameEdition(edition) {
     this.gameEdition = edition
   },
+
+  setDisplayName(name) {
+    if (typeof name === 'string') {
+      this.displayName = name
+    }
+  }
 }
