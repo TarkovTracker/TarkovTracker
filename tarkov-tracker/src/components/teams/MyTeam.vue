@@ -34,8 +34,7 @@
             </v-col>
             <v-col cols="auto">
               <!-- Button to copy the invite URL to clipboard -->
-              <v-btn v-if="systemStore.userTeamIsOwn" variant="outlined" class="mx-1" style="height:100%"
-                @click="copyUrl">
+              <v-btn variant="outlined" class="mx-1" style="height:100%" @click="copyUrl">
                 <v-icon>mdi-content-copy</v-icon>
               </v-btn>
             </v-col>

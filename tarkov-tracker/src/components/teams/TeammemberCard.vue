@@ -45,8 +45,8 @@
             :color="props.teammember != fireuser.uid && userStore.teamIsHidden(props.teammember) ? 'red' : 'green'"
             size="x-small" @click="userStore.toggleHidden(props.teammember)"></v-btn>
           <!-- Button to delete the token -->
-          <v-btn v-if="props.teammember != fireuser.uid && teamStore.isOwner" variant="outlined" icon="mdi-delete"
-            class="mx-1" color="secondary" size="x-small"></v-btn>
+          <v-btn v-if="props.teammember != fireuser.uid && teamStore.isOwner" variant="outlined"
+            icon="mdi-account-minus" class="mx-1" color="red" size="x-small"></v-btn>
         </v-col>
       </v-row>
     </v-container>

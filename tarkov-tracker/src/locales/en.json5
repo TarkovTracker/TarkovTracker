@@ -78,9 +78,7 @@
           title: 'Team Members',
           button: 'Manage Team',
           membercard: {
-            name_column: 'Name',
             this_is_you: '(This is you)',
-            level_column: 'Level',
           }
         },
         teamoptions: {
