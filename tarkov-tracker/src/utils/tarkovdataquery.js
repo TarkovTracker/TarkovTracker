@@ -272,6 +272,9 @@ export default gql`
         keys {
           id
           name
+          shortName
+          link
+          wikiLink
         }
         map {
           id

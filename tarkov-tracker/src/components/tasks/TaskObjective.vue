@@ -1,5 +1,6 @@
 <template>
-  <div class="d-flex align-center pa-1 rounded" :class="{ 'objective-complete': isComplete }"
+  <div
+class="d-flex align-center pa-1 rounded" :class="{ 'objective-complete': isComplete }"
     @click="toggleObjectiveCompletion()">
     <v-icon size="x-small" class="mr-1">{{ objectiveIcon }}</v-icon>{{ props.objective?.description }}
   </div>

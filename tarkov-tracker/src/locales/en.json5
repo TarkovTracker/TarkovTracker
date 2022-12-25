@@ -59,6 +59,8 @@
         statuscomplete: "Marked {name} as complete",
         statusuncomplete: "Marked {name} as uncompleted",
         statusavailable: "Marked all prerequisites for {name} as complete",
+        nonkappa: "Not Kappa Required",
+        keysneeded: "{keys} needed on {map} | One of {keys} needed on {map}",
       }
     },
     settings: {

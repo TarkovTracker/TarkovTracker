@@ -54,6 +54,13 @@
                   </i18n-t>
                 </v-col>
               </v-row>
+              <v-row v-if="nonKappa" no-gutters class="mb-1">
+                <v-col cols="auto" class="mr-1">
+                  <v-chip size="x-small" color="red" variant="outlined">
+                    {{ $t('page.tasks.questcard.nonkappa') }}
+                  </v-chip>
+                </v-col>
+              </v-row>
               <v-row no-gutters class="mb-1">
                 <a :href="props.task.wikiLink" target="_blank" class="wiki-link">
                   <v-row no-gutters>
@@ -74,8 +81,29 @@
           </template>
         </v-col>
         <v-col cols="12" xs="12" sm="8" md="7" lg="7" class="d-flex align-center">
-          <!-- Quest objectives -->
           <v-container>
+            <!-- Quest keys -->
+            <v-row v-if="props.task?.neededKeys?.length > 0" no-gutters>
+              <v-col cols="auto" class="py-1">
+                <v-sheet class="pa-1 rounded-lg" color="accent">
+                  <div v-for="keyMap, keyIndex in props.task.neededKeys" :key="keyIndex"
+                    class="d-flex align-center my-1">
+                    <i18n-t keypath="page.tasks.questcard.keysneeded" scope="global" :plural="keyMap.keys.length">
+                      <template #keys>
+                        <span v-for="key, keyIndex in keyMap.keys" :key="keyIndex" class="d-inline-block">
+                          <tarkov-item :item-id="key.id" :item-name="key.shortName" :dev-link="key.link"
+                            :wiki-link="key.wikiLink" class="mr-2" />
+                        </span>
+                      </template>
+                      <template #map>
+                        {{ keyMap.map.name }}
+                      </template>
+                    </i18n-t>
+                  </div>
+                </v-sheet>
+              </v-col>
+            </v-row>
+            <!-- Quest objectives -->
             <v-row no-gutters>
               <v-col v-for="objective, objectiveIndex in props.task.objectives" :key="objectiveIndex" cols="12"
                 class="py-1">
@@ -91,14 +119,14 @@
             <template v-if="!isComplete && !isLocked">
               <!-- We are an available quest, so the primary button is the complete one -->
               <template v-if="!xs">
-                <v-btn size="x-large" color="accent" @click="markTaskComplete()" class="mx-1 my-1"><v-icon
+                <v-btn size="x-large" color="accent" class="mx-1 my-1" @click="markTaskComplete()"><v-icon
                     class="mr-2">mdi-check-all</v-icon>{{
                         $t('page.tasks.questcard.completebutton')
                     }}</v-btn>
               </template>
               <template v-else>
                 <div class="d-flex justify-center">
-                  <v-btn color="accent" @click="markTaskComplete()" class="mx-1 my-1"><v-icon
+                  <v-btn color="accent" class="mx-1 my-1" @click="markTaskComplete()"><v-icon
                       class="mr-2">mdi-check-all</v-icon>{{
                           $t('page.tasks.questcard.completebutton')
                       }}</v-btn>
@@ -108,14 +136,14 @@
             <template v-else-if="isComplete">
               <!-- We are a completed quest, so the primary button is the reset one -->
               <template v-if="!xs">
-                <v-btn size="x-large" color="accent" @click="markTaskUncomplete()" class="mx-1 my-1"><v-icon
+                <v-btn size="x-large" color="accent" class="mx-1 my-1" @click="markTaskUncomplete()"><v-icon
                     class="mr-2">mdi-undo</v-icon>{{
                         $t('page.tasks.questcard.uncompletebutton')
                     }}</v-btn>
               </template>
               <template v-else>
                 <div class="d-flex justify-center">
-                  <v-btn color="accent" @click="markTaskUncomplete()" class="mx-1 my-1"><v-icon
+                  <v-btn color="accent" class="mx-1 my-1" @click="markTaskUncomplete()"><v-icon
                       class="mr-2">mdi-undo</v-icon>{{
                           $t('page.tasks.questcard.uncompletebutton')
                       }}</v-btn>
@@ -125,22 +153,22 @@
             <template v-else-if="isLocked">
               <!-- We are a locked quest, so the primary button is the unlock one -->
               <template v-if="!xs">
-                <v-btn size="x-large" color="accent" @click="markTaskAvailable()" class="mx-1 my-1"><v-icon
+                <v-btn size="x-large" color="accent" class="mx-1 my-1" @click="markTaskAvailable()"><v-icon
                     class="mr-2">mdi-fast-forward</v-icon>{{
                         $t('page.tasks.questcard.availablebutton')
                     }}</v-btn>
-                <v-btn size="x-large" color="accent" @click="markTaskComplete()" class="mx-1 my-1"><v-icon
+                <v-btn size="x-large" color="accent" class="mx-1 my-1" @click="markTaskComplete()"><v-icon
                     class="mr-2">mdi-check-all</v-icon>{{
                         $t('page.tasks.questcard.completebutton')
                     }}</v-btn>
               </template>
               <template v-else>
                 <div class="d-flex justify-center">
-                  <v-btn size="small" color="accent" @click="markTaskAvailable()" class="mx-1 my-1"><v-icon
+                  <v-btn size="small" color="accent" class="mx-1 my-1" @click="markTaskAvailable()"><v-icon
                       class="mr-2">mdi-fast-forward</v-icon>{{
                           $t('page.tasks.questcard.availablebutton')
                       }}</v-btn>
-                  <v-btn size="small" color="accent" @click="markTaskComplete()" class="mx-1 my-1"><v-icon
+                  <v-btn size="small" color="accent" class="mx-1 my-1" @click="markTaskComplete()"><v-icon
                       class="mr-2">mdi-check-all</v-icon>{{
                           $t('page.tasks.questcard.completebutton')
                       }}</v-btn>
@@ -185,6 +213,9 @@ const TaskLink = defineAsyncComponent(() =>
 const TaskObjective = defineAsyncComponent(() =>
   import("@/components/tasks/TaskObjective.vue")
 )
+const TarkovItem = defineAsyncComponent(() =>
+  import("@/components/TarkovItem.vue")
+)
 
 const { xs } = useDisplay()
 
@@ -204,6 +235,10 @@ const lockedBehind = computed(() => {
 const lockedBefore = computed(() => {
   // Calculate how many of the predecessors are uncompleted
   return props.task.predecessors.filter((s) => !tarkovStore.isTaskComplete(s.id)).length
+})
+
+const nonKappa = computed(() => {
+  return !props.task.successors.includes('5c51aac186f77432ea65c552')
 })
 
 const markTaskComplete = () => {

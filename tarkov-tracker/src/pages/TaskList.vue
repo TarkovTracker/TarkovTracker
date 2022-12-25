@@ -5,7 +5,8 @@
       <v-col lg="4" md="12">
         <!-- Primary views (all, maps, traders) -->
         <v-card>
-          <v-tabs v-model="activePrimaryView" bg-color="accent" slider-color="secondary" align-tabs="center"
+          <v-tabs
+v-model="activePrimaryView" bg-color="accent" slider-color="secondary" align-tabs="center"
             show-arrows>
             <v-tab v-for="view, index in primaryViews" :key="index" :value="view.view" :prepend-icon="view.icon">
               {{ view.title }}
@@ -51,7 +52,8 @@
       <v-col lg="4" md="12">
         <!-- Secondary views (available, locked, completed) -->
         <v-card>
-          <v-tabs v-model="activeSecondaryView" bg-color="accent" slider-color="secondary" align-tabs="center"
+          <v-tabs
+v-model="activeSecondaryView" bg-color="accent" slider-color="secondary" align-tabs="center"
             show-arrows>
             <v-tab v-for="view, index in secondaryViews" :key="index" :value="view.view" :prepend-icon="view.icon">
               {{ view.title }}
@@ -63,7 +65,8 @@
         <!-- User view -->
         <v-card>
           <v-tabs v-model="activeUserView" bg-color="accent" slider-color="secondary" align-tabs="center">
-            <v-tab v-for="view in userViews" :key="view.view" :value="view.view"
+            <v-tab
+v-for="view in userViews" :key="view.view" :value="view.view"
               :disabled="view.view == 'all' && activeSecondaryView != 'available'">
               {{ view.title }}
             </v-tab>
@@ -81,7 +84,8 @@
     </v-row>
     <v-row v-show="!loadingTasks && !reloadingTasks" justify="center">
       <v-col cols="12" class="my-1">
-        <v-lazy v-for="task, taskIndex in visibleTasks" :key="taskIndex" :options="{
+        <v-lazy
+v-for="task, taskIndex in visibleTasks" :key="taskIndex" :options="{
           threshold: 0.5
         }" min-height="100">
           <task-card :task="task" class="my-1" />
