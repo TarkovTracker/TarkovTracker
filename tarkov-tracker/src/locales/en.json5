@@ -52,7 +52,13 @@
         level: "Level {count}",
         wiki: "Wiki page",
         lockedbefore: "{count} before",
-        lockedbehind: "{count} behind"
+        lockedbehind: "{count} behind",
+        completebutton: "Complete",
+        availablebutton: "Mark Available",
+        uncompletebutton: "Mark Uncompleted",
+        statuscomplete: "Marked {name} as complete",
+        statusuncomplete: "Marked {name} as uncompleted",
+        statusavailable: "Marked all prerequisites for {name} as complete",
       }
     },
     settings: {

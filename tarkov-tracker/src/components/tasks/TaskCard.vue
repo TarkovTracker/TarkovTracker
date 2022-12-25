@@ -1,5 +1,11 @@
 <template>
-  <v-sheet class="pa-2" :rounded="true">
+  <v-sheet class="pa-2 taskContainer" :rounded="true" :class="{ 'task-complete': isComplete, 'task-locked': isLocked }">
+    <div v-if="isLocked" class="taskContainerBackground text-h1">
+      <v-icon>mdi-lock</v-icon>
+    </div>
+    <div v-if="isComplete" class="taskContainerBackground text-h1">
+      <v-icon>mdi-check</v-icon>
+    </div>
     <v-container>
       <v-row>
         <v-col cols="12" xs="12" sm="4" md="3" lg="3" :align="xs ? 'center' : 'left'">
@@ -71,8 +77,7 @@
           <!-- Quest objectives -->
           <v-container>
             <v-row no-gutters>
-              <v-col
-v-for="objective, objectiveIndex in props.task.objectives" :key="objectiveIndex" cols="12"
+              <v-col v-for="objective, objectiveIndex in props.task.objectives" :key="objectiveIndex" cols="12"
                 class="py-1">
                 <task-objective :objective="objective" />
               </v-col>
@@ -80,17 +85,89 @@ v-for="objective, objectiveIndex in props.task.objectives" :key="objectiveIndex"
           </v-container>
 
         </v-col>
-        <v-col cols="12" xs="12" sm="12" md="2" lg="2">
-          <!-- Quest actions -->
+        <v-col cols="12" xs="12" sm="12" md="2" lg="2" class="d-flex align-center justify-center">
+          <div class="d-block">
+            <!-- Quest actions -->
+            <template v-if="!isComplete && !isLocked">
+              <!-- We are an available quest, so the primary button is the complete one -->
+              <template v-if="!xs">
+                <v-btn size="x-large" color="accent" @click="markTaskComplete()" class="mx-1 my-1"><v-icon
+                    class="mr-2">mdi-check-all</v-icon>{{
+                        $t('page.tasks.questcard.completebutton')
+                    }}</v-btn>
+              </template>
+              <template v-else>
+                <div class="d-flex justify-center">
+                  <v-btn color="accent" @click="markTaskComplete()" class="mx-1 my-1"><v-icon
+                      class="mr-2">mdi-check-all</v-icon>{{
+                          $t('page.tasks.questcard.completebutton')
+                      }}</v-btn>
+                </div>
+              </template>
+            </template>
+            <template v-else-if="isComplete">
+              <!-- We are a completed quest, so the primary button is the reset one -->
+              <template v-if="!xs">
+                <v-btn size="x-large" color="accent" @click="markTaskUncomplete()" class="mx-1 my-1"><v-icon
+                    class="mr-2">mdi-undo</v-icon>{{
+                        $t('page.tasks.questcard.uncompletebutton')
+                    }}</v-btn>
+              </template>
+              <template v-else>
+                <div class="d-flex justify-center">
+                  <v-btn color="accent" @click="markTaskUncomplete()" class="mx-1 my-1"><v-icon
+                      class="mr-2">mdi-undo</v-icon>{{
+                          $t('page.tasks.questcard.uncompletebutton')
+                      }}</v-btn>
+                </div>
+              </template>
+            </template>
+            <template v-else-if="isLocked">
+              <!-- We are a locked quest, so the primary button is the unlock one -->
+              <template v-if="!xs">
+                <v-btn size="x-large" color="accent" @click="markTaskAvailable()" class="mx-1 my-1"><v-icon
+                    class="mr-2">mdi-fast-forward</v-icon>{{
+                        $t('page.tasks.questcard.availablebutton')
+                    }}</v-btn>
+                <v-btn size="x-large" color="accent" @click="markTaskComplete()" class="mx-1 my-1"><v-icon
+                    class="mr-2">mdi-check-all</v-icon>{{
+                        $t('page.tasks.questcard.completebutton')
+                    }}</v-btn>
+              </template>
+              <template v-else>
+                <div class="d-flex justify-center">
+                  <v-btn size="small" color="accent" @click="markTaskAvailable()" class="mx-1 my-1"><v-icon
+                      class="mr-2">mdi-fast-forward</v-icon>{{
+                          $t('page.tasks.questcard.availablebutton')
+                      }}</v-btn>
+                  <v-btn size="small" color="accent" @click="markTaskComplete()" class="mx-1 my-1"><v-icon
+                      class="mr-2">mdi-check-all</v-icon>{{
+                          $t('page.tasks.questcard.completebutton')
+                      }}</v-btn>
+                </div>
+              </template>
+            </template>
+          </div>
         </v-col>
       </v-row>
     </v-container>
+    <v-snackbar v-model="taskStatusUpdated" :timeout="4000" color="secondary">
+      {{ taskStatus }}
+      <template #actions>
+        <v-btn color="white" variant="text" @click="taskStatusUpdated = false">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-sheet>
+
 </template>
 <script setup>
-import { defineAsyncComponent, computed } from 'vue'
+import { defineAsyncComponent, computed, ref } from 'vue'
 import { useDisplay } from 'vuetify'
 import { useTarkovStore } from "@/stores/tarkov.js";
+import { useProgressStore } from '@/stores/progress'
+import { useI18n } from 'vue-i18n'
 // Define the props for the component
 const props = defineProps({
   task: {
@@ -98,8 +175,9 @@ const props = defineProps({
     required: true,
   },
 })
+const { t } = useI18n({ useScope: 'global' })
 const tarkovStore = useTarkovStore()
-//const { tasksById } = useTarkovData()
+const progressStore = useProgressStore()
 
 const TaskLink = defineAsyncComponent(() =>
   import("@/components/tasks/TaskLink.vue")
@@ -109,6 +187,14 @@ const TaskObjective = defineAsyncComponent(() =>
 )
 
 const { xs } = useDisplay()
+
+const isComplete = computed(() => {
+  return tarkovStore.isTaskComplete(props.task.id)
+})
+
+const isLocked = computed(() => {
+  return progressStore.unlockedTasks[props.task.id]['self'] != true && !isComplete.value
+})
 
 const lockedBehind = computed(() => {
   // Calculate how many of the successors are uncompleted (should be all, but someone might have marked off one)
@@ -120,8 +206,66 @@ const lockedBefore = computed(() => {
   return props.task.predecessors.filter((s) => !tarkovStore.isTaskComplete(s.id)).length
 })
 
+const markTaskComplete = () => {
+  tarkovStore.setTaskComplete(props.task.id)
+  // For each objective, mark it as complete
+  props.task.objectives.forEach((o) => {
+    tarkovStore.setTaskObjectiveComplete(o.id)
+  })
+  taskStatus.value = t('page.tasks.questcard.statuscomplete', { name: props.task.name })
+  taskStatusUpdated.value = true
+}
+
+const markTaskUncomplete = () => {
+  tarkovStore.setTaskUncompleted(props.task.id)
+  // For each objective, mark it as uncomplete
+  props.task.objectives.forEach((o) => {
+    tarkovStore.setTaskObjectiveUncomplete(o.id)
+  })
+  taskStatus.value = t('page.tasks.questcard.statusuncomplete', { name: props.task.name })
+  taskStatusUpdated.value = true
+}
+
+const markTaskAvailable = () => {
+  // Go through all the predecessors and mark them as complete
+  props.task.predecessors.forEach((p) => {
+    tarkovStore.setTaskComplete(p)
+  })
+  taskStatus.value = t('page.tasks.questcard.statusavailable', { name: props.task.name })
+  taskStatusUpdated.value = true
+}
+
+const taskStatusUpdated = ref(false)
+const taskStatus = ref('')
+
 </script>
 <style lang="scss" scoped>
+.taskContainer {
+  position: relative;
+  overflow: hidden;
+}
+
+.taskContainerBackground {
+  margin: 3rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: -1;
+  transform: rotate(15deg);
+  -webkit-transform: rotate(15deg);
+  color: #c6afaf;
+  opacity: 0.2;
+}
+
+.task-complete {
+  background: linear-gradient(135deg, rgba(var(--v-theme-complete), 1) 0%, rgba(var(--v-theme-complete), 0) 75%);
+}
+
+.task-locked {
+  background: linear-gradient(135deg, rgba(var(--v-theme-failure), 1) 0%, rgba(var(--v-theme-failure), 0) 75%);
+}
+
 .wiki-link {
   text-decoration: none;
   color: rgba(var(--v-theme-tasklink), 1) !important;

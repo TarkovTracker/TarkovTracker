@@ -5,8 +5,7 @@
       <v-col lg="4" md="12">
         <!-- Primary views (all, maps, traders) -->
         <v-card>
-          <v-tabs
-v-model="activePrimaryView" bg-color="accent" slider-color="secondary" align-tabs="center"
+          <v-tabs v-model="activePrimaryView" bg-color="accent" slider-color="secondary" align-tabs="center"
             show-arrows>
             <v-tab v-for="view, index in primaryViews" :key="index" :value="view.view" :prepend-icon="view.icon">
               {{ view.title }}
@@ -52,8 +51,7 @@ v-model="activePrimaryView" bg-color="accent" slider-color="secondary" align-tab
       <v-col lg="4" md="12">
         <!-- Secondary views (available, locked, completed) -->
         <v-card>
-          <v-tabs
-v-model="activeSecondaryView" bg-color="accent" slider-color="secondary" align-tabs="center"
+          <v-tabs v-model="activeSecondaryView" bg-color="accent" slider-color="secondary" align-tabs="center"
             show-arrows>
             <v-tab v-for="view, index in secondaryViews" :key="index" :value="view.view" :prepend-icon="view.icon">
               {{ view.title }}
@@ -65,8 +63,7 @@ v-model="activeSecondaryView" bg-color="accent" slider-color="secondary" align-t
         <!-- User view -->
         <v-card>
           <v-tabs v-model="activeUserView" bg-color="accent" slider-color="secondary" align-tabs="center">
-            <v-tab
-v-for="view in userViews" :key="view.view" :value="view.view"
+            <v-tab v-for="view in userViews" :key="view.view" :value="view.view"
               :disabled="view.view == 'all' && activeSecondaryView != 'available'">
               {{ view.title }}
             </v-tab>
@@ -84,8 +81,7 @@ v-for="view in userViews" :key="view.view" :value="view.view"
     </v-row>
     <v-row v-show="!loadingTasks && !reloadingTasks" justify="center">
       <v-col cols="12" class="my-1">
-        <v-lazy
-v-for="task, taskIndex in visibleTasks" :key="taskIndex" :options="{
+        <v-lazy v-for="task, taskIndex in visibleTasks" :key="taskIndex" :options="{
           threshold: 0.5
         }" min-height="100">
           <task-card :task="task" class="my-1" />
@@ -219,9 +215,11 @@ const updateVisibleTasks = async function () {
     if (activeSecondaryView.value == 'available') {
       visibleTaskList = visibleTaskList.filter((task) => progressStore.unlockedTasks?.[task.id]?.[activeUserView.value] === true)
     } else if (activeSecondaryView.value == 'locked') {
-      visibleTaskList = visibleTaskList.filter((task) => progressStore.taskCompletions?.[task.id]?.[activeUserView.value] != true && progressStore.unlockedTasks?.[task.id]?.[activeUserView.value] != true)
+      visibleTaskList = visibleTaskList.filter((task) => progressStore.tasksCompletions?.[task.id]?.[activeUserView.value] != true && progressStore.unlockedTasks?.[task.id]?.[activeUserView.value] != true)
     } else if (activeSecondaryView.value == 'completed') {
-      visibleTaskList = visibleTaskList.filter((task) => progressStore.taskCompletions?.[task.id]?.[activeUserView.value] === true)
+      visibleTaskList = visibleTaskList.filter((task) => {
+        return progressStore.tasksCompletions?.[task.id]?.[activeUserView.value] == true
+      })
     }
   }
   // Remove any disabled tasks from the view
@@ -239,6 +237,11 @@ watch([activePrimaryView, activeMapView, activeTraderView, activeSecondaryView, 
   reloadingTasks.value = true
   await updateVisibleTasks()
 }, { immediate: true })
+
+watch(() => progressStore.tasksCompletions, async () => {
+  reloadingTasks.value = true
+  await updateVisibleTasks()
+})
 </script>
 <style lang="scss" scoped>
 

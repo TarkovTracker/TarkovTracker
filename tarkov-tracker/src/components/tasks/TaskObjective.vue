@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex align-center pa-1 rounded" :style="isComplete ? 'background-color: green' : ''"
+  <div class="d-flex align-center pa-1 rounded" :class="{ 'objective-complete': isComplete }"
     @click="toggleObjectiveCompletion()">
     <v-icon size="x-small" class="mr-1">{{ objectiveIcon }}</v-icon>{{ props.objective?.description }}
   </div>
@@ -51,5 +51,8 @@ const toggleObjectiveCompletion = () => {
 
 </script>
 <style lang="scss" scoped>
-
+.objective-complete {
+  //background: rgb(var(--v-theme-complete));
+  background: linear-gradient(175deg, rgba(var(--v-theme-complete), 1) 0%, rgba(var(--v-theme-complete), 0) 75%);
+}
 </style>

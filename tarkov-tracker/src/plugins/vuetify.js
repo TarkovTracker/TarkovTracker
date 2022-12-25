@@ -18,8 +18,10 @@ const colorTheme = {
   info: '#181817',
   success: '#242F35',
   warning: '#391111',
+  complete: '#114200',
+  failed: '#ffcccc',
   error: '#FF0000',
-  failure: '#540000',
+  failure: '#391111',
   tasklink: '#00acc1'
 }
 

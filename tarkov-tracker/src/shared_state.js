@@ -82,9 +82,27 @@ export const actions = {
 
   // Set a task as complete
   setTaskComplete(taskId) {
+    if (!this?.taskCompletions) {
+      this.taskCompletions = {}
+    }
+    if (!this.taskCompletions?.[taskId]) {
+      this.taskCompletions[taskId] = {}
+    }
     this.taskCompletions[taskId] = {
       complete: true,
       timestamp: Date.now()
+    }
+  },
+
+  setTaskUncompleted(taskId) {
+    if (!this?.taskCompletions) {
+      this.taskCompletions = {}
+    }
+    if (!this.taskCompletions?.[taskId]) {
+      this.taskCompletions[taskId] = {}
+    }
+    this.taskCompletions[taskId] = {
+      complete: false,
     }
   },
 
