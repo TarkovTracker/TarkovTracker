@@ -266,6 +266,10 @@ const markTaskAvailable = () => {
   props.task.predecessors.forEach((p) => {
     tarkovStore.setTaskComplete(p)
   })
+  // If our level is lower than the task level, set it to the task level
+  if (tarkovStore.playerLevel < props.task.minPlayerLevel) {
+    tarkovStore.setLevel(props.task.minPlayerLevel)
+  }
   taskStatus.value = t('page.tasks.questcard.statusavailable', { name: props.task.name })
   taskStatusUpdated.value = true
 }

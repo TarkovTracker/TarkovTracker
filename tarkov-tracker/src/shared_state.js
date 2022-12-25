@@ -70,6 +70,10 @@ export const actions = {
     }
   },
 
+  setLevel(level) {
+    this.level = level
+  },
+
   setGameEdition(edition) {
     this.gameEdition = edition
   },
