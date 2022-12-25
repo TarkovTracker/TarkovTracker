@@ -13,8 +13,10 @@ const routes = [
         component: () => import("@/pages/TrackerDashboard.vue"),
       },
       {
-        path: "/test",
-        component: () => import("@/pages/TrackerDashboard.vue"),
+        name: 'tasks',
+        path: "/tasks",
+        meta: {},
+        component: () => import("@/pages/TaskList.vue"),
       },
       {
         name: 'settings',
@@ -22,10 +24,10 @@ const routes = [
         meta: { background: 'gas' },
         component: () => import("@/pages/TrackerSettings.vue"),
       },
-      { 
-        path: '/:pathMatch(.*)*', 
-        name: 'not-found', 
-        component: () => import("@/pages/NotFound.vue") 
+      {
+        path: '/:pathMatch(.*)*',
+        name: 'not-found',
+        component: () => import("@/pages/NotFound.vue")
       },
       {
         name: 'login',
@@ -39,6 +41,12 @@ const routes = [
         meta: { background: 'busstation' },
         component: () => import("@/pages/TeamManagement.vue"),
       },
+      {
+        name: 'taskeditor',
+        path: "/taskeditor",
+        meta: {},
+        component: () => import("@/pages/TaskEditor.vue"),
+      }
     ]
   },
 ];

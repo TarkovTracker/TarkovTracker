@@ -5,7 +5,7 @@
         <v-col cols="auto">
           <div class="text-h4">
             {{
-                progressStore.getDisplayName(props.teammember)
+                progressStore.teammemberNames[props.teammember]
             }}
           </div>
           <div v-if="props.teammember == fireuser.uid">
@@ -54,15 +54,11 @@
 </template>
 <script setup>
 import { fireuser } from "@/plugins/firebase";
-import { doc, getDoc } from 'firebase/firestore'
-import { defineProps, computed, onMounted } from 'vue'
-import { ref } from 'vue'
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useLiveData } from '@/composables/livedata'
 import { useUserStore } from '@/stores/user'
-
-// Get locale for use in calculating relative time
-const { locale } = useI18n({ useScope: 'global' })
+import { useProgressStore } from '@/stores/progress'
 
 // Define the props for the component
 const props = defineProps({
@@ -72,7 +68,7 @@ const props = defineProps({
   }
 })
 
-const { useProgressStore, useTeamStore } = useLiveData()
+const { useTeamStore } = useLiveData()
 const progressStore = useProgressStore()
 const teamStore = useTeamStore()
 const userStore = useUserStore()

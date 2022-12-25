@@ -30,7 +30,8 @@
             <v-container>
               <v-row justify="center">
                 <v-col cols="12">
-                  <v-switch v-model="streamerMode" hide-details density="compact"
+                  <v-switch
+v-model="streamerMode" hide-details density="compact"
                     :label="streamerMode ? $t('page.settings.card.streamermode.modeOn') : $t('page.settings.card.streamermode.modeOff')">
                   </v-switch>
                 </v-col>
@@ -49,7 +50,8 @@
             <v-container>
               <v-row justify="center">
                 <v-col cols="12">
-                  <v-select v-model="currentGameEdition" density="compact" :items="gameEditions"
+                  <v-select
+v-model="currentGameEdition" density="compact" :items="gameEditions"
                     :label="$t('page.settings.card.gameedition.select')" variant="outlined" hide-details></v-select>
                 </v-col>
               </v-row>

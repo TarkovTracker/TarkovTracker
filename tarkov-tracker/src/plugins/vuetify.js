@@ -20,6 +20,7 @@ const colorTheme = {
   warning: '#391111',
   error: '#FF0000',
   failure: '#540000',
+  tasklink: '#00acc1'
 }
 
 export default createVuetify({

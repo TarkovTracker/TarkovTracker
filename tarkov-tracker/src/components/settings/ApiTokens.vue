@@ -14,10 +14,12 @@
         <v-text-field v-model="tokenName" :rules="tokenNameRules" label="Token Description" required density="compact">
         </v-text-field>
         <!-- For each available permission flag, display it as a checkbox -->
-        <v-checkbox v-for="(permission, permissionKey) in availablePermissions" :key="permission"
+        <v-checkbox
+v-for="(permission, permissionKey) in availablePermissions" :key="permission"
           v-model="selectedPermissions" :label="permission.title" :value="permissionKey" density="compact" hide-details>
         </v-checkbox>
-        <v-btn :disabled="!validNewToken || selectedPermissionsCount == 0 || creatingToken" color="success" class="mr-4"
+        <v-btn
+:disabled="!validNewToken || selectedPermissionsCount == 0 || creatingToken" color="success" class="mr-4"
           :loading="creatingToken" append-icon="mdi-key-plus" @click="createToken">
           {{ $t('page.settings.card.apitokens.submit_new_token') }}
         </v-btn>
@@ -27,7 +29,8 @@
   <v-container class="align-left" fluid>
     <v-row align="start">
       <!-- Button to show the new token form -->
-      <v-btn v-if="!showNewTokenForm" variant="outlined" class="mx-1" prepend-icon="mdi-unfold-more-horizontal"
+      <v-btn
+v-if="!showNewTokenForm" variant="outlined" class="mx-1" prepend-icon="mdi-unfold-more-horizontal"
         @click="showNewTokenForm = true">
         {{ $t('page.settings.card.apitokens.new_token_expand') }}
       </v-btn>

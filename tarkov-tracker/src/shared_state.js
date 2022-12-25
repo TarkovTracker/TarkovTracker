@@ -5,6 +5,10 @@ export const defaultState = {
   level: 1,
   gameEdition: 1,
   displayName: null,
+  taskObjectives: {},
+  taskCompletions: {},
+  hideoutParts: {},
+  hideoutModules: {},
 }
 
 // Getters are for reading store state in a uniform manner
@@ -25,6 +29,26 @@ export const getters = {
     } else {
       return state.displayName || null
     }
+  },
+
+  // Check if a specific task is completed
+  isTaskComplete(state) {
+    return (taskId) => state?.taskCompletions?.[taskId]?.complete || false
+  },
+
+  // Check if a specific task objective is completed
+  isTaskObjectiveComplete(state) {
+    return (objectiveId) => state?.taskObjectives?.[objectiveId]?.complete || false
+  },
+
+  // Check if a specific hideout part is completed
+  isHideoutPartComplete(state) {
+    return (objectiveId) => state?.hideoutParts?.[objectiveId]?.complete || false
+  },
+
+  // Check if a specific hideout objective is completed
+  isHideoutModuleComplete(state) {
+    return (hideoutId) => state?.hideoutModules?.[hideoutId]?.complete || false
   }
 }
 
@@ -53,6 +77,38 @@ export const actions = {
   setDisplayName(name) {
     if (typeof name === 'string') {
       this.displayName = name
+    }
+  },
+
+  // Set a task as complete
+  setTaskComplete(taskId) {
+    this.taskCompletions[taskId] = {
+      complete: true,
+      timestamp: Date.now()
+    }
+  },
+
+  // Set a task objective as complete
+  setTaskObjectiveComplete(objectiveId) {
+    this.taskObjectives[objectiveId] = {
+      complete: true,
+      timestamp: Date.now()
+    }
+  },
+
+  // Set a hideout part as complete
+  setHideoutPartComplete(objectiveId) {
+    this.hideoutParts[objectiveId] = {
+      complete: true,
+      timestamp: Date.now()
+    }
+  },
+
+  // Set a hideout module as complete
+  setHideoutModuleComplete(hideoutId) {
+    this.hideoutModules[hideoutId] = {
+      complete: true,
+      timestamp: Date.now()
     }
   }
 }

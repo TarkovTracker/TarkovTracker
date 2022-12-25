@@ -10,6 +10,11 @@ export const defaultState = {
   questTeamHideAll: false,
   itemsTeamHideAll: false,
   mapTeamHideAll: false,
+  taskPrimaryView: null,
+  taskMapView: null,
+  taskTraderView: null,
+  taskSecondaryView: null,
+  taskUserView: null,
 }
 
 // Getters are for reading store state in a uniform manner
@@ -31,6 +36,11 @@ export const getters = {
   questTeamAllHidden: (state) => { return state.questTeamHideAll || false },
   itemsTeamAllHidden: (state) => { return state.itemsTeamHideAll || false },
   mapTeamAllHidden: (state) => { return state.mapTeamHideAll || false },
+  getTaskPrimaryView: (state) => { return state.taskPrimaryView || 'all' },
+  getTaskMapView: (state) => { return state.taskMapView || 'all' },
+  getTaskTraderView: (state) => { return state.taskTraderView || 'all' },
+  getTaskSecondaryView: (state) => { return state.taskSecondaryView || 'all' },
+  getTaskUserView: (state) => { return state.taskUserView || 'all' },
 }
 
 // Actions are for mutations and setters
@@ -76,6 +86,26 @@ export const actions = {
 
   setMapTeamHideAll(hide) {
     this.mapTeamHideAll = hide
+  },
+
+  setTaskPrimaryView(view) {
+    this.taskPrimaryView = view
+  },
+
+  setTaskMapView(view) {
+    this.taskMapView = view
+  },
+
+  setTaskTraderView(view) {
+    this.taskTraderView = view
+  },
+
+  setTaskSecondaryView(view) {
+    this.taskSecondaryView = view
+  },
+
+  setTaskUserView(view) {
+    this.taskUserView = view
   }
 }
 

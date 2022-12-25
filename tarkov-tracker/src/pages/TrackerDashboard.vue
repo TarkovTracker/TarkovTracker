@@ -4,13 +4,13 @@
       <v-col cols="12" sm="8" md="6" lg="4" xl="3">
         <tracker-stat icon="mdi-progress-check">
           <template #stat>
-            {{ $t('page.dashboard.stats.allQuests.stat') }}
+            {{ $t('page.dashboard.stats.allTasks.stat') }}
           </template>
           <template #value>
-            0/{{ totalQuests }}
+            0/{{ totalTasks }}
           </template>
           <template #details>
-            {{ $t('page.dashboard.stats.allQuests.details') }}
+            {{ $t('page.dashboard.stats.allTasks.details') }}
           </template>
         </tracker-stat>
       </v-col>
@@ -39,7 +39,7 @@ const TrackerStat = defineAsyncComponent(() =>
 )
 
 const { tasks, objectives } = useTarkovData()
-const totalQuests = computed(() => { return tasks.value?.length })
+const totalTasks = computed(() => { return tasks.value?.length })
 
 const totalObjectives = computed(() => { return objectives.value?.length })
 

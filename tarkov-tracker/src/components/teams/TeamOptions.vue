@@ -7,11 +7,14 @@
       <v-container>
         <v-row>
           <v-col cols="12">
-            <v-switch v-model="questHideAll" :label="$t(questHideAllLabel)" inset true-icon="mdi-eye-off"
+            <v-switch
+v-model="questHideAll" :label="$t(questHideAllLabel)" inset true-icon="mdi-eye-off"
               false-icon="mdi-eye" :color="questHideAllColor" hide-details density="compact"></v-switch>
-            <v-switch v-model="itemsHideAll" :label="$t(itemsHideAllLabel)" inset true-icon="mdi-eye-off"
+            <v-switch
+v-model="itemsHideAll" :label="$t(itemsHideAllLabel)" inset true-icon="mdi-eye-off"
               false-icon="mdi-eye" :color="itemsHideAllColor" hide-details density="compact"></v-switch>
-            <v-switch v-model="mapHideAll" :label="$t(mapHideAllLabel)" inset true-icon="mdi-eye-off"
+            <v-switch
+v-model="mapHideAll" :label="$t(mapHideAllLabel)" inset true-icon="mdi-eye-off"
               false-icon="mdi-eye" :color="mapHideAllColor" hide-details density="compact"></v-switch>
           </v-col>
         </v-row>

@@ -16,18 +16,43 @@
     dashboard: {
       title: 'Dashboard',
       stats: {
-        allQuests: {
-          stat: 'Quests Completed',
-          details: 'The number of quests you have completed.'
+        allTasks: {
+          stat: 'Tasks Completed',
+          details: 'The number of tasks you have completed.'
         },
-        questItems: {
-          stat: 'Quest Items',
+        taskItems: {
+          stat: 'Task Items',
           details: 'Includes FIR and non-FIR collection items.'
         },
         allObjectives: {
-          stat: 'Quest Objectives',
-          details: 'The total unique objectives within quests.'
+          stat: 'Task Objectives',
+          details: 'The total unique objectives within tasks.'
         }
+      }
+    },
+    tasks: {
+      title: 'Tasks',
+      primaryviews: {
+        all: 'All',
+        maps: 'Maps',
+        traders: 'Traders',
+      },
+      secondaryviews: {
+        available: 'Available',
+        completed: 'Completed',
+        locked: 'Locked',
+      },
+      userviews: {
+        all: 'All',
+        yourself: 'Yourself',
+      },
+      showing_all_sources: 'Showing all sources',
+      loading: 'Loading tasks',
+      questcard: {
+        level: "Level {count}",
+        wiki: "Wiki page",
+        lockedbefore: "{count} before",
+        lockedbehind: "{count} behind"
       }
     },
     settings: {
@@ -84,8 +109,8 @@
         teamoptions: {
           title: 'Team Integration Options',
           button: 'Team Options',
-          quest_hide_all: 'Hide all team members\' quests',
-          quest_show_all: 'Show team members\' quests',
+          task_hide_all: 'Hide all team members\' tasks',
+          task_show_all: 'Show team members\' tasks',
           items_hide_all: 'Hide team members\' needed items',
           items_show_all: 'Show team members\' needed items',
           map_hide_all: 'Hide team members\' map objectives',
@@ -127,7 +152,7 @@
   },
   footer: {
     call_to_action: {
-      discord_phrase: 'Report bugs/request features on {discord}',
+      discord_phrase: 'Report bugs/retask features on {discord}',
       github_phrase: 'Contribute to the open source project on {github}',
       patreon_phrase: 'Support project costs on {patreon}',
       discord: 'Discord',
@@ -151,13 +176,17 @@
     login: 'Log In',
     logout: 'Log Out',
     level: 'Level',
-    team: 'Team'
+    team: 'Team',
+    tasks: 'Tasks',
   },
   tips: {
     hide_tip: 'Hide this tip',
     default: {
       title: 'Tip',
       description: 'Oops! This tip seems to be missing. Please report this bug on Discord.'
+    },
+    tasks: {
+      description: 'You can select different ways to categorize and view your tasks using the tabs below. You can expand the filter panel to filter tasks, sort them, and more. If you already have progress in Tarkov, you can view the locked tab of tasks and jump to the tasks you current have available.'
     },
     team: {
       title: 'Team',

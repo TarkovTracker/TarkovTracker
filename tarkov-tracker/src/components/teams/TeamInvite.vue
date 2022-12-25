@@ -1,5 +1,6 @@
 <template>
-  <v-alert v-if="!inInviteTeam && !declined" color="green" theme="dark" icon="mdi-handshake" density="compact"
+  <v-alert
+v-if="!inInviteTeam && !declined" color="green" theme="dark" icon="mdi-handshake" density="compact"
     prominent>
     <div class="d-flex flex-row align-center justify-space-between">
       <div>
@@ -9,7 +10,7 @@
         <v-btn class="mx-1 my-1" variant="outlined" :disabled="accepting" :loading="accepting" @click="acceptInvite">
           {{ $t('page.team.card.teaminvite.accept') }}
         </v-btn>
-        <v-btn variant="outlined" @click="declined = true" :disabled="accepting">
+        <v-btn variant="outlined" :disabled="accepting" @click="declined = true">
           {{ $t('page.team.card.teaminvite.decline') }}
         </v-btn>
       </div>

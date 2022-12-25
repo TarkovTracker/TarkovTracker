@@ -8,14 +8,14 @@
   <!-- Main View -->
   <v-main class="" style="min-height: 100%">
     <!-- <div id="tracker-page-background"> -->
-    <v-parallax :src="backgroundImage" height="100%">
+    <div id="tracker-page-background">
       <div id="tracker-page-background-blur" class="d-flex flex-column">
         <div class="mt-2 mx-2">
           <router-view />
         </div>
         <app-footer />
       </div>
-    </v-parallax>
+    </div>
     <!-- </div> -->
 
   </v-main>
@@ -28,21 +28,21 @@ import { useRoute } from 'vue-router'
 
 const route = useRoute()
 
-// const backgroundImage = computed(() => {
-//   if (route.meta.background) {
-//     return `url(/img/background/${route.meta.background}.webp)`
-//   } else {
-//     return ''
-//   }
-// })
-
 const backgroundImage = computed(() => {
   if (route.meta.background) {
-    return `/img/background/${route.meta.background}.webp`
+    return `url(/img/background/${route.meta.background}.webp)`
   } else {
     return ''
   }
 })
+
+// const backgroundImage = computed(() => {
+//   if (route.meta.background) {
+//     return `/img/background/${route.meta.background}.webp`
+//   } else {
+//     return ''
+//   }
+// })
 
 const NavDrawer = defineAsyncComponent(() =>
   import("@/components/layout/NavDrawer.vue")

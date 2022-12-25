@@ -217,6 +217,6 @@ const useProgressStore = defineStore('progress', () => {
 // We keep the state outside of the function so that it acts as a singleton
 export function useLiveData() {
   return {
-    useTeamStore, useSystemStore, useProgressStore
+    useTeamStore, useSystemStore, useProgressStore, teammateStores
   };
 }

@@ -1,12 +1,12 @@
 <template>
   <tracker-tip tip="team"></tracker-tip>
   <v-container v-if="fireuser.loggedIn">
-    <v-row justify="center" v-if="route?.query?.team && route?.query?.code">
+    <v-row v-if="route?.query?.team && route?.query?.code" justify="center">
       <v-col cols="12">
         <team-invite></team-invite>
       </v-col>
     </v-row>
-    <v-row justify="center" v-if="fireuser.loggedIn">
+    <v-row v-if="fireuser.loggedIn" justify="center">
       <v-col v-if="systemStore.userTeam" cols="12">
         <team-members></team-members>
       </v-col>
@@ -24,9 +24,6 @@ import { fireuser } from '@/plugins/firebase'
 import { useLiveData } from '@/composables/livedata'
 import { useRoute } from 'vue-router'
 import { defineAsyncComponent } from 'vue'
-const IconCard = defineAsyncComponent(() =>
-  import("@/components/IconCard.vue")
-)
 const TeamMembers = defineAsyncComponent(() =>
   import("@/components/teams/TeamMembers.vue")
 )

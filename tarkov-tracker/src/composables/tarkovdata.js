@@ -1,7 +1,9 @@
 import { useQuery, provideApolloClient } from "@vue/apollo-composable";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import apolloClient from "@/plugins/apollo";
 import tarkovDataQuery from "@/utils/tarkovdataquery.js"
+// Import graphlib so that we can use it in the watch function
+import graphlib from "graphlib"
 
 provideApolloClient(apolloClient)
 
@@ -9,7 +11,7 @@ const queryErrors = ref(null)
 const queryResults = ref(null)
 const lastQueryTime = ref(null)
 
-const { onResult, onError, loading } = useQuery(tarkovDataQuery, null, { fetchPolicy: "network-only", pollInterval: 300000, });
+const { onResult, onError, loading } = useQuery(tarkovDataQuery, null, { fetchPolicy: "network-only" });
 onResult((result) => {
   lastQueryTime.value = Date.now()
   queryResults.value = result.data
@@ -20,10 +22,131 @@ onError((error) => {
   console.error(queryErrors)
 });
 
-// Create a computed property for each state object
-const tasks = computed(() => {
-  return queryResults.value?.tasks || [];
-});
+const tasks = ref([])
+const tasksById = computed(() => {
+  let tasksById = {}
+  for (let task of tasks.value) {
+    tasksById[task.id] = task
+  }
+  return tasksById
+})
+
+const taskGraph = ref({})
+
+const objectiveMaps = ref({})
+
+const mapTasks = ref({})
+
+// Function to recursively get all of the predecessors for a task
+function getPredecessors(taskId) {
+  let predecessors = taskGraph.value.predecessors(taskId)
+  if (predecessors.length > 0) {
+    for (let predecessor of predecessors) {
+      predecessors = predecessors.concat(getPredecessors(predecessor))
+    }
+  }
+  return predecessors
+}
+
+// Function to recursively get all of the successors for a task
+function getSuccessors(taskId) {
+  let successors = taskGraph.value.successors(taskId)
+  if (successors.length > 0) {
+    for (let successor of successors) {
+      successors = successors.concat(getSuccessors(successor))
+    }
+  }
+  return successors
+}
+
+const disabledTasks = ["61e6e5e0f5b9633f6719ed95", "61e6e60223374d168a4576a6", "61e6e621bfeab00251576265", "61e6e615eea2935bc018a2c5", "61e6e60c5ca3b3783662be27"]
+
+// Watch for changes to queryResults.value?.tasks and update the task graph
+watch(queryResults, async (newValue, oldValue) => {
+  if (newValue?.tasks) {
+    let newTaskGraph = new graphlib.Graph({ directed: true });
+    let activeRequirements = []
+
+    // Loop through all of the tasks and add them to the graph
+    for (let task of newValue.tasks) {
+
+      // If the task has requirements, add an edge from the requirement to the task
+      if (task.taskRequirements?.length > 0) {
+        for (let requirement of task.taskRequirements) {
+          if (requirement.status.includes("active")) {
+            // This task doesn't require the task to be completed, but just to be active
+            // This means that the task shares predecessors with the task that it requires
+            // So add the requirements after we've built the rest of the graph
+            activeRequirements.push({ task, requirement })
+          } else {
+            newTaskGraph.setEdge(requirement.task.id, task.id)
+
+          }
+        }
+      } else {
+        // The task doesn't have task requirements, so add it to the graph just as a node
+        newTaskGraph.setNode(task.id)
+
+      }
+    }
+
+    // Add the active requirements to the graph
+    for (let activeRequirement of activeRequirements) {
+      // Get the incoming edges for the required task
+      let inEdges = newTaskGraph.inEdges(activeRequirement.requirement.task.id)
+      for (let edge of inEdges) {
+        newTaskGraph.setEdge(edge.v, activeRequirement.task.id, 'active')
+      }
+    }
+
+    taskGraph.value = newTaskGraph
+
+    // Get the latest objective maps from tarkovdata
+    await fetch('https://tarkovtracker.github.io/tarkovdata/objective_maps.json')
+      .then(response => response.json())
+      .then(data => {
+        objectiveMaps.value = data
+      })
+
+    // Loop through all of the tasks and add them to the graph
+    let updatedTasks = []
+    for (let task of newValue.tasks) {
+      let locations = new Set()
+      let objectives = []
+      // For each objective in the task, set the maps property to the objectiveMaps value for that objective if it exists
+      for (let objective of task.objectives) {
+        if (objectiveMaps.value[objective.id]) {
+          // Add all of the objective maps to the locations set
+          for (let map of objectiveMaps.value[objective.id]) {
+            locations.add(map)
+          }
+          objectives.push({ ...objective, maps: objectiveMaps.value[objective.id] })
+        } else {
+          // Add any objective maps to the locations set
+          if (objective.maps) {
+            for (let map of objective.maps) {
+              locations.add(map.id)
+            }
+          }
+          objectives.push(objective)
+        }
+      }
+      // For each map in locations, add the task to the mapTasks object
+      for (let location of locations) {
+        if (!mapTasks.value[location]) {
+          mapTasks.value[location] = []
+        }
+        mapTasks.value[location].push(task.id)
+      }
+
+      updatedTasks.push({ ...task, locations: [...locations], objectives: objectives, predecessors: getPredecessors(task.id), successors: getSuccessors(task.id), parents: newTaskGraph.predecessors(task.id), children: newTaskGraph.successors(task.id) })
+    }
+
+    tasks.value = updatedTasks
+  } else {
+    console.error("No tasks found on first load")
+  }
+})
 
 const objectives = computed(() => {
   return tasks.value?.reduce(
@@ -36,8 +159,14 @@ const levels = computed(() => {
   return queryResults.value?.playerLevels;
 });
 
-const maps = computed(() => {
+const rawMaps = computed(() => {
   return queryResults.value?.maps;
+});
+
+const maps = computed(() => {
+  // Remove Night Factory from the maps list
+  if (!rawMaps.value) return []
+  return rawMaps?.value.filter(map => map.id != '59fc81d786f774390775787e')
 });
 
 const traders = computed(() => {
@@ -51,6 +180,6 @@ const error = computed(() => {
 // We keep the state outside of the function so that it acts as a singleton
 export function useTarkovData() {
   return {
-    tasks, objectives, maps, levels, traders, loading, error
+    tasks, objectives, maps, levels, traders, loading, error, rawMaps, disabledTasks, tasksById
   };
 }

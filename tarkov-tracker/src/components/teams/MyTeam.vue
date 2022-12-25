@@ -16,7 +16,8 @@
           <v-row>
             <v-col>
               <!-- Show the Team's invite URL -->
-              <v-text-field v-model="displayName" variant="outlined"
+              <v-text-field
+v-model="displayName" variant="outlined"
                 :label="$t('page.team.card.myteam.display_name_label')" hide-details="auto"></v-text-field>
             </v-col>
             <v-col cols="auto">
@@ -29,7 +30,8 @@
           <v-row>
             <v-col>
               <!-- Show the Team's invite URL -->
-              <v-text-field v-model="visibleUrl" variant="outlined"
+              <v-text-field
+v-model="visibleUrl" variant="outlined"
                 :label="$t('page.team.card.myteam.team_invite_url_label')" hide-details="auto" readonly></v-text-field>
             </v-col>
             <v-col cols="auto">
@@ -44,11 +46,13 @@
       <v-container class="align-left mt-2" fluid>
         <v-row align="start">
           <!-- Button to show the new token form -->
-          <v-btn v-if="systemStore.userTeam == null" :disabled="creatingTeam" :loading="creatingTeam" variant="outlined"
+          <v-btn
+v-if="systemStore.userTeam == null" :disabled="creatingTeam" :loading="creatingTeam" variant="outlined"
             class="mx-1" prepend-icon="mdi-account-group" @click="createTeam">
             {{ $t('page.team.card.myteam.create_new_team') }}
           </v-btn>
-          <v-btn v-if="systemStore.userTeam != null" :disabled="leavingTeam" :loading="leavingTeam" variant="outlined"
+          <v-btn
+v-if="systemStore.userTeam != null" :disabled="leavingTeam" :loading="leavingTeam" variant="outlined"
             class="mx-1" prepend-icon="mdi-account-off" @click="leaveTeam">
             {{ systemStore.userTeamIsOwn ? $t('page.team.card.myteam.disband_team') :
                 $t('page.team.card.myteam.leave_team')
