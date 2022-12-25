@@ -70,7 +70,7 @@ export const useProgressStore = defineStore('progress', () => {
       // Now add any rep from the game version
       for (const teamId of Object.keys(teamStores.value)) {
         // Find the gameEdition object with a version that matches the game edition
-        let bonus = gameEditions.find((edition) => edition.version === teamStores.value[teamId].gameEdition).value || 0.0
+        let bonus = gameEditions.find((edition) => edition.version === teamStores.value[teamId].gameEdition)?.value || 0.0
         // For each trader, loop through and add the rep
         for (const trader of traders.value) {
           // Add the game edition value to the total

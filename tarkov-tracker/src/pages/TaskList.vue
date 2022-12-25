@@ -189,7 +189,6 @@ const reloadingTasks = ref(false)
 const visibleTasks = shallowRef([])
 
 const updateVisibleTasks = async function () {
-  console.log('Updating visible tasks', Date.now())
   let visibleTaskList = JSON.parse(JSON.stringify(tasks.value))
   // First, filter tasks by the primary view
   if (activePrimaryView.value == 'maps') {
@@ -229,15 +228,12 @@ const updateVisibleTasks = async function () {
 
   reloadingTasks.value = false
   visibleTasks.value = visibleTaskList
-  console.log('Updated visible tasks', Date.now())
 }
 
 // Watch for changes to all of the views, and update the visible tasks
 watch([activePrimaryView, activeMapView, activeTraderView, activeSecondaryView, activeUserView, tasks], async () => {
   reloadingTasks.value = true
-  console.log("Calling updateVisibleTasks", Date.now())
   await updateVisibleTasks()
-  console.log("Finished calling updateVisibleTasks", Date.now())
 }, { immediate: true })
 </script>
 <style lang="scss" scoped>

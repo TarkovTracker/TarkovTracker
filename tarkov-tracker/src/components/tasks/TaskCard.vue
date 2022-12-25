@@ -67,8 +67,17 @@
             <task-link :task="props.task" class="d-flex justify-center" />
           </template>
         </v-col>
-        <v-col cols="12" xs="12" sm="8" md="7" lg="7">
+        <v-col cols="12" xs="12" sm="8" md="7" lg="7" class="d-flex align-center">
           <!-- Quest objectives -->
+          <v-container>
+            <v-row no-gutters>
+              <v-col v-for="objective, objectiveIndex in props.task.objectives" :key="objectiveIndex" cols="12"
+                class="py-1">
+                <task-objective :objective="objective" />
+              </v-col>
+            </v-row>
+          </v-container>
+
         </v-col>
         <v-col cols="12" xs="12" sm="12" md="2" lg="2">
           <!-- Quest actions -->
@@ -93,6 +102,9 @@ const tarkovStore = useTarkovStore()
 
 const TaskLink = defineAsyncComponent(() =>
   import("@/components/tasks/TaskLink.vue")
+)
+const TaskObjective = defineAsyncComponent(() =>
+  import("@/components/tasks/TaskObjective.vue")
 )
 
 const { xs } = useDisplay()

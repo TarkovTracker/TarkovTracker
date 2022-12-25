@@ -39,7 +39,7 @@ export const getters = {
   getTaskPrimaryView: (state) => { return state.taskPrimaryView || 'all' },
   getTaskMapView: (state) => { return state.taskMapView || 'all' },
   getTaskTraderView: (state) => { return state.taskTraderView || 'all' },
-  getTaskSecondaryView: (state) => { return state.taskSecondaryView || 'all' },
+  getTaskSecondaryView: (state) => { return state.taskSecondaryView || 'available' },
   getTaskUserView: (state) => { return state.taskUserView || 'all' },
 }
 
