@@ -3,7 +3,7 @@ import { computed, ref, watch } from "vue";
 import apolloClient from "@/plugins/apollo";
 import tarkovDataQuery from "@/utils/tarkovdataquery.js"
 // Import graphlib so that we can use it in the watch function
-import graphlib from "graphlib"
+import Graph from 'graphology';
 
 provideApolloClient(apolloClient)
 
@@ -23,13 +23,6 @@ onError((error) => {
 });
 
 const tasks = ref([])
-const tasksById = computed(() => {
-  let tasksById = {}
-  for (let task of tasks.value) {
-    tasksById[task.id] = task
-  }
-  return tasksById
-})
 
 const taskGraph = ref({})
 
@@ -39,7 +32,7 @@ const mapTasks = ref({})
 
 // Function to recursively get all of the predecessors for a task
 function getPredecessors(taskId) {
-  let predecessors = taskGraph.value.predecessors(taskId)
+  let predecessors = taskGraph.value.inNeighbors(taskId)
   if (predecessors.length > 0) {
     for (let predecessor of predecessors) {
       predecessors = predecessors.concat(getPredecessors(predecessor))
@@ -50,7 +43,7 @@ function getPredecessors(taskId) {
 
 // Function to recursively get all of the successors for a task
 function getSuccessors(taskId) {
-  let successors = taskGraph.value.successors(taskId)
+  let successors = taskGraph.value.outNeighbors(taskId)
   if (successors.length > 0) {
     for (let successor of successors) {
       successors = successors.concat(getSuccessors(successor))
@@ -64,7 +57,7 @@ const disabledTasks = ["61e6e5e0f5b9633f6719ed95", "61e6e60223374d168a4576a6", "
 // Watch for changes to queryResults.value?.tasks and update the task graph
 watch(queryResults, async (newValue, oldValue) => {
   if (newValue?.tasks) {
-    let newTaskGraph = new graphlib.Graph({ directed: true });
+    let newTaskGraph = new Graph();
     let activeRequirements = []
 
     // Loop through all of the tasks and add them to the graph
@@ -79,23 +72,23 @@ watch(queryResults, async (newValue, oldValue) => {
             // So add the requirements after we've built the rest of the graph
             activeRequirements.push({ task, requirement })
           } else {
-            newTaskGraph.setEdge(requirement.task.id, task.id)
-
+            newTaskGraph.mergeNode(requirement.task.id)
+            newTaskGraph.mergeNode(task.id)
+            newTaskGraph.mergeEdge(requirement.task.id, task.id)
           }
         }
       } else {
         // The task doesn't have task requirements, so add it to the graph just as a node
-        newTaskGraph.setNode(task.id)
-
+        newTaskGraph.mergeNode(task.id)
       }
     }
 
     // Add the active requirements to the graph
     for (let activeRequirement of activeRequirements) {
       // Get the incoming edges for the required task
-      let inEdges = newTaskGraph.inEdges(activeRequirement.requirement.task.id)
-      for (let edge of inEdges) {
-        newTaskGraph.setEdge(edge.v, activeRequirement.task.id, 'active')
+      // Find a node in newTaskGraph that matches the activeRequirement.requirement.task.id
+      for (let neighbor of newTaskGraph.inNeighbors(activeRequirement.requirement.task.id)) {
+        newTaskGraph.mergeEdge(neighbor, activeRequirement.task.id)
       }
     }
 
@@ -139,7 +132,7 @@ watch(queryResults, async (newValue, oldValue) => {
         mapTasks.value[location].push(task.id)
       }
 
-      updatedTasks.push({ ...task, locations: [...locations], objectives: objectives, predecessors: getPredecessors(task.id), successors: getSuccessors(task.id), parents: newTaskGraph.predecessors(task.id), children: newTaskGraph.successors(task.id) })
+      updatedTasks.push({ ...task, locations: [...locations], objectives: objectives, predecessors: getPredecessors(task.id), successors: getSuccessors(task.id), parents: newTaskGraph.inNeighbors(task.id), children: newTaskGraph.outNeighbors(task.id) })
     }
 
     tasks.value = updatedTasks
@@ -180,6 +173,6 @@ const error = computed(() => {
 // We keep the state outside of the function so that it acts as a singleton
 export function useTarkovData() {
   return {
-    tasks, objectives, maps, levels, traders, loading, error, rawMaps, disabledTasks, tasksById
+    tasks, objectives, maps, levels, traders, loading, error, rawMaps, disabledTasks
   };
 }

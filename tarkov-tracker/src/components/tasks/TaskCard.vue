@@ -81,7 +81,6 @@
 import { defineAsyncComponent, computed } from 'vue'
 import { useDisplay } from 'vuetify'
 import { useTarkovStore } from "@/stores/tarkov.js";
-import { useTarkovData } from '@/composables/tarkovdata'
 // Define the props for the component
 const props = defineProps({
   task: {
@@ -90,7 +89,7 @@ const props = defineProps({
   },
 })
 const tarkovStore = useTarkovStore()
-const { tasksById } = useTarkovData()
+//const { tasksById } = useTarkovData()
 
 const TaskLink = defineAsyncComponent(() =>
   import("@/components/tasks/TaskLink.vue")

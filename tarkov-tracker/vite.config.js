@@ -8,17 +8,20 @@ import firebasePlugin from 'vite-plugin-firebase';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-	resolve:{
-    alias:{
+	resolve: {
+		alias: {
 			'@': path.resolve(__dirname, './src')
-    },
-  },
-  plugins: [
+		},
+	},
+	build: {
+		sourcemap: true,
+	},
+	plugins: [
 		vue(),
 		eslintPlugin(),
 		vueI18n({
-      include: path.resolve(__dirname, './src/locales/**')
-    }),
+			include: path.resolve(__dirname, './src/locales/**')
+		}),
 		vuetify({ autoImport: true }),
 		firebasePlugin({
 			// mandatory firebase project id
@@ -32,5 +35,5 @@ export default defineConfig({
 			// show UI
 			showUI: true,
 		})
-]
+	]
 })
