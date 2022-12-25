@@ -11,13 +11,14 @@
         <b>Objective Maps:</b>
       </v-col>
       <v-col cols="auto">
-        <v-btn icon @click="mapEditor = !mapEditor" size="x-small">
+        <v-btn icon size="x-small" @click="mapEditor = !mapEditor">
           <v-icon>{{ mapEditor ? 'mdi-close' : 'mdi-pencil' }}</v-icon>
         </v-btn>
       </v-col>
       <v-col cols="7">
         <template v-if="mapEditor">
-          <v-autocomplete v-model="objectiveMaps" label="Autocomplete" :items="maps" item-title="name" item-value="id"
+          <v-autocomplete
+v-model="objectiveMaps" label="Autocomplete" :items="maps" item-title="name" item-value="id"
             multiple variant="solo"></v-autocomplete>
         </template>
         <template v-else>

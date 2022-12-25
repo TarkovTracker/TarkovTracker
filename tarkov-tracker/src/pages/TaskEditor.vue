@@ -2,14 +2,15 @@
   <v-container>
     <v-row justify="center">
       <v-col cols="12">
-        <v-btn @click="editorStore.reset()" class="mr-1">Reset Editor Store</v-btn>
+        <v-btn class="mr-1" @click="editorStore.reset()">Reset Editor Store</v-btn>
         <!-- Copy the objectiveMaps to clipboard -->
         <v-btn @click="copyObjectiveMaps()">Copy Objective Maps JSON</v-btn>
       </v-col>
     </v-row>
     <v-row justify="center">
       <v-col v-for="task in allTasks" :key="task.id" cols="12">
-        <v-lazy :options="{
+        <v-lazy
+:options="{
           threshold: 0.5
         }" min-height="50">
           <editor-task-card :task="task" />

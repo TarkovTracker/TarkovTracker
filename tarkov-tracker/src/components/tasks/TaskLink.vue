@@ -5,27 +5,23 @@
         <v-img :src="traderAvatar" />
       </v-avatar>
       <span class="ml-2 font-weight-bold">
-        {{ task.name }}
+        {{ props.task?.name }}
       </span>
     </div>
   </router-link>
 </template>
 <script setup>
 import { computed } from 'vue'
-import { useTarkovData } from '@/composables/tarkovdata';
 // Define the props for the component
 const props = defineProps({
-  taskId: {
-    type: String,
+  task: {
+    type: Object,
     required: true,
   }
 })
-const { tasksById } = useTarkovData()
-
-const task = computed(() => tasksById.value[props.taskId] || {})
 
 const traderAvatar = computed(() => {
-  return `/img/traders/${task.value?.trader?.id}.jpg`
+  return `/img/traders/${props.task?.trader?.id}.jpg`
 })
 
 </script>

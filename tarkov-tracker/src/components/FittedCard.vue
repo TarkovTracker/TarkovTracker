@@ -1,5 +1,6 @@
 <template>
-  <v-sheet rounded class="elevation-2 pt-2 corner-highlight-parent" :class="{ 'fill-height': props.fillHeight }"
+  <v-sheet
+rounded class="elevation-2 pt-2 corner-highlight-parent" :class="{ 'fill-height': props.fillHeight }"
     color="rgba(33,33,33,1)">
     <div class="text-h5">
       <span :class="highlightClasses">

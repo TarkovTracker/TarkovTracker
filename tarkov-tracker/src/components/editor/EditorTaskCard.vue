@@ -13,7 +13,8 @@
         <a :href="task.wikiLink" target="_blank" class="wiki-link">Wiki link</a>
       </div>
       <div>
-        <div v-for="objective, objIndex in task?.objectives" :key="objective.id" class="pa-1"
+        <div
+v-for="objective, objIndex in task?.objectives" :key="objective.id" class="pa-1"
           :style="objIndex % 2 == 1 ? 'background-color: #2f2f2f' : 'background-color: #1b1b1b'">
           <editor-objective-section :objective="objective" />
         </div>

@@ -9,10 +9,10 @@
             <v-container class="ma-0 pa-0">
               <v-row no-gutters class="mb-2" style="font-size: 1.1em">
                 <v-col cols="12">
-                  <task-link :taskId="props.task.id" />
+                  <task-link :task="props.task" />
                 </v-col>
               </v-row>
-              <v-row no-gutters v-if="props.task.minPlayerLevel != 0">
+              <v-row v-if="props.task.minPlayerLevel != 0" no-gutters>
                 <v-col cols="auto" class="mr-1">
                   <v-icon icon="mdi-menu-right" />
                 </v-col>
@@ -24,7 +24,7 @@
                   </i18n-t>
                 </v-col>
               </v-row>
-              <v-row no-gutters class="mb-1" v-if="task?.predecessors?.length">
+              <v-row v-if="task?.predecessors?.length" no-gutters class="mb-1">
                 <v-col cols="auto" class="mr-1">
                   <v-icon icon="mdi-lock-open-outline" />
                 </v-col>
@@ -36,7 +36,7 @@
                   </i18n-t>
                 </v-col>
               </v-row>
-              <v-row no-gutters class="mb-1" v-if="task?.successors?.length">
+              <v-row v-if="task?.successors?.length" no-gutters class="mb-1">
                 <v-col cols="auto" class="mr-1">
                   <v-icon icon="mdi-lock" />
                 </v-col>
@@ -64,7 +64,7 @@
           </template>
           <template v-else>
             <!-- xs, so display only the name -->
-            <task-link :taskId="props.task.id" class="d-flex justify-center" />
+            <task-link :task="props.task" class="d-flex justify-center" />
           </template>
         </v-col>
         <v-col cols="12" xs="12" sm="8" md="7" lg="7">
