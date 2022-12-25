@@ -1,16 +1,23 @@
 <template>
-  <div class="d-flex align-center">
+  <div class="d-flex align-center pa-1 rounded" :style="isComplete ? 'background-color: green' : ''"
+    @click="toggleObjectiveCompletion()">
     <v-icon size="x-small" class="mr-1">{{ objectiveIcon }}</v-icon>{{ props.objective?.description }}
   </div>
 </template>
 <script setup>
 import { computed } from 'vue'
+import { useTarkovStore } from "@/stores/tarkov.js";
 // Define the props for the component
 const props = defineProps({
   objective: {
     type: Object,
     required: true,
   }
+})
+const tarkovStore = useTarkovStore()
+
+const isComplete = computed(() => {
+  return tarkovStore.isTaskObjectiveComplete(props.objective.id)
 })
 
 const objectiveIcon = computed(() => {
@@ -37,6 +44,10 @@ const objectiveIcon = computed(() => {
   }
   return iconMap[props.objective.type] || 'mdi-help-circle'
 })
+
+const toggleObjectiveCompletion = () => {
+  tarkovStore.toggleTaskObjectiveComplete(props.objective.id)
+}
 
 </script>
 <style lang="scss" scoped>

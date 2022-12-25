@@ -71,7 +71,8 @@
           <!-- Quest objectives -->
           <v-container>
             <v-row no-gutters>
-              <v-col v-for="objective, objectiveIndex in props.task.objectives" :key="objectiveIndex" cols="12"
+              <v-col
+v-for="objective, objectiveIndex in props.task.objectives" :key="objectiveIndex" cols="12"
                 class="py-1">
                 <task-objective :objective="objective" />
               </v-col>

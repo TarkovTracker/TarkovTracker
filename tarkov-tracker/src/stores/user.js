@@ -7,7 +7,7 @@ export const defaultState = {
   hideTips: {},
   streamerMode: false,
   teamHide: {},
-  questTeamHideAll: false,
+  taskTeamHideAll: false,
   itemsTeamHideAll: false,
   mapTeamHideAll: false,
   taskPrimaryView: null,
@@ -32,8 +32,8 @@ export const getters = {
   getStreamerMode(state) {
     return state.streamerMode || false
   },
-  teamIsHidden: (state) => { return (teamId) => state.questTeamHideAll || state.teamHide?.[teamId] || false },
-  questTeamAllHidden: (state) => { return state.questTeamHideAll || false },
+  teamIsHidden: (state) => { return (teamId) => state.taskTeamHideAll || state.teamHide?.[teamId] || false },
+  taskTeamAllHidden: (state) => { return state.taskTeamHideAll || false },
   itemsTeamAllHidden: (state) => { return state.itemsTeamHideAll || false },
   mapTeamAllHidden: (state) => { return state.mapTeamHideAll || false },
   getTaskPrimaryView: (state) => { return state.taskPrimaryView || 'all' },
@@ -77,7 +77,7 @@ export const actions = {
   },
 
   setQuestTeamHideAll(hide) {
-    this.questTeamHideAll = hide
+    this.taskTeamHideAll = hide
   },
 
   setItemsTeamHideAll(hide) {

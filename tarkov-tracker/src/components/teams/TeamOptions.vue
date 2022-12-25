@@ -8,8 +8,8 @@
         <v-row>
           <v-col cols="12">
             <v-switch
-v-model="questHideAll" :label="$t(questHideAllLabel)" inset true-icon="mdi-eye-off"
-              false-icon="mdi-eye" :color="questHideAllColor" hide-details density="compact"></v-switch>
+v-model="taskHideAll" :label="$t(taskHideAllLabel)" inset true-icon="mdi-eye-off"
+              false-icon="mdi-eye" :color="taskHideAllColor" hide-details density="compact"></v-switch>
             <v-switch
 v-model="itemsHideAll" :label="$t(itemsHideAllLabel)" inset true-icon="mdi-eye-off"
               false-icon="mdi-eye" :color="itemsHideAllColor" hide-details density="compact"></v-switch>
@@ -30,12 +30,12 @@ const FittedCard = defineAsyncComponent(() =>
 )
 const userStore = useUserStore()
 
-const questHideAll = computed({
-  get: () => userStore.questTeamAllHidden,
+const taskHideAll = computed({
+  get: () => userStore.taskTeamAllHidden,
   set: (value) => userStore.setQuestTeamHideAll(value)
 })
-const questHideAllLabel = computed(() => userStore.questTeamAllHidden ? 'page.team.card.teamoptions.quest_hide_all' : 'page.team.card.teamoptions.quest_show_all')
-const questHideAllColor = computed(() => userStore.questTeamAllHidden ? 'error' : 'success')
+const taskHideAllLabel = computed(() => userStore.taskTeamAllHidden ? 'page.team.card.teamoptions.task_hide_all' : 'page.team.card.teamoptions.task_show_all')
+const taskHideAllColor = computed(() => userStore.taskTeamAllHidden ? 'error' : 'success')
 
 const itemsHideAll = computed({
   get: () => userStore.itemsTeamAllHidden,

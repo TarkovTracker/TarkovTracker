@@ -40,7 +40,7 @@
       <v-row dense justify="end">
         <v-col cols="auto">
           <v-btn
-:disabled="props.teammember == fireuser.uid || userStore.questTeamAllHidden" variant="outlined"
+:disabled="props.teammember == fireuser.uid || userStore.taskTeamAllHidden" variant="outlined"
             :icon="props.teammember != fireuser.uid && userStore.teamIsHidden(props.teammember) ? 'mdi-eye-off' : 'mdi-eye'"
             class="mx-1"
             :color="props.teammember != fireuser.uid && userStore.teamIsHidden(props.teammember) ? 'red' : 'green'"

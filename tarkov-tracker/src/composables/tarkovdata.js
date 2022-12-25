@@ -132,7 +132,7 @@ watch(queryResults, async (newValue, oldValue) => {
         mapTasks.value[location].push(task.id)
       }
 
-      updatedTasks.push({ ...task, locations: [...locations], objectives: objectives, predecessors: getPredecessors(task.id), successors: getSuccessors(task.id), parents: newTaskGraph.inNeighbors(task.id), children: newTaskGraph.outNeighbors(task.id) })
+      updatedTasks.push({ ...task, locations: [...locations], objectives: objectives, predecessors: [...new Set(getPredecessors(task.id))], successors: [...new Set(getSuccessors(task.id))], parents: newTaskGraph.inNeighbors(task.id), children: newTaskGraph.outNeighbors(task.id) })
     }
 
     tasks.value = updatedTasks

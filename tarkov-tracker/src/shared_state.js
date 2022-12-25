@@ -90,9 +90,35 @@ export const actions = {
 
   // Set a task objective as complete
   setTaskObjectiveComplete(objectiveId) {
+    if (!this?.taskObjectives) {
+      this.taskObjectives = {}
+    }
+    if (!this.taskObjectives?.[objectiveId]) {
+      this.taskObjectives[objectiveId] = {}
+    }
     this.taskObjectives[objectiveId] = {
       complete: true,
       timestamp: Date.now()
+    }
+  },
+
+  setTaskObjectiveUncomplete(objectiveId) {
+    if (!this?.taskObjectives) {
+      this.taskObjectives = {}
+    }
+    if (!this.taskObjectives?.[objectiveId]) {
+      this.taskObjectives[objectiveId] = {}
+    }
+    this.taskObjectives[objectiveId] = {
+      complete: false,
+    }
+  },
+
+  toggleTaskObjectiveComplete(objectiveId) {
+    if (this.isTaskObjectiveComplete(objectiveId)) {
+      this.setTaskObjectiveUncomplete(objectiveId)
+    } else {
+      this.setTaskObjectiveComplete(objectiveId)
     }
   },
 
