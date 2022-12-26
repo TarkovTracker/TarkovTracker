@@ -4,6 +4,8 @@
     </drawer-item>
     <drawer-item icon="mdi-clipboard-text-multiple" locale-key="tasks" to="/tasks">
     </drawer-item>
+    <drawer-item icon="mdi-home" locale-key="hideout" to="/hideout">
+    </drawer-item>
     <drawer-item v-show="fireuser.loggedIn" icon="mdi-account-group" locale-key="team" to="/team">
     </drawer-item>
     <drawer-item icon="mdi-cog" locale-key="settings" to="/settings">

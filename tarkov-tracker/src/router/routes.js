@@ -19,6 +19,12 @@ const routes = [
         component: () => import("@/pages/TaskList.vue"),
       },
       {
+        name: 'hideout',
+        path: "/hideout",
+        meta: { background: 'hideout' },
+        component: () => import("@/pages/HideoutList.vue"),
+      },
+      {
         name: 'settings',
         path: "/settings",
         meta: { background: 'gas' },

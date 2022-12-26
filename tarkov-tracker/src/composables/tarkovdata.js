@@ -11,13 +11,13 @@ const queryErrors = ref(null)
 const queryResults = ref(null)
 const lastQueryTime = ref(null)
 
-const { onResult, onError, loading } = useQuery(tarkovDataQuery, null, { fetchPolicy: "network-only" });
-onResult((result) => {
+const { onResult: taskOnResult, onError: taskOnError, loading } = useQuery(tarkovDataQuery, null, { fetchPolicy: "network-only" });
+taskOnResult((result) => {
   lastQueryTime.value = Date.now()
   queryResults.value = result.data
   console.debug(queryResults)
 });
-onError((error) => {
+taskOnError((error) => {
   queryErrors.value = error
   console.error(queryErrors)
 });
@@ -27,6 +27,7 @@ const tasks = ref([])
 const taskGraph = ref({})
 
 const objectiveMaps = ref({})
+const alternativeTasks = ref({})
 
 const mapTasks = ref({})
 
@@ -101,6 +102,12 @@ watch(queryResults, async (newValue, oldValue) => {
         objectiveMaps.value = data
       })
 
+    await fetch('https://tarkovtracker.github.io/tarkovdata/task_alternatives.json')
+      .then(response => response.json())
+      .then(data => {
+        alternativeTasks.value = data
+      })
+
     // Loop through all of the tasks and add them to the graph
     let updatedTasks = []
     for (let task of newValue.tasks) {
@@ -132,7 +139,13 @@ watch(queryResults, async (newValue, oldValue) => {
         mapTasks.value[location].push(task.id)
       }
 
-      updatedTasks.push({ ...task, locations: [...locations], objectives: objectives, predecessors: [...new Set(getPredecessors(task.id))], successors: [...new Set(getSuccessors(task.id))], parents: newTaskGraph.inNeighbors(task.id), children: newTaskGraph.outNeighbors(task.id) })
+      let alternatives = []
+
+      if (alternativeTasks.value[task.id]) {
+        alternatives = alternativeTasks.value[task.id]
+      }
+
+      updatedTasks.push({ ...task, locations: [...locations], objectives: objectives, predecessors: [...new Set(getPredecessors(task.id))], successors: [...new Set(getSuccessors(task.id))], parents: newTaskGraph.inNeighbors(task.id), children: newTaskGraph.outNeighbors(task.id), alternatives: alternatives })
     }
 
     tasks.value = updatedTasks

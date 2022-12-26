@@ -4,13 +4,13 @@
       <v-col cols="12">
         <v-btn class="mr-1" @click="editorStore.reset()">Reset Editor Store</v-btn>
         <!-- Copy the objectiveMaps to clipboard -->
-        <v-btn @click="copyObjectiveMaps()">Copy Objective Maps JSON</v-btn>
+        <v-btn class="mr-1" @click="copyObjectiveMaps()">Copy Objective Maps JSON</v-btn>
+        <v-btn class="mr-1" @click="copyAlternativeTasks()">Copy Alternative Tasks JSON</v-btn>
       </v-col>
     </v-row>
     <v-row justify="center">
       <v-col v-for="task in allTasks" :key="task.id" cols="12">
-        <v-lazy
-:options="{
+        <v-lazy :options="{
           threshold: 0.5
         }" min-height="50">
           <editor-task-card :task="task" />
@@ -44,6 +44,10 @@ const allTasks = computed({
 
 const copyObjectiveMaps = async () => {
   navigator.clipboard.writeText(JSON.stringify(editorStore.getObjectiveMapsFull, null, 2))
+}
+
+const copyAlternativeTasks = async () => {
+  navigator.clipboard.writeText(JSON.stringify(editorStore.getAlternativeTasksFull, null, 2))
 }
 
 </script>

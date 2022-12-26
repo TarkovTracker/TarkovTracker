@@ -36,6 +36,10 @@ export const getters = {
     return (taskId) => state?.taskCompletions?.[taskId]?.complete || false
   },
 
+  isTaskFailed(state) {
+    return (taskId) => state?.taskCompletions?.[taskId]?.failed || false
+  },
+
   // Check if a specific task objective is completed
   isTaskObjectiveComplete(state) {
     return (objectiveId) => state?.taskObjectives?.[objectiveId]?.complete || false
@@ -98,6 +102,20 @@ export const actions = {
     }
   },
 
+  setTaskFailed(taskId) {
+    if (!this?.taskCompletions) {
+      this.taskCompletions = {}
+    }
+    if (!this.taskCompletions?.[taskId]) {
+      this.taskCompletions[taskId] = {}
+    }
+    this.taskCompletions[taskId] = {
+      complete: true,
+      failed: true,
+      timestamp: Date.now()
+    }
+  },
+
   setTaskUncompleted(taskId) {
     if (!this?.taskCompletions) {
       this.taskCompletions = {}
@@ -107,6 +125,7 @@ export const actions = {
     }
     this.taskCompletions[taskId] = {
       complete: false,
+      failed: false,
     }
   },
 

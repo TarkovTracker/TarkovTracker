@@ -2,19 +2,21 @@
   <v-card>
     <v-card-title>
       <div>
-        ID: {{ task?.id }}
+        ID: {{ props.task?.id }}
       </div>
       <div>
-        Name: {{ task?.name }}
+        Name: {{ props.task?.name }}
       </div>
     </v-card-title>
     <v-card-text>
       <div>
-        <a :href="task.wikiLink" target="_blank" class="wiki-link">Wiki link</a>
+        <a :href="props.task?.wikiLink" target="_blank" class="wiki-link">Wiki link</a>
       </div>
       <div>
-        <div
-v-for="objective, objIndex in task?.objectives" :key="objective.id" class="pa-1"
+        <editor-alternative-section :task="props.task" />
+      </div>
+      <div>
+        <div v-for="objective, objIndex in props.task?.objectives" :key="objective.id" class="pa-1"
           :style="objIndex % 2 == 1 ? 'background-color: #2f2f2f' : 'background-color: #1b1b1b'">
           <editor-objective-section :objective="objective" />
         </div>
@@ -28,6 +30,9 @@ import { useTarkovData } from '@/composables/tarkovdata'
 import { defineAsyncComponent } from 'vue'
 const EditorObjectiveSection = defineAsyncComponent(() =>
   import("@/components/editor/EditorObjectiveSection.vue")
+)
+const EditorAlternativeSection = defineAsyncComponent(() =>
+  import("@/components/editor/EditorAlternativeSection.vue")
 )
 const props = defineProps({
   task: {

@@ -136,6 +136,14 @@
                     class="mr-2">mdi-check-all</v-icon>{{
                         $t('page.tasks.questcard.completebutton')
                     }}</v-btn>
+                <template v-if="props.task.alternatives?.length > 0">
+                  <div class="d-flex justify-center">
+                    {{ $t('page.tasks.questcard.alternatives') }}
+                  </div>
+                  <div v-for="alternative, altIndex in props.task.alternatives" :key="altIndex" class="my-2">
+                    <task-link :task="tasks.find(t => t.id == alternative)" class="d-flex justify-center" />
+                  </div>
+                </template>
               </template>
               <template v-else>
                 <div class="d-flex justify-center">
@@ -153,6 +161,14 @@
                     class="mr-2">mdi-undo</v-icon>{{
                         $t('page.tasks.questcard.uncompletebutton')
                     }}</v-btn>
+                <template v-if="props.task.alternatives?.length > 0">
+                  <div class="d-flex justify-center">
+                    {{ $t('page.tasks.questcard.alternativefailed') }}
+                  </div>
+                  <div v-for="alternative, altIndex in props.task.alternatives" :key="altIndex" class="my-2">
+                    <task-link :task="tasks.find(t => t.id == alternative)" class="d-flex justify-center" />
+                  </div>
+                </template>
               </template>
               <template v-else>
                 <div class="d-flex justify-center">
@@ -209,6 +225,7 @@ import { useDisplay } from 'vuetify'
 import { useTarkovStore } from "@/stores/tarkov.js";
 import { useProgressStore } from '@/stores/progress'
 import { useUserStore } from '@/stores/user'
+import { useTarkovData } from '@/composables/tarkovdata';
 import { useI18n } from 'vue-i18n'
 // Define the props for the component
 const props = defineProps({
@@ -221,6 +238,7 @@ const { t } = useI18n({ useScope: 'global' })
 const tarkovStore = useTarkovStore()
 const progressStore = useProgressStore()
 const userStore = useUserStore()
+const { tasks } = useTarkovData()
 
 const TaskLink = defineAsyncComponent(() =>
   import("@/components/tasks/TaskLink.vue")
@@ -236,6 +254,10 @@ const { xs } = useDisplay()
 
 const isComplete = computed(() => {
   return tarkovStore.isTaskComplete(props.task.id)
+})
+
+const isFailed = computed(() => {
+  return tarkovStore.isTaskFailed(props.task.id)
 })
 
 const isLocked = computed(() => {
@@ -279,6 +301,13 @@ const markTaskComplete = () => {
   props.task.objectives.forEach((o) => {
     tarkovStore.setTaskObjectiveComplete(o.id)
   })
+  // For each alternative task, mark it as failed
+  props.task.alternatives.forEach((a) => {
+    tarkovStore.setTaskFailed(a)
+    tasks.value.find(task => task.id == a).objectives.forEach((o) => {
+      tarkovStore.setTaskObjectiveComplete(o.id)
+    })
+  })
   taskStatus.value = t('page.tasks.questcard.statuscomplete', { name: props.task.name })
   taskStatusUpdated.value = true
 }
@@ -289,6 +318,13 @@ const markTaskUncomplete = () => {
   props.task.objectives.forEach((o) => {
     tarkovStore.setTaskObjectiveUncomplete(o.id)
   })
+  // For each alternative task, mark it as uncomplete
+  props.task.alternatives.forEach((a) => {
+    tarkovStore.setTaskUncompleted(a)
+    tasks.value.find(task => task.id == a).objectives.forEach((o) => {
+      tarkovStore.setTaskObjectiveUncomplete(o.id)
+    })
+  })
   taskStatus.value = t('page.tasks.questcard.statusuncomplete', { name: props.task.name })
   taskStatusUpdated.value = true
 }
@@ -297,6 +333,9 @@ const markTaskAvailable = () => {
   // Go through all the predecessors and mark them as complete
   props.task.predecessors.forEach((p) => {
     tarkovStore.setTaskComplete(p)
+    tasks.value.find(task => task.id == p).objectives.forEach((o) => {
+      tarkovStore.setTaskObjectiveComplete(o.id)
+    })
   })
   // If our level is lower than the task level, set it to the task level
   if (tarkovStore.playerLevel < props.task.minPlayerLevel) {

@@ -62,7 +62,12 @@
         nonkappa: "Not Kappa Required",
         keysneeded: "{keys} needed on {map} | One of {keys} needed on {map}",
         objectiveshidden: "{count} objectives not on this map ({uncompleted} uncompleted)",
+        alternatives: "Alternative quests",
+        alternativefailed: "Alternative quests will also be reset"
       }
+    },
+    hideout: {
+      title: 'Hideout',
     },
     settings: {
       title: 'Settings',
@@ -187,6 +192,7 @@
     level: 'Level',
     team: 'Team',
     tasks: 'Tasks',
+    hideout: 'Hideout',
   },
   tips: {
     hide_tip: 'Hide this tip',

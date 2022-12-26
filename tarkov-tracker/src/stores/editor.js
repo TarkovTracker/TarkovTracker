@@ -6,6 +6,7 @@ export const useEditorStore = defineStore('editor', {
   state: () => ({
     // The initial state of the store
     objectiveMaps: useStorage('editor_objectiveMaps', {}),
+    alternativeTasks: useStorage('editor_alternativeTasks', {}),
   }),
   getters: {
     // State getters
@@ -15,6 +16,14 @@ export const useEditorStore = defineStore('editor', {
 
     getObjectiveMapsFull(state) {
       return state.objectiveMaps || {}
+    },
+
+    getAlternativeTasks(state) {
+      return (taskId) => state.alternativeTasks[taskId] || {}
+    },
+
+    getAlternativeTasksFull(state) {
+      return state.alternativeTasks || {}
     }
   },
   actions: {
@@ -23,14 +32,23 @@ export const useEditorStore = defineStore('editor', {
       this.objectiveMaps[objectiveId] = maps
     },
 
+    setAlternativeTasks(taskId, tasks) {
+      this.alternativeTasks[taskId] = tasks
+    },
+
     // State reset function
     reset() {
       this.resetObjectiveMaps()
+      this.resetAlternativeTasks()
     },
 
     // objectiveMaps reset function
     resetObjectiveMaps() {
       this.objectiveMaps = {}
+    },
+
+    resetAlternativeTasks() {
+      this.alternativeTasks = {}
     }
   }
 })
