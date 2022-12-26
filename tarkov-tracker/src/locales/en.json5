@@ -69,6 +69,16 @@
     },
     hideout: {
       title: 'Hideout',
+      stationcard: {
+        level: "Available to build | Level {count} | Level {count}",
+        nextlevel: "Requirements for next level",
+        maxlevel: "Max station level reached",
+        requirements: {
+          station: "Requires {stationname} level {level}",
+          skill: "Requires {skillname} level {level}",
+          trader: "Requires {tradername} loyalty level {loyaltylevel}",
+        }
+      }
     },
     settings: {
       title: 'Settings',

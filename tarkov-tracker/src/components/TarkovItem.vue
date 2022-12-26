@@ -4,6 +4,7 @@
       <v-col cols="auto" class="d-flex align-center justify-center">
         <img width="32" :src="itemIconUrl" class="mr-2 rounded" />
       </v-col>
+      <v-col cols="auto" v-if="props.count" class="mr-2">{{ props.count }}</v-col>
       <v-col cols="auto" class="align-center justify-center tarkov-item-name">
         <b>{{ props.itemName }}</b>
       </v-col>
@@ -47,6 +48,10 @@ const props = defineProps({
   },
   wikiLink: {
     type: String,
+    required: false,
+  },
+  count: {
+    type: Number,
     required: false,
   },
 })

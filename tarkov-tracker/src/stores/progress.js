@@ -11,10 +11,10 @@ const userStore = useUserStore()
 const { tasks, traders, hideoutStations, hideoutModules } = useTarkovData()
 
 const gameEditions = [
-  { version: 1, value: 0.0 },
-  { version: 2, value: 0.0 },
-  { version: 3, value: 0.2 },
-  { version: 4, value: 0.2 },
+  { version: 1, value: 0.0, defaultStashLevel: 1 },
+  { version: 2, value: 0.0, defaultStashLevel: 2 },
+  { version: 3, value: 0.2, defaultStashLevel: 3 },
+  { version: 4, value: 0.2, defaultStashLevel: 4 },
 ]
 
 export const useProgressStore = defineStore('progress', () => {
@@ -214,20 +214,24 @@ export const useProgressStore = defineStore('progress', () => {
   })
 
   const stationLevels = computed(() => {
-    let stationLevels = {}
+    let stationLevelTemp = {}
     // For each station, check if we have marked it as built
     hideoutStations.value.forEach(station => {
-      stationLevels[station.id] = {}
+      stationLevelTemp[station.id] = {}
       for (const teamId of Object.keys(teamStores.value)) {
-        stationLevels[station.id][teamId] = 0
+        stationLevelTemp[station.id][teamId] = 0
+        // Check if were the stash station, and if so, set the default level according to the game edition
+        if (station.id == '5d484fc0654e76006657e0ab') {
+          stationLevelTemp[station.id][teamId] = gameEditions.find(edition => edition.version == teamStores.value[teamId].gameEdition).defaultStashLevel
+        }
         station.levels.forEach(level => {
-          if (moduleCompletions.value[level.id]?.[teamId] && level.level > stationLevels[station.id][teamId]) {
-            stationLevels[station.id][teamId] = level.level
+          if (moduleCompletions.value?.[level.id]?.[teamId] && level.level > stationLevelTemp?.[station.id]?.[teamId]) {
+            stationLevelTemp[station.id][teamId] = level.level
           }
         })
       }
     })
-    return stationLevels
+    return stationLevelTemp
   })
 
   const availableModules = computed(() => {
@@ -260,6 +264,29 @@ export const useProgressStore = defineStore('progress', () => {
     return availableModules
   })
 
+  const visibleStations = computed(() => {
+    let visibleStations = {}
+    // Loop through stationLevels and check load any station with a level > 0 on the 'self' teamstore
+    for (const stationId of Object.keys(stationLevels.value)) {
+      if (stationLevels.value[stationId]['self'] > 0) {
+        visibleStations[stationId] = hideoutStations.value.find(station => station.id == stationId)
+      }
+    }
+
+    // Loop through availableModules and load the relevant station if it is available
+    for (const moduleId of Object.keys(availableModules.value)) {
+      if (availableModules.value[moduleId]['self']) {
+        // Find the station for this module
+        const station = hideoutStations.value.find(station => station.levels.find(level => level.id == moduleId))
+        if (station) {
+          visibleStations[station.id] = station
+        }
+      }
+    }
+
+    return visibleStations
+  })
+
   const getTeamIndex = function (teamId) {
     if (teamId == fireuser.uid) {
       return 'self'
@@ -285,5 +312,5 @@ export const useProgressStore = defineStore('progress', () => {
     return names
   })
 
-  return { teamStores, getDisplayName, getTeamIndex, visibleTeamStores, getLevel, teammemberNames, tasksCompletions, objectiveCompletions, unlockedTasks, levelAppropriateTasks, traderRep, traderLevelsAchieved, moduleCompletions, stationLevels, availableModules }
+  return { teamStores, getDisplayName, getTeamIndex, visibleTeamStores, getLevel, teammemberNames, tasksCompletions, objectiveCompletions, unlockedTasks, levelAppropriateTasks, traderRep, traderLevelsAchieved, moduleCompletions, stationLevels, availableModules, visibleStations }
 })
