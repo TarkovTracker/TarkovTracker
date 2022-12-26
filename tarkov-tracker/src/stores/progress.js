@@ -8,7 +8,7 @@ import { useTarkovData } from '@/composables/tarkovdata'
 
 const { teammateStores } = useLiveData()
 const userStore = useUserStore()
-const { tasks, traders } = useTarkovData()
+const { tasks, traders, hideoutStations, hideoutModules } = useTarkovData()
 
 const gameEditions = [
   { version: 1, value: 0.0 },
@@ -201,6 +201,65 @@ export const useProgressStore = defineStore('progress', () => {
     return completions
   })
 
+  const moduleCompletions = computed(() => {
+    // For each module, check if it is completed for each team member
+    let completions = {}
+    for (const hModule of hideoutModules.value) {
+      completions[hModule.id] = {}
+      for (const teamId of Object.keys(teamStores.value)) {
+        completions[hModule.id][teamId] = teamStores.value[teamId].isHideoutModuleComplete(hModule.id)
+      }
+    }
+    return completions
+  })
+
+  const stationLevels = computed(() => {
+    let stationLevels = {}
+    // For each station, check if we have marked it as built
+    hideoutStations.value.forEach(station => {
+      stationLevels[station.id] = {}
+      for (const teamId of Object.keys(teamStores.value)) {
+        stationLevels[station.id][teamId] = 0
+        station.levels.forEach(level => {
+          if (moduleCompletions.value[level.id]?.[teamId] && level.level > stationLevels[station.id][teamId]) {
+            stationLevels[station.id][teamId] = level.level
+          }
+        })
+      }
+    })
+    return stationLevels
+  })
+
+  const availableModules = computed(() => {
+    let availableModules = {}
+    // For each station, check if we have marked it as built
+    hideoutStations.value.forEach(station => {
+      station.levels.forEach(level => {
+        availableModules[level.id] = {}
+        for (const teamId of Object.keys(teamStores.value)) {
+          // If the level is already built, it is not available
+          if (moduleCompletions.value?.[level.id]?.[teamId]) {
+            availableModules[level.id][teamId] = false
+            continue
+          }
+
+          let userAvailable = true
+          // For each requirement, check if the required module is built
+          if (level?.stationLevelRequirements?.length > 0) {
+            for (const requirement of level.stationLevelRequirements) {
+              if (!moduleCompletions.value?.[requirement.station.id]?.[teamId]) {
+                userAvailable = false
+                break
+              }
+            }
+          }
+          availableModules[level.id][teamId] = userAvailable
+        }
+      })
+    })
+    return availableModules
+  })
+
   const getTeamIndex = function (teamId) {
     if (teamId == fireuser.uid) {
       return 'self'
@@ -223,9 +282,8 @@ export const useProgressStore = defineStore('progress', () => {
     for (const teamId of Object.keys(teamStores.value)) {
       names[teamId] = teamStores.value[getTeamIndex(teamId)].getDisplayName || teamId.substring(0, 6)
     }
-    console.log(names)
     return names
   })
 
-  return { teamStores, getDisplayName, getTeamIndex, visibleTeamStores, getLevel, teammemberNames, tasksCompletions, objectiveCompletions, unlockedTasks, levelAppropriateTasks, traderRep, traderLevelsAchieved }
+  return { teamStores, getDisplayName, getTeamIndex, visibleTeamStores, getLevel, teammemberNames, tasksCompletions, objectiveCompletions, unlockedTasks, levelAppropriateTasks, traderRep, traderLevelsAchieved, moduleCompletions, stationLevels, availableModules }
 })

@@ -215,6 +215,10 @@
     login: {
       title: 'Login',
       description: 'As a heads up, logging in is not necessary to use TarkovTracker to track your progress in the game. The only reason to log in is to enable sharing your progress with your friends live and coordinate raids, or to keep data across devices or through clearing browser data. If you aren\'t planning on doing that, you can continue to use TarkovTracker without logging in. Your data will be stored locally in your browser.'
+    },
+    hideout: {
+      title: 'Hideout',
+      description: 'You can mark off progress towards building and upgrading your hideout. The progress you mark will be used to calculate needed items for your hideout.'
     }
   }
 }

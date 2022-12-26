@@ -165,6 +165,12 @@ export const actions = {
 
   // Set a hideout part as complete
   setHideoutPartComplete(objectiveId) {
+    if (!this?.hideoutParts) {
+      this.hideoutParts = {}
+    }
+    if (!this.hideoutParts?.[objectiveId]) {
+      this.hideoutParts[objectiveId] = {}
+    }
     this.hideoutParts[objectiveId] = {
       complete: true,
       timestamp: Date.now()
@@ -173,9 +179,47 @@ export const actions = {
 
   // Set a hideout module as complete
   setHideoutModuleComplete(hideoutId) {
+    if (!this?.hideoutParts) {
+      this.hideoutParts = {}
+    }
+    if (!this.hideoutParts?.[hideoutId]) {
+      this.hideoutParts[hideoutId] = {}
+    }
     this.hideoutModules[hideoutId] = {
       complete: true,
       timestamp: Date.now()
+    }
+  },
+
+  setHideoutModuleUncomplete(hideoutId) {
+    if (!this?.hideoutParts) {
+      this.hideoutParts = {}
+    }
+    if (!this.hideoutParts?.[hideoutId]) {
+      this.hideoutParts[hideoutId] = {}
+    }
+    this.hideoutModules[hideoutId] = {
+      complete: false,
+    }
+  },
+
+  setHideoutPartUncomplete(hideoutId) {
+    if (!this?.hideoutParts) {
+      this.hideoutParts = {}
+    }
+    if (!this.hideoutParts?.[hideoutId]) {
+      this.hideoutParts[hideoutId] = {}
+    }
+    this.hideoutParts[hideoutId] = {
+      complete: false,
+    }
+  },
+
+  toggleHideoutPartComplete(hideoutId) {
+    if (this.isHideoutPartComplete(hideoutId)) {
+      this.setHideoutPartUncomplete(hideoutId)
+    } else {
+      this.setHideoutPartComplete(hideoutId)
     }
   }
 }

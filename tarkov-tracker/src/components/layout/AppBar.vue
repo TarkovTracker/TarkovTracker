@@ -4,8 +4,7 @@
       <v-img gradient="to top right, rgba(45,45,35,.95), rgba(6,13,12,.95)"></v-img>
     </template>
     <template #prepend>
-      <v-app-bar-nav-icon
-:icon="navBarIcon" variant="text" aria-label="Toggle Menu Drawer"
+      <v-app-bar-nav-icon :icon="navBarIcon" variant="text" aria-label="Toggle Menu Drawer"
         @click.stop="changeNavigationDrawer"></v-app-bar-nav-icon>
     </template>
 
@@ -22,7 +21,7 @@
         </template>
       </v-tooltip>
     </span>
-    <span v-if="dataLoading">
+    <span v-if="dataLoading || hideoutLoading">
       <!-- Show an icon and tooltip while we load the GraphQL result -->
       <v-tooltip activator="parent" location="left">
         Loading Tarkov Data
@@ -65,7 +64,7 @@ const OverflowMenu = defineAsyncComponent(() =>
   import("/src/components/layout/OverflowMenu.vue")
 )
 
-const { loading: dataLoading, error: dataError } = useTarkovData()
+const { loading: dataLoading, error: dataError, hideoutLoading } = useTarkovData()
 
 // Change how the navigation bar is modified based upon the screen size
 // Either change between open/close or rail/full

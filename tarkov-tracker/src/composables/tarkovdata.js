@@ -8,6 +8,28 @@ import Graph from 'graphology';
 
 provideApolloClient(apolloClient)
 
+// Function to recursively get all of the predecessors for a task
+function getPredecessors(graph, nodeId) {
+  let predecessors = graph.inNeighbors(nodeId)
+  if (predecessors.length > 0) {
+    for (let predecessor of predecessors) {
+      predecessors = predecessors.concat(getPredecessors(graph, predecessor))
+    }
+  }
+  return predecessors
+}
+
+// Function to recursively get all of the successors for a task
+function getSuccessors(graph, nodeId) {
+  let successors = graph.outNeighbors(nodeId)
+  if (successors.length > 0) {
+    for (let successor of successors) {
+      successors = successors.concat(getSuccessors(graph, successor))
+    }
+  }
+  return successors
+}
+
 const queryErrors = ref(null)
 const queryResults = ref(null)
 const lastQueryTime = ref(null)
@@ -39,8 +61,34 @@ hideoutOnError((error) => {
 });
 
 const hideoutStations = ref([])
+const hideoutModules = ref([])
+const hideoutGraph = ref({})
 watch(queryHideoutResults, async (newValue, oldValue) => {
   if (newValue?.hideoutStations) {
+    let newHideoutGraph = new Graph();
+    newValue.hideoutStations.forEach((station) => {
+      // For each level
+      station.levels.forEach((level) => {
+        newHideoutGraph.mergeNode(level.id)
+        // For each stationRequirement
+        level.stationLevelRequirements.forEach((requirement) => {
+          let requiredStation = newValue.hideoutStations.find((station) => station.id === requirement.station.id)
+          let requiredLevel = requiredStation.levels.find((level) => level.level === requirement.level)
+          newHideoutGraph.mergeNode(requiredLevel.id)
+          newHideoutGraph.mergeEdge(requiredLevel.id, level.id)
+        })
+      })
+    })
+
+    let newModules = []
+    newValue.hideoutStations.forEach((station) => {
+      // For each level
+      station.levels.forEach((level) => {
+        newModules.push({ ...level, predecessors: [...new Set(getPredecessors(newHideoutGraph, level.id))], successors: [...new Set(getSuccessors(newHideoutGraph, level.id))], parents: newHideoutGraph.inNeighbors(level.id), children: newHideoutGraph.outNeighbors(level.id) })
+      })
+    })
+    hideoutModules.value = newModules
+    hideoutGraph.value = newHideoutGraph
     hideoutStations.value = newValue.hideoutStations
   }
 })
@@ -53,28 +101,6 @@ const objectiveMaps = ref({})
 const alternativeTasks = ref({})
 
 const mapTasks = ref({})
-
-// Function to recursively get all of the predecessors for a task
-function getPredecessors(taskId) {
-  let predecessors = taskGraph.value.inNeighbors(taskId)
-  if (predecessors.length > 0) {
-    for (let predecessor of predecessors) {
-      predecessors = predecessors.concat(getPredecessors(predecessor))
-    }
-  }
-  return predecessors
-}
-
-// Function to recursively get all of the successors for a task
-function getSuccessors(taskId) {
-  let successors = taskGraph.value.outNeighbors(taskId)
-  if (successors.length > 0) {
-    for (let successor of successors) {
-      successors = successors.concat(getSuccessors(successor))
-    }
-  }
-  return successors
-}
 
 const disabledTasks = ["61e6e5e0f5b9633f6719ed95", "61e6e60223374d168a4576a6", "61e6e621bfeab00251576265", "61e6e615eea2935bc018a2c5", "61e6e60c5ca3b3783662be27"]
 
@@ -168,7 +194,7 @@ watch(queryResults, async (newValue, oldValue) => {
         alternatives = alternativeTasks.value[task.id]
       }
 
-      updatedTasks.push({ ...task, locations: [...locations], objectives: objectives, predecessors: [...new Set(getPredecessors(task.id))], successors: [...new Set(getSuccessors(task.id))], parents: newTaskGraph.inNeighbors(task.id), children: newTaskGraph.outNeighbors(task.id), alternatives: alternatives })
+      updatedTasks.push({ ...task, locations: [...locations], objectives: objectives, predecessors: [...new Set(getPredecessors(taskGraph.value, task.id))], successors: [...new Set(getSuccessors(taskGraph.value, task.id))], parents: newTaskGraph.inNeighbors(task.id), children: newTaskGraph.outNeighbors(task.id), alternatives: alternatives })
     }
 
     tasks.value = updatedTasks
