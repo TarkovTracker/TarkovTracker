@@ -4,9 +4,7 @@
     <v-row justify="center" class="mt-2">
       <v-col v-for="hStation, hIndex in progressStore.visibleStations" :key="hIndex" cols="12" sm="12" md="6" lg="6"
         xl="4">
-        <hideout-card :station="hStation" class="ma-2">{{
-            hModule
-        }}</hideout-card>
+        <hideout-card :station="hStation" class="ma-2" />
       </v-col>
     </v-row>
   </v-container>

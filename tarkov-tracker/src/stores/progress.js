@@ -72,13 +72,19 @@ export const useProgressStore = defineStore('progress', () => {
         // Find the gameEdition object with a version that matches the game edition
         let bonus = gameEditions.find((edition) => edition.version === teamStores.value[teamId].gameEdition)?.value || 0.0
         // For each trader, loop through and add the rep
-        for (const trader of traders.value) {
-          // Add the game edition value to the total
-          rep[teamId][trader.id] = rep[teamId]?.[trader.id] + bonus || bonus
+        if (traders.value) {
+          for (const trader of traders.value) {
+            // Add the game edition value to the total
+            rep[teamId][trader.id] = rep[teamId]?.[trader.id] + bonus || bonus
+          }
         }
       }
     }
     return rep
+  })
+
+  const gameEditionData = computed(() => {
+    return gameEditions
   })
 
   const traderLevelsAchieved = computed(() => {
@@ -87,6 +93,7 @@ export const useProgressStore = defineStore('progress', () => {
     for (const teamId of Object.keys(teamStores.value)) {
       levels[teamId] = {}
       // For each trader, loop through the tiers and check if the user has met the requirements
+      if (!traders.value) continue
       for (const trader of traders.value) {
         levels[teamId][trader.id] = 1
         if (trader?.levels.length > 0) {
@@ -165,6 +172,7 @@ export const useProgressStore = defineStore('progress', () => {
   const levelAppropriateTasks = computed(() => {
     // For each task, check if any team member has it available
     let available = {}
+    if (!unlockedTasks.value) return {}
     for (const task of unlockedTasks.value) {
       available[task.id] = {}
       for (const teamId of Object.keys(teamStores.value)) {
@@ -312,5 +320,5 @@ export const useProgressStore = defineStore('progress', () => {
     return names
   })
 
-  return { teamStores, getDisplayName, getTeamIndex, visibleTeamStores, getLevel, teammemberNames, tasksCompletions, objectiveCompletions, unlockedTasks, levelAppropriateTasks, traderRep, traderLevelsAchieved, moduleCompletions, stationLevels, availableModules, visibleStations }
+  return { teamStores, getDisplayName, getTeamIndex, visibleTeamStores, getLevel, teammemberNames, tasksCompletions, objectiveCompletions, unlockedTasks, levelAppropriateTasks, traderRep, traderLevelsAchieved, moduleCompletions, stationLevels, availableModules, visibleStations, gameEditionData }
 })

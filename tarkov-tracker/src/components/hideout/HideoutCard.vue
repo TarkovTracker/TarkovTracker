@@ -63,14 +63,45 @@
       <div v-else>
         <div class="text-subtitle-1">{{ $t('page.hideout.stationcard.maxlevel') }}</div>
       </div>
-
+      <div>
+        <v-row no-gutters class="align-center justify-center">
+          <v-col cols="auto" class="mx-1">
+            <v-btn color="green" density="comfortable" @click="upgradeStation()">
+              <i18n-t keypath="page.hideout.stationcard.upgradebutton" scope="global">
+                <template #level>
+                  {{ nextLevel.level }}
+                </template>
+              </i18n-t>
+            </v-btn>
+          </v-col>
+          <v-col cols="auto" v-if="nextLevel.level != 1" class="mx-1">
+            <v-btn color="red" density="comfortable" :disabled="downgradeDisabled" @click="downgradeStation()">
+              <i18n-t keypath="page.hideout.stationcard.downgradebutton" scope="global"
+                :plural="progressStore.stationLevels[props.station.id]['self'] - 1">
+                <template #level>
+                  {{ progressStore.stationLevels[props.station.id]['self'] - 1 }}
+                </template>
+              </i18n-t>
+            </v-btn>
+          </v-col>
+        </v-row>
+      </div>
     </div>
+    <v-snackbar v-model="moduleStatusUpdated" :timeout="4000" color="secondary">
+      {{ moduleStatus }}
+      <template #actions>
+        <v-btn color="white" variant="text" @click="moduleStatusUpdated = false">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-sheet>
 </template>
 <script setup>
-import { computed, defineAsyncComponent } from "vue";
+import { computed, defineAsyncComponent, ref } from "vue";
 import { useProgressStore } from "@/stores/progress";
 import { useI18n } from 'vue-i18n'
+import { useTarkovStore } from '@/stores/tarkov'
 const TarkovItem = defineAsyncComponent(() =>
   import("@/components/TarkovItem.vue")
 )
@@ -81,6 +112,7 @@ const props = defineProps({
   },
 });
 const progressStore = useProgressStore();
+const tarkovStore = useTarkovStore()
 const { t } = useI18n({ useScope: 'global' })
 
 const highlightClasses = computed(() => {
@@ -93,8 +125,44 @@ const highlightClasses = computed(() => {
   return classes
 })
 
+const downgradeDisabled = computed(() => {
+  if (props.station.id == '5d484fc0654e76006657e0ab') {
+    if (progressStore.stationLevels[props.station.id]['self'] <= progressStore.gameEditionData.find(edition => edition.version == tarkovStore.getGameEdition).defaultStashLevel) {
+      return true
+    }
+  }
+  return false
+})
+
+const moduleStatusUpdated = ref(false)
+const moduleStatus = ref('')
+
+const upgradeStation = () => {
+  tarkovStore.setHideoutModuleComplete(nextLevel.value.id)
+  // For each objective, mark it as complete
+  nextLevel.value.itemRequirements.forEach((o) => {
+    tarkovStore.setHideoutPartComplete(o.id)
+  })
+  moduleStatus.value = t('page.hideout.stationcard.statusupgraded', { name: props.station.name, level: nextLevel.value.level })
+  moduleStatusUpdated.value = true
+}
+
+const downgradeStation = () => {
+  tarkovStore.setHideoutModuleUncomplete(currentLevel.value.id)
+  // For each objective, mark it as complete
+  nextLevel.value.itemRequirements.forEach((o) => {
+    tarkovStore.setHideoutPartUncomplete(o.id)
+  })
+  moduleStatus.value = t('page.hideout.stationcard.statusdowngraded', { name: props.station.name, level: currentLevel.value.level })
+  moduleStatusUpdated.value = true
+}
+
 const nextLevel = computed(() => {
   return props.station.levels.find(level => level.level === progressStore.stationLevels[props.station.id]['self'] + 1) || null
+})
+
+const currentLevel = computed(() => {
+  return props.station.levels.find(level => level.level === progressStore.stationLevels[props.station.id]['self']) || null
 })
 
 const stationAvatar = computed(() => {

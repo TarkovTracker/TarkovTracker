@@ -179,11 +179,11 @@ export const actions = {
 
   // Set a hideout module as complete
   setHideoutModuleComplete(hideoutId) {
-    if (!this?.hideoutParts) {
-      this.hideoutParts = {}
+    if (!this?.hideoutModules) {
+      this.hideoutModules = {}
     }
-    if (!this.hideoutParts?.[hideoutId]) {
-      this.hideoutParts[hideoutId] = {}
+    if (!this.hideoutModules?.[hideoutId]) {
+      this.hideoutModules[hideoutId] = {}
     }
     this.hideoutModules[hideoutId] = {
       complete: true,
@@ -192,11 +192,11 @@ export const actions = {
   },
 
   setHideoutModuleUncomplete(hideoutId) {
-    if (!this?.hideoutParts) {
-      this.hideoutParts = {}
+    if (!this?.hideoutModules) {
+      this.hideoutModules = {}
     }
-    if (!this.hideoutParts?.[hideoutId]) {
-      this.hideoutParts[hideoutId] = {}
+    if (!this.hideoutModules?.[hideoutId]) {
+      this.hideoutModules[hideoutId] = {}
     }
     this.hideoutModules[hideoutId] = {
       complete: false,
