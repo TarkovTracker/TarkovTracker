@@ -19,9 +19,18 @@
       </span>
     </div>
 
+    <div v-if="currentLevel" class="text-center text-caption mt-4 mx-2">
+      {{ currentLevel.description }}
+    </div>
+    <div v-else class="text-center text-caption mt-4 mx-2">
+      {{ nextLevel.description }}
+    </div>
+
     <div class="text-center pa-2 pt-6">
-      <div v-if="nextLevel">
-        <div class="text-subtitle-1">{{ $t('page.hideout.stationcard.nextlevel') }}</div>
+      <div v-if="nextLevel" class="rounded">
+        <div class="text-subtitle-1 mb-2"><v-icon class="mr-2">mdi-package-variant-closed-check</v-icon>{{
+            $t('page.hideout.stationcard.nextlevel')
+        }}</div>
         <div v-for="requirement, rIndex in nextLevel.itemRequirements" :key="rIndex">
           <span class="d-flex align-center justify-center">
             <tarkov-item :item-id="requirement.item.id" :item-name="requirement.item.name"
@@ -61,20 +70,22 @@
         </div>
       </div>
       <div v-else>
-        <div class="text-subtitle-1">{{ $t('page.hideout.stationcard.maxlevel') }}</div>
+        <div class="text-subtitle-1"><v-icon class="mr-2">mdi-star-check</v-icon>{{
+            $t('page.hideout.stationcard.maxlevel')
+        }}</div>
       </div>
       <div>
         <v-row no-gutters class="align-center justify-center">
-          <v-col cols="auto" class="mx-1">
+          <v-col v-if="nextLevel?.level" cols="auto" class="mx-1">
             <v-btn color="green" density="comfortable" @click="upgradeStation()">
               <i18n-t keypath="page.hideout.stationcard.upgradebutton" scope="global">
                 <template #level>
-                  {{ nextLevel.level }}
+                  {{ nextLevel?.level }}
                 </template>
               </i18n-t>
             </v-btn>
           </v-col>
-          <v-col cols="auto" v-if="nextLevel.level != 1" class="mx-1">
+          <v-col cols="auto" v-if="nextLevel?.level && nextLevel?.level != 1" class="mx-1">
             <v-btn color="red" density="comfortable" :disabled="downgradeDisabled" @click="downgradeStation()">
               <i18n-t keypath="page.hideout.stationcard.downgradebutton" scope="global"
                 :plural="progressStore.stationLevels[props.station.id]['self'] - 1">
@@ -138,22 +149,26 @@ const moduleStatusUpdated = ref(false)
 const moduleStatus = ref('')
 
 const upgradeStation = () => {
-  tarkovStore.setHideoutModuleComplete(nextLevel.value.id)
+  // Store next level to a variable because it can change mid-function
+  let upgradeLevel = nextLevel.value
+  tarkovStore.setHideoutModuleComplete(upgradeLevel.id)
   // For each objective, mark it as complete
-  nextLevel.value.itemRequirements.forEach((o) => {
+  upgradeLevel.itemRequirements.forEach((o) => {
     tarkovStore.setHideoutPartComplete(o.id)
   })
-  moduleStatus.value = t('page.hideout.stationcard.statusupgraded', { name: props.station.name, level: nextLevel.value.level })
+  moduleStatus.value = t('page.hideout.stationcard.statusupgraded', { name: props.station.name, level: upgradeLevel.level })
   moduleStatusUpdated.value = true
 }
 
 const downgradeStation = () => {
-  tarkovStore.setHideoutModuleUncomplete(currentLevel.value.id)
-  // For each objective, mark it as complete
-  nextLevel.value.itemRequirements.forEach((o) => {
+  // Store current level to a variable because it can change mid-function
+  let downgradeLevel = currentLevel.value
+  tarkovStore.setHideoutModuleUncomplete(downgradeLevel.id)
+  // For each objective, mark it as incomplete
+  downgradeLevel.itemRequirements.forEach((o) => {
     tarkovStore.setHideoutPartUncomplete(o.id)
   })
-  moduleStatus.value = t('page.hideout.stationcard.statusdowngraded', { name: props.station.name, level: currentLevel.value.level })
+  moduleStatus.value = t('page.hideout.stationcard.statusdowngraded', { name: props.station.name, level: downgradeLevel.level })
   moduleStatusUpdated.value = true
 }
 

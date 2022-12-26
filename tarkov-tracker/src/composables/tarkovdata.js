@@ -235,6 +235,6 @@ const error = computed(() => {
 // We keep the state outside of the function so that it acts as a singleton
 export function useTarkovData() {
   return {
-    tasks, objectives, maps, levels, traders, loading, error, rawMaps, disabledTasks, hideoutLoading, hideoutStations
+    tasks, objectives, maps, levels, traders, loading, error, rawMaps, disabledTasks, hideoutLoading, hideoutStations, hideoutModules
   };
 }

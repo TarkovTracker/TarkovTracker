@@ -212,6 +212,7 @@ export const useProgressStore = defineStore('progress', () => {
   const moduleCompletions = computed(() => {
     // For each module, check if it is completed for each team member
     let completions = {}
+    if (!hideoutModules.value) return {}
     for (const hModule of hideoutModules.value) {
       completions[hModule.id] = {}
       for (const teamId of Object.keys(teamStores.value)) {

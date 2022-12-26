@@ -69,6 +69,7 @@
     },
     hideout: {
       title: 'Hideout',
+      loading: 'Loading hideout data',
       stationcard: {
         level: "Available to build | Level {count} | Level {count}",
         nextlevel: "Requirements for next level",
@@ -80,6 +81,8 @@
         },
         upgradebutton: "Upgrade to level {level}",
         downgradebutton: "Remove station | Downgrade to level {level} | Downgrade to level {level}",
+        statusupgraded: "Upgraded {name} to level {level}",
+        statusdowngraded: "Downgraded {name} from level {level}",
       }
     },
     settings: {
