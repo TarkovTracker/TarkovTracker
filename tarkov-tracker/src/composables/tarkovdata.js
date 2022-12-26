@@ -121,7 +121,7 @@ watch(queryResults, async (newValue, oldValue) => {
               locations.add(map.id)
             }
           }
-          objectives.push(objective)
+          objectives.push({ ...objective, maps: objective.maps.map(m => m.id) })
         }
       }
       // For each map in locations, add the task to the mapTasks object

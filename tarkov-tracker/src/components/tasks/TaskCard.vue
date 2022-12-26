@@ -105,9 +105,22 @@
             </v-row>
             <!-- Quest objectives -->
             <v-row no-gutters>
-              <v-col v-for="objective, objectiveIndex in props.task.objectives" :key="objectiveIndex" cols="12"
+              <v-col v-for="objective, objectiveIndex in relevantViewObjectives" :key="objectiveIndex" cols="12"
                 class="py-1">
                 <task-objective :objective="objective" />
+              </v-col>
+              <v-col v-if="relevantViewObjectives.length != props.task.objectives.length" cols="12"
+                class="pa-1 hidden-objectives">
+                <v-icon size="x-small" class="mr-1">mdi-eye-off</v-icon>
+                <i18n-t keypath="page.tasks.questcard.objectiveshidden" scope="global"
+                  :plural="props.task.objectives.length - relevantViewObjectives.length">
+                  <template #count>
+                    {{ props.task.objectives.length - relevantViewObjectives.length }}
+                  </template>
+                  <template #uncompleted>
+                    {{ uncompletedIrrelevantObjectives.length }}
+                  </template>
+                </i18n-t>
               </v-col>
             </v-row>
           </v-container>
@@ -195,6 +208,7 @@ import { defineAsyncComponent, computed, ref } from 'vue'
 import { useDisplay } from 'vuetify'
 import { useTarkovStore } from "@/stores/tarkov.js";
 import { useProgressStore } from '@/stores/progress'
+import { useUserStore } from '@/stores/user'
 import { useI18n } from 'vue-i18n'
 // Define the props for the component
 const props = defineProps({
@@ -206,6 +220,7 @@ const props = defineProps({
 const { t } = useI18n({ useScope: 'global' })
 const tarkovStore = useTarkovStore()
 const progressStore = useProgressStore()
+const userStore = useUserStore()
 
 const TaskLink = defineAsyncComponent(() =>
   import("@/components/tasks/TaskLink.vue")
@@ -239,6 +254,23 @@ const lockedBefore = computed(() => {
 
 const nonKappa = computed(() => {
   return !props.task.successors.includes('5c51aac186f77432ea65c552')
+})
+
+const relevantViewObjectives = computed(() => {
+  if (onMapView.value) {
+    return props.task.objectives.filter((o) => o?.maps.includes(userStore.getTaskMapView))
+  } else {
+    return props.task.objectives
+  }
+})
+
+const uncompletedIrrelevantObjectives = computed(() => {
+  return props.task.objectives.filter((o) => !o?.maps.includes(userStore.getTaskMapView)).filter((o) => !tarkovStore.isTaskObjectiveComplete(o.id))
+})
+
+const onMapView = computed(() => {
+  // If the primary task view is set to map, then we are on the map page
+  return userStore.getTaskPrimaryView == 'maps'
 })
 
 const markTaskComplete = () => {
@@ -308,5 +340,9 @@ const taskStatus = ref('')
 .wiki-link {
   text-decoration: none;
   color: rgba(var(--v-theme-tasklink), 1) !important;
+}
+
+.hidden-objectives {
+  opacity: 0.5;
 }
 </style>

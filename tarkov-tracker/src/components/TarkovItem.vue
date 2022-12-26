@@ -10,15 +10,20 @@
     </v-row>
     <v-row v-show="linkHover" no-gutters class="float-link align-center justify-center">
       <v-col cols="auto" class="mx-1">
+        <v-avatar color="primary" title="Show item on EFT Wiki" size="1.5em" class="external-link"
+          @click="openWikiLink()">
+          <v-img src="/img/wikilogo.png"></v-img>
+        </v-avatar>
+      </v-col>
+      <v-col cols="auto" class="mx-1">
         <v-avatar color="primary" title="Show item on Tarkov.dev" size="1.5em" class="external-link"
           @click="openTarkovDevLink()">
           <v-img src="/img/tarkovdevlogo.png"></v-img>
         </v-avatar>
       </v-col>
       <v-col cols="auto" class="mx-1">
-        <v-avatar color="primary" title="Show item on EFT Wiki" size="1.5em" class="external-link"
-          @click="openWikiLink()">
-          <v-img src="/img/wikilogo.png"></v-img>
+        <v-avatar color="primary" title="Copy Item Name" size="1.5em" class="external-link" @click="copyItemName()">
+          <v-icon size="x-small">mdi-content-copy</v-icon>
         </v-avatar>
       </v-col>
     </v-row>
