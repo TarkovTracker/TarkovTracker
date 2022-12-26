@@ -26,6 +26,13 @@
       {{ nextLevel.description }}
     </div>
 
+    <v-sheet v-if="props.station.id == '5d484fc0654e76006657e0ab'" class="text-center pa-2" color="secondary">
+      <div>
+        {{ $t('page.hideout.stationcard.gameeditiondescription') }}
+      </div>
+      <v-btn variant="tonal" to="/settings">{{ $t('page.hideout.stationcard.settingsbutton') }}</v-btn>
+    </v-sheet>
+
     <div class="text-center pa-2 pt-6">
       <div v-if="nextLevel" class="rounded">
         <div class="text-subtitle-1 mb-2"><v-icon class="mr-2">mdi-package-variant-closed-check</v-icon>{{
@@ -76,7 +83,7 @@
       </div>
       <div>
         <v-row no-gutters class="align-center justify-center">
-          <v-col v-if="nextLevel?.level" cols="auto" class="mx-1">
+          <v-col v-if="nextLevel?.level" cols="auto" class="mx-1 my-1">
             <v-btn color="green" density="comfortable" @click="upgradeStation()">
               <i18n-t keypath="page.hideout.stationcard.upgradebutton" scope="global">
                 <template #level>
@@ -85,7 +92,7 @@
               </i18n-t>
             </v-btn>
           </v-col>
-          <v-col cols="auto" v-if="nextLevel?.level && nextLevel?.level != 1" class="mx-1">
+          <v-col cols="auto" v-if="nextLevel?.level && nextLevel?.level != 1" class="mx-1 my-1">
             <v-btn color="red" density="comfortable" :disabled="downgradeDisabled" @click="downgradeStation()">
               <i18n-t keypath="page.hideout.stationcard.downgradebutton" scope="global"
                 :plural="progressStore.stationLevels[props.station.id]['self'] - 1">

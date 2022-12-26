@@ -79,6 +79,8 @@
           skill: "Requires {skillname} level {level}",
           trader: "Requires {tradername} loyalty level {loyaltylevel}",
         },
+        gameeditiondescription: "The base level of the stash is determined by the game edition you own. You can change this in the Tracker settings.",
+        settingsbutton: "Visit Settings",
         upgradebutton: "Upgrade to level {level}",
         downgradebutton: "Remove station | Downgrade to level {level} | Downgrade to level {level}",
         statusupgraded: "Upgraded {name} to level {level}",
