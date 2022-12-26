@@ -2,6 +2,7 @@ import { useQuery, provideApolloClient } from "@vue/apollo-composable";
 import { computed, ref, watch } from "vue";
 import apolloClient from "@/plugins/apollo";
 import tarkovDataQuery from "@/utils/tarkovdataquery.js"
+import tarkovHideoutQuery from "@/utils/tarkovhideoutquery.js"
 // Import graphlib so that we can use it in the watch function
 import Graph from 'graphology';
 
@@ -21,6 +22,28 @@ taskOnError((error) => {
   queryErrors.value = error
   console.error(queryErrors)
 });
+
+
+const queryHideoutErrors = ref(null)
+const queryHideoutResults = ref(null)
+const lastHideoutQueryTime = ref(null)
+const { onResult: hideoutOnResult, onError: hideoutOnError, loading: hideoutLoading } = useQuery(tarkovHideoutQuery, null, { fetchPolicy: "network-only" });
+hideoutOnResult((result) => {
+  lastHideoutQueryTime.value = Date.now()
+  queryHideoutResults.value = result.data
+  console.debug(queryResults)
+});
+hideoutOnError((error) => {
+  queryHideoutErrors.value = error
+  console.error(queryErrors)
+});
+
+const hideoutStations = ref([])
+watch(queryHideoutResults, async (newValue, oldValue) => {
+  if (newValue?.hideoutStations) {
+    hideoutStations.value = newValue.hideoutStations
+  }
+})
 
 const tasks = ref([])
 
@@ -186,6 +209,6 @@ const error = computed(() => {
 // We keep the state outside of the function so that it acts as a singleton
 export function useTarkovData() {
   return {
-    tasks, objectives, maps, levels, traders, loading, error, rawMaps, disabledTasks
+    tasks, objectives, maps, levels, traders, loading, error, rawMaps, disabledTasks, hideoutLoading, hideoutStations
   };
 }

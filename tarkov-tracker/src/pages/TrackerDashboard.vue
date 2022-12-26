@@ -1,4 +1,5 @@
 <template>
+  <tracker-tip tip="welcomett3"></tracker-tip>
   <v-container>
     <v-row justify="center">
       <v-col cols="12" sm="8" md="6" lg="4" xl="3">
@@ -36,6 +37,9 @@ import { defineAsyncComponent } from 'vue'
 import { useTarkovData } from '@/composables/tarkovdata'
 const TrackerStat = defineAsyncComponent(() =>
   import("@/components/TrackerStat.vue")
+)
+const TrackerTip = defineAsyncComponent(() =>
+  import("@/components/TrackerTip.vue")
 )
 
 const { tasks, objectives } = useTarkovData()

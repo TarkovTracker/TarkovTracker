@@ -46,6 +46,7 @@
         all: 'All',
         yourself: 'Yourself',
       },
+      notasksfound: 'No tasks found. Try changing your filters or updating your level.',
       showing_all_sources: 'Showing all sources',
       loading: 'Loading tasks',
       questcard: {
@@ -207,5 +208,13 @@
       title: 'Team',
       description: 'Create a team to track your progress with friends. You can share a URL for others to join your team. You will be able to see your teammates\' progress, the items they need, and plan raids together.'
     },
+    welcomett3: {
+      title: 'Welcome to TarkovTracker 3!',
+      description: 'Welcome to TarkovTracker version 3! This is a complete rewrite of the original TarkovTracker. There are a couple QoL features missing from the original version which will be filled in over the next few days. Additionally, quest data for EFT v0.13 is being added as soon as it is confirmed. For the first day or two, some quests may be inaccurate or missing. Please report any bugs you find on Discord. Thanks for your patience!'
+    },
+    login: {
+      title: 'Login',
+      description: 'As a heads up, logging in is not necessary to use TarkovTracker to track your progress in the game. The only reason to log in is to enable sharing your progress with your friends live and coordinate raids, or to keep data across devices or through clearing browser data. If you aren\'t planning on doing that, you can continue to use TarkovTracker without logging in. Your data will be stored locally in your browser.'
+    }
   }
 }

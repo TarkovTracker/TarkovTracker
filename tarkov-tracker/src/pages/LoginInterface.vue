@@ -1,8 +1,8 @@
 <template>
-  <v-container class="fill-height">
-    <v-row align="center" class="fill-height">
+  <tracker-tip tip="login"></tracker-tip>
+  <v-container>
+    <v-row>
       <v-col cols="12">
-
         <div v-if="fireuser?.uid" class="text-center">You are already signed in!</div>
         <div v-show="fireuser?.uid == null" id="firebaseui-auth-container"></div>
       </v-col>
@@ -10,10 +10,13 @@
   </v-container>
 </template>
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, defineAsyncComponent } from 'vue'
 import * as firebaseui from 'firebaseui'
 import { firebase, fireapp, fireuser } from '@/plugins/firebase'
 import { useRouter } from 'vue-router'
+const TrackerTip = defineAsyncComponent(() =>
+  import('@/components/TrackerTip.vue')
+)
 const router = useRouter()
 const ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(fireapp.auth())
 
