@@ -243,34 +243,50 @@ export const useProgressStore = defineStore('progress', () => {
     return stationLevelTemp
   })
 
-  const availableModules = computed(() => {
-    let availableModules = {}
-    // For each station, check if we have marked it as built
-    hideoutStations.value.forEach(station => {
-      station.levels.forEach(level => {
-        availableModules[level.id] = {}
-        for (const teamId of Object.keys(teamStores.value)) {
-          // If the level is already built, it is not available
-          if (moduleCompletions.value?.[level.id]?.[teamId]) {
-            availableModules[level.id][teamId] = false
-            continue
-          }
-
-          let userAvailable = true
-          // For each requirement, check if the required module is built
-          if (level?.stationLevelRequirements?.length > 0) {
-            for (const requirement of level.stationLevelRequirements) {
-              if (!moduleCompletions.value?.[requirement.station.id]?.[teamId]) {
-                userAvailable = false
-                break
-              }
-            }
-          }
-          availableModules[level.id][teamId] = userAvailable
+  const neededTaskItems = computed(() => {
+    // Create a list of all task objectives that require items
+    let neededItemObjectives = []
+    let relevantObjectiveTypes = ['mark', 'giveItem', 'buildWeapon', 'plant', 'findItem']
+    for (const task of tasks.value) {
+      for (const objective of task.objectives) {
+        if (objective.type == 'mark') {
+          neededItemObjectives.push(objective)
         }
-      })
+      }
+    }
+    return neededItemObjectives
+  })
+
+  const availableModules = computed(() => {
+    let tempAvailableModules = {}
+    hideoutModules.value.forEach(hModule => {
+      tempAvailableModules[hModule.id] = {}
+      // For each user, check if the hModule is available
+      for (const teamId of Object.keys(teamStores.value)) {
+        // If the module is already built, it is not available
+        if (moduleCompletions.value?.[hModule.id]?.[teamId]) {
+          tempAvailableModules[hModule.id][teamId] = false
+          continue
+        }
+
+        // If one of the parent modules is not built, the module is not available
+        let parentModulesBuilt = true
+        for (const parentModule of hModule.parents) {
+          if (!moduleCompletions.value?.[parentModule]?.[teamId]) {
+            parentModulesBuilt = false
+            break
+          }
+        }
+        if (!parentModulesBuilt) {
+          tempAvailableModules[hModule.id][teamId] = false
+          continue
+        }
+
+        // If we've got this far, the module is available
+        tempAvailableModules[hModule.id][teamId] = true
+      }
     })
-    return availableModules
+    return tempAvailableModules
   })
 
   const visibleStations = computed(() => {

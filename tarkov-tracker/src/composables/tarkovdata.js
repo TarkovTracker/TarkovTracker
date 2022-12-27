@@ -34,11 +34,10 @@ const queryErrors = ref(null)
 const queryResults = ref(null)
 const lastQueryTime = ref(null)
 
-const { onResult: taskOnResult, onError: taskOnError, loading } = useQuery(tarkovDataQuery, null, { fetchPolicy: "network-only" });
+const { onResult: taskOnResult, onError: taskOnError, loading } = useQuery(tarkovDataQuery, null, { fetchPolicy: "cache-and-network", prefetch: false });
 taskOnResult((result) => {
   lastQueryTime.value = Date.now()
   queryResults.value = result.data
-  console.debug(queryResults)
 });
 taskOnError((error) => {
   queryErrors.value = error
@@ -49,7 +48,7 @@ taskOnError((error) => {
 const queryHideoutErrors = ref(null)
 const queryHideoutResults = ref(null)
 const lastHideoutQueryTime = ref(null)
-const { onResult: hideoutOnResult, onError: hideoutOnError, loading: hideoutLoading } = useQuery(tarkovHideoutQuery, null, { fetchPolicy: "network-only" });
+const { onResult: hideoutOnResult, onError: hideoutOnError, loading: hideoutLoading } = useQuery(tarkovHideoutQuery, null, { fetchPolicy: "cache-and-network", prefetch: false });
 hideoutOnResult((result) => {
   lastHideoutQueryTime.value = Date.now()
   queryHideoutResults.value = result.data
