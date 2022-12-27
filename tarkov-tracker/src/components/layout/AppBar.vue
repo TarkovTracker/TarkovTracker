@@ -4,7 +4,8 @@
       <v-img gradient="to top right, rgba(45,45,35,.95), rgba(6,13,12,.95)"></v-img>
     </template>
     <template #prepend>
-      <v-app-bar-nav-icon :icon="navBarIcon" variant="text" aria-label="Toggle Menu Drawer"
+      <v-app-bar-nav-icon
+:icon="navBarIcon" variant="text" aria-label="Toggle Menu Drawer"
         @click.stop="changeNavigationDrawer"></v-app-bar-nav-icon>
     </template>
 

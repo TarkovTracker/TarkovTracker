@@ -10,7 +10,8 @@
     </v-row>
     <v-row justify="center">
       <v-col v-for="task in allTasks" :key="task.id" cols="12">
-        <v-lazy :options="{
+        <v-lazy
+:options="{
           threshold: 0.5
         }" min-height="50">
           <editor-task-card :task="task" />

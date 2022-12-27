@@ -10,7 +10,8 @@
     </v-col>
     <v-col cols="7">
       <template v-if="alternativeEditor">
-        <v-autocomplete v-model="taskAlternatives" label="Alternative Quests" :items="tasks" item-title="name"
+        <v-autocomplete
+v-model="taskAlternatives" label="Alternative Quests" :items="tasks" item-title="name"
           item-value="id" multiple variant="solo"></v-autocomplete>
       </template>
       <template v-else>

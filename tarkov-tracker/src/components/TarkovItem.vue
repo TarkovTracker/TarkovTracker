@@ -4,20 +4,22 @@
       <v-col cols="auto" class="d-flex align-center justify-center">
         <img width="32" :src="itemIconUrl" class="mr-2 rounded" />
       </v-col>
-      <v-col cols="auto" v-if="props.count" class="mr-2">{{ props.count }}</v-col>
+      <v-col v-if="props.count" cols="auto" class="mr-2">{{ props.count }}</v-col>
       <v-col cols="auto" class="align-center justify-center tarkov-item-name">
         <b>{{ props.itemName }}</b>
       </v-col>
     </v-row>
     <v-row v-show="linkHover" no-gutters class="float-link align-center justify-center">
       <v-col cols="auto" class="mx-1">
-        <v-avatar color="primary" title="Show item on EFT Wiki" size="1.5em" class="external-link"
+        <v-avatar
+color="primary" title="Show item on EFT Wiki" size="1.5em" class="external-link"
           @click="openWikiLink()">
           <v-img src="/img/wikilogo.png"></v-img>
         </v-avatar>
       </v-col>
       <v-col cols="auto" class="mx-1">
-        <v-avatar color="primary" title="Show item on Tarkov.dev" size="1.5em" class="external-link"
+        <v-avatar
+color="primary" title="Show item on Tarkov.dev" size="1.5em" class="external-link"
           @click="openTarkovDevLink()">
           <v-img src="/img/tarkovdevlogo.png"></v-img>
         </v-avatar>
