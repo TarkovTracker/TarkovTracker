@@ -8,8 +8,7 @@
         <v-sheet rounded class="px-3 py-3" style="display: inherit">
           <span class="text-subtitle-1">{{ station.name }}</span>
           <span class="text-caption ml-3">
-            <i18n-t
-keypath="page.hideout.stationcard.level" scope="global"
+            <i18n-t keypath="page.hideout.stationcard.level" scope="global"
               :plural="progressStore.stationLevels[props.station.id]['self']">
               <template #level>
                 {{ progressStore.stationLevels[props.station.id]['self'] }}
@@ -42,8 +41,7 @@ keypath="page.hideout.stationcard.level" scope="global"
         }}</div>
         <div v-for="requirement, rIndex in nextLevel.itemRequirements" :key="rIndex">
           <span class="d-flex align-center justify-center">
-            <tarkov-item
-:item-id="requirement.item.id" :item-name="requirement.item.name"
+            <tarkov-item :item-id="requirement.item.id" :item-name="requirement.item.name"
               :dev-link="requirement.item.link" :wiki-link="requirement.item.wikiLink" :count="requirement.count"
               class="mr-2 d-inline-block" />
           </span>
@@ -90,19 +88,17 @@ keypath="page.hideout.stationcard.level" scope="global"
       <v-row no-gutters class="align-center justify-center">
         <v-col v-if="nextLevel?.level" cols="auto" class="mx-1 my-1">
           <v-btn color="green" variant="tonal" density="comfortable" class="my-1" @click="upgradeStation()">
-            <i18n-t keypath="page.hideout.stationcard.upgradebutton" scope="global">
+            <i18n-t keypath="page.hideout.stationcard.upgradebutton" scope="global" :plural="nextLevel?.level">
               <template #level>
                 {{ nextLevel?.level }}
               </template>
             </i18n-t>
           </v-btn>
         </v-col>
-        <v-col v-if="nextLevel?.level && nextLevel?.level != 1" cols="auto" class="mx-1 my-1">
-          <v-btn
-color="red" variant="tonal" density="comfortable" :disabled="downgradeDisabled"
-            class="my-1" @click="downgradeStation()">
-            <i18n-t
-keypath="page.hideout.stationcard.downgradebutton" scope="global"
+        <v-col v-if="currentLevel" cols="auto" class="mx-1 my-1">
+          <v-btn color="red" variant="tonal" density="comfortable" :disabled="downgradeDisabled" class="my-1"
+            @click="downgradeStation()">
+            <i18n-t keypath="page.hideout.stationcard.downgradebutton" scope="global"
               :plural="progressStore.stationLevels[props.station.id]['self'] - 1">
               <template #level>
                 {{ progressStore.stationLevels[props.station.id]['self'] - 1 }}

@@ -81,7 +81,7 @@
         },
         gameeditiondescription: "The base level of the stash is determined by the game edition you own. You can change this in the Tracker settings.",
         settingsbutton: "Visit Settings",
-        upgradebutton: "Upgrade to level {level}",
+        upgradebutton: "Build | Build level {level} | Upgrade to level {level}",
         downgradebutton: "Remove station | Downgrade to level {level} | Downgrade to level {level}",
         statusupgraded: "Upgraded {name} to level {level}",
         statusdowngraded: "Downgraded {name} from level {level}",
@@ -96,7 +96,11 @@
         reset: {
           title: 'Reset',
           description: 'Reset all progression data to default.',
-          button: 'Reset my progress'
+          button: 'Reset my progress',
+          confirmation: "Are you sure you want to reset your progress? This cannot be undone.",
+          confirmtitle: "Confirm Reset",
+          confirmcancelbutton: "Cancel",
+          confirmresetbutton: "Reset",
         },
         gameedition: {
           title: 'Game Edition',

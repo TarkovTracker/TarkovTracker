@@ -30,8 +30,7 @@
             <v-container>
               <v-row justify="center">
                 <v-col cols="12">
-                  <v-switch
-v-model="streamerMode" hide-details density="compact"
+                  <v-switch v-model="streamerMode" hide-details density="compact"
                     :label="streamerMode ? $t('page.settings.card.streamermode.modeOn') : $t('page.settings.card.streamermode.modeOff')">
                   </v-switch>
                 </v-col>
@@ -50,8 +49,7 @@ v-model="streamerMode" hide-details density="compact"
             <v-container>
               <v-row justify="center">
                 <v-col cols="12">
-                  <v-select
-v-model="currentGameEdition" density="compact" :items="gameEditions"
+                  <v-select v-model="currentGameEdition" density="compact" :items="gameEditions"
                     :label="$t('page.settings.card.gameedition.select')" variant="outlined" hide-details></v-select>
                 </v-col>
               </v-row>
@@ -69,9 +67,42 @@ v-model="currentGameEdition" density="compact" :items="gameEditions"
             <v-container>
               <v-row justify="center">
                 <v-col cols="auto">
-                  <v-btn color="warning" prepend-icon="mdi-alert" @click="tarkovStore.$reset()">
-                    {{ $t('page.settings.card.reset.button') }}
-                  </v-btn>
+                  <v-dialog v-model="resetDialog">
+                    <template v-slot:activator="{ props }">
+                      <v-btn color="warning" prepend-icon="mdi-alert" v-bind="props">
+                        {{ $t('page.settings.card.reset.button') }}
+                      </v-btn>
+                    </template>
+                    <v-row class="justify-center">
+                      <v-col cols="auto">
+                        <v-card :title="$t('page.settings.card.reset.confirmtitle')" style="width: fit-content;">
+                          <v-card-text>
+                            <v-container class="ma-0 pa-0">
+                              <v-row no-gutters>
+                                <v-col cols="12">
+                                  {{ $t('page.settings.card.reset.confirmation') }}
+                                </v-col>
+                              </v-row>
+                              <v-row>
+                                <v-col cols="12" md="6">
+                                  <v-btn color="red" block prepend-icon="mdi-alert"
+                                    @click="tarkovStore.$reset(); resetDialog = false">
+                                    {{ $t('page.settings.card.reset.confirmresetbutton') }}
+                                  </v-btn>
+                                </v-col>
+                                <v-col cols="12" md="6">
+                                  <v-btn color="primary" block @click="resetDialog = false">{{
+                                      $t('page.settings.card.reset.confirmcancelbutton')
+                                  }}</v-btn>
+                                </v-col>
+                              </v-row>
+                            </v-container>
+                          </v-card-text>
+                        </v-card>
+                      </v-col>
+                    </v-row>
+
+                  </v-dialog>
                 </v-col>
               </v-row>
             </v-container>
@@ -83,7 +114,7 @@ v-model="currentGameEdition" density="compact" :items="gameEditions"
 </template>
 <script setup>
 import { fireuser } from '@/plugins/firebase'
-import { defineAsyncComponent, computed } from 'vue'
+import { defineAsyncComponent, computed, ref } from 'vue'
 import { useTarkovStore } from "@/stores/tarkov.js";
 import { useUserStore } from "@/stores/user.js";
 const IconCard = defineAsyncComponent(() =>
@@ -97,6 +128,8 @@ const ApiTokens = defineAsyncComponent(() =>
 )
 const tarkovStore = useTarkovStore();
 const userStore = useUserStore();
+
+const resetDialog = ref(false)
 
 const gameEditions = [
   { title: 'Standard Edition', value: 1 },
