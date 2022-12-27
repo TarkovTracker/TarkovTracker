@@ -19,10 +19,10 @@
       </span>
     </div>
 
-    <div v-if="currentLevel" class="text-center text-caption mt-4 mx-2">
+    <div v-if="currentLevel" class="text-center text-caption mt-4 mb-2 mx-2">
       {{ currentLevel.description }}
     </div>
-    <div v-else class="text-center text-caption mt-4 mx-2">
+    <div v-else class="text-center text-caption mt-4 mb-2 mx-2">
       {{ nextLevel.description }}
     </div>
 
@@ -78,11 +78,11 @@
         </div>
       </div>
     </v-sheet>
-    <div v-if="!nextLevel">
-      <div class="text-subtitle-1"><v-icon class="mr-2">mdi-star-check</v-icon>{{
+    <v-sheet rounded v-if="!nextLevel" color="accent" class="pa-2">
+      <div class="text-center text-subtitle-1"><v-icon class="mr-2">mdi-star-check</v-icon>{{
           $t('page.hideout.stationcard.maxlevel')
       }}</div>
-    </div>
+    </v-sheet>
 
     <div class="mb-2">
       <v-row no-gutters class="align-center justify-center">
