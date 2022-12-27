@@ -44,7 +44,10 @@ export default gql`
         ... on TaskObjectiveBuildItem {
           item {
             id
+            shortName
             name
+            link
+            wikiLink
           }
           containsAll {
             id
@@ -79,7 +82,10 @@ export default gql`
         ... on TaskObjectiveItem {
           item {
             id
+            shortName
             name
+            link
+            wikiLink
           }
           count
           foundInRaid
@@ -90,7 +96,10 @@ export default gql`
         ... on TaskObjectiveMark {
           markerItem {
             id
+            shortName
             name
+            link
+            wikiLink
           }
         }
         ... on TaskObjectivePlayerLevel {
@@ -111,19 +120,31 @@ export default gql`
           bodyParts
           usingWeapon {
             id
+            shortName
             name
+            link
+            wikiLink
           }
           usingWeaponMods {
             id
+            shortName
             name
+            link
+            wikiLink
           }
           wearing {
             id
+            shortName
             name
+            link
+            wikiLink
           }
           notWearing {
             id
+            shortName
             name
+            link
+            wikiLink
           }
           distance {
             compareMethod
@@ -166,6 +187,7 @@ export default gql`
           }
           level
         }
+        
       }
       startRewards {
         traderStanding {
@@ -179,11 +201,17 @@ export default gql`
           count
           item {
             id
+            shortName
             name
+            link
+            wikiLink
             containsItems {
               item {
                 id
-                name
+            		shortName
+            		name
+            		link
+            		wikiLink
               }
               count
             }
@@ -198,12 +226,18 @@ export default gql`
           level
           item {
             id
+            shortName
             name
+            link
+            wikiLink
             containsItems {
               count
               item {
                 id
-                name
+            		shortName
+            		name
+            		link
+            		wikiLink
               }
             }
           }
@@ -229,11 +263,17 @@ export default gql`
           count
           item {
             id
+            shortName
             name
+            link
+            wikiLink
             containsItems {
               item {
                 id
-                name
+            		shortName
+            		name
+            		link
+            		wikiLink
               }
               count
             }
@@ -248,12 +288,18 @@ export default gql`
           level
           item {
             id
+            shortName
             name
+            link
+            wikiLink
             containsItems {
               count
               item {
                 id
-                name
+            		shortName
+            		name
+            		link
+            		wikiLink
               }
             }
           }
@@ -271,8 +317,8 @@ export default gql`
       neededKeys {
         keys {
           id
-          name
           shortName
+          name
           link
           wikiLink
         }

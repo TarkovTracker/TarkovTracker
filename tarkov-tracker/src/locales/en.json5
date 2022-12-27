@@ -87,6 +87,9 @@
         statusdowngraded: "Downgraded {name} from level {level}",
       }
     },
+    neededitems: {
+      title: 'Needed Items',
+    },
     settings: {
       title: 'Settings',
       card: {
@@ -211,6 +214,7 @@
     team: 'Team',
     tasks: 'Tasks',
     hideout: 'Hideout',
+    neededitems: 'Needed Items',
   },
   tips: {
     hide_tip: 'Hide this tip',

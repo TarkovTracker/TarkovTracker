@@ -13,6 +13,12 @@ const routes = [
         component: () => import("@/pages/TrackerDashboard.vue"),
       },
       {
+        name: 'neededitems',
+        path: '/items',
+        meta: {},
+        component: () => import("@/pages/NeededItems.vue"),
+      },
+      {
         name: 'tasks',
         path: "/tasks",
         meta: {},
