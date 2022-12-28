@@ -1,6 +1,5 @@
 <template>
-  <v-alert
-v-if="!inInviteTeam && !declined" color="green" theme="dark" icon="mdi-handshake" density="compact"
+  <v-alert v-if="!inInviteTeam && !declined" color="green" theme="dark" icon="mdi-handshake" density="compact"
     prominent>
     <div class="d-flex flex-row align-center justify-space-between">
       <div>
@@ -27,20 +26,18 @@ v-if="!inInviteTeam && !declined" color="green" theme="dark" icon="mdi-handshake
   </v-snackbar>
 </template>
 <script setup>
-import { defineAsyncComponent, computed, ref } from 'vue'
-import { routerKey, useRoute, useRouter } from 'vue-router'
+import { computed, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { useTarkovData } from '@/composables/tarkovdata'
 import { fireapp } from "@/plugins/firebase";
-const IconCard = defineAsyncComponent(() =>
-  import("@/components/IconCard.vue")
-)
+import { useLiveData } from '@/composables/livedata'
 
+const { useSystemStore } = useLiveData()
+const systemStore = useSystemStore();
 const { t } = useI18n({ useScope: 'global' })
 const route = useRoute()
-const { teamStore, systemStore } = useTarkovData()
 const inInviteTeam = computed(() => {
-  return systemStore.userTeam != null && systemStore.userTeam == route?.query?.team
+  return systemStore?.userTeam != null && systemStore.userTeam == route?.query?.team
 })
 const declined = ref(false)
 
