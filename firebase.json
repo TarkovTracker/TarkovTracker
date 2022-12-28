@@ -6,9 +6,21 @@
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
   },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log"
+      ]
+    }
+  ],
   "hosting": {
-    "predeploy": "cp ./tarkovdata/maps/*.svg ./public/svg && npm run build",
-    "public": "dist",
+    "predeploy": "cd tarkov-tracker && npm ci && npm run build",
+    "public": "tarkov-tracker/dist",
     "ignore": [
       "firebase.json",
       "**/.*",
@@ -28,10 +40,6 @@
     ],
     "rewrites": [
       {
-        "source": "/api/v1/**",
-        "function": "apiv1-default"
-      },
-      {
         "source": "**",
         "destination": "/index.html"
       }
@@ -45,16 +53,17 @@
       "port": 5001
     },
     "firestore": {
-      "port": 8081
+      "port": 5002
+    },
+    "database": {
+      "port": 5003
     },
     "hosting": {
-      "port": 4999
+      "port": 5000
     },
     "ui": {
-      "enabled": true
+      "enabled": true,
+      "port": 4999
     }
-  },
-  "functions": {
-    "source": "functions"
   }
 }

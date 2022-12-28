@@ -1,0 +1,63 @@
+{
+  // This file supports JSON5 notation. See https://json5.org/
+  hello_world: 'Hello World!',
+  site_name: 'Tarkov Tracker',
+  app_bar: {
+    overflow_menu: {
+      language: 'Язык'
+    }
+  },
+  menu: {
+    language: 'Язык'
+  },
+  page: {
+    dashboard: {
+      title: 'Приборная панель',
+      stats: {
+        allQuests: {
+          stat: 'Выполненные задания',
+          details: 'Количество выполненных вами заданий.'
+        },
+        questItems: {
+          stat: 'Предметы квеста',
+          details: 'Включает предметы коллекции FIR и не FIR.'
+        },
+        allObjectives: {
+          stat: 'Задачи квеста',
+          details: 'Общее количество уникальных задач в квестах.'
+        }
+      }
+    },
+    settings: {
+      title: 'Настройки'
+    },
+    login: {
+      title: 'Войти'
+    },
+    not_found: {
+      title: 'Страница не найдена',
+      not_found_description: 'Извините, эта страница не может быть найдена!'
+    }
+  },
+  footer: {
+    call_to_action: {
+      discord_phrase: 'Сообщить об ошибках/запросить функции на {discord}',
+      github_phrase: 'Вносите вклад в проект с открытым исходным кодом на {github}',
+      patreon_phrase: 'Поддержите проект на {patreon}',
+      discord: 'Discord',
+      github: 'GitHub',
+      patreon: 'Patreon',
+    },
+    ukraine: {
+      support_link: 'Поддержка Украины',
+      support_phrase: '{support_ukraine} через ICRC'
+    }
+  },
+  navigation_drawer: {
+    home: 'Главная',
+    settings: 'Настройки',
+    login: 'Войти',
+    logout: 'Выйти из системы',
+    level: 'Уровень',
+  }
+}
