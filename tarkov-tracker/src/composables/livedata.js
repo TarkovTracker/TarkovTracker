@@ -42,7 +42,14 @@ function clearState(store, newState) {
   try {
     // Find all of the properties that are missing from store.$state that exist in newState
     const missingProperties = Object.keys(store.$state).filter((key) => {
-      return !Object.hasOwn(newState, key)
+      if (typeof newState === 'undefined') return true
+      try {
+        let missingKey = !Object.hasOwn(newState, key)
+        return missingKey
+      } catch (error) {
+        console.error(error)
+        return true
+      }
     })
     // Create a new object with the missing properties set to null
     const missingPropertiesObject = missingProperties.reduce((acc, key) => {
