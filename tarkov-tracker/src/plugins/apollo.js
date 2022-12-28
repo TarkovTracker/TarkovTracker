@@ -4,6 +4,9 @@ import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client/core
 const httpLink = createHttpLink({
   // You should use an absolute URL here
   uri: 'https://api.tarkov.dev/graphql',
+  fetchOptions: {
+    timeout: 10000,
+  }
 })
 
 // Cache implementation

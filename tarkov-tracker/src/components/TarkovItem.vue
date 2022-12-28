@@ -43,18 +43,22 @@ const props = defineProps({
   itemName: {
     type: String,
     required: false,
+    default: null
   },
   devLink: {
     type: String,
     required: false,
+    default: null
   },
   wikiLink: {
     type: String,
     required: false,
+    default: null
   },
   count: {
     type: Number,
     required: false,
+    default: null
   },
 })
 

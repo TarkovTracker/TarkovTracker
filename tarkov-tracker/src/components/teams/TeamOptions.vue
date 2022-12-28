@@ -14,6 +14,14 @@ v-model="taskHideAll" :label="$t(taskHideAllLabel)" inset true-icon="mdi-eye-off
 v-model="itemsHideAll" :label="$t(itemsHideAllLabel)" inset true-icon="mdi-eye-off"
               false-icon="mdi-eye" :color="itemsHideAllColor" hide-details density="compact"></v-switch>
             <v-switch
+v-model="itemsHideNonFIR" :disabled="itemsHideAll" :label="$t(itemsHideNonFIRLabel)" inset
+              true-icon="mdi-eye-off" false-icon="mdi-eye" :color="itemsHideNonFIRColor" hide-details
+              density="compact"></v-switch>
+            <v-switch
+v-model="itemsHideHideout" :disabled="itemsHideAll" :label="$t(itemsHideHideoutLabel)" inset
+              true-icon="mdi-eye-off" false-icon="mdi-eye" :color="itemsHideHideoutColor" hide-details
+              density="compact"></v-switch>
+            <v-switch
 v-model="mapHideAll" :label="$t(mapHideAllLabel)" inset true-icon="mdi-eye-off"
               false-icon="mdi-eye" :color="mapHideAllColor" hide-details density="compact"></v-switch>
           </v-col>
@@ -43,6 +51,20 @@ const itemsHideAll = computed({
 })
 const itemsHideAllLabel = computed(() => userStore.itemsTeamAllHidden ? 'page.team.card.teamoptions.items_hide_all' : 'page.team.card.teamoptions.items_show_all')
 const itemsHideAllColor = computed(() => userStore.itemsTeamAllHidden ? 'error' : 'success')
+
+const itemsHideNonFIR = computed({
+  get: () => userStore.itemsTeamNonFIRHidden,
+  set: (value) => userStore.setItemsTeamHideNonFIR(value)
+})
+const itemsHideNonFIRLabel = computed(() => userStore.itemsTeamNonFIRHidden ? 'page.team.card.teamoptions.items_hide_non_fir' : 'page.team.card.teamoptions.items_show_non_fir')
+const itemsHideNonFIRColor = computed(() => userStore.itemsTeamNonFIRHidden ? 'error' : 'success')
+
+const itemsHideHideout = computed({
+  get: () => userStore.itemsTeamHideoutHidden,
+  set: (value) => userStore.setItemsTeamHideHideout(value)
+})
+const itemsHideHideoutLabel = computed(() => userStore.itemsTeamHideoutHidden ? 'page.team.card.teamoptions.items_hide_hideout' : 'page.team.card.teamoptions.items_show_hideout')
+const itemsHideHideoutColor = computed(() => userStore.itemsTeamHideoutHidden ? 'error' : 'success')
 
 const mapHideAll = computed({
   get: () => userStore.mapTeamAllHidden,

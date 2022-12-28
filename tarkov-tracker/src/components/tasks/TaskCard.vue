@@ -87,7 +87,7 @@
               <v-col cols="auto" class="py-1">
                 <v-sheet class="pa-1 rounded-lg" color="accent">
                   <div
-v-for="keyMap, keyIndex in props.task.neededKeys" :key="keyIndex"
+v-for="keyMap, keyMapIndex in props.task.neededKeys" :key="keyMapIndex"
                     class="d-flex align-center my-1">
                     <i18n-t keypath="page.tasks.questcard.keysneeded" scope="global" :plural="keyMap.keys.length">
                       <template #keys>
@@ -139,8 +139,8 @@ keypath="page.tasks.questcard.objectiveshidden" scope="global"
               <template v-if="!xs">
                 <v-btn size="x-large" color="accent" class="mx-1 my-1" @click="markTaskComplete()"><v-icon
                     class="mr-2">mdi-check-all</v-icon>{{
-                        $t('page.tasks.questcard.completebutton')
-                    }}</v-btn>
+    $t('page.tasks.questcard.completebutton')
+}}</v-btn>
                 <template v-if="props.task.alternatives?.length > 0">
                   <div class="d-flex justify-center">
                     {{ $t('page.tasks.questcard.alternatives') }}
@@ -154,8 +154,8 @@ keypath="page.tasks.questcard.objectiveshidden" scope="global"
                 <div class="d-flex justify-center">
                   <v-btn color="accent" class="mx-1 my-1" @click="markTaskComplete()"><v-icon
                       class="mr-2">mdi-check-all</v-icon>{{
-                          $t('page.tasks.questcard.completebutton')
-                      }}</v-btn>
+    $t('page.tasks.questcard.completebutton')
+}}</v-btn>
                 </div>
               </template>
             </template>
@@ -164,8 +164,8 @@ keypath="page.tasks.questcard.objectiveshidden" scope="global"
               <template v-if="!xs">
                 <v-btn size="x-large" color="accent" class="mx-1 my-1" @click="markTaskUncomplete()"><v-icon
                     class="mr-2">mdi-undo</v-icon>{{
-                        $t('page.tasks.questcard.uncompletebutton')
-                    }}</v-btn>
+    $t('page.tasks.questcard.uncompletebutton')
+}}</v-btn>
                 <template v-if="props.task.alternatives?.length > 0">
                   <div class="d-flex justify-center">
                     {{ $t('page.tasks.questcard.alternativefailed') }}
@@ -179,8 +179,8 @@ keypath="page.tasks.questcard.objectiveshidden" scope="global"
                 <div class="d-flex justify-center">
                   <v-btn color="accent" class="mx-1 my-1" @click="markTaskUncomplete()"><v-icon
                       class="mr-2">mdi-undo</v-icon>{{
-                          $t('page.tasks.questcard.uncompletebutton')
-                      }}</v-btn>
+    $t('page.tasks.questcard.uncompletebutton')
+}}</v-btn>
                 </div>
               </template>
             </template>
@@ -189,23 +189,23 @@ keypath="page.tasks.questcard.objectiveshidden" scope="global"
               <template v-if="!xs">
                 <v-btn size="x-large" color="accent" class="mx-1 my-1" @click="markTaskAvailable()"><v-icon
                     class="mr-2">mdi-fast-forward</v-icon>{{
-                        $t('page.tasks.questcard.availablebutton')
-                    }}</v-btn>
+    $t('page.tasks.questcard.availablebutton')
+}}</v-btn>
                 <v-btn size="x-large" color="accent" class="mx-1 my-1" @click="markTaskComplete()"><v-icon
                     class="mr-2">mdi-check-all</v-icon>{{
-                        $t('page.tasks.questcard.completebutton')
-                    }}</v-btn>
+    $t('page.tasks.questcard.completebutton')
+}}</v-btn>
               </template>
               <template v-else>
                 <div class="d-flex justify-center">
                   <v-btn size="small" color="accent" class="mx-1 my-1" @click="markTaskAvailable()"><v-icon
                       class="mr-2">mdi-fast-forward</v-icon>{{
-                          $t('page.tasks.questcard.availablebutton')
-                      }}</v-btn>
+    $t('page.tasks.questcard.availablebutton')
+}}</v-btn>
                   <v-btn size="small" color="accent" class="mx-1 my-1" @click="markTaskComplete()"><v-icon
                       class="mr-2">mdi-check-all</v-icon>{{
-                          $t('page.tasks.questcard.completebutton')
-                      }}</v-btn>
+    $t('page.tasks.questcard.completebutton')
+}}</v-btn>
                 </div>
               </template>
             </template>

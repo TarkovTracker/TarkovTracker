@@ -15,11 +15,11 @@ export const defaultState = {
 export const getters = {
   // State getters
   playerLevel(state) {
-    return state.level || 1
+    return state.level ?? 1
   },
 
   getGameEdition(state) {
-    return state.gameEdition || 1
+    return state.gameEdition ?? 1
   },
 
   getDisplayName(state) {
@@ -27,32 +27,40 @@ export const getters = {
     if (state.displayName === "") {
       return null
     } else {
-      return state.displayName || null
+      return state.displayName ?? null
     }
+  },
+
+  getObjectiveCount(state) {
+    return (objectiveId) => state?.taskObjectives?.[objectiveId]?.count ?? 0
+  },
+
+  getHideoutPartCount(state) {
+    return (objectiveId) => state?.hideoutParts?.[objectiveId]?.count ?? 0
   },
 
   // Check if a specific task is completed
   isTaskComplete(state) {
-    return (taskId) => state?.taskCompletions?.[taskId]?.complete || false
+    return (taskId) => state?.taskCompletions?.[taskId]?.complete ?? false
   },
 
   isTaskFailed(state) {
-    return (taskId) => state?.taskCompletions?.[taskId]?.failed || false
+    return (taskId) => state?.taskCompletions?.[taskId]?.failed ?? false
   },
 
   // Check if a specific task objective is completed
   isTaskObjectiveComplete(state) {
-    return (objectiveId) => state?.taskObjectives?.[objectiveId]?.complete || false
+    return (objectiveId) => state?.taskObjectives?.[objectiveId]?.complete ?? false
   },
 
   // Check if a specific hideout part is completed
   isHideoutPartComplete(state) {
-    return (objectiveId) => state?.hideoutParts?.[objectiveId]?.complete || false
+    return (objectiveId) => state?.hideoutParts?.[objectiveId]?.complete ?? false
   },
 
   // Check if a specific hideout objective is completed
   isHideoutModuleComplete(state) {
-    return (hideoutId) => state?.hideoutModules?.[hideoutId]?.complete || false
+    return (hideoutId) => state?.hideoutModules?.[hideoutId]?.complete ?? false
   }
 }
 
@@ -85,8 +93,35 @@ export const actions = {
   setDisplayName(name) {
     if (typeof name === 'string') {
       this.displayName = name
+    } else {
+      this.displayName = null
     }
   },
+
+  setObjectiveCount(objectiveId, count) {
+    if (!this?.taskObjectives) {
+      this.taskObjectives = {}
+    }
+    if (!this.taskObjectives?.[objectiveId]) {
+      this.taskObjectives[objectiveId] = {}
+    }
+    this.taskObjectives[objectiveId] = {
+      count: count,
+    }
+  },
+
+  setHideoutPartCount(objectiveId, count) {
+    if (!this?.hideoutParts) {
+      this.hideoutParts = {}
+    }
+    if (!this.hideoutParts?.[objectiveId]) {
+      this.hideoutParts[objectiveId] = {}
+    }
+    this.hideoutParts[objectiveId] = {
+      count: count,
+    }
+  },
+
 
   // Set a task as complete
   setTaskComplete(taskId) {

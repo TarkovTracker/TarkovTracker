@@ -30,7 +30,8 @@
             <v-container>
               <v-row justify="center">
                 <v-col cols="12">
-                  <v-switch v-model="streamerMode" hide-details density="compact"
+                  <v-switch
+v-model="streamerMode" hide-details density="compact"
                     :label="streamerMode ? $t('page.settings.card.streamermode.modeOn') : $t('page.settings.card.streamermode.modeOff')">
                   </v-switch>
                 </v-col>
@@ -49,7 +50,8 @@
             <v-container>
               <v-row justify="center">
                 <v-col cols="12">
-                  <v-select v-model="currentGameEdition" density="compact" :items="gameEditions"
+                  <v-select
+v-model="currentGameEdition" density="compact" :items="gameEditions"
                     :label="$t('page.settings.card.gameedition.select')" variant="outlined" hide-details></v-select>
                 </v-col>
               </v-row>
@@ -68,7 +70,7 @@
               <v-row justify="center">
                 <v-col cols="auto">
                   <v-dialog v-model="resetDialog">
-                    <template v-slot:activator="{ props }">
+                    <template #activator="{ props }">
                       <v-btn color="warning" prepend-icon="mdi-alert" v-bind="props">
                         {{ $t('page.settings.card.reset.button') }}
                       </v-btn>
@@ -85,7 +87,8 @@
                               </v-row>
                               <v-row>
                                 <v-col cols="12" md="6">
-                                  <v-btn color="red" block prepend-icon="mdi-alert"
+                                  <v-btn
+color="red" block prepend-icon="mdi-alert"
                                     @click="tarkovStore.$reset(); resetDialog = false">
                                     {{ $t('page.settings.card.reset.confirmresetbutton') }}
                                   </v-btn>

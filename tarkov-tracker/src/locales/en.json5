@@ -9,6 +9,9 @@
       hide_all_tips: 'Hide all tips',
     }
   },
+  common: {
+    refreshbutton: "Try again"
+  },
   menu: {
     language: 'Language'
   },
@@ -89,6 +92,7 @@
     },
     neededitems: {
       title: 'Needed Items',
+      loading: 'Loading task and hideout data',
     },
     settings: {
       title: 'Settings',
@@ -143,6 +147,7 @@
           button: 'Manage Team',
           membercard: {
             this_is_you: '(This is you)',
+            taskscomplete: "{completed}/{total} tasks completed",
           }
         },
         teamoptions: {
@@ -152,6 +157,10 @@
           task_show_all: 'Show team members\' tasks',
           items_hide_all: 'Hide team members\' needed items',
           items_show_all: 'Show team members\' needed items',
+          items_show_non_fir: 'Show all team members\' needed items (including non-FIR)',
+          items_hide_non_fir: 'Hide needed items for teammates that are not FIR',
+          items_hide_hideout: 'Hide team members\' needed hideout items',
+          items_show_hideout: 'Show team members\' needed hideout items',
           map_hide_all: 'Hide team members\' map objectives',
           map_show_all: 'Show team members\' map objectives',
         },
@@ -219,6 +228,11 @@
     tasks: 'Tasks',
     hideout: 'Hideout',
     neededitems: 'Needed Items',
+    tarkovdev: 'Tarkov.dev',
+    ratscanner: "Rat Scanner",
+    tarkovguru: "Tarkov Guru",
+    tarkovchanges: "Tarkov Changes"
+
   },
   tips: {
     hide_tip: 'Hide this tip',
@@ -235,7 +249,7 @@
     },
     welcomett3: {
       title: 'Welcome to TarkovTracker 3!',
-      description: 'Welcome to TarkovTracker version 3! This is a complete rewrite of the original TarkovTracker. There are a couple QoL features missing from the original version which will be filled in over the next few days. Additionally, quest data for EFT v0.13 is being added as soon as it is confirmed. For the first day or two, some quests may be inaccurate or missing. Please report any bugs you find on Discord. Thanks for your patience!'
+      description: 'Welcome to TarkovTracker version 3! This is a complete rewrite of the original TarkovTracker. There are a couple QoL features missing from the original version which will be filled in over the next few days. Additionally, quest data for EFT v0.13 is being added as soon as it is confirmed. For the first couple days some quests may be inaccurate or missing. Please report any bugs you find on Discord. Thanks for your patience!'
     },
     login: {
       title: 'Login',
@@ -244,6 +258,14 @@
     hideout: {
       title: 'Hideout',
       description: 'You can mark off progress towards building and upgrading your hideout. The progress you mark will be used to calculate needed items for your hideout.'
+    },
+    neededitems: {
+      title: 'Needed Items',
+      description: 'Here you can see items that you will need in the future for tasks and hideout upgrades. You can mark off items as you collect them to keep track of how many more you need.'
+    },
+    teammembers: {
+      title: 'Team Members',
+      description: 'These are the list of your team members. You can click the eye icon to hide or show their tasks and needed items while you are using other parts of the tracker.'
     }
   }
 }

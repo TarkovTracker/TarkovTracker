@@ -79,7 +79,7 @@ v-for="view in userViews" :key="view.view" :value="view.view"
         <!-- If we're still waiting on tasks from tarkov.dev API -->
         <v-progress-circular indeterminate color="secondary" class="mx-2"></v-progress-circular> {{
             $t('page.tasks.loading')
-        }}
+        }} <refresh-button />
       </v-col>
     </v-row>
     <v-row v-if="!loadingTasks && !reloadingTasks && visibleTasks.length == 0">
@@ -110,7 +110,9 @@ const TrackerTip = defineAsyncComponent(() =>
 const TaskCard = defineAsyncComponent(() =>
   import("@/components/tasks/TaskCard.vue")
 )
-
+const RefreshButton = defineAsyncComponent(() =>
+  import("@/components/RefreshButton.vue")
+)
 const { t } = useI18n({ useScope: 'global' })
 const userStore = useUserStore()
 const progressStore = useProgressStore()

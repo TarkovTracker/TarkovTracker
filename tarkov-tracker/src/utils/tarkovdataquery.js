@@ -48,14 +48,38 @@ export default gql`
             name
             link
             wikiLink
+            image512pxLink
+            gridImageLink
+            baseImageLink
+            iconLink
+            image8xLink
+            backgroundColor
           }
           containsAll {
             id
+            shortName
             name
+            link
+            wikiLink
+            image512pxLink
+            gridImageLink
+            baseImageLink
+            iconLink
+            image8xLink
+            backgroundColor
           }
           containsOne {
             id
+            shortName
             name
+            link
+            wikiLink
+            image512pxLink
+            gridImageLink
+            baseImageLink
+            iconLink
+            image8xLink
+            backgroundColor
           }
           attributes {
             name
@@ -86,6 +110,12 @@ export default gql`
             name
             link
             wikiLink
+            image512pxLink
+            gridImageLink
+            baseImageLink
+            iconLink
+            image8xLink
+            backgroundColor
           }
           count
           foundInRaid
@@ -100,6 +130,12 @@ export default gql`
             name
             link
             wikiLink
+            image512pxLink
+            gridImageLink
+            baseImageLink
+            iconLink
+            image8xLink
+            backgroundColor
           }
         }
         ... on TaskObjectivePlayerLevel {
@@ -124,6 +160,12 @@ export default gql`
             name
             link
             wikiLink
+            image512pxLink
+            gridImageLink
+            baseImageLink
+            iconLink
+            image8xLink
+            backgroundColor
           }
           usingWeaponMods {
             id
@@ -131,6 +173,12 @@ export default gql`
             name
             link
             wikiLink
+            image512pxLink
+            gridImageLink
+            baseImageLink
+            iconLink
+            image8xLink
+            backgroundColor
           }
           wearing {
             id
@@ -138,6 +186,12 @@ export default gql`
             name
             link
             wikiLink
+            image512pxLink
+            gridImageLink
+            baseImageLink
+            iconLink
+            image8xLink
+            backgroundColor
           }
           notWearing {
             id
@@ -145,6 +199,12 @@ export default gql`
             name
             link
             wikiLink
+            image512pxLink
+            gridImageLink
+            baseImageLink
+            iconLink
+            image8xLink
+            backgroundColor
           }
           distance {
             compareMethod
@@ -208,10 +268,16 @@ export default gql`
             containsItems {
               item {
                 id
-            		shortName
-            		name
-            		link
-            		wikiLink
+                shortName
+                name
+                link
+                wikiLink
+                image512pxLink
+                gridImageLink
+                baseImageLink
+                iconLink
+                image8xLink
+                backgroundColor
               }
               count
             }
@@ -234,10 +300,16 @@ export default gql`
               count
               item {
                 id
-            		shortName
-            		name
-            		link
-            		wikiLink
+                shortName
+                name
+                link
+                wikiLink
+                image512pxLink
+                gridImageLink
+                baseImageLink
+                iconLink
+                image8xLink
+                backgroundColor
               }
             }
           }
@@ -270,10 +342,16 @@ export default gql`
             containsItems {
               item {
                 id
-            		shortName
-            		name
-            		link
-            		wikiLink
+                shortName
+                name
+                link
+                wikiLink
+                image512pxLink
+                gridImageLink
+                baseImageLink
+                iconLink
+                image8xLink
+                backgroundColor
               }
               count
             }
@@ -296,10 +374,16 @@ export default gql`
               count
               item {
                 id
-            		shortName
-            		name
-            		link
-            		wikiLink
+                shortName
+                name
+                link
+                wikiLink
+                image512pxLink
+                gridImageLink
+                baseImageLink
+                iconLink
+                image8xLink
+                backgroundColor
               }
             }
           }
@@ -321,6 +405,12 @@ export default gql`
           name
           link
           wikiLink
+          image512pxLink
+          gridImageLink
+          baseImageLink
+          iconLink
+          image8xLink
+          backgroundColor
         }
         map {
           id

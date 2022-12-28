@@ -1,19 +1,25 @@
 <template>
   <v-sheet
-rounded class="elevation-2 pt-2 corner-highlight-parent" :class="{ 'fill-height': props.fillHeight }"
+rounded class="elevation-2 corner-highlight-parent" :class="{ 'fill-height': props.fillHeight }"
     color="rgba(33,33,33,1)">
-    <div class="text-h5">
-      <span :class="highlightClasses">
-        <v-icon :color="props.iconColor">{{ props.icon }}</v-icon>
-      </span>
-      <span class="text-left pa-2 pb-0">
-        <slot name="title"></slot>
-      </span>
-    </div>
-
-    <div class="text-center pa-2 pt-6">
-      <slot name="content"></slot>
-    </div>
+    <v-container class="fill-height ma-0 pa-0">
+      <v-row no-gutters class="fill-height">
+        <v-col cols="12" class="text-h5 mt-2">
+          <span :class="highlightClasses">
+            <v-icon :color="props.iconColor">{{ props.icon }}</v-icon>
+          </span>
+          <span class="text-left pa-2 pb-0">
+            <slot name="title"></slot>
+          </span>
+        </v-col>
+        <v-col cols="12" class="mt-2 text-center">
+          <slot name="content"></slot>
+        </v-col>
+        <v-col align-self="end" cols="12" class="pb-1">
+          <slot name="footer"></slot>
+        </v-col>
+      </v-row>
+    </v-container>
   </v-sheet>
 </template>
 <script setup>

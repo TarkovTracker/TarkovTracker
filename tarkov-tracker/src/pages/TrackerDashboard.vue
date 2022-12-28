@@ -1,6 +1,15 @@
 <template>
+  <v-alert color="red" theme="dark" border prominent class="mx-4 mt-2">
+    Wipe was just announced! This is a complete rebuild of TarkovTracker. There are a few pages that were in the middle
+    of
+    being rebuilt and are not fully complete. They should be so in the next 24 hours. Task, hideout, and item progress
+    tracking should all work. API interactions with external tools like Tarkov.dev and RatScanner may be broken for a
+    few hours. Data on new quests and quest changes will be loaded in as they are discovered and verified.
+    Please let me know on Discord if you run into any bugs.
+  </v-alert>
   <tracker-tip tip="welcomett3"></tracker-tip>
-  <v-container>
+
+  <v-container class="mt-2">
     <v-row justify="center">
       <v-col cols="12" sm="8" md="6" lg="4" xl="3">
         <tracker-stat icon="mdi-progress-check">

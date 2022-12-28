@@ -5,7 +5,7 @@
       <v-col cols="12" align="center">
         <v-progress-circular indeterminate color="secondary" class="mx-2"></v-progress-circular> {{
             $t('page.hideout.loading')
-        }}
+        }} <refresh-button />
       </v-col>
     </v-row>
     <v-row justify="center" class="mt-2">
@@ -27,6 +27,9 @@ const TrackerTip = defineAsyncComponent(() =>
 )
 const HideoutCard = defineAsyncComponent(() =>
   import("@/components/hideout/HideoutCard.vue")
+)
+const RefreshButton = defineAsyncComponent(() =>
+  import("@/components/RefreshButton.vue")
 )
 const { tasks, maps, traders, hideoutStations, hideoutLoading } = useTarkovData()
 const progressStore = useProgressStore()

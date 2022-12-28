@@ -8,7 +8,8 @@
         <v-sheet rounded class="px-3 py-3" style="display: inherit">
           <span class="text-subtitle-1">{{ station.name }}</span>
           <span class="text-caption ml-3">
-            <i18n-t keypath="page.hideout.stationcard.level" scope="global"
+            <i18n-t
+keypath="page.hideout.stationcard.level" scope="global"
               :plural="progressStore.stationLevels[props.station.id]['self']">
               <template #level>
                 {{ progressStore.stationLevels[props.station.id]['self'] }}
@@ -41,7 +42,8 @@
         }}</div>
         <div v-for="requirement, rIndex in nextLevel.itemRequirements" :key="rIndex">
           <span class="d-flex align-center justify-center">
-            <tarkov-item :item-id="requirement.item.id" :item-name="requirement.item.name"
+            <tarkov-item
+:item-id="requirement.item.id" :item-name="requirement.item.name"
               :dev-link="requirement.item.link" :wiki-link="requirement.item.wikiLink" :count="requirement.count"
               class="mr-2 d-inline-block" />
           </span>
@@ -96,9 +98,11 @@
           </v-btn>
         </v-col>
         <v-col v-if="currentLevel" cols="auto" class="mx-1 my-1">
-          <v-btn color="red" variant="tonal" density="comfortable" :disabled="downgradeDisabled" class="my-1"
+          <v-btn
+color="red" variant="tonal" density="comfortable" :disabled="downgradeDisabled" class="my-1"
             @click="downgradeStation()">
-            <i18n-t keypath="page.hideout.stationcard.downgradebutton" scope="global"
+            <i18n-t
+keypath="page.hideout.stationcard.downgradebutton" scope="global"
               :plural="progressStore.stationLevels[props.station.id]['self'] - 1">
               <template #level>
                 {{ progressStore.stationLevels[props.station.id]['self'] - 1 }}

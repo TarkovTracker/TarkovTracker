@@ -34,7 +34,7 @@ const queryErrors = ref(null)
 const queryResults = ref(null)
 const lastQueryTime = ref(null)
 
-const { onResult: taskOnResult, onError: taskOnError, loading } = useQuery(tarkovDataQuery, null, { fetchPolicy: "cache-and-network", prefetch: false });
+const { onResult: taskOnResult, onError: taskOnError, loading, refetch: taskRefetch } = useQuery(tarkovDataQuery, null, { fetchPolicy: "cache-and-network", notifyOnNetworkStatusChange: true });
 taskOnResult((result) => {
   lastQueryTime.value = Date.now()
   queryResults.value = result.data
@@ -48,7 +48,7 @@ taskOnError((error) => {
 const queryHideoutErrors = ref(null)
 const queryHideoutResults = ref(null)
 const lastHideoutQueryTime = ref(null)
-const { onResult: hideoutOnResult, onError: hideoutOnError, loading: hideoutLoading } = useQuery(tarkovHideoutQuery, null, { fetchPolicy: "cache-and-network", prefetch: false });
+const { onResult: hideoutOnResult, onError: hideoutOnError, loading: hideoutLoading, refetch: hideoutRefetch } = useQuery(tarkovHideoutQuery, null, { fetchPolicy: "cache-and-network", notifyOnNetworkStatusChange: true });
 hideoutOnResult((result) => {
   lastHideoutQueryTime.value = Date.now()
   queryHideoutResults.value = result.data
@@ -83,7 +83,7 @@ watch(queryHideoutResults, async (newValue, oldValue) => {
     newValue.hideoutStations.forEach((station) => {
       // For each level
       station.levels.forEach((level) => {
-        newModules.push({ ...level, predecessors: [...new Set(getPredecessors(newHideoutGraph, level.id))], successors: [...new Set(getSuccessors(newHideoutGraph, level.id))], parents: newHideoutGraph.inNeighbors(level.id), children: newHideoutGraph.outNeighbors(level.id) })
+        newModules.push({ ...level, stationId: station.id, predecessors: [...new Set(getPredecessors(newHideoutGraph, level.id))], successors: [...new Set(getSuccessors(newHideoutGraph, level.id))], parents: newHideoutGraph.inNeighbors(level.id), children: newHideoutGraph.outNeighbors(level.id) })
       })
     })
     hideoutModules.value = newModules
@@ -163,6 +163,9 @@ watch(queryResults, async (newValue, oldValue) => {
       let objectives = []
       // For each objective in the task, set the maps property to the objectiveMaps value for that objective if it exists
       for (let objective of task.objectives) {
+        if (objective.id == '5968edc086f77420d2328014') {
+          //debugger
+        }
         if (objectiveMaps.value[objective.id]) {
           // Add all of the objective maps to the locations set
           for (let map of objectiveMaps.value[objective.id]) {
@@ -202,6 +205,47 @@ watch(queryResults, async (newValue, oldValue) => {
   }
 })
 
+const neededItemTaskObjectives = computed(() => {
+  // Create a list of all task objectives that require items
+  let neededItemObjectives = []
+  let relevantObjectiveTypes = ['mark', 'buildWeapon', 'plantItem', 'findItem']
+  for (const task of tasks.value) {
+    for (const objective of task.objectives) {
+      if (relevantObjectiveTypes.includes(objective.type) && objective.optional != true) {
+        if (objective.type == 'findItem') {
+          let matchingObjective = task.objectives.find(giObj => giObj.type == 'giveItem' && giObj.item.id == objective.item.id && giObj.count == objective.count && giObj.foundInRaid == objective.foundInRaid && giObj.dogTagLevel == objective.dogTagLevel && giObj.maxDurability == objective.maxDurability && giObj.minDurability == objective.minDurability)
+          if (!matchingObjective) {
+            console.debug("No matching giveItem objective", objective.id)
+          }
+          neededItemObjectives.push({ ...objective, taskId: task.id, giveObjective: matchingObjective, predecessors: task.predecessors })
+        } else {
+          neededItemObjectives.push({ ...objective, taskId: task.id, predecessors: task.predecessors })
+        }
+      }
+    }
+  }
+  return neededItemObjectives.map(neededItemObjective => { return { ...neededItemObjective, needType: 'taskObjective' } })
+})
+
+const neededItemHideoutModules = computed(() => {
+  let neededItemModules = []
+  hideoutModules.value.forEach(hModule => {
+    if (hModule?.itemRequirements?.length > 0) {
+      hModule.itemRequirements.forEach(itemRequirement => {
+        neededItemModules.push({ ...itemRequirement, hideoutModule: hModule })
+      })
+    }
+  })
+  return neededItemModules.map(neededItemObjective => { return { ...neededItemObjective, needType: 'hideoutModule' } })
+})
+
+const tarkovDataMaps = ref({})
+fetch('https://tarkovtracker.github.io/tarkovdata/maps.json')
+  .then(response => response.json())
+  .then(data => {
+    tarkovDataMaps.value = data
+  })
+
 const objectives = computed(() => {
   return tasks.value?.reduce(
     (acc, task) => acc.concat(task.objectives),
@@ -221,6 +265,7 @@ const maps = computed(() => {
   // Remove Night Factory from the maps list
   if (!rawMaps.value) return []
   return rawMaps?.value.filter(map => map.id != '59fc81d786f774390775787e')
+    .map(map => new Object({ ...map, svg: Object.values(tarkovDataMaps.value).find(tdm => String(tdm.id) == String(map.tarkovDataId))?.svg || null }))
 });
 
 const traders = computed(() => {
@@ -234,6 +279,6 @@ const error = computed(() => {
 // We keep the state outside of the function so that it acts as a singleton
 export function useTarkovData() {
   return {
-    tasks, objectives, maps, levels, traders, loading, error, rawMaps, disabledTasks, hideoutLoading, hideoutStations, hideoutModules
+    tasks, objectives, maps, levels, traders, loading, error, rawMaps, disabledTasks, hideoutLoading, hideoutStations, hideoutModules, taskRefetch, hideoutRefetch, neededItemTaskObjectives, neededItemHideoutModules
   };
 }

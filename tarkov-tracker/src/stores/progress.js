@@ -222,6 +222,21 @@ export const useProgressStore = defineStore('progress', () => {
     return completions
   })
 
+  const modulePartCompletions = computed(() => {
+    // For each module part, check if it is completed for each team member
+    let completions = {}
+    if (!hideoutModules.value) return {}
+    for (const hModule of hideoutModules.value) {
+      for (const part of hModule.itemRequirements) {
+        completions[part.id] = {}
+        for (const teamId of Object.keys(teamStores.value)) {
+          completions[part.id][teamId] = teamStores.value[teamId].isHideoutPartComplete(part.id)
+        }
+      }
+    }
+    return completions
+  })
+
   const stationLevels = computed(() => {
     let stationLevelTemp = {}
     // For each station, check if we have marked it as built
@@ -231,7 +246,7 @@ export const useProgressStore = defineStore('progress', () => {
         stationLevelTemp[station.id][teamId] = 0
         // Check if were the stash station, and if so, set the default level according to the game edition
         if (station.id == '5d484fc0654e76006657e0ab') {
-          stationLevelTemp[station.id][teamId] = gameEditions.find(edition => edition.version == teamStores.value[teamId].gameEdition).defaultStashLevel
+          stationLevelTemp[station.id][teamId] = gameEditions.find(edition => edition.version == teamStores.value[teamId].gameEdition)?.defaultStashLevel ?? 1
         }
         station.levels.forEach(level => {
           if (moduleCompletions.value?.[level.id]?.[teamId] && level.level > stationLevelTemp?.[station.id]?.[teamId]) {
@@ -243,19 +258,6 @@ export const useProgressStore = defineStore('progress', () => {
     return stationLevelTemp
   })
 
-  const neededTaskItems = computed(() => {
-    // Create a list of all task objectives that require items
-    let neededItemObjectives = []
-    let relevantObjectiveTypes = ['mark', 'giveItem', 'buildWeapon', 'plant', 'findItem']
-    for (const task of tasks.value) {
-      for (const objective of task.objectives) {
-        if (objective.type == 'mark') {
-          neededItemObjectives.push(objective)
-        }
-      }
-    }
-    return neededItemObjectives
-  })
 
   const availableModules = computed(() => {
     let tempAvailableModules = {}
@@ -321,21 +323,25 @@ export const useProgressStore = defineStore('progress', () => {
   }
 
   const getDisplayName = function (teamId) {
-    return teamStores.value[getTeamIndex(teamId)].getDisplayName || teamId.substring(0, 6)
+    return teamStores.value[getTeamIndex(teamId)].getDisplayName ?? teamId.substring(0, 6)
   }
 
   const getLevel = function (teamId) {
-    return this.teamStores[this.getTeamIndex(teamId)].playerLevel || 1
+    return this.teamStores[this.getTeamIndex(teamId)].playerLevel ?? 1
   }
 
   const teammemberNames = computed(() => {
     let names = {}
     //Return the displayNames of all visible team members
     for (const teamId of Object.keys(teamStores.value)) {
-      names[teamId] = teamStores.value[getTeamIndex(teamId)].getDisplayName || teamId.substring(0, 6)
+      if (teamId == 'self') {
+        names[teamId] = teamStores.value[getTeamIndex(teamId)].getDisplayName ?? fireuser.uid.substring(0, 6)
+      } else {
+        names[teamId] = teamStores.value[getTeamIndex(teamId)].getDisplayName ?? teamId.substring(0, 6)
+      }
     }
     return names
   })
 
-  return { teamStores, getDisplayName, getTeamIndex, visibleTeamStores, getLevel, teammemberNames, tasksCompletions, objectiveCompletions, unlockedTasks, levelAppropriateTasks, traderRep, traderLevelsAchieved, moduleCompletions, stationLevels, availableModules, visibleStations, gameEditionData }
+  return { teamStores, getDisplayName, getTeamIndex, visibleTeamStores, getLevel, teammemberNames, tasksCompletions, objectiveCompletions, unlockedTasks, levelAppropriateTasks, traderRep, traderLevelsAchieved, moduleCompletions, stationLevels, availableModules, visibleStations, gameEditionData, modulePartCompletions }
 })

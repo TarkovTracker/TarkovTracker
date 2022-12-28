@@ -1,6 +1,13 @@
 <template>
-  <v-list-item :class="itemClass" :to="props.to" :active="props.to === $route.path">
-    <v-icon :icon="props.icon" />
+  <v-list-item :class="itemClass" :to="props.to" :active="props.to === $route.path" @click="visitHref()">
+    <template v-if="props.avatar">
+      <v-avatar size="24">
+        <v-img :src="props.avatar" />
+      </v-avatar>
+    </template>
+    <template v-else>
+      <v-icon :icon="props.icon" />
+    </template>
     <v-list-item-title v-if="!appStore.drawerUseRail(mdAndDown)" :class="titleClass" style="display: inline-flex;">
       <template v-if="props.localeKey">
         {{ $t(`navigation_drawer.${props.localeKey}`) }}
@@ -24,6 +31,11 @@ const props = defineProps({
     default: "mdi-menu-right",
     required: false,
   },
+  avatar: {
+    type: String,
+    required: false,
+    default: null
+  },
   localeKey: {
     type: String,
     required: false,
@@ -39,7 +51,18 @@ const props = defineProps({
     required: false,
     default: null,
   },
+  href: {
+    type: String,
+    required: false,
+    default: null,
+  },
 });
+
+const visitHref = () => {
+  if (props.href !== null) {
+    window.open(props.href, "_blank");
+  }
+};
 
 const appStore = useAppStore();
 

@@ -5,7 +5,7 @@
         <v-col cols="auto">
           <div class="text-h4">
             {{
-                progressStore.teammemberNames[props.teammember]
+                progressStore.teammemberNames[teamStoreId]
             }}
           </div>
           <div v-if="props.teammember == fireuser.uid">
@@ -37,7 +37,21 @@
           </div>
         </v-col>
       </v-row>
-      <v-row dense justify="end">
+      <v-row dense justify="space-between">
+        <v-col cols="auto">
+          <i18n-t keypath="page.team.card.manageteam.membercard.taskscomplete" scope="global">
+            <template #completed>
+              <b>
+                {{ completedTaskCount }}
+              </b>
+            </template>
+            <template #total>
+              <b>
+                {{ tasks.length }}
+              </b>
+            </template>
+          </i18n-t>
+        </v-col>
         <v-col cols="auto">
           <v-btn
 :disabled="props.teammember == fireuser.uid || userStore.taskTeamAllHidden" variant="outlined"
@@ -61,6 +75,7 @@ import { useI18n } from 'vue-i18n'
 import { useLiveData } from '@/composables/livedata'
 import { useUserStore } from '@/stores/user'
 import { useProgressStore } from '@/stores/progress'
+import { useTarkovData } from '@/composables/tarkovdata'
 
 // Define the props for the component
 const props = defineProps({
@@ -70,10 +85,23 @@ const props = defineProps({
   }
 })
 
+const teamStoreId = computed(() => {
+  if (props.teammember == fireuser.uid) {
+    return 'self'
+  } else {
+    return props.teammember
+  }
+})
+
 const { useTeamStore } = useLiveData()
 const progressStore = useProgressStore()
 const teamStore = useTeamStore()
 const userStore = useUserStore()
+const { tasks } = useTarkovData()
+
+const completedTaskCount = computed(() => {
+  return tasks.value.filter(task => progressStore.taskCompletions?.[task.id]?.[teamStoreId.value] == true).length
+})
 
 const groupIcon = computed(() => { return `/img/levelgroups/${Math.floor(progressStore.getLevel(props.teammember) / 5) + 1}.png` })
 

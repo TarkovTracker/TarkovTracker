@@ -1,10 +1,7 @@
 <template>
   <v-navigation-drawer
-    v-model="appStore.drawerShow"
-    theme="dark"
-    image="/img/sidebar-background.webp"
-    :rail="appStore.drawerUseRail(mdAndDown)"
-  >
+v-model="appStore.drawerShow" theme="dark" image="/img/sidebar-background.webp"
+    :rail="appStore.drawerUseRail(mdAndDown)">
     <tracker-logo />
     <v-divider class="mx-3 my-1" />
     <drawer-account />
@@ -12,6 +9,8 @@
     <drawer-level />
     <v-divider class="mx-3 my-1" />
     <drawer-links />
+    <v-divider class="mx-3 my-1" />
+    <drawer-external-links />
   </v-navigation-drawer>
 </template>
 <script setup>
@@ -35,6 +34,9 @@ const DrawerAccount = defineAsyncComponent(() =>
 );
 const DrawerLevel = defineAsyncComponent(() =>
   import("@/components/drawer/DrawerLevel.vue")
+);
+const DrawerExternalLinks = defineAsyncComponent(() =>
+  import("@/components/drawer/DrawerExternalLinks.vue")
 );
 </script>
 <style lang="scss" scoped>

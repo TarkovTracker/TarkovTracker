@@ -43,8 +43,10 @@ v-model="visibleUrl" variant="outlined"
           </v-row>
         </v-container>
       </template>
-      <v-container class="align-left mt-2" fluid>
-        <v-row align="start">
+    </template>
+    <template #footer>
+      <v-container class="">
+        <v-row align="end" justify="start">
           <!-- Button to show the new token form -->
           <v-btn
 v-if="systemStore.userTeam == null" :disabled="creatingTeam" :loading="creatingTeam" variant="outlined"
@@ -55,8 +57,8 @@ v-if="systemStore.userTeam == null" :disabled="creatingTeam" :loading="creatingT
 v-if="systemStore.userTeam != null" :disabled="leavingTeam" :loading="leavingTeam" variant="outlined"
             class="mx-1" prepend-icon="mdi-account-off" @click="leaveTeam">
             {{ systemStore.userTeamIsOwn ? $t('page.team.card.myteam.disband_team') :
-                $t('page.team.card.myteam.leave_team')
-            }}
+    $t('page.team.card.myteam.leave_team')
+}}
           </v-btn>
         </v-row>
       </v-container>
@@ -169,12 +171,14 @@ const displayName = computed({
     return tarkovStore.getDisplayName || fireuser.uid.substring(0, 6);
   },
   set(newName) {
-    tarkovStore.setDisplayName(newName);
+    if (newName !== '') {
+      tarkovStore.setDisplayName(newName);
+    }
   }
 })
 
 const clearDisplayName = () => {
-  tarkovStore.setDisplayName("");
+  tarkovStore.setDisplayName(null);
 }
 </script>
 <style lang="scss" scoped>

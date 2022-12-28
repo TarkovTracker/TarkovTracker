@@ -5,7 +5,7 @@
         <v-alert :color="props.color" theme="dark" :icon="props.icon" border prominent>
           {{ $t('tips.' + props.tip + '.description') }}
           <v-container class="align-right pa-0 pt-2" fluid>
-            <v-btn variant="text" prepend-icon="mdi-eye-off" @click="hideTip">
+            <v-btn variant="tonal" prepend-icon="mdi-eye-off" style="opacity:.75" @click="hideTip">
               {{ $t('tips.hide_tip') }}
             </v-btn>
           </v-container>

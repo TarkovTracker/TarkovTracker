@@ -9,6 +9,8 @@ export const defaultState = {
   teamHide: {},
   taskTeamHideAll: false,
   itemsTeamHideAll: false,
+  itemsTeamHideNonFIR: false,
+  itemsTeamHideHideout: false,
   mapTeamHideAll: false,
   taskPrimaryView: null,
   taskMapView: null,
@@ -33,14 +35,16 @@ export const getters = {
     return state.streamerMode || false
   },
   teamIsHidden: (state) => { return (teamId) => state.taskTeamHideAll || state.teamHide?.[teamId] || false },
-  taskTeamAllHidden: (state) => { return state.taskTeamHideAll || false },
-  itemsTeamAllHidden: (state) => { return state.itemsTeamHideAll || false },
-  mapTeamAllHidden: (state) => { return state.mapTeamHideAll || false },
-  getTaskPrimaryView: (state) => { return state.taskPrimaryView || 'all' },
-  getTaskMapView: (state) => { return state.taskMapView || 'all' },
-  getTaskTraderView: (state) => { return state.taskTraderView || 'all' },
-  getTaskSecondaryView: (state) => { return state.taskSecondaryView || 'available' },
-  getTaskUserView: (state) => { return state.taskUserView || 'all' },
+  taskTeamAllHidden: (state) => { return state.taskTeamHideAll ?? false },
+  itemsTeamAllHidden: (state) => { return state.itemsTeamHideAll ?? false },
+  itemsTeamNonFIRHidden: (state) => { return state.itemsTeamHideAll || state.itemsTeamHideNonFIR || false },
+  itemsTeamHideoutHidden: (state) => { return state.itemsTeamHideAll || state.itemsTeamHideHideout || false },
+  mapTeamAllHidden: (state) => { return state.mapTeamHideAll ?? false },
+  getTaskPrimaryView: (state) => { return state.taskPrimaryView ?? 'all' },
+  getTaskMapView: (state) => { return state.taskMapView ?? 'all' },
+  getTaskTraderView: (state) => { return state.taskTraderView ?? 'all' },
+  getTaskSecondaryView: (state) => { return state.taskSecondaryView ?? 'available' },
+  getTaskUserView: (state) => { return state.taskUserView ?? 'all' },
 }
 
 // Actions are for mutations and setters
@@ -82,6 +86,14 @@ export const actions = {
 
   setItemsTeamHideAll(hide) {
     this.itemsTeamHideAll = hide
+  },
+
+  setItemsTeamHideNonFIR(hide) {
+    this.itemsTeamHideNonFIR = hide
+  },
+
+  setItemsTeamHideHideout(hide) {
+    this.itemsTeamHideHideout = hide
   },
 
   setMapTeamHideAll(hide) {
