@@ -208,16 +208,19 @@ watch(queryResults, async (newValue, oldValue) => {
 const neededItemTaskObjectives = computed(() => {
   // Create a list of all task objectives that require items
   let neededItemObjectives = []
-  let relevantObjectiveTypes = ['mark', 'buildWeapon', 'plantItem', 'findItem']
+  let relevantObjectiveTypes = ['mark', 'buildWeapon', 'plantItem', 'giveItem']
   for (const task of tasks.value) {
+    if (disabledTasks.includes(task.id)) {
+      continue
+    }
     for (const objective of task.objectives) {
       if (relevantObjectiveTypes.includes(objective.type) && objective.optional != true) {
-        if (objective.type == 'findItem') {
-          let matchingObjective = task.objectives.find(giObj => giObj.type == 'giveItem' && giObj.item.id == objective.item.id && giObj.count == objective.count && giObj.foundInRaid == objective.foundInRaid && giObj.dogTagLevel == objective.dogTagLevel && giObj.maxDurability == objective.maxDurability && giObj.minDurability == objective.minDurability)
+        if (objective.type == 'giveItem') {
+          let matchingObjective = task.objectives.find(fiObj => fiObj.type == 'findItem' && fiObj.item.id == objective.item.id && fiObj.count == objective.count && fiObj.foundInRaid == objective.foundInRaid && fiObj.dogTagLevel == objective.dogTagLevel && fiObj.maxDurability == objective.maxDurability && fiObj.minDurability == objective.minDurability)
           if (!matchingObjective) {
-            console.debug("No matching giveItem objective", objective.id)
+            console.debug("No matching findItem objective", objective.id)
           }
-          neededItemObjectives.push({ ...objective, taskId: task.id, giveObjective: matchingObjective, predecessors: task.predecessors })
+          neededItemObjectives.push({ ...objective, taskId: task.id, findObjective: matchingObjective, predecessors: task.predecessors })
         } else {
           neededItemObjectives.push({ ...objective, taskId: task.id, predecessors: task.predecessors })
         }

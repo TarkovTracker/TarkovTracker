@@ -35,6 +35,18 @@
                     </i18n-t>
                   </v-col>
                 </v-row>
+                <v-row v-if="levelRequired > 0" no-gutters class="mb-1 mt-1 d-flex justify-center">
+                  <v-col cols="auto" class="mr-1" align="center">
+                    <v-icon icon="mdi-menu-right" />
+                  </v-col>
+                  <v-col cols="auto" align="center">
+                    <i18n-t keypath="page.tasks.questcard.level" scope="global">
+                      <template #count>
+                        {{ levelRequired }}
+                      </template>
+                    </i18n-t>
+                  </v-col>
+                </v-row>
                 <v-row v-if="!progressStore.objectiveCompletions[props.need.id]['self']" class="text-center mx-2"
                   no-gutters>
                   <v-col cols="3">
@@ -167,6 +179,16 @@ const increaseCount = () => {
   }
 }
 
+const levelRequired = computed(() => {
+  if (props.need.needType == 'taskObjective') {
+    return relatedTask.value.minPlayerLevel
+  } else if (props.need.needType == 'hideoutModule') {
+    return 0
+  } else {
+    return 0
+  }
+})
+
 const toggleCount = () => {
   if (props.need.needType == 'taskObjective') {
     if (currentCount.value === 0) {
@@ -214,7 +236,7 @@ const item = computed(() => {
       return props.need.item
     } else if (props.need.type == 'plantItem') {
       return props.need.item
-    } else if (props.need.type == 'findItem') {
+    } else if (props.need.type == 'giveItem') {
       return props.need.item
     } else {
       return null
