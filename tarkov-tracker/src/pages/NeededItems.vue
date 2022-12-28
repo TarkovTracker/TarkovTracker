@@ -16,7 +16,7 @@
       </v-col>
     </v-row>
     <v-row>
-      <needed-item-card v-for="neededItem, itemIndex in neededItemTaskObjectives" :key="itemIndex" :need="neededItem"
+      <needed-item-card v-for="neededItem, itemIndex in neededQuestItems" :key="itemIndex" :need="neededItem"
         class="my-1" />
     </v-row>
   </v-container>
@@ -39,7 +39,29 @@ const { tasks, maps, traders, hideoutStations, hideoutLoading, loading, neededIt
 const progressStore = useProgressStore()
 
 const neededQuestItems = computed(() => {
-  return progressStore.neededQuestItems
+  return JSON.parse(JSON.stringify(neededItemTaskObjectives.value)).sort((a, b) => {
+    let aCount = 0
+    tasks.value.find((task) => task.id == a.taskId).predecessors.forEach((predecessor) => {
+      // Check if the predecessor is completed
+      if (progressStore.tasksCompletions?.[predecessor]?.['self'] === false) {
+        aCount++
+      }
+    })
+
+    let bCount = 0
+    tasks.value.find((task) => task.id == b.taskId).predecessors.forEach((predecessor) => {
+      // Check if the predecessor is completed
+      if (progressStore.tasksCompletions?.[predecessor]?.['self'] === false) {
+        bCount++
+      }
+    })
+    if (aCount > bCount) {
+      return 1
+    } else if (aCount < bCount) {
+      return -1
+    }
+    return 0
+  })
 })
 
 </script>
