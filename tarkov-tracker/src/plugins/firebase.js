@@ -6,13 +6,14 @@ import 'firebase/compat/functions'
 import 'firebase/compat/auth'
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDzod-ZcUKOmlYNChDAeGWhoatPt6niPu0",
-  authDomain: "tarkovtracker-next.firebaseapp.com",
-  projectId: "tarkovtracker-next",
-  storageBucket: "tarkovtracker-next.appspot.com",
-  messagingSenderId: "260245547337",
-  appId: "1:260245547337:web:e2821d280026b1af539298",
-  measurementId: "G-JYJTN74JNW"
+  apiKey: "AIzaSyCRgDK1U5wjeQA8RbRFTAj_jprsG4hF0zw",
+  authDomain: "tarkovtracker-production.firebaseapp.com",
+  databaseURL: "https://tarkovtracker-production-default-rtdb.firebaseio.com",
+  projectId: "tarkovtracker-production",
+  storageBucket: "tarkovtracker-production.appspot.com",
+  messagingSenderId: "140836645499",
+  appId: "1:140836645499:web:2253dd97b8224a898b90de",
+  measurementId: "G-ZH4YVDFWTJ"
 };
 
 // Initialize Firebase
@@ -21,7 +22,7 @@ const analytics = getAnalytics(fireapp);
 
 // Set up a reactive object for using the user object from auth
 const fireuser = reactive({})
-fireapp.auth().onAuthStateChanged(function(user) {
+fireapp.auth().onAuthStateChanged(function (user) {
   if (user) {
     Object.assign(fireuser, user?._delegate)
     fireuser.loggedIn = true
@@ -40,4 +41,4 @@ if (window.location.hostname === 'localhost') {
   fireapp.auth().useEmulator('http://localhost:9099')
 }
 
-export {firebase, fireapp, analytics, fireuser}
+export { firebase, fireapp, analytics, fireuser }

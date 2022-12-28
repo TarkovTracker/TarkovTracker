@@ -14,6 +14,7 @@ import { onMounted, defineAsyncComponent } from 'vue'
 import * as firebaseui from 'firebaseui'
 import { firebase, fireapp, fireuser } from '@/plugins/firebase'
 import { useRouter } from 'vue-router'
+import { FirebaseError } from '@firebase/util';
 const TrackerTip = defineAsyncComponent(() =>
   import('@/components/TrackerTip.vue')
 )
@@ -43,7 +44,14 @@ const uiConfig = {
   signInSuccessUrl: '/',
   signInOptions: [
     // Leave the lines as is for the providers you want to offer your users.
-    firebase.auth.GoogleAuthProvider.PROVIDER_ID
+    firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+    firebase.auth.GithubAuthProvider.PROVIDER_ID,
+    firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+    {
+      provider: 'microsoft.com',
+      loginHintKey: 'login_hint'
+    }
+
   ],
   signInFlow: 'popup',
   // Terms of Service
