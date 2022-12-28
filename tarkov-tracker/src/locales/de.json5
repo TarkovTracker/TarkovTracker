@@ -1,59 +1,271 @@
 {
   // This file supports JSON5 notation. See https://json5.org/
-  hello_world: 'Hallo Welt!',
+  hello_world: 'Hello World!',
   site_name: 'Tarkov Tracker',
   app_bar: {
     overflow_menu: {
-      language: 'Sprache'
+      language: 'Language',
+      reset_tips: 'Zeige alle Tipps',
+      hide_all_tips: 'VErstecke alle Tipps',
     }
+  },
+  common: {
+    refreshbutton: "Erneut versuchen"
+  },
+  menu: {
+    language: 'Language'
   },
   page: {
     dashboard: {
-      title: 'Armaturenbrett',
+      title: 'Dashboard',
       stats: {
-        allQuests: {
-          stat: 'Erledigte Quests',
-          details: 'Die Anzahl der Quests, die Sie abgeschlossen haben.'
+        allTasks: {
+          stat: 'Aufgaben erledigt',
+          details: 'Die Anzahl an erledigten Aufgaben.'
         },
-        questItems: {
-          stat: 'Quest-Gegenstände',
-          details: 'Beinhaltet FIR- und Nicht-FIR-Sammlungselemente.'
+        taskItems: {
+          stat: 'Afugaben Gegenstände',
+          details: 'Beinhaltet gefunden-im-Raid und nicht gefunden-im-Raid Gegenstände.'
         },
         allObjectives: {
-          stat: 'Quest-Ziele',
-          details: 'Die Gesamtheit der einzigartigen Ziele innerhalb der Quests.'
+          stat: 'Aufgabenziele',
+          details: 'Die Gesamtzahl an Einzelaufgaben innerhalb einer Aufgabe.'
         }
       }
     },
+    tasks: {
+      title: 'Aufgaben',
+      primaryviews: {
+        all: 'Alle',
+        maps: 'Karten',
+        traders: 'Händler',
+      },
+      secondaryviews: {
+        available: 'Verfügbar',
+        completed: 'Abgeschlossen',
+        locked: 'Gesperrt',
+      },
+      userviews: {
+        all: 'Alle',
+        yourself: 'Du',
+      },
+      notasksfound: 'Keine Aufgaben gefunden. Ändere deine filter or passe dein Level links an.',
+      showing_all_sources: 'zeige alle Quellen',
+      loading: 'Lade Aufgaben',
+      questcard: {
+        level: "Level {count}",
+        wiki: "Wikiseite",
+        lockedbefore: "{count} davor",
+        lockedbehind: "{count} danach",
+        completebutton: "Abgeschliessen",
+        availablebutton: "Als verfügbar markieren",
+        uncompletebutton: "als unvollständig markieren",
+        statuscomplete: "Markiere {name} als abgeschlossen",
+        statusuncomplete: "Markiere {name} als unvollständig",
+        statusavailable: "Markiere alle Vorraussetzungen für {name} als abgeschlossen",
+        nonkappa: "Nicht für Kappa benötigt",
+        keysneeded: "{keys} wird gebraucht auf {map} | eine {keys} wird gebraucht auf {map}",
+        objectiveshidden: "{count} Teilaufgaben nicht auf dieser Karte ({uncompleted} uncompleted)",
+        alternatives: "Alternative Aufgaben",
+        alternativefailed: "Alternative Aufgaben werden auch zurückgesetzt"
+      }
+    },
+    hideout: {
+      title: 'Versteck',
+      loading: 'Lade Versteck Daten',
+      stationcard: {
+        level: "Bereit zum bauen | Stufe {count} | Stufe {count}",
+        nextlevel: "Voraussetzungen für die nächste Stufe",
+        maxlevel: "Maximale Ausbaustufe erreicht",
+        requirements: {
+          station: "benötigt {stationname} Stufe {level}",
+          skill: "Benötigt {skillname} Stufe {level}",
+          trader: "Benötigt {tradername} Treuestufe {loyaltylevel}",
+        },
+        gameeditiondescription: "The Basisstufe des Stashs wird durch die Spielversion bestimmt. Du kannst diese in den Einstellungen angeben.",
+        settingsbutton: "Besuche Einstellungen",
+        upgradebutton: "Bauen | Baue Stufe {level} | Ausbauen auf Stufe {level}",
+        downgradebutton: "Entferne Station | Baue ab zu Stufe {level} | Baue ab zu Stufe  {level}",
+        statusupgraded: " {name} wurde ausgebaut auf Stufe {level}",
+        statusdowngraded: " {name} wurde runtergestuft von Stufe {level}",
+      }
+    },
+    neededitems: {
+      title: 'Zu sammelnde Gegenstände',
+      loading: 'Lade Aufgaben und Versteckdaten',
+    },
     settings: {
-      title: 'Einstellungen'
+      title: 'Einstellungen',
+      card: {
+        reset: {
+          title: 'Zurücksetzen',
+          description: 'Setze meinen Fortschritt zurück.',
+          button: 'Setze meinen Fortschritt zurück.',
+          confirmation: "Bist du sicher das du deinen Fortschritt zurücksetzen willst? Dies kann nicht rückgängig gemacht werden.",
+          confirmtitle: "CBestätige Zurücksetzen",
+          confirmcancelbutton: "Abbruch",
+          confirmresetbutton: "Zurücksetzen",
+        },
+        gameedition: {
+          title: 'Game Edition',
+          description: 'Select the game edition you are playing. Additional data may be computed from this information (e.g. trader reputation, stash level).',
+          select: 'Select game edition'
+        },
+        streamermode: {
+          title: 'Streamermodus',
+          description: 'Versteckt deinen Teameinladungscode.',
+          modeOn: 'An',
+          modeOff: 'Aus'
+        },
+        apitokens: {
+          title: 'API Tokens',
+          description: 'TarkovTracker hat eine öffentliche API die es anderen Tools erlaubt Zugriff auf deinen Fortschritt zu haben. Du kannst ein API token erstellen um anderen Tools Zugriff zu geben. Schaue in die {openAPI_documentation}',
+          new_token_expand: 'Erstelle ein Token',
+          submit_new_token: 'Erstelle ein Token',
+          openAPI_documentation: 'OpenAPI documentation',
+          show_tokens: 'Zeige meineT okens',
+          create_token_success: 'Es wurde erfolgreich ein API token erstellt.',
+          create_token_error: 'Erstellung eines neuen API Tokens fehlgeschlagen.',
+          no_tokens: 'Du hast keine TarkovTracker API Tokens.',
+          token_column: 'Token',
+          note_column: 'Notiz',
+          created_column: 'Erstellt',
+          permissions_column: 'Erlaubnis',
+          permission: {
+            'GP': 'Erhalte Persönlichenfortschritt',
+            'TP': 'Erhalte Teamfortschritt ',
+            'WP': 'Schreibe Fortschritt',
+          }
+        }
+      }
+    },
+    team: {
+      title: 'Team',
+      card: {
+        manageteam: {
+          title: 'Teammitglieder',
+          button: 'Verwalte Team',
+          membercard: {
+            this_is_you: '(Das bist du)',
+            taskscomplete: "{completed}/{total} Aufgaben erledigt",
+          }
+        },
+        teamoptions: {
+          title: 'Team Integration Optionen',
+          button: 'Team Optionen',
+          task_hide_all: 'Verstecke alle Teammitglieder \' Aufgaben',
+          task_show_all: 'Zeige alle Teammitglieder \' Aufgaben',
+          items_hide_all: 'Verstecke Teammitglieder\' benötigte Gegenstände',
+          items_show_all: 'Zeige alle Teammitglieder\' benötigte Gegenstände',
+          items_show_non_fir: 'Zeige alle Teammitglieder\' benötigte Gegenstände (including non-FIR)',
+          items_hide_non_fir: 'Verstecke benötigte Gegenstände für Teammitglieder die nicht gefunden-im-raid sind',
+          items_hide_hideout: 'Verstecke Teammitglieder\' benötigte Versteckgegenstände',
+          items_show_hideout: 'Zeige Teammitglieder\' benötigte Versteckgegenstände',
+          map_hide_all: 'Verstecke Teammitglieder\' Kartenziele',
+          map_show_all: 'Zeige Teammitglieder\' Kartenziele',
+        },
+        myteam: {
+          title: 'Mein Team',
+          button: 'Zeige Team',
+          create_new_team: 'Erstelle ein neues Team',
+          disband_team: 'Löse Team auf',
+          leave_team: 'Verlasse Team',
+          create_team_success: 'Erfolgreich ein neues Team erstellt.',
+          create_team_error: 'Erstellung eines neues Teams fehlgeschlagen.',
+          disband_team_success: 'Erfolgreich das Team aufgelöst.',
+          leave_team_success: 'Erfolgreich das Team verlassen.',
+          leave_team_error: 'Team verlassen fehlgeschlagen.',
+          no_team: 'Du bist aktuell in keinem Team.',
+          url_hidden: 'Versteckt für Streamermodus.',
+          team_invite_url_label: 'Teameinladungs URL',
+          display_name_label: 'Teamanzeigename',
+        },
+        teaminvite: {
+          description: 'Du hast eine Einladung für ein Team',
+          accept: 'Annehmen',
+          decline: 'Ablehnen',
+          leave_error: 'Verlassen deines aktuellen Teams fehlgeschlagen.',
+          join_error: 'Teambeitritt fehlgeschlagen.',
+          join_success: 'Erfolgreich Team beigetreten.',
+        }
+      },
     },
     login: {
-      title: 'Anmeldung'
+      title: 'Login'
     },
     not_found: {
       title: 'Seite nicht gefunden',
-      not_found_description: 'Entschuldigung, diese Seite konnte nicht gefunden werden!'
+      not_found_description: 'Entschuldigung die Seite konnte nicht gefunden werden!'
     }
   },
   footer: {
     call_to_action: {
-      discord_phrase: 'Melden Sie Fehler/fordern Sie Funktionen auf {discord} an',
-      github_phrase: 'Tragen Sie zum Open-Source-Projekt auf {github} bei',
-      patreon_phrase: 'Unterstütze das Projekt auf {patreon}',
+      discord_phrase: 'Melde bugs auf {discord}',
+      github_phrase: 'Trage bei zum open source project auf {github}',
+      patreon_phrase: 'Untersütze die Projektkosten auf {patreon}',
       discord: 'Discord',
       github: 'GitHub',
       patreon: 'Patreon',
     },
     ukraine: {
-      support_link: 'Unterstützen Sie die Ukraine',
-      support_phrase: '{support_ukraine} über das ICRC'
+      support_link: 'Unterstütze die Ukrainer',
+      support_phrase: '{support_ukraine} via the ICRC'
+    }
+  },
+  module: {
+    team_settings: {
+      title: 'Team Einstellungen',
+      description: 'Einstellungen für dein Team.',
     }
   },
   navigation_drawer: {
-    home: 'Heim',
+    home: 'Heimat',
     settings: 'Einstellungen',
-    login: 'Einloggen',
-    level: 'Ebene',
+    login: 'Log In',
+    logout: 'Log Out',
+    level: 'Level',
+    team: 'Team',
+    tasks: 'Aufgaben',
+    hideout: 'Versteck',
+    neededitems: 'benötigte Gegenstände',
+    tarkovdev: 'Tarkov.dev',
+    ratscanner: "Rat Scanner",
+    tarkovguru: "Tarkov Guru",
+    tarkovchanges: "Tarkov Changes"
+
+  },
+  tips: {
+    hide_tip: 'Verstecke diesen Hinweis',
+    default: {
+      title: 'Tip',
+      description: 'Oops! This tip seems to be missing. Please report this bug on Discord.'
+    },
+    tasks: {
+      description: 'Du hast mehrere Möglichkeiten die Aufgaben zu sortieren. Falls du schon Fortschritt erspielt hast kannst du die Aufgaben die du schon erledigt hast im \'locked\' Reiter abhaken.'
+    },
+    team: {
+      title: 'Team',
+      description: 'Erstelle ein Team und verfolgt euren Fortschritt mit Freunden. Du kannst die URL mit Freunden teilen um sie in dein Team einzuladen. '
+    },
+    welcomett3: {
+      title: 'Willkommen bei TarkovTracker 3!',
+      description: 'Willkommen bei TarkovTracker version 3! Das ist eine komplett überarbeitete Version vom original TarkovTracker. Es gibt eine quality of life Änderungen aus der vorherigen Version die nach und nach hinzugefügt werden. Zusätzlich werden Quests  aus EFT 0.13 hinzugefügt sobald sie bestätigt wurden. Die ersten paar Tage können Quests fehler oder unvollständig sein. Bitte melde Fehler im Discord, danke für die Geduld!'
+    },
+    login: {
+      title: 'Login',
+      description: 'Ein Login ist nicht zum verfolgen deines Fortschritts nötig jedoch wenn du ihn teilen möchtest oder auf mehreren Geräten nutzen willst. Ansonsten wird dein Fortschritt im Browser gespeichert'
+    },
+    hideout: {
+      title: 'Hideout',
+      description: 'Du kannst Fortschritt im Hideout auswählen und die benötigten Gegenstände für dein Versteck werden aktualisiert.'
+    },
+    neededitems: {
+      title: 'Zu sammelnde Gegenstände',
+      description: 'Hier kannst du sehen welche Gegenstände du in der Zukunft für Augaben oder das Versteck brauchst, du kannst die abhaken wenn du welche gefunden hast um zu sehen wieviele du noch brauchst.'
+    },
+    teammembers: {
+      title: 'Teammitglieder',
+      description: 'Dies ist eine Liste deiner Teammitglieder.Du kannst auf die Icons klicken um ihre benötigten Gegenstände und Aufgaben sichbar zu machen oder sie zu verstecken.'
+    }
   }
 }
