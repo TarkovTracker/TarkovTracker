@@ -15,6 +15,11 @@
 }} <refresh-button />
       </v-col>
     </v-row>
+    <v-row justify="center">
+      <v-col cols="12" sm="12" md="8" lg="6">
+        <v-text-field v-model="itemFilterNameText" label="Search by item name" variant="solo"></v-text-field>
+      </v-col>
+    </v-row>
     <v-row>
       <needed-item-card v-for="neededItem, itemIndex in neededQuestItems" :key="itemIndex" :need="neededItem"
         class="my-1" />
@@ -22,10 +27,11 @@
   </v-container>
 </template>
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, provide, ref, watch } from 'vue'
 import { useTarkovData } from '@/composables/tarkovdata'
 import { useProgressStore } from '@/stores/progress'
 import { defineAsyncComponent } from 'vue'
+import { debounce } from 'lodash-es'
 const TrackerTip = defineAsyncComponent(() =>
   import("@/components/TrackerTip.vue")
 )
@@ -37,6 +43,14 @@ const NeededItemCard = defineAsyncComponent(() =>
 )
 const { tasks, maps, traders, hideoutStations, hideoutLoading, loading, neededItemTaskObjectives, neededItemHideoutModules } = useTarkovData()
 const progressStore = useProgressStore()
+
+const itemFilterNameText = ref('')
+const itemFilterName = ref('')
+provide('itemFilterName', itemFilterName)
+
+watch(itemFilterNameText, debounce((newVal) => {
+  itemFilterName.value = newVal
+}, 500))
 
 const neededQuestItems = computed(() => {
   return JSON.parse(JSON.stringify(neededItemTaskObjectives.value)).sort((a, b) => {
