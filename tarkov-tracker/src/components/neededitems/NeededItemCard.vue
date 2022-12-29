@@ -104,7 +104,7 @@ const showItemFilter = computed(() => {
   if (filterString.value == '') {
     return showItem.value
   } else {
-    return item.value.name.toLowerCase().includes(filterString.value.toLowerCase()) && showItem.value
+    return (item.value.shortName.toLowerCase().includes(filterString.value.toLowerCase()) || item.value.name.toLowerCase().includes(filterString.value.toLowerCase())) && showItem.value
   }
 })
 
