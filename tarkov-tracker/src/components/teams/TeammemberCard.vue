@@ -5,14 +5,14 @@
         <v-col cols="auto">
           <div class="text-h4">
             {{
-                progressStore.teammemberNames[teamStoreId]
-            }}
+    progressStore.teammemberNames[teamStoreId]
+}}
           </div>
           <div v-if="props.teammember == fireuser.uid">
             <b>
               {{
-                  $t('page.team.card.manageteam.membercard.this_is_you')
-              }}
+    $t('page.team.card.manageteam.membercard.this_is_you')
+}}
             </b>
           </div>
         </v-col>
@@ -53,16 +53,14 @@
           </i18n-t>
         </v-col>
         <v-col cols="auto">
-          <v-btn
-:disabled="props.teammember == fireuser.uid || userStore.taskTeamAllHidden" variant="outlined"
+          <v-btn :disabled="props.teammember == fireuser.uid || userStore.taskTeamAllHidden" variant="outlined"
             :icon="props.teammember != fireuser.uid && userStore.teamIsHidden(props.teammember) ? 'mdi-eye-off' : 'mdi-eye'"
             class="mx-1"
             :color="props.teammember != fireuser.uid && userStore.teamIsHidden(props.teammember) ? 'red' : 'green'"
             size="x-small" @click="userStore.toggleHidden(props.teammember)"></v-btn>
           <!-- Button to delete the token -->
-          <v-btn
-v-if="props.teammember != fireuser.uid && teamStore.isOwner" variant="outlined"
-            icon="mdi-account-minus" class="mx-1" color="red" size="x-small"></v-btn>
+          <v-btn v-if="props.teammember != fireuser.uid && teamStore.isOwner" variant="outlined"
+            icon="mdi-account-minus" class="mx-1" color="red" size="x-small" @click="kickTeammate()"></v-btn>
         </v-col>
       </v-row>
     </v-container>
@@ -105,6 +103,25 @@ const completedTaskCount = computed(() => {
 
 const groupIcon = computed(() => { return `/img/levelgroups/${Math.floor(progressStore.getLevel(props.teammember) / 5) + 1}.png` })
 
+// const kickTeammate = () => {
+//   teamStore.kickTeammate(props.teammember)
+// }
+// const kickingTeammate = ref(false);
+// const kickTeammateResult = ref(null);
+// const kickTeammateSnackbar = ref(false);
+// const kickTeammate = async () => {
+//   creatingTeam.value = true;
+//   try {
+//     kickTeammateResult.value = await fireapp.functions().httpsCallable("kickTeammate")({});
+//     kickTeammateResult.value = t('page.team.card.myteam.create_team_success');
+//     kickTeammateSnackbar.value = true;
+//   } catch (error) {
+//     kickTeammateResult.value = t('page.team.card.myteam.create_team_error');
+//     console.error(error)
+//     kickTeammateSnackbar.value = true;
+//   }
+//   creatingTeam.value = false;
+// }
 </script>
 <style lang="scss" scoped>
 

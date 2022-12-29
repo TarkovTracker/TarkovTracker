@@ -5,7 +5,7 @@ const admin = require("firebase-admin");
 admin.initializeApp();
 
 // Export the v2 API
-//exports.apiv2 = require('./api/v2/index.js');
+exports.apiv2 = require('./api/v2/index.js');
 
 // Create an API token for the user
 // This is a Firebase callable function (not part of the REST API)
@@ -257,6 +257,54 @@ exports.createTeam = functions.https.onCall(async (data, context) => {
 	} catch (e) {
 		functions.logger.error("Failed to create team", { owner: context.auth.uid, error: e });
 		return { error: 'Error during team creation', timestamp: Date.now() }
+	}
+});
+
+exports.kickTeamMember = functions.https.onCall(async (data, context) => {
+	const db = admin.firestore();
+
+	try {
+		await db.runTransaction(async (transaction) => {
+			const teamRef = db.collection('team').doc(context.auth.uid);
+			const teamDoc = await transaction.get(teamRef);
+
+			const kickedRef = db.collection('system').doc(data.kicked);
+			const kickedDoc = await transaction.get(kickedRef);
+
+			if (!teamDoc?.exists) {
+				// Team doesn't exist, oops
+				throw new Error('Team doesn\'t exist')
+			}
+
+			if (teamDoc?.data()?.owner != context.auth.uid) {
+				// We are not the room owner, oops
+				throw new Error('User is not the owner of the team')
+			}
+
+			if (!kickedDoc?.exists) {
+				// Kicked user doesn't exist, oops
+				throw new Error('Kicked user doesn\'t exist')
+			}
+
+			if (kickedDoc?.data()?.team != context.auth.uid) {
+				// Kicked user is not in our team, oops
+				throw new Error('Kicked user is not in our team')
+			}
+
+			// Remove the user from the team
+			transaction.set(teamRef, {
+				members: admin.firestore.FieldValue.arrayRemove(data.kicked)
+			}, { merge: true })
+			transaction.set(kickedRef, {
+				team: null,
+				lastLeftTeam: admin.firestore.FieldValue.serverTimestamp()
+			}, { merge: true })
+		});
+		functions.logger.log("Kicked team member", { user: context.auth.uid, kicked: data.kicked });
+		return { kicked: true }
+	} catch (e) {
+		functions.logger.error("Failed to kick team member", { owner: context.auth.uid, kicked: data.kicked, error: e });
+		return { error: 'Error during team kick', timestamp: Date.now() }
 	}
 });
 

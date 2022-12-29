@@ -47,7 +47,7 @@
                     </i18n-t>
                   </v-col>
                 </v-row>
-                <v-row v-if="!progressStore.objectiveCompletions[props.need.id]['self']" class="text-center mx-2"
+                <v-row v-if="!progressStore.objectiveCompletions[props.need.id]['self']" class="text-center mx-2 mt-2"
                   no-gutters>
                   <v-col cols="3">
                     <v-btn variant="tonal" class="pa-0 ma-0"
