@@ -1,7 +1,7 @@
 <template>
   <v-alert color="red" theme="dark" border prominent class="mx-4 mt-2">
-    The new version of TarkovTracker broke API access to external tools. This will be fixed in the next few hours.
-    Sorry!
+    The new TarkovTracker API is now live - external tools may need to update their API calls to work with the new API.
+    Documentation wil be updated later today. Developers see Discord for more information or assistance.
   </v-alert>
   <v-container>
     <template v-if="systemStore.userTokenCount == 0">{{ $t('page.settings.card.apitokens.no_tokens') }}</template>
