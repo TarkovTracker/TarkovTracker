@@ -1,5 +1,6 @@
 <template>
-  <v-alert v-if="!inInviteTeam && !declined" color="green" theme="dark" icon="mdi-handshake" density="compact"
+  <v-alert
+v-if="!inInviteTeam && !declined" color="green" theme="dark" icon="mdi-handshake" density="compact"
     prominent>
     <div class="d-flex flex-row align-center justify-space-between">
       <div>

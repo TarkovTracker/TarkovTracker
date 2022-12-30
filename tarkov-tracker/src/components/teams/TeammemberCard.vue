@@ -53,13 +53,15 @@
           </i18n-t>
         </v-col>
         <v-col cols="auto">
-          <v-btn :disabled="props.teammember == fireuser.uid || userStore.taskTeamAllHidden" variant="outlined"
+          <v-btn
+:disabled="props.teammember == fireuser.uid || userStore.taskTeamAllHidden" variant="outlined"
             :icon="props.teammember != fireuser.uid && userStore.teamIsHidden(props.teammember) ? 'mdi-eye-off' : 'mdi-eye'"
             class="mx-1"
             :color="props.teammember != fireuser.uid && userStore.teamIsHidden(props.teammember) ? 'red' : 'green'"
             size="x-small" @click="userStore.toggleHidden(props.teammember)"></v-btn>
           <!-- Button to delete the token -->
-          <v-btn v-if="props.teammember != fireuser.uid && teamStore.isOwner" variant="outlined"
+          <v-btn
+v-if="props.teammember != fireuser.uid && teamStore.isOwner" variant="outlined"
             icon="mdi-account-minus" class="mx-1" color="red" size="x-small" @click="kickTeammate()"></v-btn>
         </v-col>
       </v-row>

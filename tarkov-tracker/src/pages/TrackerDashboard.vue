@@ -1,11 +1,8 @@
 <template>
-  <v-alert color="red" theme="dark" border prominent class="mx-4 mt-2">
-    Wipe was just announced! This is a complete rebuild of TarkovTracker. There are a few pages that were in the middle
-    of
-    being rebuilt and are not fully complete. They should be so in the next 24 hours. Task, hideout, and item progress
-    tracking should all work. API interactions with external tools like Tarkov.dev and RatScanner may be broken for a
-    few hours. Data on new quests and quest changes will be loaded in as they are discovered and verified.
-    Please let me know on Discord if you run into any bugs.
+  <v-alert color="orange" theme="dark" border prominent class="mx-4 mt-2">
+    This is a complete rebuild of TarkovTracker. There are a few features from the old version which weren't quite
+    finished before wipe. They will be added back in a day or two. Task and hideout data for 0.13 is being updated
+    automatically as changes are discovered and verified. Feel free to report any issues you find in the Discord.
   </v-alert>
   <tracker-tip tip="welcomett3"></tracker-tip>
 
@@ -17,7 +14,7 @@
             {{ $t('page.dashboard.stats.allTasks.stat') }}
           </template>
           <template #value>
-            0/{{ totalTasks }}
+            {{ completedTasks }}/{{ totalTasks }}
           </template>
           <template #details>
             {{ $t('page.dashboard.stats.allTasks.details') }}
@@ -44,6 +41,7 @@
 import { inject, computed } from 'vue'
 import { defineAsyncComponent } from 'vue'
 import { useTarkovData } from '@/composables/tarkovdata'
+import { useProgressStore } from '@/stores/progress'
 const TrackerStat = defineAsyncComponent(() =>
   import("@/components/TrackerStat.vue")
 )
@@ -52,9 +50,14 @@ const TrackerTip = defineAsyncComponent(() =>
 )
 
 const { tasks, objectives } = useTarkovData()
+const progressStore = useProgressStore()
 const totalTasks = computed(() => { return tasks.value?.length })
 
 const totalObjectives = computed(() => { return objectives.value?.length })
+
+const completedTasks = computed(() => {
+  return Object.values(progressStore.tasksCompletions).some(task => task['self'] == true).length
+})
 
 </script>
 <style lang="scss" scoped>

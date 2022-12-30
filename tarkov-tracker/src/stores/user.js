@@ -17,6 +17,8 @@ export const defaultState = {
   taskTraderView: null,
   taskSecondaryView: null,
   taskUserView: null,
+  neededTypeView: null,
+  itemsHideNonFIR: false,
 }
 
 // Getters are for reading store state in a uniform manner
@@ -45,6 +47,8 @@ export const getters = {
   getTaskTraderView: (state) => { return state.taskTraderView ?? 'all' },
   getTaskSecondaryView: (state) => { return state.taskSecondaryView ?? 'available' },
   getTaskUserView: (state) => { return state.taskUserView ?? 'all' },
+  getNeededTypeView: (state) => { return state.neededTypeView ?? 'all' },
+  itemsNeededHideNonFIR: (state) => { return state.itemsHideNonFIR || false },
 }
 
 // Actions are for mutations and setters
@@ -118,6 +122,14 @@ export const actions = {
 
   setTaskUserView(view) {
     this.taskUserView = view
+  },
+
+  setNeededTypeView(view) {
+    this.neededTypeView = view
+  },
+
+  setItemsNeededHideNonFIR(hide) {
+    this.itemsHideNonFIR = hide
   }
 }
 

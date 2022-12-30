@@ -93,6 +93,17 @@
     neededitems: {
       title: 'Needed Items',
       loading: 'Loading task and hideout data',
+      neededviews: {
+        all: 'All',
+        tasks: 'Tasks',
+        hideout: 'Hideout',
+      },
+      options: {
+        title: 'Needed Items Options',
+        close: 'Close',
+        items_hide_non_fir: 'Hide needed items that don\'t need to be found in raid',
+        items_show_non_fir: 'Show needed items that don\'t need to be found in raid',
+      }
     },
     settings: {
       title: 'Settings',

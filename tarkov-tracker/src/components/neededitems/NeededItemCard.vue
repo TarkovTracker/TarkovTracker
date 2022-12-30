@@ -48,24 +48,54 @@
                       </i18n-t>
                     </v-col>
                   </v-row>
-                  <v-row v-if="!progressStore.objectiveCompletions[props.need.id]['self']" class="text-center mx-2 mt-2"
-                    no-gutters>
-                    <v-col cols="3">
-                      <v-btn variant="tonal" class="pa-0 ma-0"
-                        @click="decreaseCount()"><v-icon>mdi-minus-thick</v-icon></v-btn>
+                </template>
+                <template v-else-if="props.need.needType == 'hideoutModule'">
+                  <v-row dense no-gutters class="mb-1 mt-1 d-flex justify-center">
+                    <v-col cols="auto" align="center">
+                      <station-link :station="relatedStation" class="justify-center" />
                     </v-col>
-                    <v-col cols="5">
-                      <v-btn variant="tonal" class="pa-0 ma-0" @click="toggleCount()">{{ currentCount }}/{{ neededCount
-}}</v-btn>
+                    <v-col cols="auto" class="ml-1">{{ props.need.hideoutModule.level }}</v-col>
+                  </v-row>
+                  <v-row v-if="props.need.hideoutModule.predecessors?.length > 0" no-gutters
+                    class="mb-1 mt-1 d-flex justify-center">
+                    <v-col cols="auto" class="mr-1" align="center">
+                      <v-icon icon="mdi-lock-open-outline" />
                     </v-col>
-                    <v-col cols="3">
-                      <v-btn variant="tonal" class="pa-0 ma-0"
-                        @click="increaseCount()"><v-icon>mdi-plus-thick</v-icon></v-btn>
+                    <v-col cols="auto" align="center">
+                      <i18n-t keypath="page.tasks.questcard.lockedbefore" scope="global">
+                        <template #count>
+                          {{ lockedBefore }}
+                        </template>
+                      </i18n-t>
+                    </v-col>
+                  </v-row>
+                  <v-row v-if="levelRequired > 0" no-gutters class="mb-1 mt-1 d-flex justify-center">
+                    <v-col cols="auto" class="mr-1" align="center">
+                      <v-icon icon="mdi-menu-right" />
+                    </v-col>
+                    <v-col cols="auto" align="center">
+                      <i18n-t keypath="page.tasks.questcard.level" scope="global">
+                        <template #count>
+                          {{ levelRequired }}
+                        </template>
+                      </i18n-t>
                     </v-col>
                   </v-row>
                 </template>
-                <template v-else-if="props.need.needType == 'hideoutModule'">
-                </template>
+                <v-row v-if="!selfCompletedNeed" class="text-center mx-2 mt-2" no-gutters>
+                  <v-col cols="3">
+                    <v-btn variant="tonal" class="pa-0 ma-0"
+                      @click="decreaseCount()"><v-icon>mdi-minus-thick</v-icon></v-btn>
+                  </v-col>
+                  <v-col cols="5">
+                    <v-btn variant="tonal" class="pa-0 ma-0" @click="toggleCount()">{{ currentCount }}/{{ neededCount
+}}</v-btn>
+                  </v-col>
+                  <v-col cols="3">
+                    <v-btn variant="tonal" class="pa-0 ma-0"
+                      @click="increaseCount()"><v-icon>mdi-plus-thick</v-icon></v-btn>
+                  </v-col>
+                </v-row>
               </v-col>
             </v-row>
           </v-container>
@@ -86,6 +116,9 @@ const DrawerItem = defineAsyncComponent(() =>
 const TaskLink = defineAsyncComponent(() =>
   import("@/components/tasks/TaskLink.vue")
 )
+const StationLink = defineAsyncComponent(() =>
+  import("@/components/hideout/StationLink.vue")
+)
 const props = defineProps({
   need: {
     type: Object,
@@ -96,7 +129,7 @@ const userStore = useUserStore()
 const progressStore = useProgressStore()
 const tarkovStore = useTarkovStore()
 
-const { tasks } = useTarkovData()
+const { tasks, hideoutModules, hideoutStations } = useTarkovData()
 
 const filterString = inject('itemFilterName')
 
@@ -110,6 +143,16 @@ const showItemFilter = computed(() => {
 
 const showItem = computed(() => {
   if (props.need.needType == 'taskObjective') {
+    if (userStore.itemsNeededHideNonFIR) {
+      if (props.need.type == 'mark' || props.need.type == 'buildWeapon' || props.need.type == 'plantItem') {
+        return false
+      } else if (props.need.type == 'giveItem') {
+        if (props.need.foundInRaid == false) {
+          return false
+        }
+      }
+    }
+
     if (userStore.itemsTeamAllHidden) {
       // Only show if the objective is needed by ourself
       return !progressStore.tasksCompletions[props.need.taskId]['self'] && !progressStore.objectiveCompletions[props.need.id]['self']
@@ -122,10 +165,20 @@ const showItem = computed(() => {
   } else if (props.need.needType == 'hideoutModule') {
     if (userStore.itemsTeamAllHidden || userStore.itemsTeamHideoutHidden) {
       // Only show if the objective is needed by ourself
-      return !progressStore.hideoutModuleCompletions[props.need.hideoutModule.id]['self'] && !progressStore.modulePartCompletions[props.need.id]['self']
+      return !progressStore.moduleCompletions[props.need.hideoutModule.id]['self'] && !progressStore.modulePartCompletions[props.need.id]['self']
     } else {
-      return Object.values(progressStore.hideoutModuleCompletions[props.need.hideoutModule.id]).some(userStatus => userStatus === false) && Object.values(progressStore.modulePartCompletions[props.need.id]).some(userStatus => userStatus === false)
+      return Object.values(progressStore.moduleCompletions[props.need.hideoutModule.id]).some(userStatus => userStatus === false) && Object.values(progressStore.modulePartCompletions[props.need.id]).some(userStatus => userStatus === false)
     }
+  } else {
+    return false
+  }
+})
+
+const selfCompletedNeed = computed(() => {
+  if (props.need.needType == 'taskObjective') {
+    return progressStore.tasksCompletions[props.need.taskId]['self'] || progressStore.objectiveCompletions[props.need.id]['self']
+  } else if (props.need.needType == 'hideoutModule') {
+    return progressStore.moduleCompletions[props.need.hideoutModule.id]['self'] || progressStore.modulePartCompletions[props.need.id]['self']
   } else {
     return false
   }
@@ -139,9 +192,19 @@ const relatedTask = computed(() => {
   }
 })
 
+const relatedStation = computed(() => {
+  if (props.need.needType == 'hideoutModule') {
+    return Object.values(hideoutStations.value).find(s => s.id == props.need.hideoutModule.stationId)
+  } else {
+    return null
+  }
+})
+
 const lockedBefore = computed(() => {
   if (props.need.needType == 'taskObjective') {
     return relatedTask.value.predecessors.filter((s) => !tarkovStore.isTaskComplete(s.id)).length
+  } else if (props.need.needType == 'hideoutModule') {
+    return props.need.hideoutModule.predecessors.filter((s) => !tarkovStore.isHideoutModuleComplete(s.id)).length
   } else {
     return 0
   }

@@ -18,7 +18,8 @@
         </v-col>
         <v-col cols="7">
           <template v-if="mapEditor">
-            <v-autocomplete v-model="objectiveMaps" label="Autocomplete" :items="maps" item-title="name" item-value="id"
+            <v-autocomplete
+v-model="objectiveMaps" label="Autocomplete" :items="maps" item-title="name" item-value="id"
               multiple variant="solo"></v-autocomplete>
           </template>
           <template v-else>
@@ -27,7 +28,7 @@
         </v-col>
       </v-row>
     </v-col>
-    <v-col cols="12" v-if="validGPS">
+    <v-col v-if="validGPS" cols="12">
       <v-row align="center" no-gutters>
         <v-col cols="auto">
           <b>GPS:</b>

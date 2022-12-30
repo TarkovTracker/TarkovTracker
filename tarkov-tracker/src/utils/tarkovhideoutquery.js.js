@@ -15,11 +15,16 @@ export default gql`
       	id
         item {
           id
-          name
           shortName
+          name
           link
           wikiLink
-          avg24hPrice
+          image512pxLink
+          gridImageLink
+          baseImageLink
+          iconLink
+          image8xLink
+          backgroundColor
         }
         count
         quantity
@@ -51,10 +56,16 @@ export default gql`
         requiredItems {
           item {
             id
-            name
             shortName
+            name
             link
             wikiLink
+            image512pxLink
+            gridImageLink
+            baseImageLink
+            iconLink
+            image8xLink
+            backgroundColor
           }
           count
           quantity
@@ -62,10 +73,16 @@ export default gql`
         rewardItems {
           item {
             id
-            name
             shortName
+            name
             link
             wikiLink
+            image512pxLink
+            gridImageLink
+            baseImageLink
+            iconLink
+            image8xLink
+            backgroundColor
           }
           count
           quantity
