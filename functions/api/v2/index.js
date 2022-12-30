@@ -164,6 +164,8 @@ app.get('/api/v2/team/progress', async (req, res) => {
 		// Create an array to store all the team's progress data
 		var team = []
 
+		var hiddenTeammates = []
+
 		// We aren't currently in a team
 		if (systemDoc.data().team == null) {
 			team.push(requesteeProgressRef.get())
@@ -178,22 +180,26 @@ app.get('/api/v2/team/progress', async (req, res) => {
 				const memberProgressRef = db.collection('progress').doc(member);
 				team.push(memberProgressRef.get())
 			})
-		}
 
-		const hideTeammates = userDoc.data()?.teamHide || []
+			// Find all of the hidden teammates
+			const hideTeammates = userDoc.data()?.teamHide || []
+			for (const [id, hidden] of Object.entries(hideTeammates)) {
+				if (hidden && teamDoc.data().members.includes(id)) {
+					hiddenTeammates.push(id)
+				}
+			}
+		}
 
 		// Wait for all the promises to finish
 		var teamResponse = []
-		var hiddenTeammates = {}
 
 		await Promise.all(team).then((members) => {
 			members.forEach((member) => {
 				teamResponse.push(formatProgress(member.data(), member.ref.path.split('/').pop()))
-				hiddenTeammates[member.ref.path.split('/').pop()] = hideTeammates[member.ref.path.split('/').pop()] ?? false
 			})
 		})
 
-		res.status(200).json({ data: teamResponse, meta: { self: req.apiToken.owner, hideTeammates: hiddenTeammates } }).send()
+		res.status(200).json({ data: teamResponse, meta: { self: req.apiToken.owner, hiddenTeammates: hiddenTeammates } }).send()
 	} else {
 		res.status(401).send()
 	}
