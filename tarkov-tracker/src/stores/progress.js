@@ -220,6 +220,13 @@ export const useProgressStore = defineStore('progress', () => {
       completions[hModule.id] = {}
       for (const teamId of Object.keys(teamStores.value)) {
         completions[hModule.id][teamId] = teamStores.value[teamId].isHideoutModuleComplete(hModule.id)
+        //For stash modules, check if they are 'complete' based on game edition
+        if (hModule.stationId == '5d484fc0654e76006657e0ab') {
+          let stashLevel = gameEditions.find(edition => edition.version == teamStores.value[teamId].gameEdition)?.defaultStashLevel ?? 1
+          if (stashLevel >= hModule.level) {
+            completions[hModule.id][teamId] = true
+          }
+        }
       }
     }
     return completions
