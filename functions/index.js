@@ -191,7 +191,7 @@ exports.joinTeam = functions.https.onCall(async (data, context) => {
 				throw new Error('Wrong password')
 			}
 
-			if (teamDoc?.data()?.members.length >= 4) {
+			if (teamDoc?.data()?.members.length >= 10) {
 				// Team is full, oops
 				throw new Error('Team is full')
 			}
