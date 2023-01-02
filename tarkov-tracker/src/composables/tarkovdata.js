@@ -34,7 +34,7 @@ const queryErrors = ref(null)
 const queryResults = ref(null)
 const lastQueryTime = ref(null)
 
-const { onResult: taskOnResult, onError: taskOnError, loading, refetch: taskRefetch } = useQuery(tarkovDataQuery, null, { fetchPolicy: "cache-and-network", notifyOnNetworkStatusChange: true, errorPolicy: "ignore" });
+const { onResult: taskOnResult, onError: taskOnError, loading, refetch: taskRefetch } = useQuery(tarkovDataQuery, null, { fetchPolicy: "cache-and-network", notifyOnNetworkStatusChange: true, errorPolicy: "all" });
 taskOnResult((result) => {
   lastQueryTime.value = Date.now()
   queryResults.value = result.data
