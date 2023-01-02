@@ -9,7 +9,7 @@
         </template>
       </v-col>
       <v-col cols="12">
-        <div :id="randomMapId" style="position:relative">
+        <div :id="randomMapId" style="position:relative; width: 100%">
           <template v-for="mark, markIndex in props.marks" :key="markIndex">
             <map-marker v-if="mark.map === props.map.id" :key="markIndex" :mark="mark"
               :selected-floor="selectedFloor" />
@@ -50,12 +50,15 @@ const setFloor = (floor) => {
 
 watch(() => props.map, () => {
   draw()
+  selectedFloor.value = props.map.svg.floors[props.map.svg.floors.length - 1]
 })
 
 const draw = async () => {
   const svg = await d3.svg(`https://tarkovtracker.github.io/tarkovdata/maps/${props.map.svg.file}`)
   d3.select(document.getElementById(randomMapId.value)).selectAll('svg').remove()
   d3.select(document.getElementById(randomMapId.value)).node().appendChild(svg.documentElement)
+  d3.select(document.getElementById(randomMapId.value)).select('svg').style('width', '100%')
+  d3.select(document.getElementById(randomMapId.value)).select('svg').style('height', '100%')
   // Calculate the index of the selected floor
   const selectedFloorIndex = props.map.svg.floors.indexOf(selectedFloor.value)
   props.map.svg.floors.forEach((floor, index) => {
