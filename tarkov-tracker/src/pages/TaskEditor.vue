@@ -6,14 +6,15 @@
         <!-- Copy the objectiveMaps to clipboard -->
         <v-btn class="mr-1" @click="copyObjectiveMaps()">Copy Objective Maps JSON</v-btn>
         <v-btn class="mr-1" @click="copyAlternativeTasks()">Copy Alternative Tasks JSON</v-btn>
+        <v-btn class="mr-1" @click="copyGPSLocations()">Copy GPS Locations JSON</v-btn>
       </v-col>
     </v-row>
     <v-row justify="center">
       <v-col v-for="task in allTasks" :key="task.id" cols="12">
         <v-lazy
 :options="{
-          threshold: 0.5
-        }" min-height="50">
+  threshold: 0.5
+}" min-height="50">
           <editor-task-card :task="task" />
         </v-lazy>
       </v-col>
@@ -49,6 +50,10 @@ const copyObjectiveMaps = async () => {
 
 const copyAlternativeTasks = async () => {
   navigator.clipboard.writeText(JSON.stringify(editorStore.getAlternativeTasksFull, null, 2))
+}
+
+const copyGPSLocations = async () => {
+  navigator.clipboard.writeText(JSON.stringify(editorStore.getObjectiveGPSFull, null, 2))
 }
 
 </script>

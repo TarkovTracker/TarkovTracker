@@ -3,17 +3,25 @@
     <v-row>
       <v-col cols="12">
         <template v-for="floor, floorIndex in props.map.svg.floors" :key="floorIndex">
-          <v-btn variant="tonal" @click="setFloor(floor)">{{ floor }}</v-btn>
+          <v-btn variant="tonal" :color="floor == selectedFloor ? 'green' : ''" class="mx-2" @click="setFloor(floor)">{{
+    floor.replace('_', ' ')
+}}</v-btn>
         </template>
       </v-col>
       <v-col cols="12">
-        <div :id="randomMapId"></div>
+        <div :id="randomMapId" style="position:relative">
+          <template v-for="mark, markIndex in props.marks" :key="markIndex">
+            <map-marker
+v-if="mark.map === props.map.id" :key="markIndex" :mark="mark"
+              :selected-floor="selectedFloor" />
+          </template>
+        </div>
       </v-col>
     </v-row>
   </v-container>
 </template>
 <script setup>
-import { defineProps, computed, ref, onMounted } from "vue";
+import { defineProps, computed, ref, onMounted, defineAsyncComponent } from "vue";
 import { useUserStore } from "@/stores/user.js";
 import { v4 as uuidv4 } from 'uuid';
 import * as d3 from "d3";
@@ -24,7 +32,14 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  marks: {
+    type: Array,
+    required: false,
+  },
 });
+const MapMarker = defineAsyncComponent(() =>
+  import("@/components/MapMarker.vue")
+)
 
 // selectedFloor is a ref which defaults to the last item in the floors array
 const selectedFloor = ref(props.map.svg.floors[props.map.svg.floors.length - 1])

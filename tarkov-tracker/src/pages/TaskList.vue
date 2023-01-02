@@ -5,8 +5,7 @@
       <v-col lg="4" md="12">
         <!-- Primary views (all, maps, traders) -->
         <v-card>
-          <v-tabs
-v-model="activePrimaryView" bg-color="accent" slider-color="secondary" align-tabs="center"
+          <v-tabs v-model="activePrimaryView" bg-color="accent" slider-color="secondary" align-tabs="center"
             show-arrows>
             <v-tab v-for="view, index in primaryViews" :key="index" :value="view.view" :prepend-icon="view.icon">
               {{ view.title }}
@@ -52,8 +51,7 @@ v-model="activePrimaryView" bg-color="accent" slider-color="secondary" align-tab
       <v-col lg="4" md="12">
         <!-- Secondary views (available, locked, completed) -->
         <v-card>
-          <v-tabs
-v-model="activeSecondaryView" bg-color="accent" slider-color="secondary" align-tabs="center"
+          <v-tabs v-model="activeSecondaryView" bg-color="accent" slider-color="secondary" align-tabs="center"
             show-arrows>
             <v-tab v-for="view, index in secondaryViews" :key="index" :value="view.view" :prepend-icon="view.icon">
               {{ view.title }}
@@ -65,8 +63,7 @@ v-model="activeSecondaryView" bg-color="accent" slider-color="secondary" align-t
         <!-- User view -->
         <v-card>
           <v-tabs v-model="activeUserView" bg-color="accent" slider-color="secondary" align-tabs="center">
-            <v-tab
-v-for="view in userViews" :key="view.view" :value="view.view"
+            <v-tab v-for="view in userViews" :key="view.view" :value="view.view"
               :disabled="view.view == 'all' && activeSecondaryView != 'available'">
               {{ view.title }}
             </v-tab>
@@ -78,19 +75,28 @@ v-for="view in userViews" :key="view.view" :value="view.view"
       <v-col v-if="loadingTasks || reloadingTasks" cols="12" align="center">
         <!-- If we're still waiting on tasks from tarkov.dev API -->
         <v-progress-circular indeterminate color="secondary" class="mx-2"></v-progress-circular> {{
-            $t('page.tasks.loading')
-        }} <refresh-button />
+    $t('page.tasks.loading')
+}} <refresh-button />
       </v-col>
     </v-row>
     <v-row v-if="!loadingTasks && !reloadingTasks && visibleTasks.length == 0">
       <v-col cols="12"><v-alert icon="mdi-clipboard-search"> {{ $t('page.tasks.notasksfound') }}</v-alert></v-col>
     </v-row>
     <v-row v-show="!loadingTasks && !reloadingTasks" justify="center">
+      <v-col v-if="activePrimaryView == 'maps' && visibleGPS.length > 0" cols="12" class="my-1">
+        <v-expansion-panels v-model="expandMap">
+          <v-expansion-panel>
+            <v-expansion-panel-title>Objective Locations</v-expansion-panel-title>
+            <v-expansion-panel-text>
+              <tarkov-map :map="maps.find(m => m.id == activeMapView)" :marks="visibleGPS" />
+            </v-expansion-panel-text>
+          </v-expansion-panel>
+        </v-expansion-panels>
+      </v-col>
       <v-col cols="12" class="my-1">
-        <v-lazy
-v-for="task, taskIndex in visibleTasks" :key="taskIndex" :options="{
-          threshold: 0.5
-        }" min-height="100">
+        <v-lazy v-for="task, taskIndex in visibleTasks" :key="taskIndex" :options="{
+  threshold: 0.5
+}" min-height="100">
           <task-card :task="task" class="my-1" />
         </v-lazy>
       </v-col>
@@ -113,6 +119,7 @@ const TaskCard = defineAsyncComponent(() =>
 const RefreshButton = defineAsyncComponent(() =>
   import("@/components/RefreshButton.vue")
 )
+const TarkovMap = defineAsyncComponent(() => import('@/components/TarkovMap.vue'))
 const { t } = useI18n({ useScope: 'global' })
 const userStore = useUserStore()
 const progressStore = useProgressStore()
@@ -158,6 +165,8 @@ const activeSecondaryView = computed({
   }
 })
 
+const expandMap = ref([0])
+
 const activeUserView = computed({
   get: () => userStore.getTaskUserView,
   set: (value) => userStore.setTaskUserView(value)
@@ -196,6 +205,47 @@ const loadingTasks = computed(() => {
 const reloadingTasks = ref(false)
 
 const visibleTasks = shallowRef([])
+
+const visibleGPS = computed(() => {
+  let visibleGPS = []
+
+  // Don't return GPS for views that can't really utilize it
+  if (activePrimaryView.value != 'maps') {
+    return []
+  }
+  if (activeSecondaryView.value != 'available') {
+    return []
+  }
+
+  for (const task of visibleTasks.value) {
+    let unlockedUsers = []
+    Object.entries(progressStore.unlockedTasks[task.id]).forEach(([teamId, unlocked]) => {
+      if (unlocked) {
+        unlockedUsers.push(teamId)
+      }
+    })
+    // For each objective
+    for (const objective of task.objectives) {
+      // If the objective has a GPS location, and its not complete yet, add it to the list
+      if (objective.gps != null) {
+        // Only show the GPS location if the objective is not complete by the selected user view
+        if (activeUserView.value == 'all') {
+          // Find the users that have the task unlocked
+          if (unlockedUsers.some((user) => progressStore.objectiveCompletions[objective.id][user] == false)) {
+            // Were a valid, unlocked, uncompleted objective, so add it to the list
+            visibleGPS.push({ ...objective.gps, objectiveId: objective.id })
+          }
+        } else {
+          if (progressStore.objectiveCompletions[objective.id][activeUserView.value] == false) {
+            // Were a valid, unlocked, uncompleted objective, so add it to the list
+            visibleGPS.push({ ...objective.gps, objectiveId: objective.id })
+          }
+        }
+      }
+    }
+  }
+  return visibleGPS
+})
 
 const updateVisibleTasks = async function () {
   let visibleTaskList = JSON.parse(JSON.stringify(tasks.value))

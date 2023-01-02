@@ -28,7 +28,7 @@ export const useEditorStore = defineStore('editor', {
     },
 
     getObjectiveGPS(state) {
-      return (objectiveId) => state.objectiveGPS[objectiveId] ?? {}
+      return (objectiveId) => state.objectiveGPS[objectiveId] ?? null
     },
 
     getObjectiveGPSFull(state) {

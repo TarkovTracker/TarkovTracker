@@ -98,6 +98,7 @@ const taskGraph = ref({})
 
 const objectiveMaps = ref({})
 const alternativeTasks = ref({})
+const objectiveGPS = ref({})
 
 const mapTasks = ref({})
 
@@ -156,6 +157,12 @@ watch(queryResults, async (newValue, oldValue) => {
         alternativeTasks.value = data
       })
 
+    await fetch('https://tarkovtracker.github.io/tarkovdata/objective_gps.json')
+      .then(response => response.json())
+      .then(data => {
+        objectiveGPS.value = data
+      })
+
     // Loop through all of the tasks and add them to the graph
     let updatedTasks = []
     for (let task of newValue.tasks) {
@@ -163,6 +170,8 @@ watch(queryResults, async (newValue, oldValue) => {
       let objectives = []
       // For each objective in the task, set the maps property to the objectiveMaps value for that objective if it exists
       for (let objective of task.objectives) {
+        let objMaps = []
+        let objGPS = null
         if (objective.id == '5968edc086f77420d2328014') {
           //debugger
         }
@@ -171,7 +180,7 @@ watch(queryResults, async (newValue, oldValue) => {
           for (let map of objectiveMaps.value[objective.id]) {
             locations.add(map)
           }
-          objectives.push({ ...objective, maps: objectiveMaps.value[objective.id] })
+          objMaps = objectiveMaps.value[objective.id]
         } else {
           // Add any objective maps to the locations set
           if (objective.maps) {
@@ -179,8 +188,14 @@ watch(queryResults, async (newValue, oldValue) => {
               locations.add(map.id)
             }
           }
-          objectives.push({ ...objective, maps: objective.maps.map(m => m.id) })
+          objMaps = objective.maps.map(m => m.id)
         }
+
+        if (objectiveGPS.value[objective.id]) {
+          objGPS = objectiveGPS.value[objective.id]
+        }
+
+        objectives.push({ ...objective, maps: objMaps, gps: objGPS })
       }
       // For each map in locations, add the task to the mapTasks object
       for (let location of locations) {
@@ -267,8 +282,14 @@ const rawMaps = computed(() => {
 const maps = computed(() => {
   // Remove Night Factory from the maps list
   if (!rawMaps.value) return []
-  return rawMaps?.value.filter(map => map.id != '59fc81d786f774390775787e')
-    .map(map => new Object({ ...map, svg: Object.values(tarkovDataMaps.value).find(tdm => String(tdm.id) == String(map.tarkovDataId))?.svg || null }))
+  let noNightFactory = rawMaps.value.filter(map => map.id != '59fc81d786f774390775787e')
+  let processedMaps = []
+  noNightFactory.forEach(map => {
+    let tempMap = { ...map }
+    tempMap.svg = Object.values(tarkovDataMaps.value).find(tdm => String(tdm.id) == String(map.tarkovDataId))?.svg || null
+    processedMaps.push(tempMap)
+  })
+  return processedMaps
 });
 
 const traders = computed(() => {

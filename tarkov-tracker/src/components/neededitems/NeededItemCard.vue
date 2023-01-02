@@ -1,7 +1,8 @@
 <template>
   <v-col v-if="showItemFilter" cols="12" sm="6" md="4" lg="3" xl="2">
     <KeepAlive>
-      <v-lazy :options="{
+      <v-lazy
+:options="{
   threshold: 0.5
 }" min-height="100">
         <v-sheet rounded>
@@ -56,7 +57,8 @@
                     </v-col>
                     <v-col cols="auto" class="ml-1">{{ props.need.hideoutModule.level }}</v-col>
                   </v-row>
-                  <v-row v-if="props.need.hideoutModule.predecessors?.length > 0" no-gutters
+                  <v-row
+v-if="props.need.hideoutModule.predecessors?.length > 0" no-gutters
                     class="mb-1 mt-1 d-flex justify-center">
                     <v-col cols="auto" class="mr-1" align="center">
                       <v-icon icon="mdi-lock-open-outline" />
@@ -84,7 +86,8 @@
                 </template>
                 <v-row v-if="!selfCompletedNeed" class="text-center mx-2 mt-2" no-gutters>
                   <v-col cols="3">
-                    <v-btn variant="tonal" class="pa-0 ma-0"
+                    <v-btn
+variant="tonal" class="pa-0 ma-0"
                       @click="decreaseCount()"><v-icon>mdi-minus-thick</v-icon></v-btn>
                   </v-col>
                   <v-col cols="5">
@@ -92,7 +95,8 @@
 }}</v-btn>
                   </v-col>
                   <v-col cols="3">
-                    <v-btn variant="tonal" class="pa-0 ma-0"
+                    <v-btn
+variant="tonal" class="pa-0 ma-0"
                       @click="increaseCount()"><v-icon>mdi-plus-thick</v-icon></v-btn>
                   </v-col>
                 </v-row>

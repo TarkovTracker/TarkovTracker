@@ -26,7 +26,8 @@
         </v-card>
       </v-col>
       <v-col cols="12" sm="11" md="8" lg="8">
-        <v-text-field v-model="itemFilterNameText" label="Search by item name" variant="solo"
+        <v-text-field
+v-model="itemFilterNameText" label="Search by item name" variant="solo"
           hide-details></v-text-field>
       </v-col>
       <v-col cols="1">
@@ -43,7 +44,8 @@
                   <v-container class="ma-0 pa-0">
                     <v-row dense>
                       <v-col cols="12">
-                        <v-switch v-model="hideFIR" :label="$t(hideFIRLabel)" inset true-icon="mdi-eye-off"
+                        <v-switch
+v-model="hideFIR" :label="$t(hideFIRLabel)" inset true-icon="mdi-eye-off"
                           false-icon="mdi-eye" :color="hideFIRColor" hide-details density="compact"></v-switch>
                       </v-col>
                     </v-row>
@@ -63,11 +65,13 @@
       </v-col>
     </v-row>
     <v-row v-show="activeNeededView == 'all' || activeNeededView == 'tasks'">
-      <needed-item-card v-for="neededItem, itemIndex in neededTaskItems" :key="itemIndex" :need="neededItem"
+      <needed-item-card
+v-for="neededItem, itemIndex in neededTaskItems" :key="itemIndex" :need="neededItem"
         class="my-1" />
     </v-row>
     <v-row v-show="activeNeededView == 'all' || activeNeededView == 'hideout'">
-      <needed-item-card v-for="neededItem, itemIndex in neededHideoutItems" :key="itemIndex" :need="neededItem"
+      <needed-item-card
+v-for="neededItem, itemIndex in neededHideoutItems" :key="itemIndex" :need="neededItem"
         class="my-1" />
     </v-row>
   </v-container>
