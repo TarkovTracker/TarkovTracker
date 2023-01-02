@@ -266,7 +266,7 @@ fetch('https://tarkovtracker.github.io/tarkovdata/maps.json')
 
 const objectives = computed(() => {
   return tasks.value?.reduce(
-    (acc, task) => acc.concat(task.objectives),
+    (acc, task) => acc.concat(task.objectives.map((objective) => ({ ...objective, taskId: task.id }))),
     []
   ) || [];
 });
