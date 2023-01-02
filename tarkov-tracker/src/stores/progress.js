@@ -44,8 +44,8 @@ export const useProgressStore = defineStore('progress', () => {
     let completions = {}
     for (const task of tasks.value) {
       completions[task.id] = {}
-      for (const teamId of Object.keys(teamStores.value)) {
-        completions[task.id][teamId] = teamStores.value[teamId].isTaskComplete(task.id)
+      for (const teamId of Object.keys(visibleTeamStores.value)) {
+        completions[task.id][teamId] = visibleTeamStores.value[teamId].isTaskComplete(task.id)
       }
     }
     return completions
@@ -53,11 +53,11 @@ export const useProgressStore = defineStore('progress', () => {
 
   const traderRep = computed(() => {
     let rep = {}
-    for (const teamId of Object.keys(teamStores.value)) {
+    for (const teamId of Object.keys(visibleTeamStores.value)) {
       rep[teamId] = {}
       // Now add any rep from the game version
       // Find the gameEdition object with a version that matches the game edition
-      let bonus = gameEditions.find((edition) => edition.version === teamStores.value[teamId].gameEdition)?.value || 0.0
+      let bonus = gameEditions.find((edition) => edition.version === visibleTeamStores.value[teamId].gameEdition)?.value || 0.0
       // For each trader, loop through and add the rep
       if (traders.value) {
         for (const trader of traders.value) {
@@ -93,7 +93,7 @@ export const useProgressStore = defineStore('progress', () => {
   const traderLevelsAchieved = computed(() => {
     let levels = {}
     // Figure out which tier each user is at for each trader
-    for (const teamId of Object.keys(teamStores.value)) {
+    for (const teamId of Object.keys(visibleTeamStores.value)) {
       levels[teamId] = {}
       // For each trader, loop through the tiers and check if the user has met the requirements
       if (!traders.value) continue
@@ -104,7 +104,7 @@ export const useProgressStore = defineStore('progress', () => {
             // Check if the user has enough reputation
             if (traderRep.value[teamId]?.[trader.id] >= level.requiredReputation) {
               // Check if the user is high enough level
-              if (teamStores.value[teamId].playerLevel >= level.requiredPlayerLevel) {
+              if (visibleTeamStores.value[teamId].playerLevel >= level.requiredPlayerLevel) {
                 // If these conditions are met, check if the level is higher than the current level
                 if (level.level > levels[teamId][trader.id]) {
                   levels[teamId][trader.id] = level
@@ -123,7 +123,7 @@ export const useProgressStore = defineStore('progress', () => {
     let available = {}
     for (const task of tasks.value) {
       available[task.id] = {}
-      for (const teamId of Object.keys(teamStores.value)) {
+      for (const teamId of Object.keys(visibleTeamStores.value)) {
         // Check if the task is already marked as complete for this team member
         if (tasksCompletions.value[task.id][teamId]) {
           available[task.id][teamId] = false
@@ -145,7 +145,7 @@ export const useProgressStore = defineStore('progress', () => {
         }
         // If we aren't already marked as false, check if the player has met the level requirement
         if (task?.minPlayerLevel && task?.minPlayerLevel > 0) {
-          if (teamStores.value[teamId].playerLevel < task.minPlayerLevel) {
+          if (visibleTeamStores.value[teamId].playerLevel < task.minPlayerLevel) {
             available[task.id][teamId] = false
             continue
           }
@@ -178,7 +178,7 @@ export const useProgressStore = defineStore('progress', () => {
     if (!unlockedTasks.value) return {}
     for (const task of unlockedTasks.value) {
       available[task.id] = {}
-      for (const teamId of Object.keys(teamStores.value)) {
+      for (const teamId of Object.keys(visibleTeamStores.value)) {
         // Check if the task is unlocked for this team member
         if (!unlockedTasks.value[task.id][teamId]) {
           available[task.id][teamId] = false
@@ -186,7 +186,7 @@ export const useProgressStore = defineStore('progress', () => {
         }
         // Check if the task is level appropriate for this team member
         if (task?.minPlayerLevel && task?.minPlayerLevel > 0) {
-          if (teamStores.value[teamId].playerLevel < task.minPlayerLevel) {
+          if (visibleTeamStores.value[teamId].playerLevel < task.minPlayerLevel) {
             available[task.id][teamId] = false
             continue
           }
@@ -204,8 +204,8 @@ export const useProgressStore = defineStore('progress', () => {
     for (const task of tasks.value) {
       for (const objective of task.objectives) {
         completions[objective.id] = {}
-        for (const teamId of Object.keys(teamStores.value)) {
-          completions[objective.id][teamId] = teamStores.value[teamId].isTaskObjectiveComplete(objective.id)
+        for (const teamId of Object.keys(visibleTeamStores.value)) {
+          completions[objective.id][teamId] = visibleTeamStores.value[teamId].isTaskObjectiveComplete(objective.id)
         }
       }
     }
@@ -218,11 +218,11 @@ export const useProgressStore = defineStore('progress', () => {
     if (!hideoutModules.value) return {}
     for (const hModule of hideoutModules.value) {
       completions[hModule.id] = {}
-      for (const teamId of Object.keys(teamStores.value)) {
-        completions[hModule.id][teamId] = teamStores.value[teamId].isHideoutModuleComplete(hModule.id)
+      for (const teamId of Object.keys(visibleTeamStores.value)) {
+        completions[hModule.id][teamId] = visibleTeamStores.value[teamId].isHideoutModuleComplete(hModule.id)
         //For stash modules, check if they are 'complete' based on game edition
         if (hModule.stationId == '5d484fc0654e76006657e0ab') {
-          let stashLevel = gameEditions.find(edition => edition.version == teamStores.value[teamId].gameEdition)?.defaultStashLevel ?? 1
+          let stashLevel = gameEditions.find(edition => edition.version == visibleTeamStores.value[teamId].gameEdition)?.defaultStashLevel ?? 1
           if (stashLevel >= hModule.level) {
             completions[hModule.id][teamId] = true
           }
@@ -239,8 +239,8 @@ export const useProgressStore = defineStore('progress', () => {
     for (const hModule of hideoutModules.value) {
       for (const part of hModule.itemRequirements) {
         completions[part.id] = {}
-        for (const teamId of Object.keys(teamStores.value)) {
-          completions[part.id][teamId] = teamStores.value[teamId].isHideoutPartComplete(part.id)
+        for (const teamId of Object.keys(visibleTeamStores.value)) {
+          completions[part.id][teamId] = visibleTeamStores.value[teamId].isHideoutPartComplete(part.id)
         }
       }
     }
@@ -252,11 +252,11 @@ export const useProgressStore = defineStore('progress', () => {
     // For each station, check if we have marked it as built
     hideoutStations.value.forEach(station => {
       stationLevelTemp[station.id] = {}
-      for (const teamId of Object.keys(teamStores.value)) {
+      for (const teamId of Object.keys(visibleTeamStores.value)) {
         stationLevelTemp[station.id][teamId] = 0
         // Check if were the stash station, and if so, set the default level according to the game edition
         if (station.id == '5d484fc0654e76006657e0ab') {
-          stationLevelTemp[station.id][teamId] = gameEditions.find(edition => edition.version == teamStores.value[teamId].gameEdition)?.defaultStashLevel ?? 1
+          stationLevelTemp[station.id][teamId] = gameEditions.find(edition => edition.version == visibleTeamStores.value[teamId].gameEdition)?.defaultStashLevel ?? 1
         }
         station.levels.forEach(level => {
           if (moduleCompletions.value?.[level.id]?.[teamId] && level.level > stationLevelTemp?.[station.id]?.[teamId]) {
@@ -274,7 +274,7 @@ export const useProgressStore = defineStore('progress', () => {
     hideoutModules.value.forEach(hModule => {
       tempAvailableModules[hModule.id] = {}
       // For each user, check if the hModule is available
-      for (const teamId of Object.keys(teamStores.value)) {
+      for (const teamId of Object.keys(visibleTeamStores.value)) {
         // If the module is already built, it is not available
         if (moduleCompletions.value?.[hModule.id]?.[teamId]) {
           tempAvailableModules[hModule.id][teamId] = false
