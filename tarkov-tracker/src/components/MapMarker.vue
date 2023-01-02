@@ -1,9 +1,11 @@
 <template>
   <div :style="markerStyle" class="text-blue"><v-icon>mdi-map-marker</v-icon>
     <v-tooltip v-if="props.mark.floor == props.selectedFloor" activator="parent" location="top" attach
-      content-class="objective-gps-tooltip">
-      <task-objective v-if="props.mark.objectiveId"
-        :objective="objectives.find(obj => obj.id == props.mark.objectiveId)" style="min-width: 300px;" />
+      content-class="objective-gps-tooltip pa-0 rounded">
+      <v-sheet class="ma-0 elevation-3 rounded">
+        <task-objective v-if="props.mark.objectiveId"
+          :objective="objectives.find(obj => obj.id == props.mark.objectiveId)" style="min-width: 300px;" />
+      </v-sheet>
     </v-tooltip>
   </div>
 </template>

@@ -28,7 +28,15 @@
         <v-card>
           <v-tabs v-model="activeMapView" bg-color="accent" slider-color="secondary" align-tabs="center" show-arrows>
             <v-tab v-for="map, index in maps" :key="index" :value="map.id" prepend-icon="mdi-compass">
-              {{ map.name }}
+              <template v-if="mapTaskTotals[map.id] > 0">
+                <v-badge color="secondary" :content="mapTaskTotals[map.id]" :label="String(mapTaskTotals[map.id])"
+                  offset-y="-5" offset-x="-10">
+                  {{ map.name }}
+                </v-badge>
+              </template>
+              <template v-else>
+                {{ map.name }}
+              </template>
             </v-tab>
           </v-tabs>
         </v-card>
@@ -245,6 +253,28 @@ const visibleGPS = computed(() => {
     }
   }
   return visibleGPS
+})
+
+const mapTaskTotals = computed(() => {
+  let mapTaskCounts = {}
+
+  // Update the task count for each map
+  for (const map of maps.value) {
+    mapTaskCounts[map.id] = 0
+    for (const task of tasks.value) {
+      if (disabledTasks.includes(task.id)) {
+        continue
+      }
+      if (task.locations.includes(map.id)) {
+        if ((activeUserView.value == 'all' && Object.values(progressStore.unlockedTasks[task.id]).some((unlocked) => unlocked))
+          || (progressStore.unlockedTasks[task.id][activeUserView.value])) {
+          mapTaskCounts[map.id]++
+        }
+      }
+    }
+  }
+
+  return mapTaskCounts
 })
 
 const updateVisibleTasks = async function () {
