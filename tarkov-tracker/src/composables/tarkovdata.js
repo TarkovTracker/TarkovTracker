@@ -34,7 +34,7 @@ const queryErrors = ref(null)
 const queryResults = ref(null)
 const lastQueryTime = ref(null)
 
-const { onResult: taskOnResult, onError: taskOnError, loading, refetch: taskRefetch } = useQuery(tarkovDataQuery, null, { fetchPolicy: "cache-and-network", notifyOnNetworkStatusChange: true });
+const { onResult: taskOnResult, onError: taskOnError, loading, refetch: taskRefetch } = useQuery(tarkovDataQuery, null, { fetchPolicy: "cache-and-network", notifyOnNetworkStatusChange: true, errorPolicy: "ignore" });
 taskOnResult((result) => {
   lastQueryTime.value = Date.now()
   queryResults.value = result.data
@@ -48,7 +48,7 @@ taskOnError((error) => {
 const queryHideoutErrors = ref(null)
 const queryHideoutResults = ref(null)
 const lastHideoutQueryTime = ref(null)
-const { onResult: hideoutOnResult, onError: hideoutOnError, loading: hideoutLoading, refetch: hideoutRefetch } = useQuery(tarkovHideoutQuery, null, { fetchPolicy: "cache-and-network", notifyOnNetworkStatusChange: true });
+const { onResult: hideoutOnResult, onError: hideoutOnError, loading: hideoutLoading, refetch: hideoutRefetch } = useQuery(tarkovHideoutQuery, null, { fetchPolicy: "cache-and-network", notifyOnNetworkStatusChange: true, errorPolicy: "all" });
 hideoutOnResult((result) => {
   lastHideoutQueryTime.value = Date.now()
   queryHideoutResults.value = result.data
@@ -116,15 +116,17 @@ watch(queryResults, async (newValue, oldValue) => {
       // If the task has requirements, add an edge from the requirement to the task
       if (task.taskRequirements?.length > 0) {
         for (let requirement of task.taskRequirements) {
-          if (requirement.status.includes("active")) {
+          if (requirement?.status.includes("active")) {
             // This task doesn't require the task to be completed, but just to be active
             // This means that the task shares predecessors with the task that it requires
             // So add the requirements after we've built the rest of the graph
             activeRequirements.push({ task, requirement })
           } else {
-            newTaskGraph.mergeNode(requirement.task.id)
             newTaskGraph.mergeNode(task.id)
-            newTaskGraph.mergeEdge(requirement.task.id, task.id)
+            if (requirement?.task) {
+              newTaskGraph.mergeNode(requirement.task.id)
+              newTaskGraph.mergeEdge(requirement.task.id, task.id)
+            }
           }
         }
       } else {
