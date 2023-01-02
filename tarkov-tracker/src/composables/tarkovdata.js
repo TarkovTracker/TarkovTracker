@@ -9,22 +9,42 @@ import Graph from 'graphology';
 provideApolloClient(apolloClient)
 
 // Function to recursively get all of the predecessors for a task
-function getPredecessors(graph, nodeId) {
-  let predecessors = graph.inNeighbors(nodeId)
+function getPredecessors(graph, nodeId, visited = []) {
+  let predecessors = []
+  try {
+    predecessors = graph.inNeighbors(nodeId)
+    visited.push(nodeId)
+  } catch {
+    console.error("Error getting predecessors for node " + nodeId)
+    return []
+  }
   if (predecessors.length > 0) {
     for (let predecessor of predecessors) {
-      predecessors = predecessors.concat(getPredecessors(graph, predecessor))
+      if (visited.includes(predecessor)) {
+        continue
+      }
+      predecessors = predecessors.concat(getPredecessors(graph, predecessor, visited))
     }
   }
   return predecessors
 }
 
 // Function to recursively get all of the successors for a task
-function getSuccessors(graph, nodeId) {
-  let successors = graph.outNeighbors(nodeId)
+function getSuccessors(graph, nodeId, visited = []) {
+  let successors = []
+  try {
+    successors = graph.outNeighbors(nodeId)
+    visited.push(nodeId)
+  } catch {
+    console.error("Error getting successors for node " + nodeId)
+    return []
+  }
   if (successors.length > 0) {
     for (let successor of successors) {
-      successors = successors.concat(getSuccessors(graph, successor))
+      if (visited.includes(successor)) {
+        continue
+      }
+      successors = successors.concat(getSuccessors(graph, successor, visited))
     }
   }
   return successors
@@ -123,7 +143,7 @@ watch(queryResults, async (newValue, oldValue) => {
             activeRequirements.push({ task, requirement })
           } else {
             newTaskGraph.mergeNode(task.id)
-            if (requirement?.task) {
+            if (requirement?.task && newValue.tasks.find((t) => t.id === requirement.task.id)) {
               newTaskGraph.mergeNode(requirement.task.id)
               newTaskGraph.mergeEdge(requirement.task.id, task.id)
             }
