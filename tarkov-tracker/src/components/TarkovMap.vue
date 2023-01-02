@@ -11,8 +11,7 @@
       <v-col cols="12">
         <div :id="randomMapId" style="position:relative">
           <template v-for="mark, markIndex in props.marks" :key="markIndex">
-            <map-marker
-v-if="mark.map === props.map.id" :key="markIndex" :mark="mark"
+            <map-marker v-if="mark.map === props.map.id" :key="markIndex" :mark="mark"
               :selected-floor="selectedFloor" />
           </template>
         </div>
@@ -21,7 +20,7 @@ v-if="mark.map === props.map.id" :key="markIndex" :mark="mark"
   </v-container>
 </template>
 <script setup>
-import { defineProps, computed, ref, onMounted, defineAsyncComponent } from "vue";
+import { defineProps, computed, ref, onMounted, defineAsyncComponent, watch } from "vue";
 import { useUserStore } from "@/stores/user.js";
 import { v4 as uuidv4 } from 'uuid';
 import * as d3 from "d3";
@@ -48,6 +47,10 @@ const setFloor = (floor) => {
   selectedFloor.value = floor
   draw()
 }
+
+watch(() => props.map, () => {
+  draw()
+})
 
 const draw = async () => {
   const svg = await d3.svg(`https://tarkovtracker.github.io/tarkovdata/maps/${props.map.svg.file}`)
