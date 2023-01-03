@@ -7,6 +7,16 @@ import 'firebase/compat/auth'
 
 const { hostname } = new URL(document.location.href)
 
+// const firebaseConfig = {
+//   apiKey: 'AIzaSyCRgDK1U5wjeQA8RbRFTAj_jprsG4hF0zw',
+//   authDomain: 'auth.tarkovtracker.io',
+//   projectId: 'tarkovtracker-production',
+//   storageBucket: 'tarkovtracker-production.appspot.com',
+//   messagingSenderId: '140836645499',
+//   appId: '1:140836645499:web:2253dd97b8224a898b90de',
+//   measurementId: 'G-ZH4YVDFWTJ'
+// }
+
 const firebaseConfig = (hostname == 'tarkovtracker.io')
   ? {
     apiKey: 'AIzaSyCRgDK1U5wjeQA8RbRFTAj_jprsG4hF0zw',
@@ -56,7 +66,7 @@ fireapp.auth().onAuthStateChanged(function (user) {
 });
 
 
-// Use emulators if we're localhost
+//Use emulators if we're localhost
 if (window.location.hostname === 'localhost') {
   fireapp.firestore().useEmulator('localhost', 5002)
   fireapp.functions().useEmulator('localhost', 5001)

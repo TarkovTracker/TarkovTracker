@@ -31,7 +31,7 @@ export const useProgressStore = defineStore('progress', () => {
     let visibleStores = {}
     if (teamStores.value) {
       Object.entries(teamStores.value).forEach(([teamId, store]) => {
-        if (!userStore.teamIsHidden(teamId)) {
+        if (teamId == 'self' || !userStore.teamIsHidden(teamId)) {
           visibleStores[teamId] = store
         }
       })
@@ -172,31 +172,31 @@ export const useProgressStore = defineStore('progress', () => {
     return available
   })
 
-  const levelAppropriateTasks = computed(() => {
-    // For each task, check if any team member has it available
-    let available = {}
-    if (!unlockedTasks.value) return {}
-    for (const task of unlockedTasks.value) {
-      available[task.id] = {}
-      for (const teamId of Object.keys(visibleTeamStores.value)) {
-        // Check if the task is unlocked for this team member
-        if (!unlockedTasks.value[task.id][teamId]) {
-          available[task.id][teamId] = false
-          continue
-        }
-        // Check if the task is level appropriate for this team member
-        if (task?.minPlayerLevel && task?.minPlayerLevel > 0) {
-          if (visibleTeamStores.value[teamId].playerLevel < task.minPlayerLevel) {
-            available[task.id][teamId] = false
-            continue
-          }
-        }
-        // If we aren't already marked as false, the task is available
-        available[task.id][teamId] = true
-      }
-    }
-    return available
-  })
+  // const levelAppropriateTasks = computed(() => {
+  //   // For each task, check if any team member has it available
+  //   let available = {}
+  //   if (!unlockedTasks.value) return {}
+  //   for (const task of unlockedTasks.value) {
+  //     available[task.id] = {}
+  //     for (const teamId of Object.keys(visibleTeamStores.value)) {
+  //       // Check if the task is unlocked for this team member
+  //       if (!unlockedTasks.value[task.id][teamId]) {
+  //         available[task.id][teamId] = false
+  //         continue
+  //       }
+  //       // Check if the task is level appropriate for this team member
+  //       if (task?.minPlayerLevel && task?.minPlayerLevel > 0) {
+  //         if (visibleTeamStores.value[teamId].playerLevel < task.minPlayerLevel) {
+  //           available[task.id][teamId] = false
+  //           continue
+  //         }
+  //       }
+  //       // If we aren't already marked as false, the task is available
+  //       available[task.id][teamId] = true
+  //     }
+  //   }
+  //   return available
+  // })
 
   const objectiveCompletions = computed(() => {
     // For each objective, check if it is completed for each team member
@@ -353,5 +353,5 @@ export const useProgressStore = defineStore('progress', () => {
     return names
   })
 
-  return { teamStores, getDisplayName, getTeamIndex, visibleTeamStores, getLevel, teammemberNames, tasksCompletions, objectiveCompletions, unlockedTasks, levelAppropriateTasks, traderRep, traderLevelsAchieved, moduleCompletions, stationLevels, availableModules, visibleStations, gameEditionData, modulePartCompletions }
+  return { teamStores, getDisplayName, getTeamIndex, visibleTeamStores, getLevel, teammemberNames, tasksCompletions, objectiveCompletions, unlockedTasks, traderRep, traderLevelsAchieved, moduleCompletions, stationLevels, availableModules, visibleStations, gameEditionData, modulePartCompletions }
 })
