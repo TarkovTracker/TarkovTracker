@@ -83,8 +83,8 @@
       <v-col v-if="loadingTasks || reloadingTasks" cols="12" align="center">
         <!-- If we're still waiting on tasks from tarkov.dev API -->
         <v-progress-circular indeterminate color="secondary" class="mx-2"></v-progress-circular> {{
-    $t('page.tasks.loading')
-}} <refresh-button />
+          $t('page.tasks.loading')
+        }} <refresh-button />
       </v-col>
     </v-row>
     <v-row v-if="!loadingTasks && !reloadingTasks && visibleTasks.length == 0">
@@ -103,8 +103,8 @@
       </v-col>
       <v-col cols="12" class="my-1">
         <v-lazy v-for="task, taskIndex in visibleTasks" :key="taskIndex" :options="{
-  threshold: 0.5
-}" min-height="100">
+          threshold: 0.5
+        }" min-height="100">
           <task-card :task="task" class="my-1" />
         </v-lazy>
       </v-col>
@@ -316,6 +316,11 @@ const updateVisibleTasks = async function () {
 
   // Finally, map the tasks to their IDs
   //visibleTaskList = visibleTaskList.map((task) => task.id)
+
+  // Sort the tasks by their count of successors
+  visibleTaskList.sort((a, b) => {
+    return b.successors.length - a.successors.length
+  })
 
   reloadingTasks.value = false
   visibleTasks.value = visibleTaskList
