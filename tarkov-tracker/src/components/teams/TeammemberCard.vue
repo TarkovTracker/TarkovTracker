@@ -5,14 +5,14 @@
         <v-col cols="auto">
           <div class="text-h4">
             {{
-    progressStore.teammemberNames[teamStoreId]
-}}
+              progressStore.teammemberNames[teamStoreId]
+            }}
           </div>
           <div v-if="props.teammember == fireuser.uid">
             <b>
               {{
-    $t('page.team.card.manageteam.membercard.this_is_you')
-}}
+                $t('page.team.card.manageteam.membercard.this_is_you')
+              }}
             </b>
           </div>
         </v-col>
@@ -53,15 +53,13 @@
           </i18n-t>
         </v-col>
         <v-col cols="auto">
-          <v-btn
-:disabled="props.teammember == fireuser.uid || userStore.taskTeamAllHidden" variant="outlined"
+          <v-btn :disabled="props.teammember == fireuser.uid || userStore.taskTeamAllHidden" variant="outlined"
             :icon="props.teammember != fireuser.uid && userStore.teamIsHidden(props.teammember) ? 'mdi-eye-off' : 'mdi-eye'"
             class="mx-1"
             :color="props.teammember != fireuser.uid && userStore.teamIsHidden(props.teammember) ? 'red' : 'green'"
             size="x-small" @click="userStore.toggleHidden(props.teammember)"></v-btn>
           <!-- Button to delete the token -->
-          <v-btn
-v-if="props.teammember != fireuser.uid && teamStore.isOwner" variant="outlined"
+          <v-btn v-if="props.teammember != fireuser.uid && teamStore.isOwner" variant="outlined"
             icon="mdi-account-minus" class="mx-1" color="red" size="x-small" @click="kickTeammate()"></v-btn>
         </v-col>
       </v-row>
@@ -100,7 +98,7 @@ const userStore = useUserStore()
 const { tasks } = useTarkovData()
 
 const completedTaskCount = computed(() => {
-  return tasks.value.filter(task => progressStore.taskCompletions?.[task.id]?.[teamStoreId.value] == true).length
+  return tasks.value.filter(task => progressStore.tasksCompletions?.[task.id]?.[teamStoreId.value] == true).length
 })
 
 const groupIcon = computed(() => { return `/img/levelgroups/${Math.floor(progressStore.getLevel(props.teammember) / 5) + 1}.png` })

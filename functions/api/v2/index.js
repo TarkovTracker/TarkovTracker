@@ -54,7 +54,8 @@ const formatProgress = (progressData, userId) => {
 	let hideoutPartCompletions = progressData?.hideoutParts ?? {}
 	let hideoutModuleCompletions = progressData?.hideoutModules ?? {}
 	let displayName = progressData?.displayName ?? userId.substring(0, 6)
-	return { tasksProgress: formatObjective(taskCompletions), taskObjectivesProgress: formatObjective(objectiveCompletions), hideoutModulesProgress: formatObjective(hideoutModuleCompletions), hideoutPartsProgress: formatObjective(hideoutPartCompletions), displayName: displayName, userId: userId }
+	let playerLevel = progressData?.level ?? 1
+	return { tasksProgress: formatObjective(taskCompletions), taskObjectivesProgress: formatObjective(objectiveCompletions), hideoutModulesProgress: formatObjective(hideoutModuleCompletions), hideoutPartsProgress: formatObjective(hideoutPartCompletions), displayName: displayName, userId: userId, playerLevel: playerLevel }
 }
 
 const formatObjective = (objectiveData) => {
