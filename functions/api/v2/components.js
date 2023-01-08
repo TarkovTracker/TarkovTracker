@@ -15,23 +15,11 @@
  *         token:
  *           type: "string"
  *           description: "Shows token used to make this call"
- *         calls:
- *           type: "integer"
- *           description: "Shows number of times this token has been used so far"
  *         permissions:
  *           type: array
  *           description: "List of permissions this token has (GP == Read Personal Progression, TP == Read Team Progression, WP == Write Personal Progression)"
  *           items:
- *             type: integer
- *         createdAt:
- *           type: object
- *           properties:
- *             _seconds:
- *               type: number
- *               description: "UNIX Timestamp when this authorization token was created"
- *             _nanoseconds:
- *               type: number
- *               description: "Combined with _seconds field, this will give you more precise time of when this authorization token was created"
+ *             type: string
  *     TeamProgress:
  *       title: "TeamProgress"
  *       description: "Array of team member's progress data."
@@ -43,77 +31,86 @@
  *       description: "User's progress data."
  *       type: "object"
  *       properties:
- *         level:
+ *         playerLevel:
  *           type: "integer"
  *           description: "Player's current level"
  *         gameEdition:
  *           type: "integer"
  *           description: "Player's game edition (1 = Standard Edition, 2 == Left to Die Edition, 3 == Prepare to Die Edition, 4 == Edge of Darkness Edition)"
- *         hide:
- *           type: "boolean"
- *           description: "True if this player is being hidden within the team from the perspective of the token owner. Useful when some member are inactive and you are not interested in seeing their progress for the moment. Think of it as a not-a-real-kick from the team."
- *         taskCompletions:
+ *         taskProgress:
  *           type: "array"
- *           description: "List of completed quests."
+ *           description: "Array of task progress data."
  *           items:
- *             $ref: "#/components/schemas/TaskCompletion"
- *         hideout:
+ *             $ref: "#/components/schemas/TaskProgress"
+ *         taskObjectivesProgress:
  *           type: "array"
- *           description: "List of installed hideout modules."
+ *           description: "Array of task objective progress data."
  *           items:
- *             $ref: "#/components/schemas/HideoutModuleCompletion"
- *         objectives:
+ *             $ref: "#/components/schemas/TaskObjectiveProgress"
+ *         hideoutModulesProgress:
  *           type: "array"
- *           description: "List of quest objectives."
+ *           description: "Array of hideout module progress data."
  *           items:
- *             $ref: "#/components/schemas/ObjectiveCompletion"
- *         hideoutObjectives:
+ *             $ref: "#/components/schemas/HideoutModulesProgress"
+ *         hideoutPartsProgress:
  *           type: "array"
- *           description: "List of hideout objectives."
+ *           description: "Array of hideout part progress data."
  *           items:
- *             $ref: "#/components/schemas/HideoutModuleObjectiveCompletion"
- *     TaskCompletion:
- *       title: "TaskCompletion"
+ *             $ref: "#/components/schemas/HideoutPartsProgress"
+ *         userId:
+ *           type: "string"
+ *           description: "Player's TarkovTracker UUID"
+ *         displayName:
+ *          type: "string"
+ *          description: "Player's TarkovTracker display name within their team"
+ *     TaskProgress:
+ *       title: "TaskProgress"
  *       description: "Player's progress of a given task. The key is the UUID correlating to the task ID available via the tarkov.dev API"
  *       type: "object"
  *       properties:
+ *         id:
+ *           type: "string"
+ *           description: "UUID correlating to the task ID available via the tarkov.dev API"
  *         complete:
  *           type: "boolean"
  *           description: "True if a given quest has been completed."
- *         timeComplete:
- *           type: "number"
- *           description: "UNIX timestamp of the time when quest was marked as complete"
- *     HideoutModuleCompletion:
- *       title: "HideoutModuleCompletion"
- *       description: "Player's progress on a given hideout module. The key is the UUID correlating to a hideout station level ID available via the tarkov.dev API"
+ *     HideoutModulesProgress:
+ *       title: "HideoutModulesProgress"
+ *       description: "Player's progress on a given hideout module."
  *       type: "object"
  *       properties:
+ *         id:
+ *           type: "string"
+ *           description: "UUID correlating to the hideout station level ID available via the tarkov.dev API"
  *         complete:
  *           type: "boolean"
  *           description: "True if a given hideout module has been installed"
- *         timeComplete:
- *           type: "number"
- *           description: "UNIX timestamp of the time when hideout module was marked as installed"
- *     ObjectiveCompletion:
- *       title: "ObjectiveCompletion"
- *       description: "Player's progress on a given quest objective."
+ *     TaskObjectiveProgress:
+ *       title: "TaskObjectiveProgress"
+ *       description: "Player's progress on a given task objective. 
  *       type: "object"
  *       properties:
+ *         id:
+ *           type: "string"
+ *           description: "UUID correlating to the task objective ID available via the tarkov.dev API"
+ *         count:
+ *           type: "integer"
+ *           description: "Number of items collected for a given objective (if applicable)"
  *         complete:
  *           type: "boolean"
  *           description: "True if a given objective has been completed"
- *         timeComplete:
- *           type: "number"
- *           description: "UNIX timestamp of the time when objective was marked as complete"
- *     HideoutModuleObjectiveCompletion:
- *       title: "HideoutModuleObjectiveCompletion"
- *       description: "Player's progress on a given hideout module objective data."
+ *     HideoutPartsProgress:
+ *       title: "HideoutPartsProgress"
+ *       description: "Player's progress on items needed for hideout module upgrades."
  *       type: "object"
  *       properties:
  *         complete:
  *           type: "boolean"
- *           description: "True if a given hideout module objective has been completed"
- *         timeComplete:
- *           type: "number"
- *           description: "UNIX timestamp of the time when hideout module was marked as complete"
+ *           description: "True if a given hideout part objective has been completed"
+ *         count:
+ *           type: "integer"
+ *           description: "Number of items collected for a given hideout part objective"
+ *         id:
+ *           type: "string"
+ *           description: "UUID correlating to invidiual hideout station level item requirements' ID available via the tarkov.dev API"
  */
