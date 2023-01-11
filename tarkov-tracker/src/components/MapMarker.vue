@@ -1,18 +1,20 @@
 <template>
-  <div :style="markerStyle" class="text-red"><v-icon>mdi-map-marker</v-icon>
-    <v-tooltip v-if="props.mark.floor == props.selectedFloor" activator="parent" location="top" attach
-      content-class="objective-gps-tooltip pa-0 rounded">
-      <v-sheet class="ma-0 elevation-3 rounded px-1 pt-2">
-        <task-link :task="relatedTask" />
-        <task-objective v-if="props.mark.objectiveId"
-          :objective="objectives.find(obj => obj.id == props.mark.objectiveId)" style="min-width: 400px;" />
-      </v-sheet>
-    </v-tooltip>
+  <div :style="markerStyle" class="text-red" @mouseenter="showTooltip()" @mouseleave="hideTooltip()"
+    @click="forceTooltipToggle()"><v-icon>{{ tooltipVisible == true ? 'mdi-map-marker-radius' : 'mdi-map-marker'
+    }}</v-icon>
+  </div>
+  <div v-if="tooltipVisible" :style="tooltipStyle">
+    <v-sheet class="ma-0 elevation-3 rounded px-1 pt-2" color="primary">
+      <task-link :task="relatedTask" />
+      <task-objective v-if="props.mark.objectiveId"
+        :objective="objectives.find(obj => obj.id == props.mark.objectiveId)" />
+    </v-sheet>
   </div>
 </template>
 <script setup>
-import { defineProps, computed, defineAsyncComponent } from "vue";
+import { defineProps, computed, defineAsyncComponent, ref } from "vue";
 import { useTarkovData } from "@/composables/tarkovdata.js";
+
 const TaskObjective = defineAsyncComponent(() =>
   import("@/components/tasks/TaskObjective.vue")
 )
@@ -31,12 +33,32 @@ const props = defineProps({
   },
 });
 
+const forceTooltip = ref(false)
+const hoverTooltip = ref(false)
+
+const forceTooltipToggle = () => {
+  forceTooltip.value = !forceTooltip.value
+}
+
+const showTooltip = () => {
+  hoverTooltip.value = true
+}
+
+const hideTooltip = () => {
+  hoverTooltip.value = false
+}
+
+const tooltipVisible = computed(() => {
+  if (props.mark.floor !== props.selectedFloor) return false
+  return forceTooltip.value || hoverTooltip.value
+})
+
 const relatedObjective = computed(() => {
   return objectives.value.find(obj => obj.id == props.mark.objectiveId)
 })
 
 const relatedTask = computed(() => {
-  return tasks.value.find(task => task.id == relatedObjective.value.taskId)
+  return tasks.value.find(task => task.id == relatedObjective.value?.taskId)
 })
 
 const markerStyle = computed(() => {
@@ -49,6 +71,15 @@ const markerStyle = computed(() => {
     transform: 'translate(-50%, -50%)',
     cursor: props.mark.floor === props.selectedFloor ? 'pointer' : 'inherit',
     opacity: props.mark.floor === props.selectedFloor ? 1 : 0.2,
+  };
+});
+
+const tooltipStyle = computed(() => {
+  return {
+    position: "absolute",
+    top: props.mark.topPercent + "%",
+    left: props.mark.leftPercent + "%",
+    transform: 'translate(-50%, -125%)',
   };
 });
 </script>
