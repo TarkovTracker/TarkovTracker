@@ -86,14 +86,12 @@
             <v-row v-if="props.task?.neededKeys?.length > 0" no-gutters>
               <v-col cols="auto" class="py-1">
                 <v-sheet class="pa-1 rounded-lg" color="accent">
-                  <div
-v-for="keyMap, keyMapIndex in props.task.neededKeys" :key="keyMapIndex"
+                  <div v-for="keyMap, keyMapIndex in props.task.neededKeys" :key="keyMapIndex"
                     class="d-flex align-center my-1">
                     <i18n-t keypath="page.tasks.questcard.keysneeded" scope="global" :plural="keyMap.keys.length">
                       <template #keys>
                         <span v-for="key, keyIndex in keyMap.keys" :key="keyIndex" class="d-inline-block">
-                          <tarkov-item
-:item-id="key.id" :item-name="key.shortName" :dev-link="key.link"
+                          <tarkov-item :item-id="key.id" :item-name="key.shortName" :dev-link="key.link"
                             :wiki-link="key.wikiLink" class="mr-2" />
                         </span>
                       </template>
@@ -107,17 +105,14 @@ v-for="keyMap, keyMapIndex in props.task.neededKeys" :key="keyMapIndex"
             </v-row>
             <!-- Quest objectives -->
             <v-row no-gutters>
-              <v-col
-v-for="objective, objectiveIndex in relevantViewObjectives" :key="objectiveIndex" cols="12"
+              <v-col v-for="objective, objectiveIndex in relevantViewObjectives" :key="objectiveIndex" cols="12"
                 class="py-1">
                 <task-objective :objective="objective" />
               </v-col>
-              <v-col
-v-if="relevantViewObjectives.length != props.task.objectives.length" cols="12"
+              <v-col v-if="relevantViewObjectives.length != props.task.objectives.length" cols="12"
                 class="pa-1 hidden-objectives">
                 <v-icon size="x-small" class="mr-1">mdi-eye-off</v-icon>
-                <i18n-t
-keypath="page.tasks.questcard.objectiveshidden" scope="global"
+                <i18n-t keypath="page.tasks.questcard.objectiveshidden" scope="global"
                   :plural="props.task.objectives.length - relevantViewObjectives.length">
                   <template #count>
                     {{ props.task.objectives.length - relevantViewObjectives.length }}
@@ -139,8 +134,8 @@ keypath="page.tasks.questcard.objectiveshidden" scope="global"
               <template v-if="!xs">
                 <v-btn size="x-large" color="accent" class="mx-1 my-1" @click="markTaskComplete()"><v-icon
                     class="mr-2">mdi-check-all</v-icon>{{
-    $t('page.tasks.questcard.completebutton')
-}}</v-btn>
+                      $t('page.tasks.questcard.completebutton')
+                    }}</v-btn>
                 <template v-if="props.task.alternatives?.length > 0">
                   <div class="d-flex justify-center">
                     {{ $t('page.tasks.questcard.alternatives') }}
@@ -154,8 +149,8 @@ keypath="page.tasks.questcard.objectiveshidden" scope="global"
                 <div class="d-flex justify-center">
                   <v-btn color="accent" class="mx-1 my-1" @click="markTaskComplete()"><v-icon
                       class="mr-2">mdi-check-all</v-icon>{{
-    $t('page.tasks.questcard.completebutton')
-}}</v-btn>
+                        $t('page.tasks.questcard.completebutton')
+                      }}</v-btn>
                 </div>
               </template>
             </template>
@@ -164,8 +159,8 @@ keypath="page.tasks.questcard.objectiveshidden" scope="global"
               <template v-if="!xs">
                 <v-btn size="x-large" color="accent" class="mx-1 my-1" @click="markTaskUncomplete()"><v-icon
                     class="mr-2">mdi-undo</v-icon>{{
-    $t('page.tasks.questcard.uncompletebutton')
-}}</v-btn>
+                      $t('page.tasks.questcard.uncompletebutton')
+                    }}</v-btn>
                 <template v-if="props.task.alternatives?.length > 0">
                   <div class="d-flex justify-center">
                     {{ $t('page.tasks.questcard.alternativefailed') }}
@@ -179,8 +174,8 @@ keypath="page.tasks.questcard.objectiveshidden" scope="global"
                 <div class="d-flex justify-center">
                   <v-btn color="accent" class="mx-1 my-1" @click="markTaskUncomplete()"><v-icon
                       class="mr-2">mdi-undo</v-icon>{{
-    $t('page.tasks.questcard.uncompletebutton')
-}}</v-btn>
+                        $t('page.tasks.questcard.uncompletebutton')
+                      }}</v-btn>
                 </div>
               </template>
             </template>
@@ -189,23 +184,23 @@ keypath="page.tasks.questcard.objectiveshidden" scope="global"
               <template v-if="!xs">
                 <v-btn size="x-large" color="accent" class="mx-1 my-1" @click="markTaskAvailable()"><v-icon
                     class="mr-2">mdi-fast-forward</v-icon>{{
-    $t('page.tasks.questcard.availablebutton')
-}}</v-btn>
+                      $t('page.tasks.questcard.availablebutton')
+                    }}</v-btn>
                 <v-btn size="x-large" color="accent" class="mx-1 my-1" @click="markTaskComplete()"><v-icon
                     class="mr-2">mdi-check-all</v-icon>{{
-    $t('page.tasks.questcard.completebutton')
-}}</v-btn>
+                      $t('page.tasks.questcard.completebutton')
+                    }}</v-btn>
               </template>
               <template v-else>
                 <div class="d-flex justify-center">
                   <v-btn size="small" color="accent" class="mx-1 my-1" @click="markTaskAvailable()"><v-icon
                       class="mr-2">mdi-fast-forward</v-icon>{{
-    $t('page.tasks.questcard.availablebutton')
-}}</v-btn>
+                        $t('page.tasks.questcard.availablebutton')
+                      }}</v-btn>
                   <v-btn size="small" color="accent" class="mx-1 my-1" @click="markTaskComplete()"><v-icon
                       class="mr-2">mdi-check-all</v-icon>{{
-    $t('page.tasks.questcard.completebutton')
-}}</v-btn>
+                        $t('page.tasks.questcard.completebutton')
+                      }}</v-btn>
                 </div>
               </template>
             </template>

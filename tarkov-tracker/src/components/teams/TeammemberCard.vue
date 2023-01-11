@@ -39,7 +39,8 @@
       </v-row>
       <v-row dense justify="space-between">
         <v-col cols="auto">
-          <i18n-t keypath="page.team.card.manageteam.membercard.taskscomplete" scope="global">
+          <i18n-t keypath="page.team.card.manageteam.membercard.taskscomplete" scope="global"
+            v-if="!userStore.teamIsHidden(props.teammember)">
             <template #completed>
               <b>
                 {{ completedTaskCount }}
