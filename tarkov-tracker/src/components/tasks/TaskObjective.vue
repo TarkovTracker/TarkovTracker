@@ -4,8 +4,8 @@
       @click="toggleObjectiveCompletion()" @mouseenter="objectiveMouseEnter()" @mouseleave="objectiveMouseLeave()">
       <v-icon size="x-small" class="mr-1">{{ objectiveIcon }}</v-icon>{{ props.objective?.description }}
     </div>
-    <v-row v-if="userNeeds.length > 1 || itemObjectiveTypes.includes(fullObjective.type)" align="center"
-      class="pa-0 ml-0" style="font-size: smaller; margin-top: 1px; margin-bottom: 1px;">
+    <v-row v-if="(systemStore.userTeam && userNeeds.length > 0) || itemObjectiveTypes.includes(fullObjective.type)"
+      align="center" class="pa-0 ml-0" style="font-size: smaller; margin-top: 1px; margin-bottom: 1px;">
       <v-col cols="auto" v-if="itemObjectiveTypes.includes(fullObjective.type)" class="pa-0 d-flex align-center">
         <v-sheet class="rounded-lg pr-0 d-flex align-start mb-2" color="accent" style="width: fit-content">
           <tarkov-item :item-id="relatedItem.id" :item-name="relatedItem.shortName" :dev-link="relatedItem.link"
