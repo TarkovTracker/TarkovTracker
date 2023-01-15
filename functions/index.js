@@ -315,10 +315,10 @@ exports.updateTarkovdata = functions.pubsub.schedule('every 60 minutes').onRun(a
 
 // Using the scheduled function does not play nice with the emulators, so we use this instead to call it during local development
 // This should be commented out when deploying to production
-exports.updateTarkovdataHTTPS = functions.https.onRequest(async (request, response) => {
-	await retrieveTarkovdata();
-	response.status(200).send('OK');
-});
+// exports.updateTarkovdataHTTPS = functions.https.onRequest(async (request, response) => {
+// 	await retrieveTarkovdata();
+// 	response.status(200).send('OK');
+// });
 
 async function retrieveTarkovdata() {
 	console.log('Retrieving tarkovdata');
