@@ -18,6 +18,7 @@
     "graphql-request": "^5.1.0",
     "graphql-tag": "^2.12.6",
     "node-fetch": "^2.6.8",
+    "swagger-jsdoc": "^6.2.7",
     "uid-generator": "^2.0.0"
   },
   "devDependencies": {
