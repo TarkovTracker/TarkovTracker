@@ -31,7 +31,7 @@ export default defineConfig({
 			// whether to materialize (write on disk) `.runtimeconfig.json` for functions emulator (defaults to `false`)
 			materializeConfig: false,
 			// emulator targets (defaults to `['hosting', 'functions']`)
-			targets: ['hosting', 'functions', 'firestore', 'database', 'auth', 'ui'],
+			targets: ['hosting', 'functions', 'firestore', 'database', 'auth', 'ui', 'pubsub'],
 			// show UI
 			showUI: true,
 		})

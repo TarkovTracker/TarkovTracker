@@ -48,7 +48,7 @@ const verifyBearer = async (req, res, next) => {
 
 }
 
-const formatProgress = (progressData, userId) => {
+const formatProgress = (progressData, userId, hideoutData) => {
 	let taskCompletions = progressData?.taskCompletions ?? {}
 	let objectiveCompletions = progressData?.taskObjectives ?? {}
 	let hideoutPartCompletions = progressData?.hideoutParts ?? {}
@@ -56,7 +56,39 @@ const formatProgress = (progressData, userId) => {
 	let displayName = progressData?.displayName ?? userId.substring(0, 6)
 	let playerLevel = progressData?.level ?? 1
 	let gameEdition = progressData?.gameEdition ?? 1
-	return { tasksProgress: formatObjective(taskCompletions), taskObjectivesProgress: formatObjective(objectiveCompletions, true), hideoutModulesProgress: formatObjective(hideoutModuleCompletions), hideoutPartsProgress: formatObjective(hideoutPartCompletions, true), displayName: displayName, userId: userId, playerLevel: playerLevel, gameEdition: gameEdition }
+	let progress = { tasksProgress: formatObjective(taskCompletions), taskObjectivesProgress: formatObjective(objectiveCompletions, true), hideoutModulesProgress: formatObjective(hideoutModuleCompletions), hideoutPartsProgress: formatObjective(hideoutPartCompletions, true), displayName: displayName, userId: userId, playerLevel: playerLevel, gameEdition: gameEdition }
+
+	// If hideout data is non-null, do some post-processing
+	try {
+		if (hideoutData != null) {
+			// Find all of the stash modules and mark them off if the gameEdition meets or exceeds the level
+			hideoutData.hideoutStations.find(station => station.id === "5d484fc0654e76006657e0ab").levels.forEach(level => {
+				if (level.level <= gameEdition) {
+					// If we can find the module, mark it off, otherwise, push it to the array
+					let moduleIndex = progress.hideoutModulesProgress.findIndex(mLevel => mLevel.id === level.id)
+					if (moduleIndex === -1) {
+						progress.hideoutModulesProgress.push({ id: level.id, complete: true })
+					} else {
+						progress.hideoutModulesProgress[moduleIndex].complete = true
+					}
+					// For each itemRequirement, mark off the hideoutPartCompletions
+					level.itemRequirements.forEach(item => {
+						// If we can find the part, mark it off, otherwise, push it to the array
+						let partIndex = progress.hideoutPartsProgress.findIndex(part => part.id === item.id)
+						if (partIndex === -1) {
+							progress.hideoutPartsProgress.push({ id: item.id, complete: true, count: item.count })
+						} else {
+							progress.hideoutPartsProgress[partIndex].complete = true
+						}
+					})
+				}
+			})
+		}
+	} catch (error) {
+		functions.logger.error("Error processing hideout data", error)
+	}
+
+	return progress
 }
 
 const formatObjective = (objectiveData, showCount = false) => {
@@ -123,8 +155,14 @@ app.get('/api/v2/progress', async (req, res) => {
 		const db = admin.firestore();
 		const progressRef = db.collection('progress').doc(req.apiToken.owner);
 		const progressDoc = await progressRef.get();
-		let progressData = formatProgress(progressDoc.data(), req.apiToken.owner);
-		res.status(200).json({ data: formatProgress(progressDoc.data(), req.apiToken.owner), meta: { self: req.apiToken.owner } }).send()
+
+		// Retrieve the hideout data
+		const hideoutRef = db.collection('tarkovdata').doc('hideout');
+		const hideoutDoc = await hideoutRef.get();
+		const hideoutData = hideoutDoc.exists ? hideoutDoc.data() : null;
+
+		let progressData = formatProgress(progressDoc.data(), req.apiToken.owner, hideoutData);
+		res.status(200).json({ data: progressData, meta: { self: req.apiToken.owner } }).send()
 	} else {
 		res.status(401).send()
 	}
@@ -150,9 +188,11 @@ app.get('/api/v2/team/progress', async (req, res) => {
 		// Get the requestee's meta documents
 		const systemRef = db.collection('system').doc(req.apiToken.owner);
 		const userRef = db.collection('user').doc(req.apiToken.owner);
+		const hideoutRef = db.collection('tarkovdata').doc('hideout');
 
 		var systemDoc = null;
 		var userDoc = null;
+		var hideoutDoc = null;
 
 		var systemPromise = systemRef.get().then((result) => {
 			systemDoc = result
@@ -162,8 +202,14 @@ app.get('/api/v2/team/progress', async (req, res) => {
 			userDoc = result
 		})
 
+		var hideoutPromise = hideoutRef.get().then((result) => {
+			hideoutDoc = result
+		})
+
 		// Get the system and user doc simultaneously
-		await Promise.all([systemPromise, userPromise])
+		await Promise.all([systemPromise, userPromise, hideoutPromise])
+
+		const hideoutData = hideoutDoc.exists ? hideoutDoc.data() : null;
 
 		const requesteeProgressRef = db.collection('progress').doc(req.apiToken.owner);
 
@@ -201,7 +247,8 @@ app.get('/api/v2/team/progress', async (req, res) => {
 
 		await Promise.all(team).then((members) => {
 			members.forEach((member) => {
-				teamResponse.push(formatProgress(member.data(), member.ref.path.split('/').pop()))
+				let memberProgress = formatProgress(member.data(), member.ref.path.split('/').pop(), hideoutData)
+				teamResponse.push(memberProgress)
 			})
 		})
 

@@ -308,4 +308,53 @@ exports.kickTeamMember = functions.https.onCall(async (data, context) => {
 	}
 });
 
-//exports.tarkovdata = require('./tarkovdata.js');
+exports.updateTarkovdata = functions.pubsub.schedule('every 60 minutes').onRun(async (context) => {
+	await retrieveTarkovdata();
+	return null;
+});
+
+// Using the scheduled function does not play nice with the emulators, so we use this instead to call it during local development
+// This should be commented out when deploying to production
+exports.updateTarkovdataHTTPS = functions.https.onRequest(async (request, response) => {
+	await retrieveTarkovdata();
+	response.status(200).send('OK');
+});
+
+async function retrieveTarkovdata() {
+	console.log('Retrieving tarkovdata');
+	// Import the tarkovdata hideout query
+	//const hideoutQuery = require('./tarkovdata/hideoutQuery.js')
+
+	const { request, gql } = require('graphql-request');
+
+	// Requiring this from another file causes problems, so unfortunately we need to stick it here
+	const hideoutQuery = gql`
+  query TarkovDataHideout {
+  hideoutStations {
+    id
+  	levels {
+      id
+      level
+      itemRequirements {
+      	id
+        item {
+          id
+        }
+        count
+      }
+    }
+  }
+}
+`
+
+	try {
+		const results = await request('https://api.tarkov.dev/graphql', hideoutQuery, {}, { 'User-Agent': 'tarkov-tracker-functions' });
+		functions.logger.debug("Successfully pulled hideout data from tarkov.dev", results);
+
+		const db = admin.firestore();
+		const hideoutRef = db.collection('tarkovdata').doc('hideout');
+		await hideoutRef.set(results);
+	} catch (e) {
+		functions.logger.error("Error while pulling hideout data from tarkov.dev:", e);
+	}
+}
