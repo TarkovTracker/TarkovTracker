@@ -15,16 +15,16 @@
     <!-- Form to create a user API token -->
     <v-sheet color="secondary_dark" rounded class="pa-2">
       <v-form ref="newTokenForm" v-model="validNewToken">
-        <v-text-field v-model="tokenName" :rules="tokenNameRules" label="Token Description" required density="compact">
+        <v-text-field v-model="tokenName" :rules="tokenNameRules" label="Token Description (Required)" required
+          density="compact">
         </v-text-field>
         <!-- For each available permission flag, display it as a checkbox -->
-        <v-checkbox
-v-for="(permission, permissionKey) in availablePermissions" :key="permission"
-          v-model="selectedPermissions" :label="permission.title" :value="permissionKey" density="compact" hide-details>
+        <v-checkbox v-for="(permission, permissionKey) in availablePermissions" :key="permission"
+          v-model="selectedPermissions" :label="permission.title" :value="permissionKey" :error="selectOneError"
+          density="compact" hide-details>
         </v-checkbox>
-        <v-btn
-:disabled="!validNewToken || selectedPermissionsCount == 0 || creatingToken" color="success" class="mr-4"
-          :loading="creatingToken" append-icon="mdi-key-plus" @click="createToken">
+        <v-btn :disabled="creatingToken" color="success" class="mr-4" :loading="creatingToken"
+          append-icon="mdi-key-plus" @click="createToken">
           {{ $t('page.settings.card.apitokens.submit_new_token') }}
         </v-btn>
       </v-form>
@@ -33,8 +33,7 @@ v-for="(permission, permissionKey) in availablePermissions" :key="permission"
   <v-container class="align-left" fluid>
     <v-row align="start">
       <!-- Button to show the new token form -->
-      <v-btn
-v-if="!showNewTokenForm" variant="outlined" class="mx-1" prepend-icon="mdi-unfold-more-horizontal"
+      <v-btn v-if="!showNewTokenForm" variant="outlined" class="mx-1" prepend-icon="mdi-unfold-more-horizontal"
         @click="showNewTokenForm = true">
         {{ $t('page.settings.card.apitokens.new_token_expand') }}
       </v-btn>
@@ -65,6 +64,7 @@ const { useSystemStore } = useLiveData()
 const systemStore = useSystemStore()
 
 // New token form
+const selectOneError = ref(false)
 const newTokenForm = ref(null);
 const validNewToken = ref(false);
 const tokenName = ref("");
@@ -80,6 +80,25 @@ const newTokenSnackbar = ref(false);
 const showNewTokenForm = ref(false);
 // Create a function which calls the createToken function with the current token name and selected permissions
 const createToken = async () => {
+  // The error rules for vuetify3 checkboxes weren't working properly when this was implemented, so this is fairly ugly.
+  let { valid } = await newTokenForm.value.validate();
+  if (!valid) {
+    if (selectedPermissionsCount.value == 0) {
+      selectOneError.value = true;
+      return;
+    } else {
+      selectOneError.value = false;
+    }
+    return;
+  }
+
+  if (selectedPermissionsCount.value == 0) {
+    selectOneError.value = true;
+    return;
+  } else {
+    selectOneError.value = false;
+  }
+
   creatingToken.value = true;
   try {
     tokenResult.value = await fireapp.functions().httpsCallable("createToken")({ note: tokenName.value, permissions: selectedPermissions.value });
