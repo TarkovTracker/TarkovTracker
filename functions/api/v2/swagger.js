@@ -43,7 +43,7 @@ const swaggerOptions = {
 }
 
 const openapiSpecification = swaggerJsdoc(swaggerOptions);
-fs.writeFile('docs/openapi.js', "let openapi = " + JSON.stringify(openapiSpecification), function (err) {
+fs.writeFile('../docs/openapi.js', "let openapi = " + JSON.stringify(openapiSpecification), function (err) {
   if (err) {
     throw err;
   } else {
