@@ -19,6 +19,8 @@ export const defaultState = {
   taskUserView: null,
   neededTypeView: null,
   itemsHideNonFIR: false,
+  hideGlobalTasks: false,
+  hideNonKappaTasks: false,
 }
 
 // Getters are for reading store state in a uniform manner
@@ -49,6 +51,8 @@ export const getters = {
   getTaskUserView: (state) => { return state.taskUserView ?? 'all' },
   getNeededTypeView: (state) => { return state.neededTypeView ?? 'all' },
   itemsNeededHideNonFIR: (state) => { return state.itemsHideNonFIR || false },
+  getHideGlobalTasks: (state) => { return state.hideGlobalTasks || false },
+  getHideNonKappaTasks: (state) => { return state.hideNonKappaTasks || false },
 }
 
 // Actions are for mutations and setters
@@ -130,6 +134,12 @@ export const actions = {
 
   setItemsNeededHideNonFIR(hide) {
     this.itemsHideNonFIR = hide
+  },
+  setHideGlobalTasks(hide) {
+    this.hideGlobalTasks = hide
+  },
+  setHideNonKappaTasks(hide) {
+    this.hideNonKappaTasks = hide
   }
 }
 
@@ -142,7 +152,7 @@ export const useUserStore = defineStore('swapUser', {
     {
       // The JSON path of the store to bind to
       path: '.',
-      // {uid} will be replaced by the current auth'ed user's uid on bind 
+      // {uid} will be replaced by the current auth'ed user's uid on bind
       document: 'user/{uid}',
       // The number of miliseconds to debounce changes to the firestore document
       debouncems: 250,
