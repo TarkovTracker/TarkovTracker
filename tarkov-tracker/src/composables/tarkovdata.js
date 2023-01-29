@@ -132,7 +132,7 @@ watch(queryResults, async (newValue, oldValue) => {
 
     // Loop through all of the tasks and add them to the graph
     for (let task of newValue.tasks) {
-
+      newTaskGraph.mergeNode(task.id)
       // If the task has requirements, add an edge from the requirement to the task
       if (task.taskRequirements?.length > 0) {
         for (let requirement of task.taskRequirements) {
@@ -142,16 +142,12 @@ watch(queryResults, async (newValue, oldValue) => {
             // So add the requirements after we've built the rest of the graph
             activeRequirements.push({ task, requirement })
           } else {
-            newTaskGraph.mergeNode(task.id)
             if (requirement?.task && newValue.tasks.find((t) => t.id === requirement.task.id)) {
               newTaskGraph.mergeNode(requirement.task.id)
               newTaskGraph.mergeEdge(requirement.task.id, task.id)
             }
           }
         }
-      } else {
-        // The task doesn't have task requirements, so add it to the graph just as a node
-        newTaskGraph.mergeNode(task.id)
       }
     }
 
@@ -232,7 +228,7 @@ watch(queryResults, async (newValue, oldValue) => {
       if (alternativeTasks.value[task.id]) {
         alternatives = alternativeTasks.value[task.id]
       }
-
+      
       updatedTasks.push({ ...task, locations: [...locations], objectives: objectives, predecessors: [...new Set(getPredecessors(taskGraph.value, task.id))], successors: [...new Set(getSuccessors(taskGraph.value, task.id))], parents: newTaskGraph.inNeighbors(task.id), children: newTaskGraph.outNeighbors(task.id), alternatives: alternatives })
     }
 
