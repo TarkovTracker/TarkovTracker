@@ -6,7 +6,7 @@
     overflow_menu: {
       language: 'Language',
       reset_tips: 'Zeige alle Tipps',
-      hide_all_tips: 'VErstecke alle Tipps',
+      hide_all_tips: 'Verstecke alle Tipps',
     }
   },
   common: {
@@ -49,7 +49,7 @@
         all: 'Alle',
         yourself: 'Du',
       },
-      notasksfound: 'Keine Aufgaben gefunden. Ändere deine filter or passe dein Level links an.',
+      notasksfound: 'Keine Aufgaben gefunden. Ändere deine Filter oder passe dein Level links an.',
       showing_all_sources: 'zeige alle Quellen',
       loading: 'Lade Aufgaben',
       questcard: {
@@ -57,7 +57,7 @@
         wiki: "Wikiseite",
         lockedbefore: "{count} davor",
         lockedbehind: "{count} danach",
-        completebutton: "Abgeschliessen",
+        completebutton: "Abgeschlossen",
         availablebutton: "Als verfügbar markieren",
         uncompletebutton: "als unvollständig markieren",
         statuscomplete: "Markiere {name} als abgeschlossen",
@@ -82,7 +82,7 @@
           skill: "Benötigt {skillname} Stufe {level}",
           trader: "Benötigt {tradername} Treuestufe {loyaltylevel}",
         },
-        gameeditiondescription: "The Basisstufe des Stashs wird durch die Spielversion bestimmt. Du kannst diese in den Einstellungen angeben.",
+        gameeditiondescription: "Die Basisstufe des Stashes wird durch die Spieledition bestimmt, du kannst diese in den Einstellungen definieren.",
         settingsbutton: "Besuche Einstellungen",
         upgradebutton: "Bauen | Baue Stufe {level} | Ausbauen auf Stufe {level}",
         downgradebutton: "Entferne Station | Baue ab zu Stufe {level} | Baue ab zu Stufe  {level}",
@@ -102,14 +102,14 @@
           description: 'Setze meinen Fortschritt zurück.',
           button: 'Setze meinen Fortschritt zurück.',
           confirmation: "Bist du sicher das du deinen Fortschritt zurücksetzen willst? Dies kann nicht rückgängig gemacht werden.",
-          confirmtitle: "CBestätige Zurücksetzen",
+          confirmtitle: "Bestätige Zurücksetzen",
           confirmcancelbutton: "Abbruch",
           confirmresetbutton: "Zurücksetzen",
         },
         gameedition: {
           title: 'Game Edition',
-          description: 'Select the game edition you are playing. Additional data may be computed from this information (e.g. trader reputation, stash level).',
-          select: 'Select game edition'
+          description: 'Wähle die Spieledition aus die du besitzt, diese wird benötigt um zusätzliche Informationen (Händler, Reputation, Stash, ...) zu ermitteln.',
+          select: 'wähle deine Edition'
         },
         streamermode: {
           title: 'Streamermodus',
@@ -119,11 +119,11 @@
         },
         apitokens: {
           title: 'API Tokens',
-          description: 'TarkovTracker hat eine öffentliche API die es anderen Tools erlaubt Zugriff auf deinen Fortschritt zu haben. Du kannst ein API token erstellen um anderen Tools Zugriff zu geben. Schaue in die {openAPI_documentation}',
+          description: 'TarkovTracker hat eine öffentliche API die es anderen Tools erlaubt Zugriff auf deinen Fortschritt zu haben. Du kannst ein API token erstellen um anderen Tools Zugriff zu geben, schaue dazu in die {openAPI_documentation}',
           new_token_expand: 'Erstelle ein Token',
           submit_new_token: 'Erstelle ein Token',
           openAPI_documentation: 'OpenAPI documentation',
-          show_tokens: 'Zeige meineT okens',
+          show_tokens: 'Zeige meine Tokens',
           create_token_success: 'Es wurde erfolgreich ein API token erstellt.',
           create_token_error: 'Erstellung eines neuen API Tokens fehlgeschlagen.',
           no_tokens: 'Du hast keine TarkovTracker API Tokens.',
@@ -200,15 +200,15 @@
   },
   footer: {
     call_to_action: {
-      discord_phrase: 'Melde bugs auf {discord}',
-      github_phrase: 'Trage bei zum open source project auf {github}',
+      discord_phrase: 'Melde Fehler auf {discord}',
+      github_phrase: 'Trage zu diesem Open Source Projekt bei und besuche uns auf {github}',
       patreon_phrase: 'Untersütze die Projektkosten auf {patreon}',
       discord: 'Discord',
       github: 'GitHub',
       patreon: 'Patreon',
     },
     ukraine: {
-      support_link: 'Unterstütze die Ukrainer',
+      support_link: 'Unterstütze die Ukraine',
       support_phrase: '{support_ukraine} via the ICRC'
     }
   },
@@ -221,8 +221,8 @@
   navigation_drawer: {
     home: 'Heimat',
     settings: 'Einstellungen',
-    login: 'Log In',
-    logout: 'Log Out',
+    login: 'Einloggen',
+    logout: 'Ausloggen',
     level: 'Level',
     team: 'Team',
     tasks: 'Aufgaben',
@@ -238,22 +238,22 @@
     hide_tip: 'Verstecke diesen Hinweis',
     default: {
       title: 'Tip',
-      description: 'Oops! This tip seems to be missing. Please report this bug on Discord.'
+      description: 'Oops! Hier scheint es keine Tipps zu geben, bitte melde diesen Fehler auf unseren Discord Server.'
     },
     tasks: {
-      description: 'Du hast mehrere Möglichkeiten die Aufgaben zu sortieren. Falls du schon Fortschritt erspielt hast kannst du die Aufgaben die du schon erledigt hast im \'locked\' Reiter abhaken.'
+      description: 'Du hast mehrere Möglichkeiten die Aufgaben zu sortieren, falls du schon Fortschritt erspielt hast kannst du die Aufgaben die du schon erledigt hast im \'locked\' Reiter abhaken.'
     },
     team: {
       title: 'Team',
-      description: 'Erstelle ein Team und verfolgt euren Fortschritt mit Freunden. Du kannst die URL mit Freunden teilen um sie in dein Team einzuladen. '
+      description: 'Erstelle ein Team und verfolgt gemeinsam eure Fortschritte, du kannst die URL mit Freunden teilen um sie in dein Team einzuladen.'
     },
     welcomett3: {
       title: 'Willkommen bei TarkovTracker 3!',
-      description: 'Willkommen bei TarkovTracker version 3! Das ist eine komplett überarbeitete Version vom original TarkovTracker. Es gibt eine quality of life Änderungen aus der vorherigen Version die nach und nach hinzugefügt werden. Zusätzlich werden Quests  aus EFT 0.13 hinzugefügt sobald sie bestätigt wurden. Die ersten paar Tage können Quests fehler oder unvollständig sein. Bitte melde Fehler im Discord, danke für die Geduld!'
+      description: 'Willkommen bei TarkovTracker version 3! Das ist eine komplett überarbeitete Version vom original TarkovTracker. Es gibt einige Quality of Life Änderungen aus der vorherigen Version, die nach und nach hinzugefügt werden. Zusätzlich werden Quests aus EFT 0.13 hinzugefügt sobald sie bestätigt wurden. Die ersten paar Tage können Quests Fehlerhaft oder unvollständig sein. Bitte melde Fehler bei uns im Discord, danke für die Geduld!'
     },
     login: {
       title: 'Login',
-      description: 'Ein Login ist nicht zum verfolgen deines Fortschritts nötig jedoch wenn du ihn teilen möchtest oder auf mehreren Geräten nutzen willst. Ansonsten wird dein Fortschritt im Browser gespeichert'
+      description: 'Ein Login ist nicht zum verfolgen deines Fortschritts nötig, jedoch wenn du ihn teilen möchtest oder auf mehreren Geräten nutzen willst. Ansonsten wird dein Fortschritt im Browser gespeichert'
     },
     hideout: {
       title: 'Hideout',
@@ -261,11 +261,11 @@
     },
     neededitems: {
       title: 'Zu sammelnde Gegenstände',
-      description: 'Hier kannst du sehen welche Gegenstände du in der Zukunft für Augaben oder das Versteck brauchst, du kannst die abhaken wenn du welche gefunden hast um zu sehen wieviele du noch brauchst.'
+      description: 'Hier kannst du sehen welche Gegenstände du in der Zukunft für Augaben oder das Versteck brauchst, bereits gefundene Gegenstände kannst du abhaken um zu sehen wie viele du noch brauchst.'
     },
     teammembers: {
       title: 'Teammitglieder',
-      description: 'Dies ist eine Liste deiner Teammitglieder.Du kannst auf die Icons klicken um ihre benötigten Gegenstände und Aufgaben sichbar zu machen oder sie zu verstecken.'
+      description: 'Dies ist eine Liste deiner Teammitglieder, du kannst auf die Icons klicken um ihre benötigten Gegenstände und Aufgaben sichtbar zu machen oder sie zu verstecken.'
     }
   }
 }
