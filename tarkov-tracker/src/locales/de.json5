@@ -50,6 +50,10 @@
         yourself: 'Du',
       },
       notasksfound: 'Keine Aufgaben gefunden. Ändere deine Filter oder passe dein Level links an.',
+      hide_global_tasks: 'Globale Aufgaben ausblenden',
+      show_global_tasks: 'Globale Aufgaben anzeigen',
+      hide_non_kappa_tasks: 'Nicht-Kappa-Aufgaben ausblenden',
+      show_non_kappa_tasks: 'Nicht-Kappa-Aufgaben anzeigen',
       showing_all_sources: 'zeige alle Quellen',
       loading: 'Lade Aufgaben',
       questcard: {

@@ -6,7 +6,7 @@
         <!-- Primary views (all, maps, traders) -->
         <v-card>
           <v-tabs v-model="activePrimaryView" bg-color="accent" slider-color="secondary" align-tabs="center"
-            show-arrows>
+                  show-arrows>
             <v-tab v-for="view, index in primaryViews" :key="index" :value="view.view" :prepend-icon="view.icon">
               {{ view.title }}
             </v-tab>
@@ -30,7 +30,7 @@
             <v-tab v-for="map, index in maps" :key="index" :value="map.id" prepend-icon="mdi-compass">
               <template v-if="mapTaskTotals[map.id] > 0">
                 <v-badge color="secondary" :content="mapTaskTotals[map.id]" :label="String(mapTaskTotals[map.id])"
-                  offset-y="-5" offset-x="-10">
+                         offset-y="-5" offset-x="-10">
                   {{ map.name }}
                 </v-badge>
               </template>
@@ -47,7 +47,7 @@
           <v-tabs v-model="activeTraderView" bg-color="accent" slider-color="secondary" align-tabs="center" show-arrows>
             <v-tab v-for="trader, index in traders" :key="index" :value="trader.id">
               <v-avatar color="primary" size="2em" class="mr-2">
-                <v-img :src="traderAvatar(trader.id)" />
+                <v-img :src="traderAvatar(trader.id)"/>
               </v-avatar>
               {{ trader.name }}
             </v-tab>
@@ -60,7 +60,7 @@
         <!-- Secondary views (available, locked, completed) -->
         <v-card>
           <v-tabs v-model="activeSecondaryView" bg-color="accent" slider-color="secondary" align-tabs="center"
-            show-arrows>
+                  show-arrows>
             <v-tab v-for="view, index in secondaryViews" :key="index" :value="view.view" :prepend-icon="view.icon">
               {{ view.title }}
             </v-tab>
@@ -72,23 +72,41 @@
         <v-card>
           <v-tabs v-model="activeUserView" bg-color="accent" slider-color="secondary" align-tabs="center">
             <v-tab v-for="view in userViews" :key="view.view" :value="view.view"
-              :disabled="view.view == 'all' && activeSecondaryView != 'available'">
+                   :disabled="view.view == 'all' && activeSecondaryView != 'available'">
               {{ view.title }}
             </v-tab>
           </v-tabs>
         </v-card>
       </v-col>
     </v-row>
+    <v-row dense>
+      <v-col>
+        <v-row class="v-row v-row--dense ml-auto mt-2">
+          <v-card class="pa-2">
+            <v-switch v-if="activePrimaryView == 'maps'"
+                      v-model="hideGlobalTasks" :label="$t(hideGlobalTasksLabel)" inset true-icon="mdi-eye-off"
+                      false-icon="mdi-eye" :color="hideGlobalTasksColor" hide-details density="compact"></v-switch>
+            <v-switch
+              v-model="hideNonKappaTasks" :label="$t(hideNonKappaTasksLabel)" inset true-icon="mdi-eye-off"
+              false-icon="mdi-eye" :color="hideNonKappaTasksColor" hide-details density="compact"></v-switch>
+          </v-card>
+        </v-row>
+      </v-col>
+    </v-row>
     <v-row justify="center">
       <v-col v-if="loadingTasks || reloadingTasks" cols="12" align="center">
         <!-- If we're still waiting on tasks from tarkov.dev API -->
-        <v-progress-circular indeterminate color="secondary" class="mx-2"></v-progress-circular> {{
+        <v-progress-circular indeterminate color="secondary" class="mx-2"></v-progress-circular>
+        {{
           $t('page.tasks.loading')
-        }} <refresh-button />
+        }}
+        <refresh-button/>
       </v-col>
     </v-row>
     <v-row v-if="!loadingTasks && !reloadingTasks && visibleTasks.length == 0">
-      <v-col cols="12"><v-alert icon="mdi-clipboard-search"> {{ $t('page.tasks.notasksfound') }}</v-alert></v-col>
+      <v-col cols="12">
+        <v-alert icon="mdi-clipboard-search"> {{ $t('page.tasks.notasksfound') }}</v-alert>
+      </v-col>
     </v-row>
     <v-row v-show="!loadingTasks && !reloadingTasks" justify="center">
       <v-col v-if="activePrimaryView == 'maps' && visibleGPS.length > 0" cols="12" class="my-1">
@@ -96,7 +114,7 @@
           <v-expansion-panel>
             <v-expansion-panel-title>Objective Locations</v-expansion-panel-title>
             <v-expansion-panel-text>
-              <tarkov-map :map="maps.find(m => m.id == activeMapView)" :marks="visibleGPS" />
+              <tarkov-map :map="maps.find(m => m.id == activeMapView)" :marks="visibleGPS"/>
             </v-expansion-panel-text>
           </v-expansion-panel>
         </v-expansion-panels>
@@ -105,19 +123,20 @@
         <v-lazy v-for="task, taskIndex in visibleTasks" :key="taskIndex" :options="{
           threshold: 0.5
         }" min-height="100">
-          <task-card :task="task" class="my-1" />
+          <task-card :task="task" class="my-1"/>
         </v-lazy>
       </v-col>
     </v-row>
   </v-container>
 </template>
 <script setup>
-import { defineAsyncComponent, computed, watch, ref, shallowRef } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { useUserStore } from '@/stores/user'
-import { useTarkovData } from '@/composables/tarkovdata'
-import { useProgressStore } from '@/stores/progress'
-import { useTarkovStore } from '@/stores/tarkov'
+import {defineAsyncComponent, computed, watch, ref, shallowRef} from 'vue'
+import {useI18n} from 'vue-i18n'
+import {useUserStore} from '@/stores/user'
+import {useTarkovData} from '@/composables/tarkovdata'
+import {useProgressStore} from '@/stores/progress'
+import {useTarkovStore} from '@/stores/tarkov'
+
 const TrackerTip = defineAsyncComponent(() =>
   import("@/components/TrackerTip.vue")
 )
@@ -128,21 +147,21 @@ const RefreshButton = defineAsyncComponent(() =>
   import("@/components/RefreshButton.vue")
 )
 const TarkovMap = defineAsyncComponent(() => import('@/components/TarkovMap.vue'))
-const { t } = useI18n({ useScope: 'global' })
+const {t} = useI18n({useScope: 'global'})
 const userStore = useUserStore()
 const progressStore = useProgressStore()
 const tarkovStore = useTarkovStore()
 
 const primaryViews = [
-  { title: t('page.tasks.primaryviews.all'), icon: 'mdi-clipboard-check', view: 'all' },
-  { title: t('page.tasks.primaryviews.maps'), icon: 'mdi-compass', view: 'maps' },
-  { title: t('page.tasks.primaryviews.traders'), icon: 'mdi-account', view: 'traders' }
+  {title: t('page.tasks.primaryviews.all'), icon: 'mdi-clipboard-check', view: 'all'},
+  {title: t('page.tasks.primaryviews.maps'), icon: 'mdi-compass', view: 'maps'},
+  {title: t('page.tasks.primaryviews.traders'), icon: 'mdi-account', view: 'traders'}
 ]
 
 const secondaryViews = [
-  { title: t('page.tasks.secondaryviews.available'), icon: 'mdi-clipboard-text', view: 'available' },
-  { title: t('page.tasks.secondaryviews.locked'), icon: 'mdi-lock', view: 'locked' },
-  { title: t('page.tasks.secondaryviews.completed'), icon: 'mdi-clipboard-check', view: 'completed' }
+  {title: t('page.tasks.secondaryviews.available'), icon: 'mdi-clipboard-text', view: 'available'},
+  {title: t('page.tasks.secondaryviews.locked'), icon: 'mdi-lock', view: 'locked'},
+  {title: t('page.tasks.secondaryviews.completed'), icon: 'mdi-clipboard-check', view: 'completed'}
 ]
 
 const activePrimaryView = computed({
@@ -175,27 +194,41 @@ const activeSecondaryView = computed({
 
 const expandMap = ref([0])
 
+const hideGlobalTasks = computed({
+  get: () => userStore.getHideGlobalTasks,
+  set: (value) => userStore.setHideGlobalTasks(value)
+})
+
+const hideNonKappaTasks = computed({
+  get: () => userStore.getHideNonKappaTasks,
+  set: (value) => userStore.setHideNonKappaTasks(value)
+})
+
+const hideGlobalTasksLabel = computed(() => hideGlobalTasks.value ? 'page.tasks.show_global_tasks' : 'page.tasks.hide_global_tasks')
+const hideNonKappaTasksLabel = computed(() => hideNonKappaTasks.value ? 'page.tasks.show_non_kappa_tasks' : 'page.tasks.hide_non_kappa_tasks')
+const hideGlobalTasksColor = computed(() => hideGlobalTasks.value ? 'error' : 'success')  
+const hideNonKappaTasksColor = computed(() => hideNonKappaTasks.value ? 'error' : 'success')
 const activeUserView = computed({
   get: () => userStore.getTaskUserView,
   set: (value) => userStore.setTaskUserView(value)
 })
 
-const { tasks, maps, traders, loading: tasksLoading, disabledTasks } = useTarkovData()
+const {tasks, maps, traders, loading: tasksLoading, disabledTasks} = useTarkovData()
 
 const userViews = computed(() => {
   let views = []
-  views.push({ title: t('page.tasks.userviews.all'), view: 'all' })
+  views.push({title: t('page.tasks.userviews.all'), view: 'all'})
   if (tarkovStore.getDisplayName == null) {
     // We don't have a display name set, so use the default language name for yourself
-    views.push({ title: t('page.tasks.userviews.yourself'), view: 'self' })
+    views.push({title: t('page.tasks.userviews.yourself'), view: 'self'})
   } else {
     // We have a display name set, so use that
-    views.push({ title: tarkovStore.getDisplayName, view: 'self' })
+    views.push({title: tarkovStore.getDisplayName, view: 'self'})
   }
   // For each progressStore visible team member (other than yourself), add a view
   for (const teamId of Object.keys(progressStore.visibleTeamStores)) {
     if (teamId != 'self') {
-      views.push({ title: progressStore.teammemberNames[teamId], view: teamId })
+      views.push({title: progressStore.teammemberNames[teamId], view: teamId})
     }
   }
 
@@ -241,12 +274,12 @@ const visibleGPS = computed(() => {
           // Find the users that have the task unlocked
           if (unlockedUsers.some((user) => progressStore.objectiveCompletions[objective.id][user] == false)) {
             // Were a valid, unlocked, uncompleted objective, so add it to the list
-            visibleGPS.push({ ...objective.gps, objectiveId: objective.id })
+            visibleGPS.push({...objective.gps, objectiveId: objective.id})
           }
         } else {
           if (progressStore.objectiveCompletions[objective.id][activeUserView.value] == false) {
             // Were a valid, unlocked, uncompleted objective, so add it to the list
-            visibleGPS.push({ ...objective.gps, objectiveId: objective.id })
+            visibleGPS.push({...objective.gps, objectiveId: objective.id})
           }
         }
       }
@@ -287,6 +320,9 @@ const updateVisibleTasks = async function () {
     } else {
       visibleTaskList = visibleTaskList.filter((task) => task.locations.includes(activeMapView.value))
     }
+    if (hideGlobalTasks.value) {
+      visibleTaskList = visibleTaskList.filter((task) => task.map != null)
+    }
   } else if (activePrimaryView.value == 'traders') {
     visibleTaskList = visibleTaskList.filter((task) => task.trader.id == activeTraderView.value)
   }
@@ -314,6 +350,11 @@ const updateVisibleTasks = async function () {
   // Remove any disabled tasks from the view
   visibleTaskList = visibleTaskList.filter((task) => disabledTasks.includes(task.id) == false)
 
+  if (hideNonKappaTasks.value) {
+    visibleTaskList = visibleTaskList.filter((task) => {
+      return task.successors.length > 0 ? task.successors.includes('5c51aac186f77432ea65c552') : false
+    })
+  }
   // Finally, map the tasks to their IDs
   //visibleTaskList = visibleTaskList.map((task) => task.id)
 
@@ -327,10 +368,10 @@ const updateVisibleTasks = async function () {
 }
 
 // Watch for changes to all of the views, and update the visible tasks
-watch([activePrimaryView, activeMapView, activeTraderView, activeSecondaryView, activeUserView, tasks, () => tarkovStore.playerLevel], async () => {
+watch([activePrimaryView, activeMapView, activeTraderView, activeSecondaryView, activeUserView, tasks, hideGlobalTasks, hideNonKappaTasks, () => tarkovStore.playerLevel], async () => {
   reloadingTasks.value = true
   await updateVisibleTasks()
-}, { immediate: true })
+}, {immediate: true})
 
 watch(() => progressStore.tasksCompletions, async () => {
   reloadingTasks.value = true
