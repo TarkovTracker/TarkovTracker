@@ -27,7 +27,7 @@
             {{ $t('page.dashboard.stats.allObjectives.stat') }}
           </template>
           <template #value>
-            0/{{ totalObjectives }}
+            {{ completedObjectives }}/{{ totalObjectives }}
           </template>
           <template #details>
             {{ $t('page.dashboard.stats.allObjectives.details') }}
@@ -42,6 +42,7 @@ import { inject, computed } from 'vue'
 import { defineAsyncComponent } from 'vue'
 import { useTarkovData } from '@/composables/tarkovdata'
 import { useProgressStore } from '@/stores/progress'
+import { useTarkovStore } from "@/stores/tarkov.js";
 const TrackerStat = defineAsyncComponent(() =>
   import("@/components/TrackerStat.vue")
 )
@@ -51,12 +52,17 @@ const TrackerTip = defineAsyncComponent(() =>
 
 const { tasks, objectives } = useTarkovData()
 const progressStore = useProgressStore()
+const tarkovStore = useTarkovStore()
 const totalTasks = computed(() => { return tasks.value?.length })
 
 const totalObjectives = computed(() => { return objectives.value?.length })
 
+ const completedObjectives = computed(() => {
+  return objectives.value.filter(objective => tarkovStore.isTaskObjectiveComplete(objective.id)).length
+})
+
 const completedTasks = computed(() => {
-  return Object.values(progressStore.tasksCompletions).some(task => task['self'] == true).length
+  return Object.values(progressStore.tasksCompletions).filter((task) => task.self === true).length
 })
 
 </script>
