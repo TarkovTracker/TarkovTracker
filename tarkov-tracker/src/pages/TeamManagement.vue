@@ -1,8 +1,4 @@
 <template>
-  <v-alert color="red" theme="dark" border prominent class="mx-4 mt-2">
-    Wipe was announced while this page was being finished. Teams should be mostly functional, but there will be some
-    tweaks and improvements made over the next 24-48 hours.
-  </v-alert>
   <tracker-tip tip="team"></tracker-tip>
   <v-container v-if="fireuser.loggedIn">
     <v-row v-if="route?.query?.team && route?.query?.code" justify="center">

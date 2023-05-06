@@ -4,6 +4,7 @@
 export const defaultState = {
   level: 1,
   gameEdition: 1,
+  pmcFaction: "USEC",
   displayName: null,
   taskObjectives: {},
   taskCompletions: {},
@@ -20,6 +21,10 @@ export const getters = {
 
   getGameEdition(state) {
     return state.gameEdition ?? 1
+  },
+
+  getPMCFaction(state) {
+    return state.pmcFaction ?? "USEC"
   },
 
   getDisplayName(state) {
@@ -88,6 +93,10 @@ export const actions = {
 
   setGameEdition(edition) {
     this.gameEdition = edition
+  },
+
+  setPMCFaction(faction) {
+    this.pmcFaction = faction
   },
 
   setDisplayName(name) {

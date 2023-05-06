@@ -41,6 +41,9 @@ v-model="streamerMode" hide-details density="compact"
         </fitted-card>
       </v-col>
       <v-col cols="12" sm="12" md="6" lg="4" xl="4">
+          <faction-select />
+      </v-col>
+      <v-col cols="12" sm="12" md="6" lg="4" xl="4">
         <fitted-card icon="mdi-gift-open" icon-color="white">
           <template #title>
             {{ $t('page.settings.card.gameedition.title') }}
@@ -120,14 +123,14 @@ import { fireuser } from '@/plugins/firebase'
 import { defineAsyncComponent, computed, ref } from 'vue'
 import { useTarkovStore } from "@/stores/tarkov.js";
 import { useUserStore } from "@/stores/user.js";
-const IconCard = defineAsyncComponent(() =>
-  import("@/components/IconCard.vue")
-)
 const FittedCard = defineAsyncComponent(() =>
   import("@/components/FittedCard.vue")
 )
 const ApiTokens = defineAsyncComponent(() =>
   import("@/components/settings/ApiTokens.vue")
+)
+const FactionSelect = defineAsyncComponent(() =>
+  import("@/components/settings/FactionSelect.vue")
 )
 const tarkovStore = useTarkovStore();
 const userStore = useUserStore();

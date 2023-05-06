@@ -54,6 +54,14 @@
                   </i18n-t>
                 </v-col>
               </v-row>
+              <v-row v-if="task?.factionName != 'Any'" no-gutters class="mb-1">
+                <v-col cols="auto" class="mr-1">
+                  <img :src="factionImage" class="faction-icon mx-1"/>
+                </v-col>
+                <v-col>
+                  {{ task.factionName }}
+                </v-col>
+              </v-row>
               <v-row v-if="nonKappa" no-gutters class="mb-1">
                 <v-col cols="auto" class="mr-1">
                   <v-chip size="x-small" color="red" variant="outlined">
@@ -179,6 +187,9 @@
                 </div>
               </template>
             </template>
+            <template v-else-if="!isOurFaction">
+              {{ $t('page.tasks.questcard.differentfaction') }}
+            </template>
             <template v-else-if="isLocked">
               <!-- We are a locked quest, so the primary button is the unlock one -->
               <template v-if="!xs">
@@ -264,6 +275,11 @@ const isLocked = computed(() => {
   return progressStore.unlockedTasks[props.task.id]['self'] != true && !isComplete.value
 })
 
+const isOurFaction = computed(() => {
+  // Check if the task is faction 'Any' or the user's faction
+  return props.task.faction == 'Any' || props.task.faction == tarkovStore.getPMCFaction
+})
+
 const lockedBehind = computed(() => {
   // Calculate how many of the successors are uncompleted (should be all, but someone might have marked off one)
   return props.task.successors.filter((s) => !tarkovStore.isTaskComplete(s.id)).length
@@ -284,6 +300,10 @@ const relevantViewObjectives = computed(() => {
   } else {
     return props.task.objectives
   }
+})
+
+const factionImage = computed(() => {
+  return `/img/factions/${props.task.factionName}.webp`
 })
 
 const uncompletedIrrelevantObjectives = computed(() => {
@@ -383,5 +403,11 @@ const taskStatus = ref('')
 
 .hidden-objectives {
   opacity: 0.5;
+}
+
+.faction-icon {
+  filter: invert(1);
+  max-width: 24px;
+  max-height: 24px;
 }
 </style>

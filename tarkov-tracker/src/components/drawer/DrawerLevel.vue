@@ -1,7 +1,10 @@
 <template>
   <div class="d-flex justify-center align-center mb-2">
     <span v-if="!appStore.drawerUseRail(mdAndDown)" style="line-height:0px">
-      <img :src="groupIcon" contain style="max-width:64px">
+      <div class="crossfade">
+        <img :src="pmcFactionIcon" style="max-width:64px" class="px-2 faction-icon crossfade-faction" />
+        <img :src="groupIcon" style="max-width:64px" class="crossfade-level"/>
+      </div>
     </span>
     <span>
       <div style="font-size:.7em" class="text-center mb-1">
@@ -46,11 +49,49 @@ const { mdAndDown } = useDisplay()
 const tarkovStore = useTarkovStore();
 const appStore = useAppStore();
 
+const pmcFactionIcon = computed(() => {
+  return `/img/factions/${tarkovStore.getPMCFaction}.webp`
+})
+
 const groupIcon = computed(() => { return `/img/levelgroups/${Math.floor(tarkovStore.playerLevel / 5) + 1}.png` })
 
 </script>
 <style lang="scss" scoped>
-.fake-link {
-  cursor: pointer;
+.faction-icon {
+  filter: invert(1);
+}
+
+.crossfade {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  overflow: hidden;
+}
+
+.crossfade-faction {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  opacity: 0;
+  margin-top:8px;
+  transition: opacity 1s ease-in-out;
+}
+
+.crossfade-level {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  opacity: 1;
+  transition: opacity 1s ease-in-out;
+}
+
+.crossfade:hover .crossfade-faction {
+  opacity: 1;
+}
+
+.crossfade:hover .crossfade-level {
+  opacity: 0;
 }
 </style>

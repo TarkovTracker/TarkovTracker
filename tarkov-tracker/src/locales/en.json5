@@ -71,7 +71,8 @@
         keysneeded: "{keys} needed on {map} | One of {keys} needed on {map}",
         objectiveshidden: "{count} objectives not on this map ({uncompleted} uncompleted)",
         alternatives: "Alternative quests",
-        alternativefailed: "Alternative quests will also be reset"
+        alternativefailed: "Alternative quests will also be reset",
+        differentfaction: "This quest is not available to your faction",
       }
     },
     hideout: {
@@ -125,6 +126,15 @@
           title: 'Game Edition',
           description: 'Select the game edition you are playing. Additional data may be computed from this information (e.g. trader reputation, stash level).',
           select: 'Select game edition'
+        },
+        pmcfaction: {
+          title: 'PMC Faction',
+          description: 'Select the PMC faction you are playing. Additional data may be computed from this information (e.g. available quests).',
+          select: 'Select PMC faction',
+          factions: {
+            USEC: 'USEC',
+            BEAR: 'BEAR'
+          }
         },
         streamermode: {
           title: 'Streamer Mode',

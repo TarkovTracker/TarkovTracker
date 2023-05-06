@@ -346,6 +346,11 @@ const updateVisibleTasks = async function () {
         return progressStore.tasksCompletions?.[task.id]?.[activeUserView.value] == true
       })
     }
+
+    // Filter out tasks not for the faction of the specified user
+    visibleTaskList = visibleTaskList.filter((task) => {
+      return task.factionName == "Any" || task.factionName == progressStore.playerFaction[activeUserView.value]
+    })
   }
   // Remove any disabled tasks from the view
   visibleTaskList = visibleTaskList.filter((task) => disabledTasks.includes(task.id) == false)

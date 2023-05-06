@@ -1,10 +1,4 @@
 <template>
-  <v-alert color="orange" theme="dark" border prominent class="mx-4 mt-2">
-    This page wasn't quite finished before the wipe went live. I still have a bunch of polishing left to do, and
-    building a
-    list view
-    alternative. If you would like to, feel free to leave feedback in the Discord.
-  </v-alert>
   <tracker-tip tip="neededitems"></tracker-tip>
   <v-container>
     <v-row v-if="loading || hideoutLoading" justify="center">

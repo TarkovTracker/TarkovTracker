@@ -4,9 +4,9 @@
       <v-lazy
 :options="{
   threshold: 0.5
-}" min-height="100">
-        <v-sheet rounded>
-          <v-container class="pa-0">
+}" min-height="100" class="fill-height">
+        <v-sheet rounded class="fill-height">
+          <v-container class="pa-0 fill-height">
             <v-row no-gutters>
               <v-col cols="12" class="item-panel pa-0 pb-2">
                 <v-img :src="item.image512pxLink" :lazy-src="item.baseImageLink" :class="itemImageClasses">
@@ -18,7 +18,7 @@
                 </v-img>
               </v-col>
             </v-row>
-            <v-row no-gutters class="pb-2">
+            <v-row no-gutters class="pb-2" justify="end">
               <v-col cols="12" class="text-center px-2">
                 {{ item.name }}
               </v-col>
@@ -57,8 +57,7 @@
                     </v-col>
                     <v-col cols="auto" class="ml-1">{{ props.need.hideoutModule.level }}</v-col>
                   </v-row>
-                  <v-row
-v-if="props.need.hideoutModule.predecessors?.length > 0" no-gutters
+                  <v-row v-if="props.need.hideoutModule.predecessors?.length > 0" no-gutters
                     class="mb-1 mt-1 d-flex justify-center">
                     <v-col cols="auto" class="mr-1" align="center">
                       <v-icon icon="mdi-lock-open-outline" />
@@ -84,7 +83,7 @@ v-if="props.need.hideoutModule.predecessors?.length > 0" no-gutters
                     </v-col>
                   </v-row>
                 </template>
-                <v-row v-if="!selfCompletedNeed" class="text-center mx-2 mt-2" no-gutters>
+                <v-row v-if="selfValid && !selfCompletedNeed" class="text-center mx-2 mt-2" no-gutters>
                   <v-col cols="3">
                     <v-btn
 variant="tonal" class="pa-0 ma-0"
@@ -147,36 +146,53 @@ const showItemFilter = computed(() => {
 
 const showItem = computed(() => {
   if (props.need.needType == 'taskObjective') {
-    if (userStore.itemsNeededHideNonFIR) {
-      if (props.need.type == 'mark' || props.need.type == 'buildWeapon' || props.need.type == 'plantItem') {
-        return false
-      } else if (props.need.type == 'giveItem') {
-        if (props.need.foundInRaid == false) {
-          return false
-        }
-      }
-    }
-
-    if (userStore.itemsTeamAllHidden) {
-      // Only show if the objective is needed by ourself
-      return !progressStore.tasksCompletions[props.need.taskId]['self'] && !progressStore.objectiveCompletions[props.need.id]['self']
-    } else if (userStore.itemsTeamNonFIRHidden) {
-      // Only show if a someone needs the objective 
-      return props.need.foundInRaid && Object.values(progressStore.tasksCompletions[props.need.taskId]).some(userStatus => userStatus === false) && Object.values(progressStore.objectiveCompletions[props.need.id]).some(userStatus => userStatus === false)
-    } else {
-      return Object.values(progressStore.tasksCompletions[props.need.taskId]).some(userStatus => userStatus === false) && Object.values(progressStore.objectiveCompletions[props.need.id]).some(userStatus => userStatus === false)
-    }
+    return isTaskObjectiveNeeded(props.need)
   } else if (props.need.needType == 'hideoutModule') {
-    if (userStore.itemsTeamAllHidden || userStore.itemsTeamHideoutHidden) {
-      // Only show if the objective is needed by ourself
-      return !progressStore.moduleCompletions[props.need.hideoutModule.id]['self'] && !progressStore.modulePartCompletions[props.need.id]['self']
-    } else {
-      return Object.values(progressStore.moduleCompletions[props.need.hideoutModule.id]).some(userStatus => userStatus === false) && Object.values(progressStore.modulePartCompletions[props.need.id]).some(userStatus => userStatus === false)
-    }
+    return isHideoutModuleNeeded(props.need)
   } else {
     return false
   }
 })
+
+function isTaskObjectiveNeeded(need) {
+  if (userStore.itemsNeededHideNonFIR) {
+    if (need.type == 'mark' || need.type == 'buildWeapon' || need.type == 'plantItem') {
+      return false
+    } else if (need.type == 'giveItem') {
+      if (need.foundInRaid == false) {
+        return false
+      }
+    }
+  }
+
+  if (userStore.itemsTeamAllHidden) {
+    // Only show if the objective is needed by ourself
+    return !progressStore.tasksCompletions[need.taskId]?.self && !progressStore.objectiveCompletions[need.id]?.self && ['Any', tarkovStore.getPMCFaction].some(faction => faction == relatedTask.value.factionName)
+  } else if (userStore.itemsTeamNonFIRHidden) {
+    // Only show if a someone needs the objective 
+    return need.foundInRaid &&
+      // Check if any user has not completed the task (and that its a relevant faction task for them)
+      Object.entries(progressStore.tasksCompletions[need.taskId]).some(([userTeamId, userStatus]) => ['Any', progressStore.playerFaction[userTeamId]].some(faction => faction == relatedTask.value.factionName) && userStatus === false) &&
+      // Check if any user has not completed the objective (and that its a relevant faction task for them)
+      Object.entries(progressStore.objectiveCompletions[need.id]).some(([userTeamId, userStatus]) => ['Any', progressStore.playerFaction[userTeamId]].some(faction => faction == relatedTask.value.factionName) && userStatus === false)
+  } else {
+    return Object.entries(progressStore.tasksCompletions[need.taskId])
+      .some(([userTeamId, userStatus]) => ['Any', progressStore.playerFaction[userTeamId]]
+        .some(faction => faction == relatedTask.value.factionName) && userStatus === false) &&
+      Object.entries(progressStore.objectiveCompletions[need.id])
+      .some(([userTeamId, userStatus]) => ['Any', progressStore.playerFaction[userTeamId]]
+        .some(faction => faction == relatedTask.value.factionName) && userStatus === false)
+  }
+}
+
+function isHideoutModuleNeeded(need) {
+  if (userStore.itemsTeamAllHidden || userStore.itemsTeamHideoutHidden) {
+    // Only show if the objective is needed by ourself
+    return !progressStore.moduleCompletions[need.hideoutModule.id]?.self && !progressStore.modulePartCompletions[need.id]?.self
+  } else {
+    return Object.values(progressStore.moduleCompletions[need.hideoutModule.id]).some(userStatus => userStatus === false) && Object.values(progressStore.modulePartCompletions[need.id]).some(userStatus => userStatus === false)
+  }
+}
 
 const selfCompletedNeed = computed(() => {
   if (props.need.needType == 'taskObjective') {
@@ -193,6 +209,14 @@ const relatedTask = computed(() => {
     return tasks.value.find(t => t.id == props.need.taskId)
   } else {
     return null
+  }
+})
+
+const selfValid = computed(() => {
+  if (props.need.needType == 'taskObjective') {
+    return relatedTask.value && ['Any', tarkovStore.getPMCFaction].some(faction => faction == relatedTask.value.factionName)
+  } else {
+    return true
   }
 })
 

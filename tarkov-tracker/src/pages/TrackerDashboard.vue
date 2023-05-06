@@ -1,9 +1,4 @@
 <template>
-  <v-alert color="orange" theme="dark" border prominent class="mx-4 mt-2">
-    This is a complete rebuild of TarkovTracker. There are a few features from the old version which weren't quite
-    finished before wipe. They will be added back in a day or two. Task and hideout data for 0.13 is being updated
-    automatically as changes are discovered and verified. Feel free to report any issues you find in the Discord.
-  </v-alert>
   <tracker-tip tip="welcomett3"></tracker-tip>
 
   <v-container class="mt-2">

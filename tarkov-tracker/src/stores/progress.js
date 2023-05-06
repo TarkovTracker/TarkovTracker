@@ -118,6 +118,14 @@ export const useProgressStore = defineStore('progress', () => {
     return levels
   })
 
+  const playerFaction = computed(() => {
+    let faction = {}
+    for (const teamId of Object.keys(visibleTeamStores.value)) {
+      faction[teamId] = visibleTeamStores.value[teamId].getPMCFaction
+    }
+    return faction
+  })
+
   const unlockedTasks = computed(() => {
     // For each task, check if any team member has it available
     let available = {}
@@ -164,6 +172,11 @@ export const useProgressStore = defineStore('progress', () => {
             available[task.id][teamId] = false
             continue
           }
+        }
+
+        if (task?.factionName != "Any" && task?.factionName != visibleTeamStores.value[teamId].getPMCFaction) {
+          available[task.id][teamId] = false
+          continue
         }
         // If we aren't already marked as false, the task is available
         available[task.id][teamId] = true
@@ -236,8 +249,8 @@ export const useProgressStore = defineStore('progress', () => {
     // For each module part, check if it is completed for each team member
     let completions = {}
     if (!hideoutModules.value) return {}
-    for (const hModule of hideoutModules.value) {
-      for (const part of hModule.itemRequirements) {
+    for (const hideoutModule of hideoutModules.value) {
+      for (const part of hideoutModule.itemRequirements) {
         completions[part.id] = {}
         for (const teamId of Object.keys(visibleTeamStores.value)) {
           completions[part.id][teamId] = visibleTeamStores.value[teamId].isHideoutPartComplete(part.id)
@@ -353,5 +366,24 @@ export const useProgressStore = defineStore('progress', () => {
     return names
   })
 
-  return { teamStores, getDisplayName, getTeamIndex, visibleTeamStores, getLevel, teammemberNames, tasksCompletions, objectiveCompletions, unlockedTasks, traderRep, traderLevelsAchieved, moduleCompletions, stationLevels, availableModules, visibleStations, gameEditionData, modulePartCompletions }
+  return {
+    teamStores,
+    getDisplayName,
+    getTeamIndex,
+    visibleTeamStores,
+    getLevel,
+    teammemberNames,
+    tasksCompletions,
+    objectiveCompletions,
+    unlockedTasks,
+    traderRep,
+    traderLevelsAchieved,
+    moduleCompletions,
+    stationLevels,
+    availableModules,
+    visibleStations,
+    gameEditionData,
+    modulePartCompletions,
+    playerFaction
+  }
 })
