@@ -283,7 +283,7 @@
     },
     welcomett3: {
       title: 'Welcome to TarkovTracker 3!',
-      description: 'Welcome to TarkovTracker version 3! This is a complete rewrite of the original TarkovTracker. There are a couple QoL features missing from the original version which will be filled in over the next few days. Additionally, quest data for EFT v0.13 is being added as soon as it is confirmed. For the first couple days some quests may be inaccurate or missing. Please report any bugs you find on Discord. Thanks for your patience!'
+      description: 'Welcome to TarkovTracker version 3! This is a complete rewrite of the original TarkovTracker. New features are added every wipe! Please report any bugs you find on Discord.'
     },
     login: {
       title: 'Login',
