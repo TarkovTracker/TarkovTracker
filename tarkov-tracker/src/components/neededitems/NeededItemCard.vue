@@ -1,12 +1,9 @@
 <template>
   <v-col v-if="showItemFilter" cols="12" sm="6" md="4" lg="3" xl="2">
     <KeepAlive>
-      <v-lazy
-:options="{
-  threshold: 0.5
-}" min-height="100" class="fill-height">
+      <v-lazy :options="{ threshold: 0.5 }" min-height="100" class="fill-height">
         <v-sheet rounded class="fill-height">
-          <v-container class="pa-0 fill-height">
+          <v-container class="pa-0">
             <v-row no-gutters>
               <v-col cols="12" class="item-panel pa-0 pb-2">
                 <v-img :src="item.image512pxLink" :lazy-src="item.baseImageLink" :class="itemImageClasses">
@@ -249,6 +246,7 @@ const itemImageClasses = computed(() => {
     'elevation-2': true,
     'item-image': true,
     'pa-1': true,
+    'fill-height': true,
   }
 })
 
