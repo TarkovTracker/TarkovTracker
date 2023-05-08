@@ -20,7 +20,12 @@
     </div>
     <div v-show="showQR">
       <!-- Create a canvas with an ID of the token -->
-      <canvas :id="props.token + '-tc'"></canvas>
+      <template v-if="userStore.getStreamerMode">
+        {{ $t('page.settings.card.apitokens.streamer_mode_qr') }}
+      </template>
+      <template v-else>
+        <canvas :id="props.token + '-tc'"></canvas>
+      </template>
     </div>
     <div class="mt-1">
       <!-- Button to copy the token into clipboard -->
@@ -46,6 +51,7 @@ import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import QRCode from 'qrcode'
 import availablePermissions from "@/utils/api_permissions.js";
+import { useUserStore } from '@/stores/user'
 
 // Get locale for use in calculating relative time
 const { locale } = useI18n({ useScope: 'global' })
@@ -57,6 +63,8 @@ const props = defineProps({
     required: true,
   }
 })
+
+const userStore = useUserStore();
 
 // Ref to store tokenData when retrieved from Firestore
 const tokenDataRef = ref(null);
@@ -91,7 +99,11 @@ const relativeDays = computed(() => {
 
 // Get a string representation of the token where all but the last 4 characters are replaced with *
 const tokenHidden = computed(() => {
-  return props.token.replace(/.(?=.{5})/g, "*");
+  if (userStore.getStreamerMode) {
+    return props.token.replace(/.(?=.{0})/g, "*");
+  } else {
+    return props.token.replace(/.(?=.{5})/g, "*");
+  }
 });
 
 // Copy token to clipboard function
