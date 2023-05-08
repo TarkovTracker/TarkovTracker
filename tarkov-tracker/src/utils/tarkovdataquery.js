@@ -14,6 +14,8 @@ export default gql`
         id
         name
       }
+      kappaRequired
+      lightkeeperRequired
       experience
       wikiLink
       minPlayerLevel

@@ -291,7 +291,7 @@ const lockedBefore = computed(() => {
 })
 
 const nonKappa = computed(() => {
-  return !props.task.successors.includes('5c51aac186f77432ea65c552')
+  return !props.task.kappaRequired
 })
 
 const relevantViewObjectives = computed(() => {

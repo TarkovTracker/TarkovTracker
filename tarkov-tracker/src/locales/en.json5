@@ -136,6 +136,14 @@
             BEAR: 'BEAR'
           }
         },
+        questfilter: {
+          title: 'Quest Filters',
+          description: 'Select which quests you want to see on the Tasks page.',
+          hide_global_tasks: 'Hide global tasks on map view',
+          show_global_tasks: 'Show global tasks on map view',
+          hide_non_kappa_tasks: 'Hide non-Kappa tasks',
+          show_non_kappa_tasks: 'Show non-Kappa tasks',
+        },
         streamermode: {
           title: 'Streamer Mode',
           description: 'Hides your team invite codes from view, so you can show off your progress without letting people join your live team.',

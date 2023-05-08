@@ -79,20 +79,6 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-row dense>
-      <v-col>
-        <v-row class="v-row v-row--dense ml-auto mt-2">
-          <v-card class="pa-2">
-            <v-switch v-if="activePrimaryView == 'maps'"
-                      v-model="hideGlobalTasks" :label="$t(hideGlobalTasksLabel)" inset true-icon="mdi-eye-off"
-                      false-icon="mdi-eye" :color="hideGlobalTasksColor" hide-details density="compact"></v-switch>
-            <v-switch
-              v-model="hideNonKappaTasks" :label="$t(hideNonKappaTasksLabel)" inset true-icon="mdi-eye-off"
-              false-icon="mdi-eye" :color="hideNonKappaTasksColor" hide-details density="compact"></v-switch>
-          </v-card>
-        </v-row>
-      </v-col>
-    </v-row>
     <v-row justify="center">
       <v-col v-if="loadingTasks || reloadingTasks" cols="12" align="center">
         <!-- If we're still waiting on tasks from tarkov.dev API -->
@@ -195,19 +181,12 @@ const activeSecondaryView = computed({
 const expandMap = ref([0])
 
 const hideGlobalTasks = computed({
-  get: () => userStore.getHideGlobalTasks,
-  set: (value) => userStore.setHideGlobalTasks(value)
+  get: () => userStore.getHideGlobalTasks
 })
-
 const hideNonKappaTasks = computed({
-  get: () => userStore.getHideNonKappaTasks,
-  set: (value) => userStore.setHideNonKappaTasks(value)
+  get: () => userStore.getHideNonKappaTasks
 })
 
-const hideGlobalTasksLabel = computed(() => hideGlobalTasks.value ? 'page.tasks.show_global_tasks' : 'page.tasks.hide_global_tasks')
-const hideNonKappaTasksLabel = computed(() => hideNonKappaTasks.value ? 'page.tasks.show_non_kappa_tasks' : 'page.tasks.hide_non_kappa_tasks')
-const hideGlobalTasksColor = computed(() => hideGlobalTasks.value ? 'error' : 'success')  
-const hideNonKappaTasksColor = computed(() => hideNonKappaTasks.value ? 'error' : 'success')
 const activeUserView = computed({
   get: () => userStore.getTaskUserView,
   set: (value) => userStore.setTaskUserView(value)
@@ -356,9 +335,7 @@ const updateVisibleTasks = async function () {
   visibleTaskList = visibleTaskList.filter((task) => disabledTasks.includes(task.id) == false)
 
   if (hideNonKappaTasks.value) {
-    visibleTaskList = visibleTaskList.filter((task) => {
-      return task.successors.length > 0 ? task.successors.includes('5c51aac186f77432ea65c552') : false
-    })
+    visibleTaskList = visibleTaskList.filter((task) => task.kappaRequired == true)
   }
   // Finally, map the tasks to their IDs
   //visibleTaskList = visibleTaskList.map((task) => task.id)

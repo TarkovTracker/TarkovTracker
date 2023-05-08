@@ -41,6 +41,9 @@ v-model="streamerMode" hide-details density="compact"
         </fitted-card>
       </v-col>
       <v-col cols="12" sm="12" md="6" lg="4" xl="4">
+            <quest-filter />
+        </v-col>
+      <v-col cols="12" sm="12" md="6" lg="4" xl="4">
           <faction-select />
       </v-col>
       <v-col cols="12" sm="12" md="6" lg="4" xl="4">
@@ -107,7 +110,6 @@ color="red" block prepend-icon="mdi-alert"
                         </v-card>
                       </v-col>
                     </v-row>
-
                   </v-dialog>
                 </v-col>
               </v-row>
@@ -131,6 +133,9 @@ const ApiTokens = defineAsyncComponent(() =>
 )
 const FactionSelect = defineAsyncComponent(() =>
   import("@/components/settings/FactionSelect.vue")
+)
+const QuestFilter = defineAsyncComponent(() =>
+  import("@/components/settings/QuestFilter.vue")
 )
 const tarkovStore = useTarkovStore();
 const userStore = useUserStore();
