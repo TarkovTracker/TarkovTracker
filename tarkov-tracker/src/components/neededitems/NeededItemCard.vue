@@ -165,6 +165,10 @@ function isTaskObjectiveNeeded(need) {
     }
   }
 
+  if (userStore.hideNonKappaTasks && !relatedTask.value.kappaRequired) {
+    return false
+  }
+
   if (userStore.itemsTeamAllHidden) {
     // Only show if the objective is needed by ourself
     return !progressStore.tasksCompletions[need.taskId]?.self && !progressStore.objectiveCompletions[need.id]?.self && ['Any', tarkovStore.getPMCFaction].some(faction => faction == relatedTask.value.factionName)
