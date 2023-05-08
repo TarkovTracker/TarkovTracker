@@ -315,10 +315,10 @@ exports.updateTarkovdata = functions.pubsub.schedule('every 60 minutes').onRun(a
 
 // Using the scheduled function does not play nice with the emulators, so we use this instead to call it during local development
 // This should be commented out when deploying to production
-// exports.updateTarkovdataHTTPS = functions.https.onRequest(async (request, response) => {
-// 	await retrieveTarkovdata();
-// 	response.status(200).send('OK');
-// });
+exports.updateTarkovdataHTTPS = functions.https.onRequest(async (request, response) => {
+	await retrieveTarkovdata();
+	response.status(200).send('OK');
+});
 
 async function retrieveTarkovdata() {
 	console.log('Retrieving tarkovdata');
@@ -326,35 +326,98 @@ async function retrieveTarkovdata() {
 	//const hideoutQuery = require('./tarkovdata/hideoutQuery.js')
 
 	const { request, gql } = require('graphql-request');
+	const db = admin.firestore();
 
 	// Requiring this from another file causes problems, so unfortunately we need to stick it here
 	const hideoutQuery = gql`
   query TarkovDataHideout {
-  hideoutStations {
-    id
-  	levels {
-      id
-      level
-      itemRequirements {
-      	id
-        item {
-          id
-        }
-        count
-      }
-    }
-  }
-}
-`
+		hideoutStations {
+			id
+			levels {
+				id
+				level
+				itemRequirements {
+					id
+					item {
+						id
+					}
+					count
+				}
+			}
+		}
+	}
+	`
 
 	try {
 		const results = await request('https://api.tarkov.dev/graphql', hideoutQuery, {}, { 'User-Agent': 'tarkov-tracker-functions' });
 		functions.logger.debug("Successfully pulled hideout data from tarkov.dev", results);
 
-		const db = admin.firestore();
 		const hideoutRef = db.collection('tarkovdata').doc('hideout');
 		await hideoutRef.set(results);
 	} catch (e) {
 		functions.logger.error("Error while pulling hideout data from tarkov.dev:", e);
+	}
+
+	// Next, retrieve the tarkovdata tasks
+	const tasksQuery = gql`
+		query TarkovDataTasks {
+			tasks {
+				id
+				tarkovDataId
+				name
+				trader {
+					id
+				}
+				map {
+					id
+				}
+				experience
+				minPlayerLevel
+				taskRequirements {
+					task {
+						id
+					}
+					status
+				}
+				traderLevelRequirements {
+					trader {
+						id
+					}
+					level
+				}
+				objectives {
+					id
+					type
+					optional
+				}
+				factionName
+			}
+		}
+	`
+	
+	try {
+		let results = await request('https://api.tarkov.dev/graphql', tasksQuery, {}, { 'User-Agent': 'tarkov-tracker-functions' });
+		functions.logger.debug("Successfully pulled tasks data from tarkov.dev", results);
+
+		// Next, retrieve https://raw.githubusercontent.com/TarkovTracker/tarkovdata/master/task_alternatives.json and store it in the database
+		const taskAlternatives = await fetch('https://raw.githubusercontent.com/TarkovTracker/tarkovdata/master/task_alternatives.json').then(res => res.json());
+
+		functions.logger.debug("Successfully pulled task alternatives from tarkovdata repo", taskAlternatives);
+		// For each taskAlternative, find it in the tasks data and update it to include the alternatives
+		Object.entries(taskAlternatives).forEach(([taskId, alternatives]) => {
+			// Find the task in the tasks data and update the alternatives property
+			// Get the index of the task in the tasks array
+			const taskToUpdate = results.tasks.find(task => task.id == taskId);
+			if (taskToUpdate) {
+				taskToUpdate.alternatives = alternatives;
+			} else {
+				functions.logger.debug("Task not found in tasks data", { taskId: taskId, alternatives: alternatives });
+			}
+		});
+
+		const tasksRef = db.collection('tarkovdata').doc('tasks');
+		await tasksRef.set(results);
+	} catch (e) {
+		functions.logger.error("Error while pulling tasks data from tarkov.dev:", e);
 	}
 }

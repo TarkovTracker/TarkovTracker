@@ -141,6 +141,9 @@ watch(queryResults, async (newValue, oldValue) => {
             // This means that the task shares predecessors with the task that it requires
             // So add the requirements after we've built the rest of the graph
             activeRequirements.push({ task, requirement })
+          // } else if (requirement?.status.includes("failed")) {
+          //   // This is a failed requirement
+          //   debugger
           } else {
             if (requirement?.task && newValue.tasks.find((t) => t.id === requirement.task.id)) {
               newTaskGraph.mergeNode(requirement.task.id)

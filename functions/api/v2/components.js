@@ -74,6 +74,12 @@
  *         complete:
  *           type: "boolean"
  *           description: "True if a given quest has been completed."
+ *         failed:
+ *          type: "boolean"
+ *          description: "True if a given quest has been failed in some permanent way (eg. one of three quest options was chosen and the other two are now unavailable)"
+ *         invalid:
+ *          type: "boolean"
+ *          description: "True if a given quest is no longer accessible, but not necessarily failed (eg. wrong faction, part of a quest chain that was not chosen by previous completions)"
  *     HideoutModulesProgress:
  *       title: "HideoutModulesProgress"
  *       description: "Player's progress on a given hideout module."
@@ -99,6 +105,9 @@
  *         complete:
  *           type: "boolean"
  *           description: "True if a given objective has been completed"
+ *         invalid:
+ *          type: "boolean"
+ *          description: "True if a given objective is no longer accessible, but not necessarily failed (eg. wrong faction, part of a quest chain that was not chosen by previous completions)"
  *     HideoutPartsProgress:
  *       title: "HideoutPartsProgress"
  *       description: "Player's progress on items needed for hideout module upgrades."

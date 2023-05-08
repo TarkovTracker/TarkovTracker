@@ -1,6 +1,6 @@
 <template>
-  <v-sheet class="pa-2 taskContainer" :rounded="true" :class="{ 'task-complete': isComplete, 'task-locked': isLocked }">
-    <div v-if="isLocked" class="taskContainerBackground text-h1">
+  <v-sheet class="pa-2 taskContainer" :rounded="true" :class="{ 'task-complete': isComplete && !isFailed, 'task-locked': isLocked || isFailed }">
+    <div v-if="isLocked || isFailed" class="taskContainerBackground text-h1">
       <v-icon>mdi-lock</v-icon>
     </div>
     <div v-if="isComplete" class="taskContainerBackground text-h1">
@@ -277,7 +277,7 @@ const isLocked = computed(() => {
 
 const isOurFaction = computed(() => {
   // Check if the task is faction 'Any' or the user's faction
-  return props.task.faction == 'Any' || props.task.faction == tarkovStore.getPMCFaction
+  return props.task.factionName == 'Any' || props.task.factionName == tarkovStore.getPMCFaction
 })
 
 const lockedBehind = computed(() => {

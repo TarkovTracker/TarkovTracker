@@ -48,7 +48,7 @@ const verifyBearer = async (req, res, next) => {
 
 }
 
-const formatProgress = (progressData, userId, hideoutData) => {
+const formatProgress = (progressData, userId, hideoutData, taskData) => {
 	let taskCompletions = progressData?.taskCompletions ?? {}
 	let objectiveCompletions = progressData?.taskObjectives ?? {}
 	let hideoutPartCompletions = progressData?.hideoutParts ?? {}
@@ -56,7 +56,18 @@ const formatProgress = (progressData, userId, hideoutData) => {
 	let displayName = progressData?.displayName ?? userId.substring(0, 6)
 	let playerLevel = progressData?.level ?? 1
 	let gameEdition = progressData?.gameEdition ?? 1
-	let progress = { tasksProgress: formatObjective(taskCompletions), taskObjectivesProgress: formatObjective(objectiveCompletions, true), hideoutModulesProgress: formatObjective(hideoutModuleCompletions), hideoutPartsProgress: formatObjective(hideoutPartCompletions, true), displayName: displayName, userId: userId, playerLevel: playerLevel, gameEdition: gameEdition }
+	let pmcFaction = progressData?.pmcFaction ?? "USEC"
+	let progress = {
+    tasksProgress: formatObjective(taskCompletions, false, true),
+    taskObjectivesProgress: formatObjective(objectiveCompletions, true, true),
+    hideoutModulesProgress: formatObjective(hideoutModuleCompletions),
+    hideoutPartsProgress: formatObjective(hideoutPartCompletions, true),
+    displayName: displayName,
+    userId: userId,
+    playerLevel: playerLevel,
+    gameEdition: gameEdition,
+    pmcFaction: pmcFaction
+	}
 
 	// If hideout data is non-null, do some post-processing
 	try {
@@ -85,18 +96,121 @@ const formatProgress = (progressData, userId, hideoutData) => {
 			})
 		}
 	} catch (error) {
-		functions.logger.error("Error processing hideout data", error)
+		functions.logger.error("Error processing hideout data", error, userId)
+	}
+
+	// If task data is non-null, do some post-processing
+	try {
+		if (taskData != null) {
+			// Find all the tasks that aren't 'Any' or our faction specific
+			let invalidTaskList = taskData.tasks.filter(task => task.factionName !== "Any" && task.factionName !== pmcFaction)
+			// For each task, mark it and its objectives as invalid
+			invalidTaskList.forEach(task => {
+				let taskIndex = progress.tasksProgress.findIndex(t => t.id === task.id)
+				if (taskIndex !== -1) {
+					// Mark the task as invalid
+					progress.tasksProgress[taskIndex].invalid = true
+					// Mark the task as incomplete
+					progress.tasksProgress[taskIndex].complete = false
+				}
+				// For each objective, remove it from the progress object
+				task.objectives.forEach(objective => {
+					let objectiveIndex = progress.taskObjectivesProgress.findIndex(o => o.id === objective.id)
+					if (objectiveIndex !== -1) {
+						// Mark the objective as invalid
+						progress.taskObjectivesProgress[objectiveIndex].invalid = true
+						// Mark the objective as incomplete
+						progress.taskObjectivesProgress[objectiveIndex].complete = false
+					}
+				})
+			})
+
+			// Find all of the tasks that have a taskRequirement with status 'failed'
+			let failedTaskList = taskData.tasks.filter(task => task.taskRequirements.some(requirement => requirement.status.includes("failed")))
+			// For each task with a failed requirement, check if any of the required quests are marked as failed, and if so, mark the task as invalid
+			failedTaskList.forEach(failTask => {
+				// Check that the tasks' requirements which are marked as failed are failed, if not, we're invalid
+				let invalid = failTask.taskRequirements.some(requirement =>
+					requirement.status.length == 1 && requirement.status[0] == "failed" && !taskCompletions[requirement.task.id]?.failed && taskCompletions[requirement.task.id]?.complete
+				)
+				if (invalid) {
+					//functions.logger.log("Invalid task fail req", failTask.id)
+					({
+						tasksProgress: progress.tasksProgress,
+						objectiveProgress: progress.taskObjectivesProgress,
+					} = invalidateTaskRecursive(failTask.id, taskData, progress.tasksProgress, progress.taskObjectivesProgress))
+				}
+			})
+
+			// Find all of the tasks that have an alternative set of quests, check if any of the alternative quests are completed (not failed), and if so, mark the original task as invalid
+			let alternativeTaskList = taskData.tasks.filter(task => task.alternatives?.length > 0)
+			alternativeTaskList.forEach(alternativeTask => {
+				// Check if any of the alternatives are complete
+				let invalid = alternativeTask.alternatives.some(alternative => !taskCompletions[alternative]?.failed && taskCompletions[alternative]?.complete)
+				if (invalid) {
+					//functions.logger.log("Invalid task alternative", alternativeTask.id)
+					({
+						tasksProgress: progress.tasksProgress,
+						objectiveProgress: progress.taskObjectivesProgress,
+					} = invalidateTaskRecursive(alternativeTask.id, taskData, progress.tasksProgress, progress.taskObjectivesProgress, true))
+				}
+			})
+		}
+	} catch (error) {
+		functions.logger.error("Error processing task data", error, userId)
 	}
 
 	return progress
 }
 
-const formatObjective = (objectiveData, showCount = false) => {
+const invalidateTaskRecursive = (taskId, taskData, tasksProgress, objectiveProgress, childOnly = false) => {
+	// Find the task in the taskData, mark it as invalid in the tasksProgress, and mark all of its objectives as invalid in the objectiveProgress
+	// Finally, call this function on all of the tasks that have this task as a requirement
+	let task = taskData.tasks.find(task => task.id === taskId)
+	if (task != null) {
+		// Child only means we only mark the successors as invalid, not the task itself, this is used for alternative tasks
+		if (!childOnly) {
+			// Find the index of the task in the tasksProgress
+			let taskIndex = tasksProgress.findIndex(t => t.id === taskId)
+			// Mark the task as invalid
+			if (taskIndex !== -1) {
+				tasksProgress[taskIndex].invalid = true
+			} else {
+				tasksProgress.push({ id: taskId, complete: false, invalid: true })
+			}
+			// For each objective of the task, mark it as invalid
+			task.objectives.forEach(objective => {
+				let objectiveIndex = objectiveProgress.findIndex(o => o.id === objective.id)
+				if (objectiveIndex !== -1) {
+					objectiveProgress[objectiveIndex].invalid = true
+				} else {
+					objectiveProgress.push({ id: objective.id, complete: false, count: 0, invalid: true })
+				}
+			})
+		}
+			
+		// Find all of the tasks that have this task as a requirement
+		let requiredTasks = taskData.tasks.filter(task => task.taskRequirements.some(requirement => requirement.task.id === taskId && requirement.status.some(status => status === "complete" || status === "active")))
+		requiredTasks.forEach(requiredTask => {
+			// Recursively call this function on the task that requires this task
+			({ tasksProgress, objectiveProgress } = invalidateTaskRecursive(requiredTask.id, taskData, tasksProgress, objectiveProgress));
+		})
+	}
+	return { tasksProgress, objectiveProgress }
+}
+
+const formatObjective = (objectiveData, showCount = false, showInvalid = false) => {
 	let processedObjectives = []
 	for (const [objectiveKey, objective] of Object.entries(objectiveData)) {
 		let newObjective = { id: objectiveKey, complete: objective?.complete ?? false }
 		if (showCount) {
 			newObjective.count = objective?.count ?? 0
+		}
+		if (showInvalid) {
+			newObjective.invalid = objective?.invalid ?? false
+		}
+		if (objective?.failed) {
+			newObjective.failed = objective.failed
 		}
 		processedObjectives.push(newObjective)
 	}
@@ -161,7 +275,12 @@ app.get('/api/v2/progress', async (req, res) => {
 		const hideoutDoc = await hideoutRef.get();
 		const hideoutData = hideoutDoc.exists ? hideoutDoc.data() : null;
 
-		let progressData = formatProgress(progressDoc.data(), req.apiToken.owner, hideoutData);
+		// Retrieve the task data
+		const taskRef = db.collection('tarkovdata').doc('tasks');
+		const taskDoc = await taskRef.get();
+		const taskData = taskDoc.exists ? taskDoc.data() : null;
+
+		let progressData = formatProgress(progressDoc.data(), req.apiToken.owner, hideoutData, taskData);
 		res.status(200).json({ data: progressData, meta: { self: req.apiToken.owner } }).send()
 	} else {
 		res.status(401).send()
@@ -189,10 +308,12 @@ app.get('/api/v2/team/progress', async (req, res) => {
 		const systemRef = db.collection('system').doc(req.apiToken.owner);
 		const userRef = db.collection('user').doc(req.apiToken.owner);
 		const hideoutRef = db.collection('tarkovdata').doc('hideout');
+		const taskRef = db.collection('tarkovdata').doc('tasks');
 
 		var systemDoc = null;
 		var userDoc = null;
 		var hideoutDoc = null;
+		var taskDoc = null;
 
 		var systemPromise = systemRef.get().then((result) => {
 			systemDoc = result
@@ -206,10 +327,15 @@ app.get('/api/v2/team/progress', async (req, res) => {
 			hideoutDoc = result
 		})
 
+		var taskPromise = taskRef.get().then((result) => {
+			taskDoc = result
+		})
+
 		// Get the system and user doc simultaneously
-		await Promise.all([systemPromise, userPromise, hideoutPromise])
+		await Promise.all([systemPromise, userPromise, hideoutPromise, taskPromise])
 
 		const hideoutData = hideoutDoc.exists ? hideoutDoc.data() : null;
+		const taskData = taskDoc.exists ? taskDoc.data() : null;
 
 		const requesteeProgressRef = db.collection('progress').doc(req.apiToken.owner);
 
@@ -247,7 +373,7 @@ app.get('/api/v2/team/progress', async (req, res) => {
 
 		await Promise.all(team).then((members) => {
 			members.forEach((member) => {
-				let memberProgress = formatProgress(member.data(), member.ref.path.split('/').pop(), hideoutData)
+				let memberProgress = formatProgress(member.data(), member.ref.path.split('/').pop(), hideoutData, taskData)
 				teamResponse.push(memberProgress)
 			})
 		})

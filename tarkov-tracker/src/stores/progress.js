@@ -146,6 +146,15 @@ export const useProgressStore = defineStore('progress', () => {
               break
             }
           }
+          if (task.taskRequirements?.length > 0) {
+            // For each of the requirements which require status failed, check if the task is failed. If it is not, mark the task as not available
+            for (const req of task.taskRequirements.filter((req) => req.status.includes('failed'))) {
+              if (!visibleTeamStores.value[teamId].isTaskFailed(req.task.id)) {
+                parentTasksComplete = false
+                break
+              }
+            }
+          }
           if (!parentTasksComplete) {
             available[task.id][teamId] = false
             continue
