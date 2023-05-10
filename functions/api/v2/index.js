@@ -425,113 +425,313 @@ app.get('/api/v2/team/progress', async (req, res) => {
 // 	}
 // })
 
-// /**
-//  * @openapi
-//  * /progress/quest/{id}:
-//  *   post:
-//  *     summary: "Marks given quest as completed."
-//  *     parameters:
-//  *       - name: "id"
-//  *         in: "path"
-//  *         description: "Quest ID"
-//  *         required: true
-//  *         schema:
-//  *           type: "integer"
-//  *     tags:
-//  *       - "Progress"
-//  *     responses:
-//  *       200:
-//  *         description: "Quest progress was updated successfully"
-//  *       400:
-//  *         description: "Provided data on input are invalid"
-//  *       401:
-//  *         description: "Provided API Token is not authorized to access this resource"
-//  */
-// app.post('/api/v2/progress/quest/:questId(\\d+)', async (req, res) => {
-// 	if (req.apiToken != null && req.apiToken.permissions.includes('WP')) {
-// 		const db = admin.firestore();
 
-// 		const requesteeProgressRef = db.collection('progress').doc(req.apiToken.owner);
+/**
+ * Update the progress of a task.
+ *
+ * @openapi
+ * /api/v2/progress/task/{taskId}:
+ *   post:
+ *     summary: Update task progress
+ *     description: Update the progress of a task with the provided state.
+ *     parameters:
+ *       - in: path
+ *         name: taskId
+ *         required: true
+ *         description: The ID of the task to update.
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       description: The new state of the task.
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               state:
+ *                 type: string
+ *                 description: The new state of the task.
+ *                 enum: [uncompleted, completed, failed]
+ *     responses:
+ *       '200':
+ *         description: The task was updated successfully.
+ *       '400':
+ *         description: Invalid request parameters.
+ *       '401':
+ *         description: Unauthorized to update progress.
+ * 		 	 '500':
+ * 			   description: Internal server error.
+ */
+app.post('/api/v2/progress/task/:taskId', async (req, res) => {
+	if (req.apiToken != null && req.apiToken.permissions.includes('WP')) {
+		const db = admin.firestore();
 
-// 		if (req.body && req.params.questId) {
+		const requesteeProgressRef = db.collection('progress').doc(req.apiToken.owner);
 
-// 			// Set up an object to update merge with
-// 			var updateObject = {}
-// 			if ('complete' in req.body && typeof req.body.complete === 'boolean') {
-// 				updateObject.complete = req.body.complete
-// 				if(req.body.complete) {
-// 					updateObject.timeComplete = new Date().getTime()
-// 				}else{
-// 					updateObject.timeComplete = null
-// 				}
-// 			}
+		// Check if we have the required data to update a task
+		if (req.params.taskId && req.body.state) {
+			// Check if state is one of the valid values
+			if (['uncompleted', 'completed', 'failed'].includes(req.body.state)) {
+				// Get the task document
+				const taskRef = db.collection('tarkovdata').doc('tasks');
+				const taskDoc = await taskRef.get();
 
-// 			await requesteeProgressRef.set({
-// 				quests: {[req.params.questId]: updateObject}
-// 			}, {merge: true});
-// 			res.status(200).send()
-// 		}else{
-// 			res.status(400).send()
-// 		}
-// 	}else{
-// 		res.status(401).send()
-// 	}
-// })
+				// Get the task data TODO: Make this a global variable that is lazy-loaded as needed to reduce reads
+				const taskData = taskDoc.data();
 
-// /**
-//  * @openapi
-//  * /progress/quest/objective/{id}:
-//  *   post:
-//  *     summary: "Marks given quest objective as completed."
-//  *     parameters:
-//  *       - name: "id"
-//  *         in: "path"
-//  *         description: "Quest objective ID"
-//  *         required: true
-//  *         schema:
-//  *           type: "integer"
-//  *     tags:
-//  *       - "Progress"
-//  *     responses:
-//  *       200:
-//  *         description: "Quest objective progress was updated successfully"
-//  *       400:
-//  *         description: "Provided data on input are invalid"
-//  *       401:
-//  *         description: "Provided API Token is not authorized to access this resource"
-//  */
-// app.post('/api/v2/progress/quest/objective/:objectiveId(\\d+)', async (req, res) => {
-// 	if (req.apiToken != null && req.apiToken.permissions.includes('WP')) {
-// 		const db = admin.firestore();
+				// Check if the task exists
+				let relevantTask = taskData.tasks.find((task) => task.id == req.params.taskId)
 
-// 		const requesteeProgressRef = db.collection('progress').doc(req.apiToken.owner);
+				if (relevantTask) {
+					// We have the task, now update the progress according to state.
+					try {
+						await db.runTransaction(async (transaction) => {
+							// Ensure the progress document exists
+							const progressDoc = await transaction.get(requesteeProgressRef);
+							if (!progressDoc.exists) {
+								throw new Error("User's progress document doesn't exist")
+							}
 
-// 		if (req.body && req.params.objectiveId) {
+							// Create an object to aggregate multiple updates into one write
+							let progressUpdate = {}
+							let updateTime = Date.now()
 
-// 			// Set up an object to update merge with
-// 			var updateObject = {}
-// 			// 'have' value
-// 			if ('have' in req.body && typeof req.body.have === 'number') { updateObject.have = req.body.have }
-// 			if ('complete' in req.body && typeof req.body.complete === 'boolean') {
-// 				updateObject.complete = req.body.complete
-// 				if(req.body.complete) {
-// 					updateObject.timeComplete = new Date().getTime()
-// 				}else{
-// 					updateObject.timeComplete = null
-// 				}
-// 			}
+							// Case select the state
+							switch (req.body.state) {
+								case 'completed':
+									// Step 1: Check if the task has any alternate tasks
+									if (relevantTask?.alternatives?.length > 0) {
+										// Mark the alternative tasks as failed
+										relevantTask.alternatives.forEach((alternativeTaskId) => {
+											// Find the alternative task in the task data, and mark its objectives off as well
+											let alternativeTask = taskData.tasks.find((task) => task.id == alternativeTaskId)
 
-// 			await requesteeProgressRef.set({
-// 				objectives: {[req.params.objectiveId]: updateObject}
-// 			}, {merge: true});
-// 			res.status(200).send()
-// 		}else{
-// 			res.status(400).send()
-// 		}
-// 	}else{
-// 		res.status(401).send()
-// 	}
-// })
+											if (alternativeTask) {
+												// Mark the alternative task as failed
+												progressUpdate[`taskCompletions.${alternativeTaskId}.complete`] = true
+												progressUpdate[`taskCompletions.${alternativeTaskId}.failed`] = true
+												progressUpdate[`taskCompletions.${alternativeTaskId}.timestamp`] = updateTime
+
+												// For each objective in the alternative task, mark it as complete
+												alternativeTask.objectives.forEach((objective) => {
+													progressUpdate[`taskObjectives.${objective.id}.complete`] = true
+													progressUpdate[`taskObjectives.${objective.id}.timestamp`] = updateTime
+												})
+											} else {
+												throw new Error(`Alternative task ${alternativeTaskId} not found for task ${req.params.taskId}`)
+											}
+										})
+									}
+
+									// Step 2: Mark the task as complete
+									progressUpdate[`taskCompletions.${relevantTask.id}.complete`] = true
+									progressUpdate[`taskCompletions.${relevantTask.id}.timestamp`] = updateTime
+
+									// Step 3: Mark the task's objectives as complete
+									relevantTask.objectives.forEach((objective) => {
+										progressUpdate[`taskObjectives.${objective.id}.complete`] = true
+										progressUpdate[`taskObjectives.${objective.id}.timestamp`] = updateTime
+									})
+									break;
+								case 'uncompleted':
+									// Mark the task as uncompleted
+									progressUpdate[`taskCompletions.${relevantTask.id}.complete`] = false
+									progressUpdate[`taskCompletions.${relevantTask.id}.failed`] = false
+									progressUpdate[`taskCompletions.${relevantTask.id}.timestamp`] = admin.firestore.FieldValue.delete()
+
+									relevantTask.objectives.forEach((objective) => {
+										progressUpdate[`taskObjectives.${objective.id}.complete`] = false
+										progressUpdate[`taskObjectives.${objective.id}.timestamp`] = admin.firestore.FieldValue.delete()
+									})
+
+									// Check if the task has any alternate tasks
+									if (relevantTask?.alternatives?.length > 0) {
+										// Mark the alternative tasks as uncompleted
+										relevantTask.alternatives.forEach((alternativeTaskId) => {
+											// Find the alternative task in the task data, and mark its objectives off as well
+											let alternativeTask = taskData.tasks.find((task) => task.id == alternativeTaskId)
+
+											if (alternativeTask) {
+												// Mark the alternative task as uncompleted
+												progressUpdate[`taskCompletions.${alternativeTaskId}.complete`] = false
+												progressUpdate[`taskCompletions.${alternativeTaskId}.failed`] = false
+												progressUpdate[`taskCompletions.${alternativeTaskId}.timestamp`] = admin.firestore.FieldValue.delete()
+
+												// For each objective in the alternative task, mark it as uncompleted
+												alternativeTask.objectives.forEach((objective) => {
+													progressUpdate[`taskObjectives.${objective.id}.complete`] = false
+													progressUpdate[`taskObjectives.${objective.id}.timestamp`] = admin.firestore.FieldValue.delete()
+												})
+											} else {
+												throw new Error(`Alternative task ${alternativeTaskId} not found for task ${req.params.taskId}`)
+											}
+										})
+									}
+									break;
+								case 'failed':
+									// Mark the task as failed (don't update any alternatives as this is an explicitly manual override)
+									progressUpdate[`taskCompletions.${relevantTask.id}.complete`] = true
+									progressUpdate[`taskCompletions.${relevantTask.id}.failed`] = true
+									progressUpdate[`taskCompletions.${relevantTask.id}.timestamp`] = updateTime
+
+									// Mark the task's objectives as complete
+									relevantTask.objectives.forEach((objective) => {
+										progressUpdate[`taskObjectives.${objective.id}.complete`] = true
+										progressUpdate[`taskObjectives.${objective.id}.timestamp`] = updateTime
+									})
+									break;
+								default:
+									throw new Error(`Unknown state ${req.body.state}`)
+							}
+							
+							// Update the progress document with the changes we've made
+							transaction.update(requesteeProgressRef, progressUpdate)
+						});
+						// Finally, send OK
+						res.status(200).send({ message: 'Updated progress'})
+					} catch (error) {
+						functions.logger.error("Transaction failed", { error: error, user: req.apiToken.owner, token: req.apiToken });
+						res.status(500).send({ error: 'Progress update failed'})
+					}
+				} else {
+					res.status(400).send({ error: 'Unknown task' })
+				}
+			} else {
+				res.status(400).send({ error: 'Invalid state provided' })
+			}
+		} else {
+			res.status(400).send({ error: 'Invalid parameters provided' })
+		}
+	} else {
+		res.status(401).send()
+	}
+})
+
+/**
+ * Update the progress of tasks associated with an objective.
+ *
+ * @openapi
+ * /api/v2/progress/task/objective/{objectiveId}:
+ *   post:
+ *     summary: Update objective progress for a task.
+ *     description: Update the progress objectives of tasks.
+ *     parameters:
+ *       - in: path
+ *         name: objectiveId
+ *         required: true
+ *         description: The ID of the objective to update progress for.
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       description: Objective properties to update.
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               state:
+ *                 type: string
+ *                 description: The state of the task objective (completed or uncompleted).
+ *                 enum: [completed, uncompleted]
+ * 						     nullable: true
+ *               count:
+ *                 type: integer
+ *                 description: The number of items or completions toward the objective's goal.
+ *                 minimum: 0
+ * 							   nullable: true
+ *     responses:
+ *       '200':
+ *         description: The objective was updated successfully.
+ *       '400':
+ *         description: Invalid request parameters.
+ *       '401':
+ *         description: Unauthorized to update progress.
+ * 		 	 '500':
+ * 			   description: Internal server error.
+ */
+app.post('/api/v2/progress/task/objective/:objectiveId', async (req, res) => {
+	if (req.apiToken != null && req.apiToken.permissions.includes('WP')) {
+		const db = admin.firestore();
+
+		const requesteeProgressRef = db.collection('progress').doc(req.apiToken.owner);
+
+		// Check if we have the required data to update an objective
+		if (req.params.objectiveId && (req.body.state || req.body.count != null)) {
+			// Get the task document
+			const taskRef = db.collection('tarkovdata').doc('tasks');
+			const taskDoc = await taskRef.get();
+
+			// Get the task data TODO: Make this a global variable that is lazy-loaded as needed to reduce reads
+			const taskData = taskDoc.data();
+
+			// Check if the objective exists
+			let relevantTask = taskData.tasks.find((task) => task.objectives.find((objective) => objective.id == req.params.objectiveId))
+			
+			if (relevantTask) {
+				// We have the task, now get the objective
+				let relevantObjective = relevantTask.objectives.find((objective) => objective.id == req.params.objectiveId)
+
+				try {
+					await db.runTransaction(async (transaction) => {
+						// Our update object so we can batch update the progress document in one write
+						let updateTime = Date.now()
+						let progressUpdate = {}
+
+						// Validate the state if it's set
+						if (req.body.state) {
+							if (['uncompleted', 'completed'].includes(req.body.state)) {
+								switch (req.body.state) {
+									case 'uncompleted':
+										// Mark the objective as uncompleted
+										progressUpdate[`taskObjectives.${relevantObjective.id}.complete`] = false
+										progressUpdate[`taskObjectives.${relevantObjective.id}.timestamp`] = admin.firestore.FieldValue.delete()
+										break;
+									case 'completed':
+										// Mark the objective as completed
+										progressUpdate[`taskObjectives.${relevantObjective.id}.complete`] = true
+										progressUpdate[`taskObjectives.${relevantObjective.id}.timestamp`] = updateTime
+										break;
+								}
+							} else {
+								res.status(400).send({ error: 'Invalid state provided' })
+							}
+						}
+
+						// Validate the count if it's set and its an integer
+						if (req.body.count != null) {
+							if (Number.isInteger(req.body.count) && req.body.count >= 0) {
+								// Update the objective count
+								progressUpdate[`taskObjectives.${relevantObjective.id}.count`] = req.body.count
+							} else {
+								res.status(400).send({ error: 'Invalid count provided' })
+							}
+						}
+
+						if (Object.keys(progressUpdate).length > 0) {
+							// Update the progress document with the changes we've made
+							transaction.update(requesteeProgressRef, progressUpdate)
+							// Finally, send OK
+							res.status(200).send({ message: 'Updated progress' })
+						} else {
+							res.status(400).send({ error: 'No valid parameters provided' })
+						}
+					})
+				} catch (error) {
+					functions.logger.error("Transaction failed", { error: error, user: req.apiToken.owner, token: req.apiToken });
+					res.status(500).send({ error: 'Progress update failed' })
+				}
+			} else {
+				res.status(400).send({ error: 'Unknown objective' })
+			}
+		} else {
+			res.status(400).send({ error: 'Invalid parameters provided' })
+		}
+	} else {
+		res.status(401).send()
+	}
+})
 
 // /**
 //  * @openapi
