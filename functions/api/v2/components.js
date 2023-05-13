@@ -93,7 +93,7 @@
  *           description: "True if a given hideout module has been installed"
  *     TaskObjectiveProgress:
  *       title: "TaskObjectiveProgress"
- *       description: "Player's progress on a given task objective. 
+ *       description: "Player's progress on a given task objective."
  *       type: "object"
  *       properties:
  *         id:

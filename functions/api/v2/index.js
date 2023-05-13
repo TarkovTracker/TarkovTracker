@@ -460,8 +460,8 @@ app.get('/api/v2/team/progress', async (req, res) => {
  *         description: Invalid request parameters.
  *       '401':
  *         description: Unauthorized to update progress.
- * 		 	 '500':
- * 			   description: Internal server error.
+ *       '500':
+ *         description: Internal server error.
  */
 app.post('/api/v2/progress/task/:taskId', async (req, res) => {
 	if (req.apiToken != null && req.apiToken.permissions.includes('WP')) {
@@ -635,12 +635,12 @@ app.post('/api/v2/progress/task/:taskId', async (req, res) => {
  *                 type: string
  *                 description: The state of the task objective (completed or uncompleted).
  *                 enum: [completed, uncompleted]
- * 						     nullable: true
+ *                 nullable: true
  *               count:
  *                 type: integer
  *                 description: The number of items or completions toward the objective's goal.
  *                 minimum: 0
- * 							   nullable: true
+ *                 nullable: true
  *     responses:
  *       '200':
  *         description: The objective was updated successfully.
@@ -648,8 +648,8 @@ app.post('/api/v2/progress/task/:taskId', async (req, res) => {
  *         description: Invalid request parameters.
  *       '401':
  *         description: Unauthorized to update progress.
- * 		 	 '500':
- * 			   description: Internal server error.
+ *       '500':
+ *         description: Internal server error.
  */
 app.post('/api/v2/progress/task/objective/:objectiveId', async (req, res) => {
 	if (req.apiToken != null && req.apiToken.permissions.includes('WP')) {

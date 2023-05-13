@@ -37,8 +37,9 @@ const swaggerOptions = {
     ]
   },
   apis: [
-    'functions/api/v2/api*.js',
-    'functions/api/v2/components*.js'
+    'api/v2/api*.js',
+    'api/v2/index.js',
+    'api/v2/components*.js'
   ],
 }
 
