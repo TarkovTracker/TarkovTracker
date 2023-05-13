@@ -433,6 +433,8 @@ app.get('/api/v2/team/progress', async (req, res) => {
  * /api/v2/progress/task/{taskId}:
  *   post:
  *     summary: Update task progress
+ *     tags:
+ *       - "Progress"
  *     description: Update the progress of a task with the provided state.
  *     parameters:
  *       - in: path
@@ -615,6 +617,8 @@ app.post('/api/v2/progress/task/:taskId', async (req, res) => {
  * /api/v2/progress/task/objective/{objectiveId}:
  *   post:
  *     summary: Update objective progress for a task.
+ *     tags:
+ *       - "Progress"
  *     description: Update the progress objectives of tasks.
  *     parameters:
  *       - in: path

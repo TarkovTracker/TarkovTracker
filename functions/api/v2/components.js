@@ -63,6 +63,9 @@
  *         displayName:
  *          type: "string"
  *          description: "Player's TarkovTracker display name within their team"
+ *         pmcFaction:
+ *          type: "string"
+ *          description: "Player's PMC faction (USEC, BEAR)"
  *     TaskProgress:
  *       title: "TaskProgress"
  *       description: "Player's progress of a given task. The key is the UUID correlating to the task ID available via the tarkov.dev API"
