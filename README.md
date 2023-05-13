@@ -1,19 +1,8 @@
-# TarkovTrackerNext
-This repository is for the next major version of TarkovTracker (currently working on version 3).
-
-## Version 3
-The next version of TarkovTracker will be a complete rebuild of the SPA from scratch. There are a few reasons for the complete rebuild.
-* Vue 2 -> Vue 3 upgrade
-* Vuetify 2 -> Vuetify 3 upgrade
-* Webpack -> Vite migration
-* Vuex -> Pinia migration
-* i18n Implementation
-* Reorganization of components
-
-The original TarkovTracker was built primarily without any previous knowledge of JS at all, including best practices or experience organizing larger Vue projects. There have been a lot of things learned as new features have been added. Version 3's goal is to set TarkovTracker up for another couple years of additional updates and improvements.
+# TarkovTracker
+This repository is for TarkovTracker, a web app for tracking your Escape From Tarkov tasks and hideout progress. It allows you to mark off tasks, objectives, and hideout upgrades as you complete them. You can see items needed for upgrades and tasks, as well as how close you are to needing them. Tasks are broken down into traders and maps, so you can prioritize them based on your goals and how you play. You can also join a team with your friends, and more easily plan out your raids together.
 
 ## Installation
-The following are the steps to get the TarkovTracker Next project up and running in development.
+The following are the steps to get the TarkovTracker project up and running in development.
 
 ### Prerequisites
 * Node.js
@@ -24,3 +13,6 @@ The following are the steps to get the TarkovTracker Next project up and running
 2. Run `npm install` in the `tarkov-tracker` directory
 3. Run `npm install` in the `functions` directory
 4. Run `npm run dev` in the `tarkov-tracker` directory
+
+# Project Structure
+The project is split into two main parts: the SPA frontend built with Vue.js, and the API backend using Firebase Cloud Functions. The frontend is located in the `tarkov-tracker` directory, and the backend is located in the `functions` directory. The project can function without a backend, other than hosting, allowing for full use of the site outside of the team system or API for third-party apps. The web app can work normally using local storage without user authentication.
