@@ -56,227 +56,226 @@
         level: "Nivel {count}",
         wiki: "Wiki",
         lockedbefore: "{count} antes",
-        lockedbehind: "{count} despues",
+        lockedbehind: "{count} después",
         completebutton: "Completar",
         availablebutton: "Marcar como disponible",
-        uncompletebutton: "Marcar sin terminar",
-        statuscomplete: "Marked {name} as complete",
-        statusuncomplete: "Marked {name} as uncompleted",
-        statusavailable: "Marked all prerequisites for {name} as complete",
-        nonkappa: "Not Kappa Required",
-        keysneeded: "{keys} needed on {map} | One of {keys} needed on {map}",
-        objectiveshidden: "{count} objectives not on this map ({uncompleted} uncompleted)",
-        alternatives: "Alternative quests",
-        alternativefailed: "Alternative quests will also be reset"
+        uncompletebutton: "Marcar como no completado",
+        statuscomplete: "Marcado {name} como completo",
+        statusuncomplete: "Marcado {name} como no completado",
+        statusavailable: "Marcados todos los requisitos previos para {name} como completados",
+        nonkappa: "No se requiere Kappa",
+        keysneeded: "{keys} necesarios en {mapa} | Uno de {keys} necesarios en {mapa}",
+        objectiveshidden: "{count} objetivos no están en este mapa ({uncompleted} sin completar)",
+        alternatives: "Misiones alternativas",
+        alternativefailed: "Las misiones alternativas también se reiniciarán"
       }
     },
     hideout: {
-      title: 'Hideout',
-      loading: 'Loading hideout data',
+      title: 'Escondite',
+      loading: 'Cargando datos del escondite',
       stationcard: {
-        level: "Available to build | Level {count} | Level {count}",
-        nextlevel: "Requirements for next level",
-        maxlevel: "Max station level reached",
+        level: "Disponible para construir | Nivel {count} | Nivel {count}",
+        nextlevel: "Requisitos para el próximo nivel",
+        maxlevel: "Nivel máximo de estación alcanzado",
         requirements: {
-          station: "Requires {stationname} level {level}",
-          skill: "Requires {skillname} level {level}",
-          trader: "Requires {tradername} loyalty level {loyaltylevel}",
+          station: "Requiere nivel {level} de {stationname}",
+          skill: "Requiere nivel {level} de {skillname}",
+          trader: "Requiere nivel de lealtad {loyaltylevel} de {tradername}",
         },
-        gameeditiondescription: "The base level of the stash is determined by the game edition you own. You can change this in the Tracker settings.",
-        settingsbutton: "Visit Settings",
-        upgradebutton: "Build | Build level {level} | Upgrade to level {level}",
-        downgradebutton: "Remove station | Downgrade to level {level} | Downgrade to level {level}",
-        statusupgraded: "Upgraded {name} to level {level}",
-        statusdowngraded: "Downgraded {name} from level {level}",
+        gameeditiondescription: "El nivel base del escondite está determinado por la edición del juego que posees. Puedes cambiar esto en la configuración del rastreador.",
+        settingsbutton: "Ir a Configuración",
+        upgradebutton: "Construir | Construir nivel {level} | Mejorar a nivel {level}",
+        downgradebutton: "Eliminar estación | Degradar a nivel {level} | Degradar a nivel {level}",
+        statusupgraded: "Mejorado {name} a nivel {level}",
+        statusdowngraded: "Degradado {name} desde el nivel {level}",
       }
     },
     neededitems: {
-      title: 'Needed Items',
-      loading: 'Loading task and hideout data',
+      title: 'Objetos Necesarios',
+      loading: 'Cargando datos de tareas y escondite',
       neededviews: {
-        all: 'All',
-        tasks: 'Tasks',
-        hideout: 'Hideout',
+        all: 'Todos',
+        tasks: 'Tareas',
+        hideout: 'Escondite',
       },
       options: {
-        title: 'Needed Items Options',
-        close: 'Close',
-        items_hide_non_fir: 'Hide needed items that don\'t need to be found in raid',
-        items_show_non_fir: 'Show needed items that don\'t need to be found in raid',
+        title: 'Opciones de Objetos Necesarios',
+        close: 'Cerrar',
+        items_hide_non_fir: 'Ocultar objetos necesarios que no necesitan ser encontrados en incursión',
+        items_show_non_fir: 'Mostrar objetos necesarios que no necesitan ser encontrados en incursión',
       }
     },
     settings: {
-      title: 'Settings',
+      title: 'Configuración',
       card: {
         reset: {
-          title: 'Reset',
-          description: 'Reset all progression data to default.',
-          button: 'Reset my progress',
-          confirmation: "Are you sure you want to reset your progress? This cannot be undone.",
-          confirmtitle: "Confirm Reset",
-          confirmcancelbutton: "Cancel",
-          confirmresetbutton: "Reset",
+          title: 'Reiniciar',
+          description: 'Restablecer todos los datos de progresión a los valores predeterminados.',
+          button: 'Reiniciar mi progreso',
+          confirmation: "¿Estás seguro de que deseas reiniciar tu progreso? Esta acción no se puede deshacer.",
+          confirmtitle: "Confirmar Reinicio",
+          confirmcancelbutton: "Cancelar",
+          confirmresetbutton: "Reiniciar",
         },
         gameedition: {
-          title: 'Game Edition',
-          description: 'Select the game edition you are playing. Additional data may be computed from this information (e.g. trader reputation, stash level).',
-          select: 'Select game edition'
+          title: 'Edición del Juego',
+          description: 'Selecciona la edición del juego que estás jugando. Puede haber datos adicionales calculados a partir de esta información (por ejemplo, reputación de comerciantes, nivel del escondite).',
+          select: 'Seleccionar edición del juego'
         },
         streamermode: {
-          title: 'Streamer Mode',
-          description: 'Hides your team invite codes from view, so you can show off your progress without letting people join your live team.',
-          modeOn: 'On',
-          modeOff: 'Off'
+          title: 'Modo Streamer',
+          description: 'Oculta tus códigos de invitación de equipo, para que puedas mostrar tu progreso sin permitir que las personas se unan a tu equipo en vivo.',
+          modeOn: 'Activado',
+          modeOff: 'Desactivado'
         },
         apitokens: {
-          title: 'API Tokens',
-          description: 'TarkovTracker hosts a public API that allows other tools to access the progress you store here. You can generate an API token to allow other tools to access your data. View the {openAPI_documentation}',
-          new_token_expand: 'Create a token',
-          submit_new_token: 'Create token',
-          openAPI_documentation: 'OpenAPI documentation',
-          show_tokens: 'Show my tokens',
-          create_token_success: 'Successfully created a new API token.',
-          create_token_error: 'Failed to create a new API token.',
-          no_tokens: 'You do not have any TarkovTracker API tokens.',
+          title: 'Tokens de API',
+          description: 'TarkovTracker ofrece una API pública que permite a otras herramientas acceder al progreso que almacenas aquí. Puedes generar un token de API para permitir que otras herramientas accedan a tus datos. Ver la {openAPI_documentation}',
+          new_token_expand: 'Crear un token',
+          submit_new_token: 'Crear token',
+          openAPI_documentation: 'Documentación de OpenAPI',
+          show_tokens: 'Mostrar mis tokens',
+          create_token_success: 'Se ha creado correctamente un nuevo token de API.',
+          create_token_error: 'Error al crear un nuevo token de API.',
+          no_tokens: 'No tienes ningún token de API de TarkovTracker.',
           token_column: 'Token',
-          note_column: 'Note',
-          created_column: 'Created',
-          permissions_column: 'Permissions',
+          note_column: 'Nota',
+          created_column: 'Creado',
+          permissions_column: 'Permisos',
           permission: {
-            'GP': 'Get Personal Progress',
-            'TP': 'Get Team Progress',
-            'WP': 'Write Progress',
+            'GP': 'Obtener Progreso Personal',
+            'TP': 'Obtener Progreso del Equipo',
+            'WP': 'Escribir Progreso',
           }
         }
       }
     },
     team: {
-      title: 'Team',
+      title: 'Equipo',
       card: {
         manageteam: {
-          title: 'Team Members',
-          button: 'Manage Team',
+          title: 'Miembros del Equipo',
+          button: 'Administrar Equipo',
           membercard: {
-            this_is_you: '(This is you)',
-            taskscomplete: "{completed}/{total} tasks completed",
+            this_is_you: '(Eres tú)',
+            taskscomplete: "{completed}/{total} tareas completadas",
           }
         },
         teamoptions: {
-          title: 'Team Integration Options',
-          button: 'Team Options',
-          task_hide_all: 'Hide all team members\' tasks',
-          task_show_all: 'Show team members\' tasks',
-          items_hide_all: 'Hide team members\' needed items',
-          items_show_all: 'Show team members\' needed items',
-          items_show_non_fir: 'Show all team members\' needed items (including non-FIR)',
-          items_hide_non_fir: 'Hide needed items for teammates that are not FIR',
-          items_hide_hideout: 'Hide team members\' needed hideout items',
-          items_show_hideout: 'Show team members\' needed hideout items',
-          map_hide_all: 'Hide team members\' map objectives',
-          map_show_all: 'Show team members\' map objectives',
+          title: 'Opciones de Integración del Equipo',
+          button: 'Opciones de Equipo',
+          task_hide_all: 'Ocultar tareas de todos los miembros del equipo',
+          task_show_all: 'Mostrar tareas de los miembros del equipo',
+          items_hide_all: 'Ocultar objetos necesarios de los miembros del equipo',
+          items_show_all: 'Mostrar objetos necesarios de los miembros del equipo',
+          items_show_non_fir: 'Mostrar todos los objetos necesarios de los miembros del equipo (incluyendo los que no son FIR)',
+          items_hide_non_fir: 'Ocultar objetos necesarios para compañeros de equipo que no sean FIR',
+          items_hide_hideout: 'Ocultar objetos necesarios del escondite de los miembros del equipo',
+          items_show_hideout: 'Mostrar objetos necesarios del escondite de los miembros del equipo',
+          map_hide_all: 'Ocultar objetivos de mapa de los miembros del equipo',
+          map_show_all: 'Mostrar objetivos de mapa de los miembros del equipo',
         },
         myteam: {
-          title: 'My Team',
-          button: 'View Team',
-          create_new_team: 'Create a new team',
-          disband_team: 'Disband team',
-          leave_team: 'Leave team',
-          create_team_success: 'Successfully created a new team.',
-          create_team_error: 'Failed to create a new team.',
-          disband_team_success: 'Successfully disbanded your team.',
-          leave_team_success: 'Successfully left your team.',
-          leave_team_error: 'Failed to leave your team.',
-          no_team: 'You are not currently in a team.',
-          url_hidden: 'Hidden for Streamer mode.',
-          team_invite_url_label: 'Team Invite URL',
-          display_name_label: 'Team Display Name',
+          title: 'Mi Equipo',
+          button: 'Ver Equipo',
+          create_new_team: 'Crear un nuevo equipo',
+          disband_team: 'Disolver equipo',
+          leave_team: 'Dejar equipo',
+          create_team_success: 'Se ha creado correctamente un nuevo equipo.',
+          create_team_error: 'Error al crear un nuevo equipo.',
+          disband_team_success: 'Se ha disuelto correctamente tu equipo.',
+          leave_team_success: 'Has dejado tu equipo correctamente.',
+          leave_team_error: 'Error al dejar tu equipo.',
+          no_team: 'Actualmente no estás en un equipo.',
+          url_hidden: 'Oculto en modo Streamer.',
+          team_invite_url_label: 'URL de Invitación al Equipo',
+          display_name_label: 'Nombre para Mostrar del Equipo',
         },
         teaminvite: {
-          description: 'You have received an invite to a TarkovTracker team',
-          accept: 'Accept',
-          decline: 'Decline',
-          leave_error: 'Failed to leave your existing team.',
-          join_error: 'Failed to join the team.',
-          join_success: 'Successfully joined the team.',
+          description: 'Has recibido una invitación a un equipo de TarkovTracker',
+          accept: 'Aceptar',
+          decline: 'Rechazar',
+          leave_error: 'Error al dejar tu equipo actual.',
+          join_error: 'Error al unirse al equipo.',
+          join_success: 'Te has unido correctamente al equipo.',
         }
       },
     },
     login: {
-      title: 'Login'
+      title: 'Conectar'
     },
     not_found: {
-      title: 'Page Not Found',
-      not_found_description: 'Sorry, that page could not be found!'
+      title: 'Página no encontrada',
+      not_found_description: 'Lo sentimos, no se ha encontrado la página.'
     }
   },
   footer: {
     call_to_action: {
-      discord_phrase: 'Report bugs/retask features on {discord}',
-      github_phrase: 'Contribute to the open source project on {github}',
-      patreon_phrase: 'Support project costs on {patreon}',
+      discord_phrase: 'Informar errores / reasignar funciones en {discord}',
+      github_phrase: 'Contribuir al proyecto de código abierto en {github}',
+      patreon_phrase: 'Apoyar los costos del proyecto en {patreon}',
       discord: 'Discord',
       github: 'GitHub',
       patreon: 'Patreon',
     },
     ukraine: {
-      support_link: 'Support Ukrainians',
-      support_phrase: '{support_ukraine} via the ICRC'
+      support_link: 'Apoyar a los ucranianos',
+      support_phrase: '{support_ukraine} a través del CICR'
     }
   },
   module: {
     team_settings: {
-      title: 'Team Settings',
-      description: 'Configure your team settings.',
+      title: 'Configuración del equipo',
+      description: 'Configura los ajustes de tu equipo.',
     }
   },
   navigation_drawer: {
-    home: 'Home',
-    settings: 'Settings',
-    login: 'Log In',
-    logout: 'Log Out',
-    level: 'Level',
-    team: 'Team',
-    tasks: 'Tasks',
-    hideout: 'Hideout',
-    neededitems: 'Needed Items',
+    home: 'Inicio',
+    settings: 'Configuración',
+    login: 'Iniciar sesión',
+    logout: 'Cerrar sesión',
+    level: 'Nivel',
+    team: 'Equipo',
+    tasks: 'Tareas',
+    hideout: 'Escondite',
+    neededitems: 'Objetos Necesarios',
     tarkovdev: 'Tarkov.dev',
     ratscanner: "Rat Scanner",
     tarkovguru: "Tarkov Guru",
-    tarkovchanges: "Tarkov Changes"
-
+    tarkovchanges: "Cambios en Tarkov"
   },
   tips: {
-    hide_tip: 'Hide this tip',
+    hide_tip: 'Ocultar este consejo',
     default: {
-      title: 'Tip',
-      description: 'Oops! This tip seems to be missing. Please report this bug on Discord.'
+      title: 'Consejo',
+      description: '¡Ups! Parece que falta este consejo. Por favor, informa este error en Discord.'
     },
     tasks: {
-      description: 'You can select different ways to categorize and view your tasks using the tabs below. You can expand the filter panel to filter tasks, sort them, and more. If you already have progress in Tarkov, you can view the locked tab of tasks and jump to the tasks you current have available.'
+      description: 'Puedes seleccionar diferentes formas de categorizar y ver tus tareas utilizando las pestañas de abajo. Puedes expandir el panel de filtros para filtrar tareas, ordenarlas y más. Si ya tienes progreso en Tarkov, puedes ver la pestaña de tareas bloqueadas y saltar a las tareas que actualmente tienes disponibles.'
     },
     team: {
-      title: 'Team',
-      description: 'Create a team to track your progress with friends. You can share a URL for others to join your team. You will be able to see your teammates\' progress, the items they need, and plan raids together.'
+      title: 'Equipo',
+      description: 'Crea un equipo para hacer un seguimiento de tu progreso con amigos. Puedes compartir una URL para que otros se unan a tu equipo. Podrás ver el progreso de tus compañeros de equipo, los objetos que necesitan y planificar incursiones juntos.'
     },
     welcomett3: {
-      title: 'Welcome to TarkovTracker 3!',
-      description: 'Welcome to TarkovTracker version 3! This is a complete rewrite of the original TarkovTracker. There are a couple QoL features missing from the original version which will be filled in over the next few days. Additionally, quest data for EFT v0.13 is being added as soon as it is confirmed. For the first couple days some quests may be inaccurate or missing. Please report any bugs you find on Discord. Thanks for your patience!'
+      title: '¡Bienvenido a TarkovTracker 3!',
+      description: '¡Bienvenido a la versión 3 de TarkovTracker! Esta es una reescritura completa de la versión original de TarkovTracker. Hay algunas características de calidad de vida que faltan en la versión original y se agregarán en los próximos días. Además, los datos de misiones para EFT v0.13 se agregarán tan pronto como se confirmen. Durante los primeros días, algunas misiones pueden ser inexactas o estar ausentes. Por favor, informa cualquier error que encuentres en Discord. ¡Gracias por tu paciencia!'
     },
     login: {
-      title: 'Login',
-      description: 'As a heads up, logging in is not necessary to use TarkovTracker to track your progress in the game. The only reason to log in is to enable sharing your progress with your friends live and coordinate raids, or to keep data across devices or through clearing browser data. If you aren\'t planning on doing that, you can continue to use TarkovTracker without logging in. Your data will be stored locally in your browser.'
+      title: 'Iniciar sesión',
+      description: 'Solo como información, iniciar sesión no es necesario para usar TarkovTracker y hacer un seguimiento de tu progreso en el juego. La única razón para iniciar sesión es habilitar el compartir tu progreso en vivo con tus amigos y coordinar incursiones, o para mantener los datos en diferentes dispositivos o al borrar los datos del navegador. Si no planeas hacer eso, puedes seguir utilizando TarkovTracker sin iniciar sesión. Tus datos se almacenarán localmente en tu navegador.'
     },
     hideout: {
-      title: 'Hideout',
-      description: 'You can mark off progress towards building and upgrading your hideout. The progress you mark will be used to calculate needed items for your hideout.'
+      title: 'Escondite',
+      description: 'Puedes marcar el progreso para construir y mejorar tu escondite. El progreso que marques se utilizará para calcular los objetos necesarios para tu escondite.'
     },
     neededitems: {
-      title: 'Needed Items',
-      description: 'Here you can see items that you will need in the future for tasks and hideout upgrades. You can mark off items as you collect them to keep track of how many more you need.'
+      title: 'Objetos Necesarios',
+      description: 'Aquí puedes ver los objetos que necesitarás en el futuro para tareas y mejoras del escondite. Puedes marcar los objetos a medida que los recolectas para realizar un seguimiento de cuántos más necesitas.'
     },
     teammembers: {
-      title: 'Team Members',
-      description: 'These are the list of your team members. You can click the eye icon to hide or show their tasks and needed items while you are using other parts of the tracker.'
+      title: 'Miembros del Equipo',
+      description: 'Esta es la lista de los miembros de tu equipo. Puedes hacer clic en el icono del ojo para ocultar o mostrar sus tareas y objetos necesarios mientras utilizas otras partes del rastreador.'
     }
   }
 }
