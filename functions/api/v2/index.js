@@ -9,6 +9,48 @@ const app = express();
 app.use(cors({ origin: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Keep taskData and hideoutData in memory for faster access
+let globalTaskData;
+let globalHideoutData;
+
+// Check if taskData is already defined, if not, get it
+// Return the taskData
+const getTaskData = async () => {
+	if (globalTaskData == null) {
+		const db = admin.firestore();
+		const taskRef = db.collection('tarkovdata').doc('tasks');
+		const taskDoc = await taskRef.get();
+		if (taskDoc.exists) {
+			globalTaskData = taskDoc.data()
+			return globalTaskData
+		} else {
+			functions.logger.error("Error getting taskData", { taskData: taskDoc.data() });
+			return null
+		}
+	} else {
+		return globalTaskData
+	}
+}
+
+// Check if hideoutData is already defined, if not, get it
+// Return the hideoutData
+const getHideoutData = async () => {
+	if (globalHideoutData == null) {
+		const db = admin.firestore();
+		const hideoutRef = db.collection('tarkovdata').doc('hideout');
+		const hideoutDoc = await hideoutRef.get();
+		if (hideoutDoc.exists) {
+			globalHideoutData = hideoutDoc.data()
+			return globalHideoutData
+		} else {
+			functions.logger.error("Error getting hideoutData", { hideoutData: hideoutDoc.data() });
+			return null
+		}
+	} else {
+		return globalHideoutData
+	}
+}
+
 // Middleware for checking validity and access of tokens
 const verifyBearer = async (req, res, next) => {
 	const db = admin.firestore();
@@ -268,17 +310,24 @@ app.get('/api/v2/progress', async (req, res) => {
 	if (req.apiToken != null && req.apiToken.permissions.includes('GP')) {
 		const db = admin.firestore();
 		const progressRef = db.collection('progress').doc(req.apiToken.owner);
-		const progressDoc = await progressRef.get();
 
-		// Retrieve the hideout data
-		const hideoutRef = db.collection('tarkovdata').doc('hideout');
-		const hideoutDoc = await hideoutRef.get();
-		const hideoutData = hideoutDoc.exists ? hideoutDoc.data() : null;
+		let progressDoc = null;
+		let taskData;
+		let hideoutData;
 
-		// Retrieve the task data
-		const taskRef = db.collection('tarkovdata').doc('tasks');
-		const taskDoc = await taskRef.get();
-		const taskData = taskDoc.exists ? taskDoc.data() : null;
+		let progressPromise = progressRef.get().then((result) => {
+			progressDoc = result
+		})
+
+		let hideoutPromise = getHideoutData().then((result) => {
+			hideoutData = result
+		})
+
+		let taskPromise = getTaskData().then((result) => {
+			taskData = result
+		})
+
+		await Promise.all([progressPromise, hideoutPromise, taskPromise])
 
 		let progressData = formatProgress(progressDoc.data(), req.apiToken.owner, hideoutData, taskData);
 		res.status(200).json({ data: progressData, meta: { self: req.apiToken.owner } }).send()
@@ -307,35 +356,30 @@ app.get('/api/v2/team/progress', async (req, res) => {
 		// Get the requestee's meta documents
 		const systemRef = db.collection('system').doc(req.apiToken.owner);
 		const userRef = db.collection('user').doc(req.apiToken.owner);
-		const hideoutRef = db.collection('tarkovdata').doc('hideout');
-		const taskRef = db.collection('tarkovdata').doc('tasks');
 
-		var systemDoc = null;
-		var userDoc = null;
-		var hideoutDoc = null;
-		var taskDoc = null;
+		let systemDoc = null;
+		let userDoc = null;
+		let hideoutData;
+		let taskData;
 
-		var systemPromise = systemRef.get().then((result) => {
+		let systemPromise = systemRef.get().then((result) => {
 			systemDoc = result
 		})
 
-		var userPromise = userRef.get().then((result) => {
+		let userPromise = userRef.get().then((result) => {
 			userDoc = result
 		})
 
-		var hideoutPromise = hideoutRef.get().then((result) => {
-			hideoutDoc = result
+		let hideoutPromise = getHideoutData().then((result) => {
+			hideoutData = result
 		})
 
-		var taskPromise = taskRef.get().then((result) => {
-			taskDoc = result
+		let taskPromise = getTaskData().then((result) => {
+			taskData = result
 		})
 
 		// Get the system and user doc simultaneously
 		await Promise.all([systemPromise, userPromise, hideoutPromise, taskPromise])
-
-		const hideoutData = hideoutDoc.exists ? hideoutDoc.data() : null;
-		const taskData = taskDoc.exists ? taskDoc.data() : null;
 
 		const requesteeProgressRef = db.collection('progress').doc(req.apiToken.owner);
 
@@ -476,11 +520,11 @@ app.post('/api/v2/progress/task/:taskId', async (req, res) => {
 			// Check if state is one of the valid values
 			if (['uncompleted', 'completed', 'failed'].includes(req.body.state)) {
 				// Get the task document
-				const taskRef = db.collection('tarkovdata').doc('tasks');
-				const taskDoc = await taskRef.get();
+				let taskData;
 
-				// Get the task data TODO: Make this a global variable that is lazy-loaded as needed to reduce reads
-				const taskData = taskDoc.data();
+				await getTaskData().then((data) => {
+					taskData = data
+				})
 
 				// Check if the task exists
 				let relevantTask = taskData.tasks.find((task) => task.id == req.params.taskId)
@@ -664,11 +708,11 @@ app.post('/api/v2/progress/task/objective/:objectiveId', async (req, res) => {
 		// Check if we have the required data to update an objective
 		if (req.params.objectiveId && (req.body.state || req.body.count != null)) {
 			// Get the task document
-			const taskRef = db.collection('tarkovdata').doc('tasks');
-			const taskDoc = await taskRef.get();
+			let taskData;
 
-			// Get the task data TODO: Make this a global variable that is lazy-loaded as needed to reduce reads
-			const taskData = taskDoc.data();
+			await getTaskData().then((data) => {
+				taskData = data
+			})
 
 			// Check if the objective exists
 			let relevantTask = taskData.tasks.find((task) => task.objectives.find((objective) => objective.id == req.params.objectiveId))
