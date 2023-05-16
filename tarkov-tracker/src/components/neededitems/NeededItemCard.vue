@@ -16,15 +16,15 @@
               </v-img>
             </div>
             <!-- Item name, directly below item image -->
-            <div class="d-flex align-self-center mt-2">
+            <div class="d-flex align-self-center mt-2 mx-2">
               <div class="text-center px-2">
                 {{ item.name }}
               </div>
             </div>
             <!-- Item need details -->
-            <div class="d-flex flex-column align-self-center mt-2">
+            <div class="d-flex flex-column align-self-center mt-2 mx-2">
               <template v-if="props.need.needType == 'taskObjective'">
-                <task-link :task="relatedTask" class="d-flex justify-center" />
+                <task-link :task="relatedTask" />
                 <v-row v-if="relatedTask.predecessors?.length > 0" no-gutters class="mb-1 mt-1 d-flex justify-center">
                   <v-col cols="auto" class="mr-1" align="center">
                     <v-icon icon="mdi-lock-open-outline" />
@@ -91,7 +91,7 @@
               <div>
                 <v-btn variant="tonal" class="pa-0 ma-0" @click="decreaseCount()"><v-icon>mdi-minus-thick</v-icon></v-btn>
               </div>
-              <div>
+              <div class="mx-1">
                 <v-btn variant="tonal" class="pa-0 ma-0" @click="toggleCount()">{{ currentCount }}/{{ neededCount
                 }}</v-btn>
               </div>
