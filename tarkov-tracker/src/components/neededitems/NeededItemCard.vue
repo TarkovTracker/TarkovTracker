@@ -1,172 +1,105 @@
 <template>
   <v-col v-if="showItemFilter" cols="12" sm="6" md="4" lg="3" xl="2">
     <KeepAlive>
-      <v-lazy
-        :options="{ threshold: 0.5 }"
-        min-height="100"
-        class="fill-height"
-      >
+      <v-lazy :options="{ threshold: 0.5 }" min-height="100" class="fill-height">
         <v-sheet rounded class="fill-height">
-          <v-container class="pa-0">
-            <v-row no-gutters>
-              <v-col cols="12" class="item-panel pa-0 pb-2">
-                <v-img
-                  :src="item.image512pxLink"
-                  :lazy-src="item.baseImageLink"
-                  :class="itemImageClasses"
-                >
-                  <template #placeholder>
-                    <v-row
-                      class="fill-height ma-0"
-                      align="center"
-                      justify="center"
-                    >
-                      <v-progress-circular
-                        indeterminate
-                        color="grey-lighten-5"
-                      ></v-progress-circular>
-                    </v-row>
-                  </template>
-                </v-img>
-              </v-col>
-            </v-row>
-            <v-row no-gutters class="pb-2" justify="end">
-              <v-col cols="12" class="text-center px-2">
+          <!-- Flexbox display -->
+          <div class="d-flex align-end flex-column fill-height">
+            <!-- Item image -->
+            <div class="d-flex align-self-stretch item-panel">
+              <v-img :src="item.image512pxLink" :lazy-src="item.baseImageLink" :class="itemImageClasses">
+                <template #placeholder>
+                  <v-row class="fill-height ma-0" align="center" justify="center">
+                    <v-progress-circular indeterminate color="grey-lighten-5"></v-progress-circular>
+                  </v-row>
+                </template>
+              </v-img>
+            </div>
+            <!-- Item name, directly below item image -->
+            <div class="d-flex align-self-center mt-2">
+              <div class="text-center px-2">
                 {{ item.name }}
-              </v-col>
-              <v-col cols="12">
-                <template v-if="props.need.needType == 'taskObjective'">
-                  <task-link
-                    :task="relatedTask"
-                    class="d-flex justify-center"
-                  />
-                  <v-row
-                    v-if="relatedTask.predecessors?.length > 0"
-                    no-gutters
-                    class="mb-1 mt-1 d-flex justify-center"
-                  >
-                    <v-col cols="auto" class="mr-1" align="center">
-                      <v-icon icon="mdi-lock-open-outline" />
-                    </v-col>
-                    <v-col cols="auto" align="center">
-                      <i18n-t
-                        keypath="page.tasks.questcard.lockedbefore"
-                        scope="global"
-                      >
-                        <template #count>
-                          {{ lockedBefore }}
-                        </template>
-                      </i18n-t>
-                    </v-col>
-                  </v-row>
-                  <v-row
-                    v-if="levelRequired > 0"
-                    no-gutters
-                    class="mb-1 mt-1 d-flex justify-center"
-                  >
-                    <v-col cols="auto" class="mr-1" align="center">
-                      <v-icon icon="mdi-menu-right" />
-                    </v-col>
-                    <v-col cols="auto" align="center">
-                      <i18n-t
-                        keypath="page.tasks.questcard.level"
-                        scope="global"
-                      >
-                        <template #count>
-                          {{ levelRequired }}
-                        </template>
-                      </i18n-t>
-                    </v-col>
-                  </v-row>
-                </template>
-                <template v-else-if="props.need.needType == 'hideoutModule'">
-                  <v-row
-                    dense
-                    no-gutters
-                    class="mb-1 mt-1 d-flex justify-center"
-                  >
-                    <v-col cols="auto" align="center">
-                      <station-link
-                        :station="relatedStation"
-                        class="justify-center"
-                      />
-                    </v-col>
-                    <v-col cols="auto" class="ml-1">{{
-                      props.need.hideoutModule.level
-                    }}</v-col>
-                  </v-row>
-                  <v-row
-                    v-if="props.need.hideoutModule.predecessors?.length > 0"
-                    no-gutters
-                    class="mb-1 mt-1 d-flex justify-center"
-                  >
-                    <v-col cols="auto" class="mr-1" align="center">
-                      <v-icon icon="mdi-lock-open-outline" />
-                    </v-col>
-                    <v-col cols="auto" align="center">
-                      <i18n-t
-                        keypath="page.tasks.questcard.lockedbefore"
-                        scope="global"
-                      >
-                        <template #count>
-                          {{ lockedBefore }}
-                        </template>
-                      </i18n-t>
-                    </v-col>
-                  </v-row>
-                  <v-row
-                    v-if="levelRequired > 0"
-                    no-gutters
-                    class="mb-1 mt-1 d-flex justify-center"
-                  >
-                    <v-col cols="auto" class="mr-1" align="center">
-                      <v-icon icon="mdi-menu-right" />
-                    </v-col>
-                    <v-col cols="auto" align="center">
-                      <i18n-t
-                        keypath="page.tasks.questcard.level"
-                        scope="global"
-                      >
-                        <template #count>
-                          {{ levelRequired }}
-                        </template>
-                      </i18n-t>
-                    </v-col>
-                  </v-row>
-                </template>
-                <v-row
-                  v-if="selfValid && !selfCompletedNeed"
-                  class="text-center mx-2 mt-2"
-                  no-gutters
-                >
-                  <v-col cols="3">
-                    <v-btn
-                      variant="tonal"
-                      class="pa-0 ma-0"
-                      @click="decreaseCount()"
-                      ><v-icon>mdi-minus-thick</v-icon></v-btn
-                    >
+              </div>
+            </div>
+            <!-- Item need details -->
+            <div class="d-flex flex-column align-self-center mt-2">
+              <template v-if="props.need.needType == 'taskObjective'">
+                <task-link :task="relatedTask" class="d-flex justify-center" />
+                <v-row v-if="relatedTask.predecessors?.length > 0" no-gutters class="mb-1 mt-1 d-flex justify-center">
+                  <v-col cols="auto" class="mr-1" align="center">
+                    <v-icon icon="mdi-lock-open-outline" />
                   </v-col>
-                  <v-col cols="5">
-                    <v-btn
-                      variant="tonal"
-                      class="pa-0 ma-0"
-                      @click="toggleCount()"
-                      >{{ currentCount }}/{{ neededCount }}</v-btn
-                    >
-                  </v-col>
-                  <v-col cols="3">
-                    <v-btn
-                      variant="tonal"
-                      class="pa-0 ma-0"
-                      @click="increaseCount()"
-                      ><v-icon>mdi-plus-thick</v-icon></v-btn
-                    >
+                  <v-col cols="auto" align="center">
+                    <i18n-t keypath="page.tasks.questcard.lockedbefore" scope="global">
+                      <template #count>
+                        {{ lockedBefore }}
+                      </template>
+                    </i18n-t>
                   </v-col>
                 </v-row>
-              </v-col>
-            </v-row>
-          </v-container>
+                <v-row v-if="levelRequired > 0" no-gutters class="mb-1 mt-1 d-flex justify-center">
+                  <v-col cols="auto" class="mr-1" align="center">
+                    <v-icon icon="mdi-menu-right" />
+                  </v-col>
+                  <v-col cols="auto" align="center">
+                    <i18n-t keypath="page.tasks.questcard.level" scope="global">
+                      <template #count>
+                        {{ levelRequired }}
+                      </template>
+                    </i18n-t>
+                  </v-col>
+                </v-row>
+              </template>
+              <template v-else-if="props.need.needType == 'hideoutModule'">
+                <v-row dense no-gutters class="mb-1 mt-1 d-flex justify-center">
+                  <v-col cols="auto" align="center">
+                    <station-link :station="relatedStation" class="justify-center" />
+                  </v-col>
+                  <v-col cols="auto" class="ml-1">{{
+                    props.need.hideoutModule.level
+                  }}</v-col>
+                </v-row>
+                <v-row v-if="props.need.hideoutModule.predecessors?.length > 0" no-gutters
+                  class="mb-1 mt-1 d-flex justify-center">
+                  <v-col cols="auto" class="mr-1" align="center">
+                    <v-icon icon="mdi-lock-open-outline" />
+                  </v-col>
+                  <v-col cols="auto" align="center">
+                    <i18n-t keypath="page.tasks.questcard.lockedbefore" scope="global">
+                      <template #count>
+                        {{ lockedBefore }}
+                      </template>
+                    </i18n-t>
+                  </v-col>
+                </v-row>
+                <v-row v-if="levelRequired > 0" no-gutters class="mb-1 mt-1 d-flex justify-center">
+                  <v-col cols="auto" class="mr-1" align="center">
+                    <v-icon icon="mdi-menu-right" />
+                  </v-col>
+                  <v-col cols="auto" align="center">
+                    <i18n-t keypath="page.tasks.questcard.level" scope="global">
+                      <template #count>
+                        {{ levelRequired }}
+                      </template>
+                    </i18n-t>
+                  </v-col>
+                </v-row>
+              </template>
+            </div>
+            <!-- Item count actions -->
+            <div class="d-flex align-self-stretch justify-space-between mt-auto mb-2 mx-2">
+              <div>
+                <v-btn variant="tonal" class="pa-0 ma-0" @click="decreaseCount()"><v-icon>mdi-minus-thick</v-icon></v-btn>
+              </div>
+              <div>
+                <v-btn variant="tonal" class="pa-0 ma-0" @click="toggleCount()">{{ currentCount }}/{{ neededCount
+                }}</v-btn>
+              </div>
+              <div>
+                <v-btn variant="tonal" class="pa-0 ma-0" @click="increaseCount()"><v-icon>mdi-plus-thick</v-icon></v-btn>
+              </div>
+            </div>
+          </div>
         </v-sheet>
       </v-lazy>
     </KeepAlive>
