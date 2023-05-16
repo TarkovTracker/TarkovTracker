@@ -1,12 +1,17 @@
 <template>
   <router-link to="/">
     <div class="d-flex">
-      <v-avatar size="1.5em" style="vertical-align: middle;">
+      <v-avatar size="1.5em" style="vertical-align: middle">
         <v-img :src="traderAvatar" />
       </v-avatar>
       <template v-if="isFactionTask">
-        <v-avatar size="1.5em" rounded="0" style="vertical-align: middle;" class="ml-2">
-          <v-img :src="factionImage" class="faction-icon"/>
+        <v-avatar
+          size="1.5em"
+          rounded="0"
+          style="vertical-align: middle"
+          class="ml-2"
+        >
+          <v-img :src="factionImage" class="faction-icon" />
         </v-avatar>
       </template>
       <span class="ml-2 font-weight-bold">
@@ -16,32 +21,30 @@
   </router-link>
 </template>
 <script setup>
-import { computed } from 'vue'
+import { computed } from "vue";
 import { useTarkovData } from "@/composables/tarkovdata";
 // Define the props for the component
 const props = defineProps({
   task: {
     type: Object,
     required: true,
-  }
-})
+  },
+});
 
-const { tasks } = useTarkovData()
+const { tasks } = useTarkovData();
 
 // Check if there are two faction tasks for this task
 const isFactionTask = computed(() => {
-  return props.task?.factionName != 'Any'
-})
+  return props.task?.factionName != "Any";
+});
 
 const factionImage = computed(() => {
-  return `/img/factions/${props.task.factionName}.webp`
-})
-
+  return `/img/factions/${props.task.factionName}.webp`;
+});
 
 const traderAvatar = computed(() => {
-  return `/img/traders/${props.task?.trader?.id}.jpg`
-})
-
+  return `/img/traders/${props.task?.trader?.id}.jpg`;
+});
 </script>
 <style lang="scss" scoped>
 a:any-link {

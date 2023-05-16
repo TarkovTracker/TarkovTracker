@@ -5,13 +5,22 @@
         <template #activator="{ props }">
           <template v-if="appStore.drawerUseRail(mdAndDown)">
             <v-avatar
-v-bind="props" class="mx-auto" size="24"
-              :class="appStore.drawerUseRail(mdAndDown) ? 'd-flex fake-link' : ''">
+              v-bind="props"
+              class="mx-auto"
+              size="24"
+              :class="
+                appStore.drawerUseRail(mdAndDown) ? 'd-flex fake-link' : ''
+              "
+            >
               <v-img :src="fireuser.photoURL" />
             </v-avatar>
           </template>
           <template v-else>
-            <v-list-item v-bind="props" :title="fireuser.displayName" :prepend-avatar="fireuser.photoURL"></v-list-item>
+            <v-list-item
+              v-bind="props"
+              :title="fireuser.displayName"
+              :prepend-avatar="fireuser.photoURL"
+            ></v-list-item>
           </template>
         </template>
         <drawer-item icon="mdi-lock" locale-key="logout" @click.stop="logout" />
@@ -23,11 +32,11 @@ v-bind="props" class="mx-auto" size="24"
   </v-list>
 </template>
 <script setup>
-import { fireapp, fireuser } from '@/plugins/firebase'
+import { fireapp, fireuser } from "@/plugins/firebase";
 import { defineAsyncComponent } from "vue";
 import { useAppStore } from "@/stores/app.js";
-import { useDisplay } from 'vuetify'
-const { mdAndDown } = useDisplay()
+import { useDisplay } from "vuetify";
+const { mdAndDown } = useDisplay();
 const appStore = useAppStore();
 
 const DrawerItem = defineAsyncComponent(() =>
@@ -35,12 +44,15 @@ const DrawerItem = defineAsyncComponent(() =>
 );
 
 function logout() {
-  fireapp.auth().signOut()
+  fireapp.auth().signOut();
 }
-
 </script>
 <style lang="scss" scoped>
-:global(body > div.v-overlay-container > div.allow-overflow > div.v-overlay__content > div.v-sheet) {
+:global(body
+    > div.v-overlay-container
+    > div.allow-overflow
+    > div.v-overlay__content
+    > div.v-sheet) {
   overflow-y: visible;
 }
 

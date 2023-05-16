@@ -1,6 +1,10 @@
 <template>
   <v-sheet rounded class="elevation-2 mt-2">
-    <v-avatar class="ml-2 mb-2 mt-n4 mr-2 elevation-2 float-left" :color="props.iconBackground" size="64">
+    <v-avatar
+      class="ml-2 mb-2 mt-n4 mr-2 elevation-2 float-left"
+      :color="props.iconBackground"
+      size="64"
+    >
       <v-icon size="48px" :color="props.iconColor">{{ props.icon }}</v-icon>
     </v-avatar>
     <div class="text-h5 text-left pa-2 pb-0">
@@ -13,7 +17,6 @@
 </template>
 
 <script setup>
-
 // eslint-disable-next-line no-unused-vars
 const props = defineProps({
   icon: {
@@ -32,9 +35,5 @@ const props = defineProps({
     required: false,
   },
 });
-
-
 </script>
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

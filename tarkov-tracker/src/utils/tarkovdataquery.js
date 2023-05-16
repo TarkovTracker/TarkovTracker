@@ -249,7 +249,6 @@ export default gql`
           }
           level
         }
-        
       }
       startRewards {
         traderStanding {
@@ -451,4 +450,4 @@ export default gql`
       tarkovDataId
     }
   }
-`
+`;

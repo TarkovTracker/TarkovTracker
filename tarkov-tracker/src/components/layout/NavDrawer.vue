@@ -1,7 +1,10 @@
 <template>
   <v-navigation-drawer
-v-model="appStore.drawerShow" theme="dark" image="/img/sidebar-background.webp"
-    :rail="appStore.drawerUseRail(mdAndDown)">
+    v-model="appStore.drawerShow"
+    theme="dark"
+    image="/img/sidebar-background.webp"
+    :rail="appStore.drawerUseRail(mdAndDown)"
+  >
     <tracker-logo />
     <v-divider class="mx-3 my-1" />
     <drawer-account />
@@ -17,8 +20,8 @@ v-model="appStore.drawerShow" theme="dark" image="/img/sidebar-background.webp"
 import { defineAsyncComponent } from "vue";
 import { useAppStore } from "@/stores/app.js";
 
-import { useDisplay } from 'vuetify'
-const { mdAndDown } = useDisplay()
+import { useDisplay } from "vuetify";
+const { mdAndDown } = useDisplay();
 
 const appStore = useAppStore();
 

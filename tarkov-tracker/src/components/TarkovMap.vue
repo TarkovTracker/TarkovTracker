@@ -2,17 +2,28 @@
   <v-container>
     <v-row>
       <v-col cols="12">
-        <template v-for="floor, floorIndex in props.map.svg.floors" :key="floorIndex">
-          <v-btn variant="tonal" :color="floor == selectedFloor ? 'green' : ''" class="mx-2" @click="setFloor(floor)">{{
-    floor.replace('_', ' ')
-}}</v-btn>
+        <template
+          v-for="(floor, floorIndex) in props.map.svg.floors"
+          :key="floorIndex"
+        >
+          <v-btn
+            variant="tonal"
+            :color="floor == selectedFloor ? 'green' : ''"
+            class="mx-2"
+            @click="setFloor(floor)"
+            >{{ floor.replace("_", " ") }}</v-btn
+          >
         </template>
       </v-col>
       <v-col cols="12">
-        <div :id="randomMapId" style="position:relative; width: 100%">
-          <template v-for="mark, markIndex in props.marks" :key="markIndex">
-            <map-marker v-if="mark.map === props.map.id" :key="markIndex" :mark="mark"
-              :selected-floor="selectedFloor" />
+        <div :id="randomMapId" style="position: relative; width: 100%">
+          <template v-for="(mark, markIndex) in props.marks" :key="markIndex">
+            <map-marker
+              v-if="mark.map === props.map.id"
+              :key="markIndex"
+              :mark="mark"
+              :selected-floor="selectedFloor"
+            />
           </template>
         </div>
       </v-col>
@@ -20,12 +31,19 @@
   </v-container>
 </template>
 <script setup>
-import { defineProps, computed, ref, onMounted, defineAsyncComponent, watch } from "vue";
+import {
+  defineProps,
+  computed,
+  ref,
+  onMounted,
+  defineAsyncComponent,
+  watch,
+} from "vue";
 import { useUserStore } from "@/stores/user.js";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import * as d3 from "d3";
 const randomMapId = ref(uuidv4());
-const emit = defineEmits(['gpsclick'])
+const emit = defineEmits(["gpsclick"]);
 const props = defineProps({
   map: {
     type: Object,
@@ -38,58 +56,78 @@ const props = defineProps({
 });
 const MapMarker = defineAsyncComponent(() =>
   import("@/components/MapMarker.vue")
-)
+);
 
 // selectedFloor is a ref which defaults to the last item in the floors array
-const selectedFloor = ref(props.map.svg.floors[props.map.svg.floors.length - 1])
+const selectedFloor = ref(
+  props.map.svg.floors[props.map.svg.floors.length - 1]
+);
 
 const setFloor = (floor) => {
-  selectedFloor.value = floor
-  draw()
-}
+  selectedFloor.value = floor;
+  draw();
+};
 
-watch(() => props.map, () => {
-  draw()
-  selectedFloor.value = props.map.svg.floors[props.map.svg.floors.length - 1]
-})
+watch(
+  () => props.map,
+  () => {
+    draw();
+    selectedFloor.value = props.map.svg.floors[props.map.svg.floors.length - 1];
+  }
+);
 
 const draw = async () => {
-  const svg = await d3.svg(`https://tarkovtracker.github.io/tarkovdata/maps/${props.map.svg.file}`)
-  d3.select(document.getElementById(randomMapId.value)).selectAll('svg').remove()
-  d3.select(document.getElementById(randomMapId.value)).node().appendChild(svg.documentElement)
-  d3.select(document.getElementById(randomMapId.value)).select('svg').style('width', '100%')
-  d3.select(document.getElementById(randomMapId.value)).select('svg').style('height', '100%')
+  const svg = await d3.svg(
+    `https://tarkovtracker.github.io/tarkovdata/maps/${props.map.svg.file}`
+  );
+  d3.select(document.getElementById(randomMapId.value))
+    .selectAll("svg")
+    .remove();
+  d3.select(document.getElementById(randomMapId.value))
+    .node()
+    .appendChild(svg.documentElement);
+  d3.select(document.getElementById(randomMapId.value))
+    .select("svg")
+    .style("width", "100%");
+  d3.select(document.getElementById(randomMapId.value))
+    .select("svg")
+    .style("height", "100%");
   // Calculate the index of the selected floor
-  const selectedFloorIndex = props.map.svg.floors.indexOf(selectedFloor.value)
+  const selectedFloorIndex = props.map.svg.floors.indexOf(selectedFloor.value);
   props.map.svg.floors.forEach((floor, index) => {
     if (index > selectedFloorIndex) {
-      d3.select(document.getElementById(randomMapId.value)).select('svg').select(`#${floor}`).style('opacity', 0.02)
+      d3.select(document.getElementById(randomMapId.value))
+        .select("svg")
+        .select(`#${floor}`)
+        .style("opacity", 0.02);
     }
-  }, this)
-}
+  }, this);
+};
 onMounted(() => {
-  console.log(`the component is now mounted.`)
-  draw()
+  console.log(`the component is now mounted.`);
+  draw();
 
   // Event block for creating gps data
-  document.getElementById(randomMapId.value).addEventListener("click", function (event) {
-    let e = document.getElementById(randomMapId.value);
-    let dim = e.getBoundingClientRect();
-    let gps = {
-      map: props.map.id,
-      leftPercent: parseFloat(((event.clientX - dim.left) / e.clientWidth * 100).toFixed(2)),
-      topPercent: parseFloat(((event.clientY - dim.top) / e.clientHeight * 100).toFixed(2)),
-      floor: selectedFloor.value
-    }
-    emit('gpsclick', gps)
-  }.bind(this));
-})
-
-
+  document.getElementById(randomMapId.value).addEventListener(
+    "click",
+    function (event) {
+      let e = document.getElementById(randomMapId.value);
+      let dim = e.getBoundingClientRect();
+      let gps = {
+        map: props.map.id,
+        leftPercent: parseFloat(
+          (((event.clientX - dim.left) / e.clientWidth) * 100).toFixed(2)
+        ),
+        topPercent: parseFloat(
+          (((event.clientY - dim.top) / e.clientHeight) * 100).toFixed(2)
+        ),
+        floor: selectedFloor.value,
+      };
+      emit("gpsclick", gps);
+    }.bind(this)
+  );
+});
 
 const userStore = useUserStore();
-
 </script>
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

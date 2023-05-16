@@ -1,71 +1,71 @@
 const routes = [
   {
     // Standard Layout
-    path: '/',
+    path: "/",
     component: () => import("@/components/layout/StandardLayout.vue"),
     children: [
       {
         // Default route
-        name: 'dashboard',
-        path: '/',
-        alias: ['/', '/dashboard'],
-        meta: { background: 'sunset' },
+        name: "dashboard",
+        path: "/",
+        alias: ["/", "/dashboard"],
+        meta: { background: "sunset" },
         component: () => import("@/pages/TrackerDashboard.vue"),
       },
       {
-        name: 'neededitems',
-        path: '/items',
+        name: "neededitems",
+        path: "/items",
         meta: {},
         component: () => import("@/pages/NeededItems.vue"),
       },
       {
-        name: 'tasks',
+        name: "tasks",
         path: "/tasks",
         meta: {},
         component: () => import("@/pages/TaskList.vue"),
       },
       {
-        name: 'hideout',
+        name: "hideout",
         path: "/hideout",
-        meta: { background: 'hideout' },
+        meta: { background: "hideout" },
         component: () => import("@/pages/HideoutList.vue"),
       },
       {
-        name: 'settings',
+        name: "settings",
         path: "/settings",
-        meta: { background: 'gas' },
+        meta: { background: "gas" },
         component: () => import("@/pages/TrackerSettings.vue"),
       },
       {
-        path: '/:pathMatch(.*)*',
-        name: 'not-found',
-        component: () => import("@/pages/NotFound.vue")
+        path: "/:pathMatch(.*)*",
+        name: "not-found",
+        component: () => import("@/pages/NotFound.vue"),
       },
       {
-        name: 'login',
+        name: "login",
         path: "/login",
-        meta: { background: 'checkpoint' },
+        meta: { background: "checkpoint" },
         component: () => import("@/pages/LoginInterface.vue"),
       },
       {
-        name: 'team',
+        name: "team",
         path: "/team",
-        meta: { background: 'busstation' },
+        meta: { background: "busstation" },
         component: () => import("@/pages/TeamManagement.vue"),
       },
       {
-        name: 'taskeditor',
+        name: "taskeditor",
         path: "/taskeditor",
         meta: {},
         component: () => import("@/pages/TaskEditor.vue"),
       },
       {
-        name: 'usertester',
+        name: "usertester",
         path: "/usertester",
         meta: {},
         component: () => import("@/pages/UserTester.vue"),
       },
-    ]
+    ],
   },
 ];
 

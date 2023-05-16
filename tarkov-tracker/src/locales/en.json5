@@ -1,60 +1,60 @@
 {
   // This file supports JSON5 notation. See https://json5.org/
-  site_name: 'Tarkov Tracker',
+  site_name: "Tarkov Tracker",
   app_bar: {
     overflow_menu: {
-      language: 'Language',
-      reset_tips: 'Unhide all tips',
-      hide_all_tips: 'Hide all tips',
-    }
+      language: "Language",
+      reset_tips: "Unhide all tips",
+      hide_all_tips: "Hide all tips",
+    },
   },
   common: {
-    refreshbutton: "Try again"
+    refreshbutton: "Try again",
   },
   menu: {
-    language: 'Language'
+    language: "Language",
   },
   page: {
     dashboard: {
-      title: 'Dashboard',
+      title: "Dashboard",
       stats: {
         allTasks: {
-          stat: 'Tasks Completed',
-          details: 'The number of tasks you have completed.'
+          stat: "Tasks Completed",
+          details: "The number of tasks you have completed.",
         },
         taskItems: {
-          stat: 'Task Items',
-          details: 'Includes FIR and non-FIR collection items.'
+          stat: "Task Items",
+          details: "Includes FIR and non-FIR collection items.",
         },
         allObjectives: {
-          stat: 'Task Objectives',
-          details: 'The total unique objectives within tasks.'
-        }
-      }
+          stat: "Task Objectives",
+          details: "The total unique objectives within tasks.",
+        },
+      },
     },
     tasks: {
-      title: 'Tasks',
+      title: "Tasks",
       primaryviews: {
-        all: 'All',
-        maps: 'Maps',
-        traders: 'Traders',
+        all: "All",
+        maps: "Maps",
+        traders: "Traders",
       },
       secondaryviews: {
-        available: 'Available',
-        completed: 'Completed',
-        locked: 'Locked',
+        available: "Available",
+        completed: "Completed",
+        locked: "Locked",
       },
       userviews: {
-        all: 'All',
-        yourself: 'Yourself',
+        all: "All",
+        yourself: "Yourself",
       },
-      hide_global_tasks: 'Hide Global Tasks',
-      show_global_tasks: 'Show Global Tasks',
-      hide_non_kappa_tasks: 'Hide Non Kappa Tasks',
-      show_non_kappa_tasks: 'Show Non Kappa Tasks',
-      notasksfound: 'No tasks found. Try changing your filters or updating your level.',
-      showing_all_sources: 'Showing all sources',
-      loading: 'Loading tasks',
+      hide_global_tasks: "Hide Global Tasks",
+      show_global_tasks: "Show Global Tasks",
+      hide_non_kappa_tasks: "Hide Non Kappa Tasks",
+      show_non_kappa_tasks: "Show Non Kappa Tasks",
+      notasksfound: "No tasks found. Try changing your filters or updating your level.",
+      showing_all_sources: "Showing all sources",
+      loading: "Loading tasks",
       questcard: {
         level: "Level {count}",
         wiki: "Wiki page",
@@ -72,11 +72,11 @@
         alternatives: "Alternative quests",
         alternativefailed: "Alternative quests will also be reset",
         differentfaction: "This quest is not available to your faction",
-      }
+      },
     },
     hideout: {
-      title: 'Hideout',
-      loading: 'Loading hideout data',
+      title: "Hideout",
+      loading: "Loading hideout data",
       stationcard: {
         level: "Available to build | Level {count} | Level {count}",
         nextlevel: "Requirements for next level",
@@ -92,212 +92,212 @@
         downgradebutton: "Remove station | Downgrade to level {level} | Downgrade to level {level}",
         statusupgraded: "Upgraded {name} to level {level}",
         statusdowngraded: "Downgraded {name} from level {level}",
-      }
+      },
     },
     neededitems: {
-      title: 'Needed Items',
-      loading: 'Loading task and hideout data',
+      title: "Needed Items",
+      loading: "Loading task and hideout data",
       neededviews: {
-        all: 'All',
-        tasks: 'Tasks',
-        hideout: 'Hideout',
+        all: "All",
+        tasks: "Tasks",
+        hideout: "Hideout",
       },
       options: {
-        title: 'Needed Items Options',
-        close: 'Close',
-        items_hide_non_fir: 'Hide needed items that don\'t need to be found in raid',
-        items_show_non_fir: 'Show needed items that don\'t need to be found in raid',
-      }
+        title: "Needed Items Options",
+        close: "Close",
+        items_hide_non_fir: "Hide needed items that don't need to be found in raid",
+        items_show_non_fir: "Show needed items that don't need to be found in raid",
+      },
     },
     settings: {
-      title: 'Settings',
+      title: "Settings",
       card: {
         reset: {
-          title: 'Reset',
-          description: 'Reset all progression data to default.',
-          button: 'Reset my progress',
+          title: "Reset",
+          description: "Reset all progression data to default.",
+          button: "Reset my progress",
           confirmation: "Are you sure you want to reset your progress? This cannot be undone.",
           confirmtitle: "Confirm Reset",
           confirmcancelbutton: "Cancel",
           confirmresetbutton: "Reset",
         },
         gameedition: {
-          title: 'Game Edition',
-          description: 'Select the game edition you are playing. Additional data may be computed from this information (e.g. trader reputation, stash level).',
-          select: 'Select game edition'
+          title: "Game Edition",
+          description: "Select the game edition you are playing. Additional data may be computed from this information (e.g. trader reputation, stash level).",
+          select: "Select game edition",
         },
         pmcfaction: {
-          title: 'PMC Faction',
-          description: 'Select the PMC faction you are playing. Additional data may be computed from this information (e.g. available quests).',
-          select: 'Select PMC faction',
+          title: "PMC Faction",
+          description: "Select the PMC faction you are playing. Additional data may be computed from this information (e.g. available quests).",
+          select: "Select PMC faction",
           factions: {
-            USEC: 'USEC',
-            BEAR: 'BEAR'
-          }
+            USEC: "USEC",
+            BEAR: "BEAR",
+          },
         },
         questfilter: {
-          title: 'Quest Filters',
-          description: 'Select which quests you want to see on the Tasks page.',
-          hide_global_tasks: 'Hide global tasks on map view',
-          show_global_tasks: 'Show global tasks on map view',
-          hide_non_kappa_tasks: 'Hide non-Kappa tasks',
-          show_non_kappa_tasks: 'Show non-Kappa tasks',
+          title: "Quest Filters",
+          description: "Select which quests you want to see on the Tasks page.",
+          hide_global_tasks: "Hide global tasks on map view",
+          show_global_tasks: "Show global tasks on map view",
+          hide_non_kappa_tasks: "Hide non-Kappa tasks",
+          show_non_kappa_tasks: "Show non-Kappa tasks",
         },
         streamermode: {
-          title: 'Streamer Mode',
-          description: 'Hides your team invite codes from view, so you can show off your progress without letting people join your live team.',
-          modeOn: 'On',
-          modeOff: 'Off'
+          title: "Streamer Mode",
+          description: "Hides your team invite codes from view, so you can show off your progress without letting people join your live team.",
+          modeOn: "On",
+          modeOff: "Off",
         },
         apitokens: {
-          title: 'API Tokens',
-          description: 'TarkovTracker hosts a public API that allows other tools to access the progress you store here. You can generate an API token to allow other tools to access your data. View the {openAPI_documentation}',
-          new_token_expand: 'Create a token',
-          submit_new_token: 'Create token',
-          openAPI_documentation: 'OpenAPI documentation',
-          show_tokens: 'Show my tokens',
-          create_token_success: 'Successfully created a new API token.',
-          create_token_error: 'Failed to create a new API token.',
-          no_tokens: 'You do not have any TarkovTracker API tokens.',
-          token_column: 'Token',
-          note_column: 'Note',
-          created_column: 'Created',
-          streamer_mode_qr: 'Streamer mode is enabled. QR codes are hidden.',
-          permissions_column: 'Permissions',
+          title: "API Tokens",
+          description: "TarkovTracker hosts a public API that allows other tools to access the progress you store here. You can generate an API token to allow other tools to access your data. View the {openAPI_documentation}",
+          new_token_expand: "Create a token",
+          submit_new_token: "Create token",
+          openAPI_documentation: "OpenAPI documentation",
+          show_tokens: "Show my tokens",
+          create_token_success: "Successfully created a new API token.",
+          create_token_error: "Failed to create a new API token.",
+          no_tokens: "You do not have any TarkovTracker API tokens.",
+          token_column: "Token",
+          note_column: "Note",
+          created_column: "Created",
+          streamer_mode_qr: "Streamer mode is enabled. QR codes are hidden.",
+          permissions_column: "Permissions",
           permission: {
-            'GP': 'Get Personal Progress',
-            'TP': 'Get Team Progress',
-            'WP': 'Write Progress',
-          }
-        }
-      }
+            GP: "Get Personal Progress",
+            TP: "Get Team Progress",
+            WP: "Write Progress",
+          },
+        },
+      },
     },
     team: {
-      title: 'Team',
+      title: "Team",
       card: {
         manageteam: {
-          title: 'Team Members',
-          button: 'Manage Team',
+          title: "Team Members",
+          button: "Manage Team",
           membercard: {
-            this_is_you: '(This is you)',
+            this_is_you: "(This is you)",
             taskscomplete: "{completed}/{total} tasks completed",
-          }
+          },
         },
         teamoptions: {
-          title: 'Team Integration Options',
-          button: 'Team Options',
-          task_hide_all: 'Hide all team members\' tasks',
-          task_show_all: 'Show team members\' tasks',
-          items_hide_all: 'Hide team members\' needed items',
-          items_show_all: 'Show team members\' needed items',
-          items_show_non_fir: 'Show all team members\' needed items (including non-FIR)',
-          items_hide_non_fir: 'Hide needed items for teammates that are not FIR',
-          items_hide_hideout: 'Hide team members\' needed hideout items',
-          items_show_hideout: 'Show team members\' needed hideout items',
-          map_hide_all: 'Hide team members\' map objectives',
-          map_show_all: 'Show team members\' map objectives',
+          title: "Team Integration Options",
+          button: "Team Options",
+          task_hide_all: "Hide all team members' tasks",
+          task_show_all: "Show team members' tasks",
+          items_hide_all: "Hide team members' needed items",
+          items_show_all: "Show team members' needed items",
+          items_show_non_fir: "Show all team members' needed items (including non-FIR)",
+          items_hide_non_fir: "Hide needed items for teammates that are not FIR",
+          items_hide_hideout: "Hide team members' needed hideout items",
+          items_show_hideout: "Show team members' needed hideout items",
+          map_hide_all: "Hide team members' map objectives",
+          map_show_all: "Show team members' map objectives",
         },
         myteam: {
-          title: 'My Team',
-          button: 'View Team',
-          create_new_team: 'Create a new team',
-          disband_team: 'Disband team',
-          leave_team: 'Leave team',
-          create_team_success: 'Successfully created a new team.',
-          create_team_error: 'Failed to create a new team.',
-          disband_team_success: 'Successfully disbanded your team.',
-          leave_team_success: 'Successfully left your team.',
-          leave_team_error: 'Failed to leave your team.',
-          no_team: 'You are not currently in a team.',
-          url_hidden: 'Hidden for Streamer mode.',
-          team_invite_url_label: 'Team Invite URL',
-          display_name_label: 'Team Display Name',
+          title: "My Team",
+          button: "View Team",
+          create_new_team: "Create a new team",
+          disband_team: "Disband team",
+          leave_team: "Leave team",
+          create_team_success: "Successfully created a new team.",
+          create_team_error: "Failed to create a new team.",
+          disband_team_success: "Successfully disbanded your team.",
+          leave_team_success: "Successfully left your team.",
+          leave_team_error: "Failed to leave your team.",
+          no_team: "You are not currently in a team.",
+          url_hidden: "Hidden for Streamer mode.",
+          team_invite_url_label: "Team Invite URL",
+          display_name_label: "Team Display Name",
         },
         teaminvite: {
-          description: 'You have received an invite to a TarkovTracker team',
-          accept: 'Accept',
-          decline: 'Decline',
-          leave_error: 'Failed to leave your existing team.',
-          join_error: 'Failed to join the team.',
-          join_success: 'Successfully joined the team.',
-        }
+          description: "You have received an invite to a TarkovTracker team",
+          accept: "Accept",
+          decline: "Decline",
+          leave_error: "Failed to leave your existing team.",
+          join_error: "Failed to join the team.",
+          join_success: "Successfully joined the team.",
+        },
       },
     },
     login: {
-      title: 'Login'
+      title: "Login",
     },
     not_found: {
-      title: 'Page Not Found',
-      not_found_description: 'Sorry, that page could not be found!'
-    }
+      title: "Page Not Found",
+      not_found_description: "Sorry, that page could not be found!",
+    },
   },
   footer: {
     call_to_action: {
-      discord_phrase: 'Report bugs/retask features on {discord}',
-      github_phrase: 'Contribute to the open source project on {github}',
-      patreon_phrase: 'Support project costs on {patreon}',
-      discord: 'Discord',
-      github: 'GitHub',
-      patreon: 'Patreon',
+      discord_phrase: "Report bugs/retask features on {discord}",
+      github_phrase: "Contribute to the open source project on {github}",
+      patreon_phrase: "Support project costs on {patreon}",
+      discord: "Discord",
+      github: "GitHub",
+      patreon: "Patreon",
     },
     ukraine: {
-      support_link: 'Support Ukrainians',
-      support_phrase: '{support_ukraine} via the ICRC'
-    }
+      support_link: "Support Ukrainians",
+      support_phrase: "{support_ukraine} via the ICRC",
+    },
   },
   module: {
     team_settings: {
-      title: 'Team Settings',
-      description: 'Configure your team settings.',
-    }
+      title: "Team Settings",
+      description: "Configure your team settings.",
+    },
   },
   navigation_drawer: {
-    home: 'Home',
-    settings: 'Settings',
-    login: 'Log In',
-    logout: 'Log Out',
-    level: 'Level',
-    team: 'Team',
-    tasks: 'Tasks',
-    hideout: 'Hideout',
-    neededitems: 'Needed Items',
-    tarkovdev: 'Tarkov.dev',
+    home: "Home",
+    settings: "Settings",
+    login: "Log In",
+    logout: "Log Out",
+    level: "Level",
+    team: "Team",
+    tasks: "Tasks",
+    hideout: "Hideout",
+    neededitems: "Needed Items",
+    tarkovdev: "Tarkov.dev",
     ratscanner: "Rat Scanner",
     tarkovguru: "Tarkov Guru",
-    tarkovchanges: "Tarkov Changes"
+    tarkovchanges: "Tarkov Changes",
   },
   tips: {
-    hide_tip: 'Hide this tip',
+    hide_tip: "Hide this tip",
     default: {
-      title: 'Tip',
-      description: 'Oops! This tip seems to be missing. Please report this bug on Discord.'
+      title: "Tip",
+      description: "Oops! This tip seems to be missing. Please report this bug on Discord.",
     },
     tasks: {
-      description: 'You can select different ways to categorize and view your tasks using the tabs below. You can expand the filter panel to filter tasks, sort them, and more. If you already have progress in Tarkov, you can view the locked tab of tasks and jump to the tasks you current have available.'
+      description: "You can select different ways to categorize and view your tasks using the tabs below. You can expand the filter panel to filter tasks, sort them, and more. If you already have progress in Tarkov, you can view the locked tab of tasks and jump to the tasks you current have available.",
     },
     team: {
-      title: 'Team',
-      description: 'Create a team to track your progress with friends. You can share a URL for others to join your team. You will be able to see your teammates\' progress, the items they need, and plan raids together.'
+      title: "Team",
+      description: "Create a team to track your progress with friends. You can share a URL for others to join your team. You will be able to see your teammates' progress, the items they need, and plan raids together.",
     },
     welcomett3: {
-      title: 'Welcome to TarkovTracker 3!',
-      description: 'Welcome to TarkovTracker version 3! This is a complete rewrite of the original TarkovTracker. New features are added every wipe! Please report any bugs you find on Discord.'
+      title: "Welcome to TarkovTracker 3!",
+      description: "Welcome to TarkovTracker version 3! This is a complete rewrite of the original TarkovTracker. New features are added every wipe! Please report any bugs you find on Discord.",
     },
     login: {
-      title: 'Login',
-      description: 'As a heads up, logging in is not necessary to use TarkovTracker to track your progress in the game. The only reason to log in is to enable sharing your progress with your friends live and coordinate raids, or to keep data across devices or through clearing browser data. If you aren\'t planning on doing that, you can continue to use TarkovTracker without logging in. Your data will be stored locally in your browser.'
+      title: "Login",
+      description: "As a heads up, logging in is not necessary to use TarkovTracker to track your progress in the game. The only reason to log in is to enable sharing your progress with your friends live and coordinate raids, or to keep data across devices or through clearing browser data. If you aren't planning on doing that, you can continue to use TarkovTracker without logging in. Your data will be stored locally in your browser.",
     },
     hideout: {
-      title: 'Hideout',
-      description: 'You can mark off progress towards building and upgrading your hideout. The progress you mark will be used to calculate needed items for your hideout.'
+      title: "Hideout",
+      description: "You can mark off progress towards building and upgrading your hideout. The progress you mark will be used to calculate needed items for your hideout.",
     },
     neededitems: {
-      title: 'Needed Items',
-      description: 'Here you can see items that you will need in the future for tasks and hideout upgrades. You can mark off items as you collect them to keep track of how many more you need.'
+      title: "Needed Items",
+      description: "Here you can see items that you will need in the future for tasks and hideout upgrades. You can mark off items as you collect them to keep track of how many more you need.",
     },
     teammembers: {
-      title: 'Team Members',
-      description: 'These are the list of your team members. You can click the eye icon to hide or show their tasks and needed items while you are using other parts of the tracker.'
-    }
-  }
+      title: "Team Members",
+      description: "These are the list of your team members. You can click the eye icon to hide or show their tasks and needed items while you are using other parts of the tracker.",
+    },
+  },
 }

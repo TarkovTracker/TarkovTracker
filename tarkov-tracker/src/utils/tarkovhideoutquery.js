@@ -2,58 +2,17 @@ import gql from "graphql-tag";
 
 export default gql`
   query TarkovDataHideout {
-  hideoutStations {
-    id
-    name
-    normalizedName
-  	levels {
+    hideoutStations {
       id
-      level
-      description
-      constructionTime
-      itemRequirements {
-      	id
-        item {
-          id
-          shortName
-          name
-          link
-          wikiLink
-          image512pxLink
-          gridImageLink
-          baseImageLink
-          iconLink
-          image8xLink
-          backgroundColor
-        }
-        count
-        quantity
-      }
-      stationLevelRequirements {
+      name
+      normalizedName
+      levels {
         id
-        station {
-          id
-          name
-        }
         level
-      }
-      skillRequirements {
-        id
-        name
-        level
-      }
-      traderRequirements {
-        id
-        trader {
+        description
+        constructionTime
+        itemRequirements {
           id
-          name
-        }
-        level
-      }
-      crafts {
-        id
-        duration
-        requiredItems {
           item {
             id
             shortName
@@ -70,25 +29,66 @@ export default gql`
           count
           quantity
         }
-        rewardItems {
-          item {
+        stationLevelRequirements {
+          id
+          station {
             id
-            shortName
             name
-            link
-            wikiLink
-            image512pxLink
-            gridImageLink
-            baseImageLink
-            iconLink
-            image8xLink
-            backgroundColor
           }
-          count
-          quantity
+          level
+        }
+        skillRequirements {
+          id
+          name
+          level
+        }
+        traderRequirements {
+          id
+          trader {
+            id
+            name
+          }
+          level
+        }
+        crafts {
+          id
+          duration
+          requiredItems {
+            item {
+              id
+              shortName
+              name
+              link
+              wikiLink
+              image512pxLink
+              gridImageLink
+              baseImageLink
+              iconLink
+              image8xLink
+              backgroundColor
+            }
+            count
+            quantity
+          }
+          rewardItems {
+            item {
+              id
+              shortName
+              name
+              link
+              wikiLink
+              image512pxLink
+              gridImageLink
+              baseImageLink
+              iconLink
+              image8xLink
+              backgroundColor
+            }
+            count
+            quantity
+          }
         }
       }
     }
   }
-}
-`
+`;

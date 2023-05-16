@@ -1,33 +1,33 @@
-import { createApp } from 'vue'
+import { createApp } from "vue";
 
-import { DefaultApolloClient } from '@vue/apollo-composable'
+import { DefaultApolloClient } from "@vue/apollo-composable";
 
 // Router component
-import router from './router'
+import router from "./router";
 
 // Web font loader
-import { loadFonts } from './plugins/webfontloader'
+import { loadFonts } from "./plugins/webfontloader";
 
 // i18n
-import i18n from './plugins/i18n'
+import i18n from "./plugins/i18n";
 
 // Vuetify
-import vuetify from './plugins/vuetify'
+import vuetify from "./plugins/vuetify";
 
 // Pinia
-import pinia from './plugins/pinia'
+import pinia from "./plugins/pinia";
 
 // Apollo GraphQL client
-import apolloClient from './plugins/apollo'
+import apolloClient from "./plugins/apollo";
 
 // VueFire
-import { VueFire, VueFireAuth } from 'vuefire'
-import { fireapp } from './plugins/firebase'
+import { VueFire, VueFireAuth } from "vuefire";
+import { fireapp } from "./plugins/firebase";
 
 // Base app component
-import App from './App.vue'
+import App from "./App.vue";
 
-loadFonts()
+loadFonts();
 
 createApp(App)
   .use(pinia)
@@ -36,9 +36,7 @@ createApp(App)
   .use(i18n)
   .use(VueFire, {
     firebaseApp: fireapp,
-    modules: [
-      VueFireAuth(),
-    ],
+    modules: [VueFireAuth()],
   })
   .provide(DefaultApolloClient, apolloClient)
-  .mount('#app')
+  .mount("#app");

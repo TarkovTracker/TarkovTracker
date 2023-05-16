@@ -1,5 +1,10 @@
 <template>
-  <v-list-item :class="itemClass" :to="props.to" :active="props.to === $route.path" @click="visitHref()">
+  <v-list-item
+    :class="itemClass"
+    :to="props.to"
+    :active="props.to === $route.path"
+    @click="visitHref()"
+  >
     <template v-if="props.avatar">
       <v-avatar size="24">
         <v-img :src="props.avatar" />
@@ -8,7 +13,11 @@
     <template v-else>
       <v-icon :icon="props.icon" />
     </template>
-    <v-list-item-title v-if="!appStore.drawerUseRail(mdAndDown)" :class="titleClass" style="display: inline-flex;">
+    <v-list-item-title
+      v-if="!appStore.drawerUseRail(mdAndDown)"
+      :class="titleClass"
+      style="display: inline-flex"
+    >
       <template v-if="props.localeKey">
         {{ $t(`navigation_drawer.${props.localeKey}`) }}
       </template>
@@ -20,10 +29,10 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed } from "vue";
 import { useAppStore } from "@/stores/app.js";
-import { useDisplay } from 'vuetify'
-const { mdAndDown } = useDisplay()
+import { useDisplay } from "vuetify";
+const { mdAndDown } = useDisplay();
 
 const props = defineProps({
   icon: {
@@ -34,17 +43,17 @@ const props = defineProps({
   avatar: {
     type: String,
     required: false,
-    default: null
+    default: null,
   },
   localeKey: {
     type: String,
     required: false,
-    default: null
+    default: null,
   },
   text: {
     type: String,
     required: false,
-    default: null
+    default: null,
   },
   to: {
     type: String,
@@ -67,16 +76,14 @@ const visitHref = () => {
 const appStore = useAppStore();
 
 const itemClass = computed(() => ({
-  'align-center': appStore.drawerUseRail(mdAndDown.value),
-  'justify-center': appStore.drawerUseRail(mdAndDown.value),
-}))
+  "align-center": appStore.drawerUseRail(mdAndDown.value),
+  "justify-center": appStore.drawerUseRail(mdAndDown.value),
+}));
 
 const titleClass = computed(() => ({
-  'v-drawer-item-full': !appStore.drawerUseRail(mdAndDown.value),
-  'v-drawer-item-rail': appStore.drawerUseRail(mdAndDown.value)
-}))
-
-
+  "v-drawer-item-full": !appStore.drawerUseRail(mdAndDown.value),
+  "v-drawer-item-rail": appStore.drawerUseRail(mdAndDown.value),
+}));
 </script>
 <style lang="scss" scoped>
 // Set up styles for rail and standard item

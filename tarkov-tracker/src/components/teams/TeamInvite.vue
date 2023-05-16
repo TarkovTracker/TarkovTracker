@@ -1,17 +1,32 @@
 <template>
   <v-alert
-v-if="!inInviteTeam && !declined" color="green" theme="dark" icon="mdi-handshake" density="compact"
-    prominent>
+    v-if="!inInviteTeam && !declined"
+    color="green"
+    theme="dark"
+    icon="mdi-handshake"
+    density="compact"
+    prominent
+  >
     <div class="d-flex flex-row align-center justify-space-between">
       <div>
-        {{ $t('page.team.card.teaminvite.description') }}
+        {{ $t("page.team.card.teaminvite.description") }}
       </div>
       <div>
-        <v-btn class="mx-1 my-1" variant="outlined" :disabled="accepting" :loading="accepting" @click="acceptInvite">
-          {{ $t('page.team.card.teaminvite.accept') }}
+        <v-btn
+          class="mx-1 my-1"
+          variant="outlined"
+          :disabled="accepting"
+          :loading="accepting"
+          @click="acceptInvite"
+        >
+          {{ $t("page.team.card.teaminvite.accept") }}
         </v-btn>
-        <v-btn variant="outlined" :disabled="accepting" @click="declined = true">
-          {{ $t('page.team.card.teaminvite.decline') }}
+        <v-btn
+          variant="outlined"
+          :disabled="accepting"
+          @click="declined = true"
+        >
+          {{ $t("page.team.card.teaminvite.decline") }}
         </v-btn>
       </div>
     </div>
@@ -27,70 +42,74 @@ v-if="!inInviteTeam && !declined" color="green" theme="dark" icon="mdi-handshake
   </v-snackbar>
 </template>
 <script setup>
-import { computed, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useI18n } from 'vue-i18n'
+import { computed, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 import { fireapp } from "@/plugins/firebase";
-import { useLiveData } from '@/composables/livedata'
+import { useLiveData } from "@/composables/livedata";
 
-const { useSystemStore } = useLiveData()
+const { useSystemStore } = useLiveData();
 const systemStore = useSystemStore();
-const { t } = useI18n({ useScope: 'global' })
-const route = useRoute()
+const { t } = useI18n({ useScope: "global" });
+const route = useRoute();
 const inInviteTeam = computed(() => {
-  return systemStore?.userTeam != null && systemStore.userTeam == route?.query?.team
-})
-const declined = ref(false)
+  return (
+    systemStore?.userTeam != null && systemStore.userTeam == route?.query?.team
+  );
+});
+const declined = ref(false);
 
-const accepting = ref(false)
+const accepting = ref(false);
 
-const joinTeamSnackbar = ref(false)
-const joinResult = ref("")
+const joinTeamSnackbar = ref(false);
+const joinResult = ref("");
 
 const acceptInvite = async () => {
   // If the user is already in the team, do nothing
   if (inInviteTeam.value) {
-    return
+    return;
   }
 
   // Mark the process as started
-  accepting.value = true
+  accepting.value = true;
 
   // If the user is already in a team, leave it first
   if (systemStore.userTeam != null) {
     try {
-      const leaveResult = await fireapp.functions().httpsCallable("leaveTeam")();
+      const leaveResult = await fireapp
+        .functions()
+        .httpsCallable("leaveTeam")();
       if (leaveResult.data.error) {
-        throw new Error(leaveResult.data)
+        throw new Error(leaveResult.data);
       }
     } catch (error) {
-      console.debug("Error while leaving team", JSON.stringify(error))
-      joinResult.value = t('page.team.card.teaminvite.leave_error');
+      console.debug("Error while leaving team", JSON.stringify(error));
+      joinResult.value = t("page.team.card.teaminvite.leave_error");
       joinTeamSnackbar.value = true;
-      return
+      return;
     }
   }
 
   // Join the team
   try {
-    const joinResult = await fireapp.functions().httpsCallable("joinTeam")({ id: route?.query?.team, password: route?.query?.code });
+    const joinResult = await fireapp.functions().httpsCallable("joinTeam")({
+      id: route?.query?.team,
+      password: route?.query?.code,
+    });
     if (joinResult.data.error) {
-      throw new Error(joinResult.data)
+      throw new Error(joinResult.data);
     }
-    joinResult.value = t('page.team.card.teaminvite.join_success');
+    joinResult.value = t("page.team.card.teaminvite.join_success");
     joinTeamSnackbar.value = true;
-    accepting.value = false
+    accepting.value = false;
     // Get rid of the invite code from the URL by navigating to the team page with no query/params
-    const router = useRouter()
-    router.push({ name: "team" })
+    const router = useRouter();
+    router.push({ name: "team" });
   } catch (error) {
-    console.debug("Error while joining team", JSON.stringify(error))
-    joinResult.value = t('page.team.card.teaminvite.join_error');
+    console.debug("Error while joining team", JSON.stringify(error));
+    joinResult.value = t("page.team.card.teaminvite.join_error");
     joinTeamSnackbar.value = true;
   }
-}
-
+};
 </script>
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>
