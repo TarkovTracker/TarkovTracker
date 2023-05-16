@@ -66,9 +66,9 @@ const verifyBearer = async (req, res, next) => {
 		// If auth broken, 400
 		if (authHeader.split(' ')[1] == null) {
 			res.status(400).json({ "error": "No bearer token set" }).send()
-		} else {
-			var authToken = authHeader.split(' ')[1]
 		}
+
+		let authToken = authHeader.split(' ')[1]
 
 		// Check if token is valid
 		const tokenRef = db.collection('token').doc(authToken);
@@ -384,9 +384,9 @@ app.get('/api/v2/team/progress', async (req, res) => {
 		const requesteeProgressRef = db.collection('progress').doc(req.apiToken.owner);
 
 		// Create an array to store all the team's progress data
-		var team = []
+		let team = []
 
-		var hiddenTeammates = []
+		let hiddenTeammates = []
 
 		// We aren't currently in a team
 		if (systemDoc.data().team == null) {
@@ -413,7 +413,7 @@ app.get('/api/v2/team/progress', async (req, res) => {
 		}
 
 		// Wait for all the promises to finish
-		var teamResponse = []
+		let teamResponse = []
 
 		await Promise.all(team).then((members) => {
 			members.forEach((member) => {
