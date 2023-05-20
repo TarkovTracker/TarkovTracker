@@ -358,11 +358,11 @@ const decreaseCount = () => {
 
 const increaseCount = () => {
   if (props.need.needType == "taskObjective") {
-    if (currentCount.value < props.need.count) {
+    if (currentCount.value < neededCount.value) {
       tarkovStore.setObjectiveCount(props.need.id, currentCount.value + 1);
     }
   } else if (props.need.needType == "hideoutModule") {
-    if (currentCount.value < props.need.count) {
+    if (currentCount.value < neededCount.value) {
       tarkovStore.setHideoutPartCount(props.need.id, currentCount.value + 1);
     }
   }
@@ -381,19 +381,19 @@ const levelRequired = computed(() => {
 const toggleCount = () => {
   if (props.need.needType == "taskObjective") {
     if (currentCount.value === 0) {
-      tarkovStore.setObjectiveCount(props.need.id, props.need.count);
-    } else if (currentCount.value === props.need.count) {
+      tarkovStore.setObjectiveCount(props.need.id, neededCount.value);
+    } else if (currentCount.value === neededCount.value) {
       tarkovStore.setObjectiveCount(props.need.id, 0);
     } else {
-      tarkovStore.setObjectiveCount(props.need.id, props.need.count);
+      tarkovStore.setObjectiveCount(props.need.id, neededCount.value);
     }
   } else if (props.need.needType == "hideoutModule") {
     if (currentCount.value === 0) {
-      tarkovStore.setHideoutPartCount(props.need.id, props.need.count);
-    } else if (currentCount.value === props.need.count) {
+      tarkovStore.setHideoutPartCount(props.need.id, neededCount.value);
+    } else if (currentCount.value === neededCount.value) {
       tarkovStore.setHideoutPartCount(props.need.id, 0);
     } else {
-      tarkovStore.setHideoutPartCount(props.need.id, props.need.count);
+      tarkovStore.setHideoutPartCount(props.need.id, neededCount.value);
     }
   }
 };
