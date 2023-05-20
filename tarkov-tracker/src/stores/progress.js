@@ -84,7 +84,7 @@ export const useProgressStore = defineStore("progress", () => {
             for (const traderStanding of task.finishRewards.traderStanding) {
               rep[teamId][traderStanding.trader.id] =
                 rep[teamId]?.[traderStanding.trader.id] +
-                  traderStanding.standing || traderStanding.standing;
+                traderStanding.standing || traderStanding.standing;
             }
           }
         }
@@ -407,6 +407,10 @@ export const useProgressStore = defineStore("progress", () => {
     return this.teamStores[this.getTeamIndex(teamId)].playerLevel ?? 1;
   };
 
+  const getFaction = function (teamId) {
+    return this.teamStores[this.getTeamIndex(teamId)].faction ?? "USEC";
+  };
+
   const teammemberNames = computed(() => {
     let names = {};
     //Return the displayNames of all visible team members
@@ -443,5 +447,6 @@ export const useProgressStore = defineStore("progress", () => {
     gameEditionData,
     modulePartCompletions,
     playerFaction,
+    getFaction,
   };
 });

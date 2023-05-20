@@ -1,7 +1,7 @@
 <template>
   <tracker-tip tip="neededitems"></tracker-tip>
   <v-container>
-    <v-row justify="center" align="center" dense>
+    <v-row align="center" dense>
       <v-col cols="12" sm="12" md="3" lg="3">
         <!-- Primary views (all, maps, traders) -->
         <v-card>
@@ -12,14 +12,14 @@
           </v-tabs>
         </v-card>
       </v-col>
-      <v-col cols="12" sm="11" md="8" lg="8">
+      <v-col cols="9" sm="10" md="8" lg="8">
         <v-text-field v-model="itemFilterNameText" label="Search by item name" variant="solo" hide-details
           density="comfortable"></v-text-field>
       </v-col>
-      <v-col cols="1">
-        <v-dialog v-model="settingsDialog">
+      <v-col cols="3" sm="2" md="1" lg="1">
+        <v-dialog v-model="settingsDialog" scrim="#9A8866">
           <template #activator="{ props }">
-            <v-btn v-bind="props" variant="tonal" style="width: 100%; height: 48px">
+            <v-btn v-bind="props" variant="tonal" style="width: 100%; height: 48px" class="px-0">
               <v-icon>mdi-cog</v-icon>
             </v-btn>
           </template>
@@ -29,10 +29,25 @@
                 <v-card-text>
                   <v-container class="ma-0 pa-0">
                     <v-row dense>
+                      <!-- Choose needed items layout style -->
+                      <v-col cols="12">
+                        <v-btn-toggle v-model="neededItemsStyle" rounded="0" group variant="outlined">
+                          <v-btn value="mediumCard" icon="mdi-view-grid">
+                          </v-btn>
+
+                          <v-btn value="smallCard" icon="mdi-view-comfy">
+                          </v-btn>
+
+                          <v-btn value="row" icon="mdi-view-sequential">
+                          </v-btn>
+                        </v-btn-toggle>
+                      </v-col>
+                      <!-- Hide Task Items that aren't needed found in raid option-->
                       <v-col cols="12">
                         <v-switch v-model="hideFIR" :label="$t(hideFIRLabel)" inset true-icon="mdi-eye-off"
                           false-icon="mdi-eye" :color="hideFIRColor" hide-details density="compact"></v-switch>
                       </v-col>
+
                     </v-row>
                     <v-row justify="end">
                       <v-col cols="12" md="6">
@@ -54,13 +69,13 @@
         {{ $t("page.neededitems.loading") }} <refresh-button />
       </v-col>
     </v-row>
-    <v-row v-show="activeNeededView == 'all' || activeNeededView == 'tasks'">
-      <needed-item-card v-for="(neededItem, itemIndex) in neededTaskItems" :key="itemIndex" :need="neededItem"
-        class="my-1" />
+    <v-row v-show="activeNeededView == 'all' || activeNeededView == 'tasks'" justify="space-between">
+      <needed-item v-for="(neededItem, itemIndex) in neededTaskItems" :key="itemIndex" :need="neededItem"
+        :itemStyle="neededItemsStyle" />
     </v-row>
-    <v-row v-show="activeNeededView == 'all' || activeNeededView == 'hideout'">
-      <needed-item-card v-for="(neededItem, itemIndex) in neededHideoutItems" :key="itemIndex" :need="neededItem"
-        class="my-1" />
+    <v-row v-show="activeNeededView == 'all' || activeNeededView == 'hideout'" justify="space-between">
+      <needed-item v-for="(neededItem, itemIndex) in neededHideoutItems" :key="itemIndex" :need="neededItem"
+        :itemStyle="neededItemsStyle" />
     </v-row>
   </v-container>
 </template>
@@ -78,14 +93,12 @@ const TrackerTip = defineAsyncComponent(() =>
 const RefreshButton = defineAsyncComponent(() =>
   import("@/components/RefreshButton.vue")
 );
-const NeededItemCard = defineAsyncComponent(() =>
-  import("@/components/neededitems/NeededItemCard.vue")
+const NeededItem = defineAsyncComponent(() =>
+  import("@/components/neededitems/NeededItem.vue")
 );
 const { t } = useI18n({ useScope: "global" });
 const {
   tasks,
-  maps,
-  traders,
   hideoutModules,
   hideoutLoading,
   loading,
@@ -105,6 +118,11 @@ watch(
     itemFilterName.value = newVal;
   }, 500)
 );
+
+const neededItemsStyle = computed({
+  get: () => userStore.getNeededItemsStyle,
+  set: (value) => userStore.setNeededItemsStyle(value),
+});
 
 const settingsDialog = ref(false);
 

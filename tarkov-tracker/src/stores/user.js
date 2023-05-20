@@ -21,6 +21,7 @@ export const defaultState = {
   itemsHideNonFIR: false,
   hideGlobalTasks: false,
   hideNonKappaTasks: false,
+  neededitemsStyle: null,
 };
 
 // Getters are for reading store state in a uniform manner
@@ -87,6 +88,10 @@ export const getters = {
   },
   getHideNonKappaTasks: (state) => {
     return state.hideNonKappaTasks || false;
+  },
+  // Needed items style
+  getNeededItemsStyle: (state) => {
+    return state.neededitemsStyle ?? "mediumCard";
   },
 };
 
@@ -176,6 +181,10 @@ export const actions = {
   setHideNonKappaTasks(hide) {
     this.hideNonKappaTasks = hide;
   },
+  // Needed items style
+  setNeededItemsStyle(style) {
+    this.neededitemsStyle = style;
+  }
 };
 
 export const useUserStore = defineStore("swapUser", {

@@ -9,9 +9,6 @@
     "logs": "firebase functions:log",
     "swagger": "node api/v2/swagger.js"
   },
-  "engines": {
-    "node": "18"
-  },
   "main": "index.js",
   "dependencies": {
     "firebase-admin": "^10.3.0",

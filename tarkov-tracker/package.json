@@ -46,7 +46,7 @@
     "sass": "^1.52.3",
     "vite": "^2.9.9",
     "vite-plugin-eslint": "^1.6.1",
-    "vite-plugin-firebase": "^0.4.0",
+    "vite-plugin-firebase": "^0.5.1",
     "vite-plugin-vuetify": "^1.0.0-alpha.0",
     "vue-cli-plugin-vuetify": "~2.5.1",
     "vue-eslint-parser": "^9.0.2"
