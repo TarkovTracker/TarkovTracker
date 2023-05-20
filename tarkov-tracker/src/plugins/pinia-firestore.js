@@ -40,7 +40,7 @@ export function PiniaFireswap(context) {
           ) {
             console.debug(
               "Loading local version of " +
-                context.options.fireswap[fsIndex].localKey
+              context.options.fireswap[fsIndex].localKey
             );
             // Load the localstorage version of the store
             const localStore = JSON.parse(
@@ -139,7 +139,7 @@ export function PiniaFireswap(context) {
             (error) => {
               console.error(
                 "Error binding to firestore document: " +
-                  fireswapSetting.document,
+                fireswapSetting.document,
                 error
               );
               // An error occurred trying to obtain the snapshot (or getting the latest)
@@ -187,7 +187,7 @@ export function PiniaFireswap(context) {
           // Update the related document when the state changes
           if (
             typeof context.options.fireswap[fsIndex].unsubscribe !=
-              "undefined" &&
+            "undefined" &&
             !context.options.fireswap[fsIndex].lock
           ) {
             // Get the path of the state that we care about for this subscription
@@ -199,7 +199,7 @@ export function PiniaFireswap(context) {
             }
           } else if (
             typeof context.options.fireswap[fsIndex].unsubscribe ==
-              "undefined" &&
+            "undefined" &&
             !context.options.fireswap[fsIndex].lock
           ) {
             // If we're not bound, then update local storage instead
