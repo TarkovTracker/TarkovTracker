@@ -17,8 +17,9 @@
               </span>
               <span class="ml-2 d-flex flex-column"
                 style="-webkit-mask-image: linear-gradient(90deg, #000 100%, transparent);">
-                <span style="font-size: 1.1em">
-                  {{ item.name }}
+                <span style="font-size: 1.1em" class="d-flex align-center">
+                  {{ item.name }} <v-icon v-if="props.need.foundInRaid" size="x-small"
+                    class="ml-1">mdi-checkbox-marked-circle-outline</v-icon>
                 </span>
                 <span>
                   <template v-if="props.need.needType == 'taskObjective'">
@@ -48,10 +49,12 @@
                             </template>
                           </v-img>
                         </div>
-                        <div class="d-flex align-self-center mt-2 mx-2">
+                        <div class="d-flex align-self-center align-center mt-2 mx-2">
                           <div class="text-center px-2">
                             {{ item.name }}
                           </div>
+                          <v-icon v-if="props.need.foundInRaid" size="x-small"
+                            class="ml-1">mdi-checkbox-marked-circle-outline</v-icon>
                         </div>
                         <!-- Item need details -->
                         <div class="d-flex flex-column align-self-center mt-2 mx-2">
@@ -122,7 +125,7 @@
                           </template>
                         </div>
                         <!-- Item count actions -->
-                        <div class="d-flex align-self-stretch justify-center mt-auto mb-2 mx-2">
+                        <div class="d-flex align-self-stretch justify-center mt-2 mb-2 mx-2">
                           <div>
                             <v-btn variant="tonal" class="pa-0 ma-0"
                               @click="decreaseCount()"><v-icon>mdi-minus-thick</v-icon></v-btn>
@@ -330,7 +333,7 @@ const itemImageDialogClasses = computed(() => {
 
 const itemRowClasses = computed(() => {
   return {
-    "item-complete": selfCompletedNeed.value || currentCount.value >= neededCount.value,
+    "item-complete-row": selfCompletedNeed.value || currentCount.value >= neededCount.value,
   };
 });
 
@@ -429,7 +432,7 @@ const item = computed(() => {
 });
 </script>
 <style lang="scss">
-.item-complete {
+.item-complete-row {
   background: linear-gradient(270deg,
       rgba(var(--v-theme-complete), 1) 0%,
       rgba(var(--v-theme-surface), 1) 100%) !important;

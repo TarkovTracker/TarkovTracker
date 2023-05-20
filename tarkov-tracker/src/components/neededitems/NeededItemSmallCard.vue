@@ -3,8 +3,9 @@
     <v-lazy :options="{ threshold: 0.5 }" min-height="150" class="fill-height">
       <v-sheet rounded style="position: relative;" class="fill-height" @click="smallDialog = false">
         <div style="position: absolute; left: 0px; top: 0px; z-index: 2;">
-          <v-sheet class="item-count-sheet py-1 px-2 elevation-2" :class="itemCountTagClasses">
+          <v-sheet class="d-flex align-center item-count-sheet py-1 px-2 elevation-2" :class="itemCountTagClasses">
             {{ currentCount.toLocaleString() }}/{{ neededCount.toLocaleString() }}
+            <v-icon v-if="props.need.foundInRaid" size="x-small" class="ml-1">mdi-checkbox-marked-circle-outline</v-icon>
           </v-sheet>
         </div>
         <!-- Flexbox display -->
@@ -33,10 +34,12 @@
                   </template>
                 </v-img>
               </div>
-              <div class="d-flex align-self-center mt-2 mx-2">
+              <div class="d-flex align-self-center align-center mt-2 mx-2">
                 <div class="text-center px-2">
                   {{ item.name }}
                 </div>
+                <v-icon v-if="props.need.foundInRaid" size="x-small"
+                  class="ml-1">mdi-checkbox-marked-circle-outline</v-icon>
               </div>
               <!-- Item need details -->
               <div class="d-flex flex-column align-self-center mt-2 mx-2">
@@ -106,7 +109,7 @@
                 </template>
               </div>
               <!-- Item count actions -->
-              <div class="d-flex align-self-stretch justify-center mt-auto mb-2 mx-2">
+              <div class="d-flex align-self-stretch justify-center mt-2 mb-2 mx-2">
                 <div>
                   <v-btn variant="tonal" class="pa-0 ma-0"
                     @click="decreaseCount()"><v-icon>mdi-minus-thick</v-icon></v-btn>

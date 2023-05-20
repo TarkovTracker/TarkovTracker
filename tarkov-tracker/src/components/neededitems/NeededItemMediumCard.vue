@@ -18,6 +18,7 @@
           <div class="d-flex align-self-center mt-2 mx-2">
             <div class="text-center px-2">
               {{ item.name }}
+              <v-icon v-if="props.need.foundInRaid" size="x-small">mdi-checkbox-marked-circle-outline</v-icon>
             </div>
           </div>
           <!-- Item need details -->
