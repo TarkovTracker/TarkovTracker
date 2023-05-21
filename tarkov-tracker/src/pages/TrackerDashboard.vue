@@ -27,6 +27,19 @@
           </template>
         </tracker-stat>
       </v-col>
+      <v-col cols="12" sm="8" md="6" lg="4" xl="3">
+        <tracker-stat icon="mdi-briefcase-search">
+          <template #stat>
+            {{ $t("page.dashboard.stats.taskItems.stat") }}
+          </template>
+          <template #value>
+            {{ completedTaskItems }}/{{ totalTaskItems }}
+          </template>
+          <template #details>
+            {{ $t("page.dashboard.stats.taskItems.details") }}
+          </template>
+        </tracker-stat>
+      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -43,15 +56,30 @@ const TrackerTip = defineAsyncComponent(() =>
   import("@/components/TrackerTip.vue")
 );
 
-const { tasks, objectives } = useTarkovData();
+const { tasks, objectives, neededItemTaskObjectives } = useTarkovData();
 const progressStore = useProgressStore();
 const tarkovStore = useTarkovStore();
+
 const totalTasks = computed(() => {
-  return tasks.value?.length;
+  let relevantTasks = tasks.value.filter((task) => task.factionName == "Any" || task.factionName == tarkovStore.getPMCFaction).length;
+  // Find all tasks with alternatives and subtract n-1 from the total
+  let tasksWithAlternatives = tasks.value.filter((task) => task.alternatives.length > 0);
+  // For each task with alternatives, subtract n-1 from the total and then remove the task and its alternatives from the list
+  tasksWithAlternatives.forEach((task) => {
+    relevantTasks -= task.alternatives.length - 1;
+    task.alternatives.forEach((alternative) => {
+      tasksWithAlternatives = tasksWithAlternatives.filter((task) => task.id != alternative);
+    });
+  });
+  return relevantTasks;
 });
 
 const totalObjectives = computed(() => {
-  return objectives.value?.length;
+  let total = 0;
+  tasks.value.filter((task) => task.factionName == "Any" || task.factionName == tarkovStore.getPMCFaction).forEach((task) => {
+    total += task.objectives.length;
+  });
+  return total;
 });
 
 const completedObjectives = computed(() => {
@@ -64,6 +92,53 @@ const completedTasks = computed(() => {
   return Object.values(progressStore.tasksCompletions).filter(
     (task) => task.self === true
   ).length;
+});
+
+const completedTaskItems = computed(() => {
+  let total = 0;
+  neededItemTaskObjectives.value.forEach((objective) => {
+    // If the objective is Dollars, Euros, or Rubles, skip it
+    if (["5696686a4bdc2da3298b456a", "5449016a4bdc2d6f028b456f", "569668774bdc2da2298b4568"].includes(objective?.item?.id)) {
+      return;
+    }
+
+    let relatedTask = tasks.value.find((task) => task.id === objective.taskId);
+    if (relatedTask.factionName != "Any" && relatedTask.factionName != tarkovStore.getPMCFaction) {
+      return;
+    }
+
+    // If the objective has a count, use that, otherwise assume 1
+    if (progressStore.tasksCompletions[objective.taskId]["self"] ||
+      progressStore.objectiveCompletions[objective.id]["self"] || objective?.count <= tarkovStore.getObjectiveCount(objective.id)) {
+      total += objective.count || 1;
+    } else {
+      total += tarkovStore.getObjectiveCount(objective.id);
+    }
+  });
+  return total;
+})
+
+const totalTaskItems = computed(() => {
+  let total = 0;
+  neededItemTaskObjectives.value.forEach((objective) => {
+    // If the objective is Dollars, Euros, or Rubles, skip it
+    if (["5696686a4bdc2da3298b456a", "5449016a4bdc2d6f028b456f", "569668774bdc2da2298b4568"].includes(objective?.item?.id)) {
+      return;
+    }
+
+    let relatedTask = tasks.value.find((task) => task.id === objective.taskId);
+    if (relatedTask.factionName != "Any" && relatedTask.factionName != tarkovStore.getPMCFaction) {
+      return;
+    }
+
+    // If the objective has a count, use that, otherwise assume 1
+    if (objective.count) {
+      total += objective.count;
+    } else {
+      total += 1;
+    }
+  });
+  return total;
 });
 </script>
 <style lang="scss" scoped></style>

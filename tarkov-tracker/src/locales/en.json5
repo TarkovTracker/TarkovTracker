@@ -24,7 +24,7 @@
         },
         taskItems: {
           stat: "Task Items",
-          details: "Includes FIR and non-FIR collection items.",
+          details: "Includes FIR, non-FIR, and planted items.",
         },
         allObjectives: {
           stat: "Task Objectives",

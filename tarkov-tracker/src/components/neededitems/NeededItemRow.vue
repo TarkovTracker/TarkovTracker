@@ -123,7 +123,7 @@
                           </template>
                         </div>
                         <!-- Item count actions -->
-                        <div class="d-flex align-self-stretch justify-center mt-2 mb-2 mx-2">
+                        <div v-if="!selfCompletedNeed" class="d-flex align-self-stretch justify-center mt-2 mb-2 mx-2">
                           <div>
                             <v-btn variant="tonal" class="pa-0 ma-0"
                               @click="$emit('decreaseCount')"><v-icon>mdi-minus-thick</v-icon></v-btn>
@@ -136,6 +136,21 @@
                           <div>
                             <v-btn variant="tonal" class="pa-0 ma-0"
                               @click="$emit('increaseCount')"><v-icon>mdi-plus-thick</v-icon></v-btn>
+                          </div>
+                        </div>
+                        <div v-else class="d-flex fill-height align-self-stretch justify-center mt-2 mb-2 mx-2">
+                          <div class="align-self-end text-center">
+                            <i18n-t keypath="page.neededitems.neededby" scope="global">
+                              <template #users>
+                                <div v-for="(userNeed, userIndex) in teamNeeds" :key="userIndex"
+                                  style="white-space:pre-line;">
+                                  <v-icon size="x-small" class="mr-1">mdi-account-child-circle</v-icon>{{
+                                    progressStore.getDisplayName(userNeed.user) }} {{ userNeed.count.toLocaleString() }}/{{
+    neededCount.toLocaleString()
+  }}
+                                </div>
+                              </template>
+                            </i18n-t>
                           </div>
                         </div>
                       </div>
