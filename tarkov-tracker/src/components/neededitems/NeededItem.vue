@@ -267,11 +267,11 @@ const item = computed(() => {
 const lockedBefore = computed(() => {
   if (props.need.needType == "taskObjective") {
     return relatedTask.value.predecessors.filter(
-      (s) => !tarkovStore.isTaskComplete(s.id)
+      (s) => !tarkovStore.isTaskComplete(s)
     ).length;
   } else if (props.need.needType == "hideoutModule") {
     return props.need.hideoutModule.predecessors.filter(
-      (s) => !tarkovStore.isHideoutModuleComplete(s.id)
+      (s) => !tarkovStore.isHideoutModuleComplete(s)
     ).length;
   } else {
     return 0;
@@ -314,9 +314,32 @@ const levelRequired = computed(() => {
   }
 });
 
+const teamNeeds = computed(() => {
+  let needingUsers = [];
+  if (props.need.needType == "taskObjective") {
+    // Find all of the users that need this objective
+    Object.entries(progressStore.objectiveCompletions[props.need.id]).forEach(
+      ([user, completed]) => {
+        if (!completed && !progressStore.tasksCompletions[props.need.taskId][user]) {
+          needingUsers.push({ user: user, count: progressStore.teamStores[user].getObjectiveCount(props.need.id) });
+        }
+      }
+    );
+  } else if (props.need.needType == "hideoutModule") {
+    // Find all of the users that need this module
+    Object.entries(progressStore.modulePartCompletions[props.need.id]).forEach(
+      ([user, completed]) => {
+        if (!completed) {
+          needingUsers.push({ user: user, count: progressStore.teamStores[user].getHideoutPartCount(props.need.id) });
+        }
+      }
+    );
+  }
+  return needingUsers;
+});
+
 provide('neededitem', {
-  neededData: props.need,
-  itemData: item,
+  item,
   relatedTask,
   relatedStation,
   selfCompletedNeed,
@@ -324,6 +347,7 @@ provide('neededitem', {
   currentCount,
   neededCount,
   levelRequired,
+  teamNeeds
 })
 </script>
 <style lang="scss">
@@ -370,4 +394,5 @@ provide('neededitem', {
 
 .item-bg-blue {
   background-color: #202d32;
-}</style>
+}
+</style>

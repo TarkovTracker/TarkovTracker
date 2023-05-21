@@ -60,8 +60,7 @@
                         <div class="d-flex flex-column align-self-center mt-2 mx-2">
                           <template v-if="props.need.needType == 'taskObjective'">
                             <task-link :task="relatedTask" />
-                            <v-row v-if="relatedTask.predecessors?.length > 0" no-gutters
-                              class="mb-1 mt-1 d-flex justify-center">
+                            <v-row v-if="lockedBefore > 0" no-gutters class="mb-1 mt-1 d-flex justify-center">
                               <v-col cols="auto" class="mr-1" align="center">
                                 <v-icon icon="mdi-lock-open-outline" />
                               </v-col>
@@ -96,8 +95,7 @@
                                 props.need.hideoutModule.level
                               }}</v-col>
                             </v-row>
-                            <v-row v-if="props.need.hideoutModule.predecessors?.length > 0" no-gutters
-                              class="mb-1 mt-1 d-flex justify-center">
+                            <v-row v-if="lockedBefore > 0" no-gutters class="mb-1 mt-1 d-flex justify-center">
                               <v-col cols="auto" class="mr-1" align="center">
                                 <v-icon icon="mdi-lock-open-outline" />
                               </v-col>
@@ -161,8 +159,7 @@
                         </i18n-t>
                       </div>
                     </div>
-                    <div v-if="relatedTask.predecessors?.length > 0" no-gutters
-                      class="mb-1 mt-1 d-flex align-center justify-center">
+                    <div v-if="lockedBefore > 0" no-gutters class="mb-1 mt-1 d-flex align-center justify-center">
                       <div>
                         <v-icon icon="mdi-lock-open-outline" />
                       </div>
@@ -186,8 +183,7 @@
                         }}</v-col>
                       </v-row>
                     </div>
-                    <div v-if="props.need.hideoutModule.predecessors?.length > 0" no-gutters
-                      class="mb-1 mt-1 d-flex justify-center">
+                    <div v-if="lockedBefore > 0" no-gutters class="mb-1 mt-1 d-flex justify-center">
                       <div>
                         <v-icon icon="mdi-lock-open-outline" />
                       </div>
@@ -213,7 +209,7 @@
                     </div>
                   </template>
                 </div>
-                <div class="d-flex align-self-center justify-space-between mr-2">
+                <div v-if="!selfCompletedNeed" class="d-flex align-self-center justify-space-between mr-2">
                   <div>
                     <v-btn variant="tonal" class="pa-0 ma-0"
                       @click="$emit('decreaseCount')"><v-icon>mdi-minus-thick</v-icon></v-btn>
@@ -226,6 +222,20 @@
                   <div>
                     <v-btn variant="tonal" class="pa-0 ma-0"
                       @click="$emit('increaseCount')"><v-icon>mdi-plus-thick</v-icon></v-btn>
+                  </div>
+                </div>
+                <div v-else class="d-flex fill-height align-self-stretch justify-center mr-2">
+                  <div class="align-self-end text-center">
+                    <i18n-t keypath="page.neededitems.neededby" scope="global">
+                      <template #users>
+                        <div v-for="(userNeed, userIndex) in teamNeeds" :key="userIndex" style="white-space:pre-line;">
+                          <v-icon size="x-small" class="mr-1">mdi-account-child-circle</v-icon>{{
+                            progressStore.getDisplayName(userNeed.user) }} {{ userNeed.count.toLocaleString() }}/{{
+    neededCount.toLocaleString()
+  }}
+                        </div>
+                      </template>
+                    </i18n-t>
                   </div>
                 </div>
               </div>
@@ -266,7 +276,7 @@ const { tasks, hideoutStations } = useTarkovData();
 
 const smallDialog = ref(false);
 
-const { selfCompletedNeed, relatedTask, relatedStation, lockedBefore, neededCount, currentCount, levelRequired } = inject('neededitem')
+const { selfCompletedNeed, relatedTask, relatedStation, lockedBefore, neededCount, currentCount, levelRequired, item, teamNeeds } = inject('neededitem')
 
 const itemImageClasses = computed(() => {
   return {
@@ -289,26 +299,6 @@ const itemRowClasses = computed(() => {
   return {
     "item-complete-row": selfCompletedNeed.value || currentCount.value >= neededCount.value,
   };
-});
-
-const item = computed(() => {
-  if (props.need.needType == "taskObjective") {
-    if (props.need.type == "mark") {
-      return props.need.markerItem;
-    } else if (props.need.type == "buildWeapon") {
-      return props.need.item;
-    } else if (props.need.type == "plantItem") {
-      return props.need.item;
-    } else if (props.need.type == "giveItem") {
-      return props.need.item;
-    } else {
-      return null;
-    }
-  } else if (props.need.needType == "hideoutModule") {
-    return props.need.item;
-  } else {
-    return null;
-  }
 });
 </script>
 <style lang="scss">
