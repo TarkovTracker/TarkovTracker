@@ -1,22 +1,25 @@
 <template>
   <template v-if="props.itemStyle == 'mediumCard'">
     <v-col v-if="showItemFilter" cols="12" sm="6" md="4" lg="3" xl="2">
-      <NeededItemMediumCard :item="item" :need="props.need" />
+      <NeededItemMediumCard :need="props.need" @decrease-count="decreaseCount()" @toggle-count="toggleCount()"
+        @increase-count="increaseCount()" />
     </v-col>
   </template>
   <template v-else-if="props.itemStyle == 'smallCard'">
     <v-col v-if="showItemFilter" cols="auto">
-      <NeededItemSmallCard :item="item" :need="props.need" />
+      <NeededItemSmallCard :need="props.need" @decrease-count="decreaseCount()" @toggle-count="toggleCount()"
+        @increase-count="increaseCount()" />
     </v-col>
   </template>
   <template v-else-if="props.itemStyle == 'row'">
     <v-col v-if="showItemFilter" cols="12" class="pt-1">
-      <NeededItemRow :item="item" :need="props.need" />
+      <NeededItemRow :need="props.need" @decrease-count="decreaseCount()" @toggle-count="toggleCount()"
+        @increase-count="increaseCount()" />
     </v-col>
   </template>
 </template>
 <script setup>
-import { defineAsyncComponent, computed, inject } from "vue";
+import { defineAsyncComponent, computed, inject, provide } from "vue";
 import { useUserStore } from "@/stores/user";
 import { useProgressStore } from "@/stores/progress";
 import { useTarkovData } from "@/composables/tarkovdata";
@@ -44,10 +47,11 @@ const userStore = useUserStore();
 const progressStore = useProgressStore();
 const tarkovStore = useTarkovStore();
 
-const { tasks } = useTarkovData();
+const { tasks, hideoutStations } = useTarkovData();
 
+// Helper functions and data to calculate if the item should be shown based
+// on the user's/team's progress and the user's filters
 const filterString = inject("itemFilterName");
-
 const showItemFilter = computed(() => {
   if (filterString.value == "") {
     return showItem.value;
@@ -158,6 +162,78 @@ function isHideoutModuleNeeded(need) {
   }
 }
 
+// Emit functions to update the user's progress towards the need
+// the child functions emit these functions and we watch for them here
+const decreaseCount = () => {
+  if (props.need.needType == "taskObjective") {
+    if (currentCount.value > 0) {
+      tarkovStore.setObjectiveCount(props.need.id, currentCount.value - 1);
+    }
+  } else if (props.need.needType == "hideoutModule") {
+    if (currentCount.value > 0) {
+      tarkovStore.setHideoutPartCount(props.need.id, currentCount.value - 1);
+    }
+  }
+};
+
+const increaseCount = () => {
+  if (props.need.needType == "taskObjective") {
+    if (currentCount.value < neededCount.value) {
+      tarkovStore.setObjectiveCount(props.need.id, currentCount.value + 1);
+    }
+  } else if (props.need.needType == "hideoutModule") {
+    if (currentCount.value < neededCount.value) {
+      tarkovStore.setHideoutPartCount(props.need.id, currentCount.value + 1);
+    }
+  }
+};
+
+const toggleCount = () => {
+  if (props.need.needType == "taskObjective") {
+    if (currentCount.value === 0) {
+      tarkovStore.setObjectiveCount(props.need.id, neededCount.value);
+    } else if (currentCount.value === neededCount.value) {
+      tarkovStore.setObjectiveCount(props.need.id, 0);
+    } else {
+      tarkovStore.setObjectiveCount(props.need.id, neededCount.value);
+    }
+  } else if (props.need.needType == "hideoutModule") {
+    if (currentCount.value === 0) {
+      tarkovStore.setHideoutPartCount(props.need.id, neededCount.value);
+    } else if (currentCount.value === neededCount.value) {
+      tarkovStore.setHideoutPartCount(props.need.id, 0);
+    } else {
+      tarkovStore.setHideoutPartCount(props.need.id, neededCount.value);
+    }
+  }
+};
+
+
+// Helper functions and data to calculate the item's progress
+// These are passed to the child components via provide/inject
+const currentCount = computed(() => {
+  if (selfCompletedNeed.value) {
+    return neededCount.value;
+  }
+  if (props.need.needType == "taskObjective") {
+    return tarkovStore.getObjectiveCount(props.need.id);
+  } else if (props.need.needType == "hideoutModule") {
+    return tarkovStore.getHideoutPartCount(props.need.id);
+  } else {
+    return 0;
+  }
+});
+
+const neededCount = computed(() => {
+  if (props.need.needType == "taskObjective" && props.need.count) {
+    return props.need.count;
+  } else if (props.need.needType == "hideoutModule" && props.need.count) {
+    return props.need.count;
+  } else {
+    return 1;
+  }
+});
+
 const relatedTask = computed(() => {
   if (props.need.needType == "taskObjective") {
     return tasks.value.find((t) => t.id == props.need.taskId);
@@ -165,6 +241,8 @@ const relatedTask = computed(() => {
     return null;
   }
 });
+
+
 
 const item = computed(() => {
   if (props.need.needType == "taskObjective") {
@@ -185,6 +263,68 @@ const item = computed(() => {
     return null;
   }
 });
+
+const lockedBefore = computed(() => {
+  if (props.need.needType == "taskObjective") {
+    return relatedTask.value.predecessors.filter(
+      (s) => !tarkovStore.isTaskComplete(s.id)
+    ).length;
+  } else if (props.need.needType == "hideoutModule") {
+    return props.need.hideoutModule.predecessors.filter(
+      (s) => !tarkovStore.isHideoutModuleComplete(s.id)
+    ).length;
+  } else {
+    return 0;
+  }
+});
+
+const selfCompletedNeed = computed(() => {
+  if (props.need.needType == "taskObjective") {
+    return (
+      progressStore.tasksCompletions[props.need.taskId]["self"] ||
+      progressStore.objectiveCompletions[props.need.id]["self"]
+    );
+  } else if (props.need.needType == "hideoutModule") {
+    return (
+      progressStore.moduleCompletions[props.need.hideoutModule.id]["self"] ||
+      progressStore.modulePartCompletions[props.need.id]["self"]
+    );
+  } else {
+    return false;
+  }
+});
+
+const relatedStation = computed(() => {
+  if (props.need.needType == "hideoutModule") {
+    return Object.values(hideoutStations.value).find(
+      (s) => s.id == props.need.hideoutModule.stationId
+    );
+  } else {
+    return null;
+  }
+});
+
+const levelRequired = computed(() => {
+  if (props.need.needType == "taskObjective") {
+    return relatedTask.value.minPlayerLevel;
+  } else if (props.need.needType == "hideoutModule") {
+    return 0;
+  } else {
+    return 0;
+  }
+});
+
+provide('neededitem', {
+  neededData: props.need,
+  itemData: item,
+  relatedTask,
+  relatedStation,
+  selfCompletedNeed,
+  lockedBefore,
+  currentCount,
+  neededCount,
+  levelRequired,
+})
 </script>
 <style lang="scss">
 .item-panel {
@@ -230,5 +370,4 @@ const item = computed(() => {
 
 .item-bg-blue {
   background-color: #202d32;
-}
-</style>
+}</style>

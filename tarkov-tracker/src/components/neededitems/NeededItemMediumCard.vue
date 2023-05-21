@@ -1,9 +1,9 @@
 <template>
-  <KeepAlive>
-    <v-lazy :options="{ threshold: 0.5 }" min-height="100" class="fill-height">
-      <v-sheet rounded :class="itemCardClasses">
-        <!-- Flexbox display -->
-        <div class="d-flex align-end flex-column fill-height">
+  <v-lazy :options="{ threshold: 0.5 }" min-height="100" class="fill-height">
+    <v-sheet rounded :class="itemCardClasses">
+      <!-- Flexbox display -->
+      <div class="fill-height">
+        <div class="d-flex flex-column align-end fill-height">
           <!-- Item image -->
           <div class="d-flex align-self-stretch item-panel">
             <v-img :src="item.image512pxLink" :lazy-src="item.baseImageLink" :class="itemImageClasses">
@@ -16,7 +16,7 @@
           </div>
           <!-- Item name, directly below item image -->
           <div class="d-flex align-self-center mt-2 mx-2">
-            <div class="text-center px-2">
+            <div class="text-center px-2" style="white-space:pre-line;">
               {{ item.name }}
               <v-icon v-if="props.need.foundInRaid" size="x-small">mdi-checkbox-marked-circle-outline</v-icon>
             </div>
@@ -88,23 +88,40 @@
             </template>
           </div>
           <!-- Item count actions -->
-          <div class="d-flex align-self-stretch justify-space-between mt-auto mb-2 mx-2">
-            <div>
-              <v-btn variant="tonal" class="pa-0 ma-0" @click="decreaseCount()"><v-icon>mdi-minus-thick</v-icon></v-btn>
+          <div v-if="!selfCompletedNeed"
+            class="d-flex fill-height align-self-stretch justify-space-between mt-2 mb-2 mx-2">
+            <div class="align-self-end">
+              <v-btn variant="tonal" class="pa-0 ma-0"
+                @click="$emit('decreaseCount')"><v-icon>mdi-minus-thick</v-icon></v-btn>
             </div>
-            <div class="mx-1">
-              <v-btn variant="tonal" class="pa-0 px-1 ma-0" @click="toggleCount()">
+            <div class="mx-1 align-self-end">
+              <v-btn variant="tonal" class="pa-0 px-1 ma-0" @click="$emit('toggleCount')">
                 {{ currentCount.toLocaleString() }}/{{ neededCount.toLocaleString() }}
               </v-btn>
             </div>
-            <div>
-              <v-btn variant="tonal" class="pa-0 ma-0" @click="increaseCount()"><v-icon>mdi-plus-thick</v-icon></v-btn>
+            <div class="align-self-end">
+              <v-btn variant="tonal" class="pa-0 ma-0"
+                @click="$emit('increaseCount')"><v-icon>mdi-plus-thick</v-icon></v-btn>
+            </div>
+          </div>
+          <div v-else class="d-flex fill-height align-self-stretch justify-center mt-2 mb-2 mx-2">
+            <div class="align-self-end text-center">
+              <i18n-t keypath="page.neededitems.neededby" scope="global">
+                <template #users>
+                  <div v-for="(userNeed, userIndex) in userNeeds" :key="userIndex" style="white-space:pre-line;">
+                    <v-icon size="x-small" class="mr-1">mdi-account-child-circle</v-icon>{{
+                      progressStore.getDisplayName(userNeed.user) }} {{ userNeed.count.toLocaleString() }}/{{
+    neededCount.toLocaleString()
+  }}
+                  </div>
+                </template>
+              </i18n-t>
             </div>
           </div>
         </div>
-      </v-sheet>
-    </v-lazy>
-  </KeepAlive>
+      </div>
+    </v-sheet>
+  </v-lazy>
 </template>
 <script setup>
 import { defineAsyncComponent, computed, inject } from "vue";
@@ -130,53 +147,7 @@ const tarkovStore = useTarkovStore();
 
 const { tasks, hideoutStations } = useTarkovData();
 
-const selfCompletedNeed = computed(() => {
-  if (props.need.needType == "taskObjective") {
-    return (
-      progressStore.tasksCompletions[props.need.taskId]["self"] ||
-      progressStore.objectiveCompletions[props.need.id]["self"]
-    );
-  } else if (props.need.needType == "hideoutModule") {
-    return (
-      progressStore.moduleCompletions[props.need.hideoutModule.id]["self"] ||
-      progressStore.modulePartCompletions[props.need.id]["self"]
-    );
-  } else {
-    return false;
-  }
-});
-
-const relatedTask = computed(() => {
-  if (props.need.needType == "taskObjective") {
-    return tasks.value.find((t) => t.id == props.need.taskId);
-  } else {
-    return null;
-  }
-});
-
-const relatedStation = computed(() => {
-  if (props.need.needType == "hideoutModule") {
-    return Object.values(hideoutStations.value).find(
-      (s) => s.id == props.need.hideoutModule.stationId
-    );
-  } else {
-    return null;
-  }
-});
-
-const lockedBefore = computed(() => {
-  if (props.need.needType == "taskObjective") {
-    return relatedTask.value.predecessors.filter(
-      (s) => !tarkovStore.isTaskComplete(s.id)
-    ).length;
-  } else if (props.need.needType == "hideoutModule") {
-    return props.need.hideoutModule.predecessors.filter(
-      (s) => !tarkovStore.isHideoutModuleComplete(s.id)
-    ).length;
-  } else {
-    return 0;
-  }
-});
+const { selfCompletedNeed, relatedTask, relatedStation, lockedBefore, neededCount, currentCount, levelRequired } = inject('neededitem')
 
 const itemImageClasses = computed(() => {
   return {
@@ -196,78 +167,28 @@ const itemCardClasses = computed(() => {
   };
 });
 
-const currentCount = computed(() => {
+const userNeeds = computed(() => {
+  let needingUsers = [];
   if (props.need.needType == "taskObjective") {
-    return tarkovStore.getObjectiveCount(props.need.id);
+    // Find all of the users that need this objective
+    Object.entries(progressStore.objectiveCompletions[props.need.id]).forEach(
+      ([user, completed]) => {
+        if (!completed && !progressStore.tasksCompletions[props.need.taskId][user]) {
+          needingUsers.push({ user: user, count: progressStore.teamStores[user].getObjectiveCount(props.need.id) });
+        }
+      }
+    );
   } else if (props.need.needType == "hideoutModule") {
-    return tarkovStore.getHideoutPartCount(props.need.id);
-  } else {
-    return 0;
+    // Find all of the users that need this module
+    Object.entries(progressStore.modulePartCompletions[props.need.id]).forEach(
+      ([user, completed]) => {
+        if (!completed) {
+          needingUsers.push({ user: user, count: progressStore.teamStores[user].getHideoutPartCount(props.need.id) });
+        }
+      }
+    );
   }
-});
-
-const decreaseCount = () => {
-  if (props.need.needType == "taskObjective") {
-    if (currentCount.value > 0) {
-      tarkovStore.setObjectiveCount(props.need.id, currentCount.value - 1);
-    }
-  } else if (props.need.needType == "hideoutModule") {
-    if (currentCount.value > 0) {
-      tarkovStore.setHideoutPartCount(props.need.id, currentCount.value - 1);
-    }
-  }
-};
-
-const increaseCount = () => {
-  if (props.need.needType == "taskObjective") {
-    if (currentCount.value < neededCount.value) {
-      tarkovStore.setObjectiveCount(props.need.id, currentCount.value + 1);
-    }
-  } else if (props.need.needType == "hideoutModule") {
-    if (currentCount.value < neededCount.value) {
-      tarkovStore.setHideoutPartCount(props.need.id, currentCount.value + 1);
-    }
-  }
-};
-
-const levelRequired = computed(() => {
-  if (props.need.needType == "taskObjective") {
-    return relatedTask.value.minPlayerLevel;
-  } else if (props.need.needType == "hideoutModule") {
-    return 0;
-  } else {
-    return 0;
-  }
-});
-
-const toggleCount = () => {
-  if (props.need.needType == "taskObjective") {
-    if (currentCount.value === 0) {
-      tarkovStore.setObjectiveCount(props.need.id, neededCount.value);
-    } else if (currentCount.value === neededCount.value) {
-      tarkovStore.setObjectiveCount(props.need.id, 0);
-    } else {
-      tarkovStore.setObjectiveCount(props.need.id, neededCount.value);
-    }
-  } else if (props.need.needType == "hideoutModule") {
-    if (currentCount.value === 0) {
-      tarkovStore.setHideoutPartCount(props.need.id, neededCount.value);
-    } else if (currentCount.value === neededCount.value) {
-      tarkovStore.setHideoutPartCount(props.need.id, 0);
-    } else {
-      tarkovStore.setHideoutPartCount(props.need.id, neededCount.value);
-    }
-  }
-};
-
-const neededCount = computed(() => {
-  if (props.need.needType == "taskObjective" && props.need.count) {
-    return props.need.count;
-  } else if (props.need.needType == "hideoutModule" && props.need.count) {
-    return props.need.count;
-  } else {
-    return 1;
-  }
+  return needingUsers;
 });
 
 const item = computed(() => {
@@ -299,7 +220,7 @@ const item = computed(() => {
 
 .item-panel {
   aspect-ratio: 16/9;
-  min-height: 100px;
+  min-height: 138px;
 }
 
 .item-image {

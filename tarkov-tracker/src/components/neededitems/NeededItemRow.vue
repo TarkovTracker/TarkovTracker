@@ -128,16 +128,16 @@
                         <div class="d-flex align-self-stretch justify-center mt-2 mb-2 mx-2">
                           <div>
                             <v-btn variant="tonal" class="pa-0 ma-0"
-                              @click="decreaseCount()"><v-icon>mdi-minus-thick</v-icon></v-btn>
+                              @click="$emit('decreaseCount')"><v-icon>mdi-minus-thick</v-icon></v-btn>
                           </div>
                           <div class="mx-1">
-                            <v-btn variant="tonal" class="pa-0 px-1 ma-0" @click="toggleCount()">
+                            <v-btn variant="tonal" class="pa-0 px-1 ma-0" @click="$emit('toggleCount')">
                               {{ currentCount.toLocaleString() }}/{{ neededCount.toLocaleString() }}
                             </v-btn>
                           </div>
                           <div>
                             <v-btn variant="tonal" class="pa-0 ma-0"
-                              @click="increaseCount()"><v-icon>mdi-plus-thick</v-icon></v-btn>
+                              @click="$emit('increaseCount')"><v-icon>mdi-plus-thick</v-icon></v-btn>
                           </div>
                         </div>
                       </div>
@@ -216,16 +216,16 @@
                 <div class="d-flex align-self-center justify-space-between mr-2">
                   <div>
                     <v-btn variant="tonal" class="pa-0 ma-0"
-                      @click="decreaseCount()"><v-icon>mdi-minus-thick</v-icon></v-btn>
+                      @click="$emit('decreaseCount')"><v-icon>mdi-minus-thick</v-icon></v-btn>
                   </div>
                   <div class="mx-1">
-                    <v-btn variant="tonal" class="pa-0 px-1 ma-0" @click="toggleCount()">
+                    <v-btn variant="tonal" class="pa-0 px-1 ma-0" @click="$emit('toggleCount')">
                       {{ currentCount.toLocaleString() }}/{{ neededCount.toLocaleString() }}
                     </v-btn>
                   </div>
                   <div>
                     <v-btn variant="tonal" class="pa-0 ma-0"
-                      @click="increaseCount()"><v-icon>mdi-plus-thick</v-icon></v-btn>
+                      @click="$emit('increaseCount')"><v-icon>mdi-plus-thick</v-icon></v-btn>
                   </div>
                 </div>
               </div>
@@ -266,53 +266,7 @@ const { tasks, hideoutStations } = useTarkovData();
 
 const smallDialog = ref(false);
 
-const selfCompletedNeed = computed(() => {
-  if (props.need.needType == "taskObjective") {
-    return (
-      progressStore.tasksCompletions[props.need.taskId]["self"] ||
-      progressStore.objectiveCompletions[props.need.id]["self"]
-    );
-  } else if (props.need.needType == "hideoutModule") {
-    return (
-      progressStore.moduleCompletions[props.need.hideoutModule.id]["self"] ||
-      progressStore.modulePartCompletions[props.need.id]["self"]
-    );
-  } else {
-    return false;
-  }
-});
-
-const relatedTask = computed(() => {
-  if (props.need.needType == "taskObjective") {
-    return tasks.value.find((t) => t.id == props.need.taskId);
-  } else {
-    return null;
-  }
-});
-
-const relatedStation = computed(() => {
-  if (props.need.needType == "hideoutModule") {
-    return Object.values(hideoutStations.value).find(
-      (s) => s.id == props.need.hideoutModule.stationId
-    );
-  } else {
-    return null;
-  }
-});
-
-const lockedBefore = computed(() => {
-  if (props.need.needType == "taskObjective") {
-    return relatedTask.value.predecessors.filter(
-      (s) => !tarkovStore.isTaskComplete(s.id)
-    ).length;
-  } else if (props.need.needType == "hideoutModule") {
-    return props.need.hideoutModule.predecessors.filter(
-      (s) => !tarkovStore.isHideoutModuleComplete(s.id)
-    ).length;
-  } else {
-    return 0;
-  }
-});
+const { selfCompletedNeed, relatedTask, relatedStation, lockedBefore, neededCount, currentCount, levelRequired } = inject('neededitem')
 
 const itemImageClasses = computed(() => {
   return {
@@ -335,80 +289,6 @@ const itemRowClasses = computed(() => {
   return {
     "item-complete-row": selfCompletedNeed.value || currentCount.value >= neededCount.value,
   };
-});
-
-const currentCount = computed(() => {
-  if (props.need.needType == "taskObjective") {
-    return tarkovStore.getObjectiveCount(props.need.id);
-  } else if (props.need.needType == "hideoutModule") {
-    return tarkovStore.getHideoutPartCount(props.need.id);
-  } else {
-    return 0;
-  }
-});
-
-const decreaseCount = () => {
-  if (props.need.needType == "taskObjective") {
-    if (currentCount.value > 0) {
-      tarkovStore.setObjectiveCount(props.need.id, currentCount.value - 1);
-    }
-  } else if (props.need.needType == "hideoutModule") {
-    if (currentCount.value > 0) {
-      tarkovStore.setHideoutPartCount(props.need.id, currentCount.value - 1);
-    }
-  }
-};
-
-const increaseCount = () => {
-  if (props.need.needType == "taskObjective") {
-    if (currentCount.value < neededCount.value) {
-      tarkovStore.setObjectiveCount(props.need.id, currentCount.value + 1);
-    }
-  } else if (props.need.needType == "hideoutModule") {
-    if (currentCount.value < neededCount.value) {
-      tarkovStore.setHideoutPartCount(props.need.id, currentCount.value + 1);
-    }
-  }
-};
-
-const levelRequired = computed(() => {
-  if (props.need.needType == "taskObjective") {
-    return relatedTask.value.minPlayerLevel;
-  } else if (props.need.needType == "hideoutModule") {
-    return 0;
-  } else {
-    return 0;
-  }
-});
-
-const toggleCount = () => {
-  if (props.need.needType == "taskObjective") {
-    if (currentCount.value === 0) {
-      tarkovStore.setObjectiveCount(props.need.id, neededCount.value);
-    } else if (currentCount.value === neededCount.value) {
-      tarkovStore.setObjectiveCount(props.need.id, 0);
-    } else {
-      tarkovStore.setObjectiveCount(props.need.id, neededCount.value);
-    }
-  } else if (props.need.needType == "hideoutModule") {
-    if (currentCount.value === 0) {
-      tarkovStore.setHideoutPartCount(props.need.id, neededCount.value);
-    } else if (currentCount.value === neededCount.value) {
-      tarkovStore.setHideoutPartCount(props.need.id, 0);
-    } else {
-      tarkovStore.setHideoutPartCount(props.need.id, neededCount.value);
-    }
-  }
-};
-
-const neededCount = computed(() => {
-  if (props.need.needType == "taskObjective" && props.need.count) {
-    return props.need.count;
-  } else if (props.need.needType == "hideoutModule" && props.need.count) {
-    return props.need.count;
-  } else {
-    return 1;
-  }
 });
 
 const item = computed(() => {

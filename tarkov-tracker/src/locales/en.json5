@@ -102,6 +102,7 @@
         tasks: "Tasks",
         hideout: "Hideout",
       },
+      neededby: "Needed by: {users}",
       options: {
         title: "Needed Items Options",
         close: "Close",
