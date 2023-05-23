@@ -208,6 +208,14 @@ const toggleCount = () => {
   }
 };
 
+const imageItem = computed(() => {
+  if (item.value?.properties?.defaultPreset) {
+    return item.value.properties.defaultPreset;
+  } else {
+    return item.value;
+  }
+})
+
 
 // Helper functions and data to calculate the item's progress
 // These are passed to the child components via provide/inject
@@ -348,7 +356,8 @@ provide('neededitem', {
   currentCount,
   neededCount,
   levelRequired,
-  teamNeeds
+  teamNeeds,
+  imageItem
 })
 </script>
 <style lang="scss">

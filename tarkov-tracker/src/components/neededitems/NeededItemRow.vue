@@ -7,7 +7,7 @@
             <v-col class="d-flex align-center pa-0" cols="9" xs="9" sm="9" md="6" lg="6" xl="6"
               style="overflow:-moz-hidden-unscrollable">
               <span class="d-block">
-                <v-img :src="item.iconLink" :class="itemImageClasses">
+                <v-img :src="imageItem.iconLink" :class="itemImageClasses">
                   <template #placeholder>
                     <v-row class="fill-height ma-0" align="center" justify="center">
                       <v-progress-circular indeterminate color="grey-lighten-5"></v-progress-circular>
@@ -40,7 +40,7 @@
                       <div class="d-flex align-end flex-column fill-height">
                         <!-- Item image -->
                         <div class="d-flex align-self-stretch item-panel">
-                          <v-img :src="item.image512pxLink" :lazy-src="item.baseImageLink"
+                          <v-img :src="imageItem.image512pxLink" :lazy-src="imageItem.baseImageLink"
                             :class="itemImageDialogClasses">
                             <template #placeholder>
                               <v-row class="fill-height ma-0" align="center" justify="center">
@@ -291,7 +291,7 @@ const { tasks, hideoutStations } = useTarkovData();
 
 const smallDialog = ref(false);
 
-const { selfCompletedNeed, relatedTask, relatedStation, lockedBefore, neededCount, currentCount, levelRequired, item, teamNeeds } = inject('neededitem')
+const { selfCompletedNeed, relatedTask, relatedStation, lockedBefore, neededCount, currentCount, levelRequired, item, teamNeeds, imageItem } = inject('neededitem')
 
 const itemImageClasses = computed(() => {
   return {

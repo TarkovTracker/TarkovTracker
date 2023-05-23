@@ -56,6 +56,23 @@ export default gql`
             iconLink
             image8xLink
             backgroundColor
+            properties {
+              ... on ItemPropertiesWeapon {
+                defaultPreset {
+                  id
+                  shortName
+                  name
+                  link
+                  wikiLink
+                  image512pxLink
+                  gridImageLink
+                  baseImageLink
+                  iconLink
+                  image8xLink
+                  backgroundColor
+                }
+              }
+            }
           }
           containsAll {
             id
@@ -118,6 +135,23 @@ export default gql`
             iconLink
             image8xLink
             backgroundColor
+            properties {
+              ... on ItemPropertiesWeapon {
+                defaultPreset {
+                  id
+                  shortName
+                  name
+                  link
+                  wikiLink
+                  image512pxLink
+                  gridImageLink
+                  baseImageLink
+                  iconLink
+                  image8xLink
+                  backgroundColor
+                }
+              }
+            }
           }
           count
           foundInRaid
@@ -168,6 +202,23 @@ export default gql`
             iconLink
             image8xLink
             backgroundColor
+            properties {
+              ... on ItemPropertiesWeapon {
+                defaultPreset {
+                  id
+                  shortName
+                  name
+                  link
+                  wikiLink
+                  image512pxLink
+                  gridImageLink
+                  baseImageLink
+                  iconLink
+                  image8xLink
+                  backgroundColor
+                }
+              }
+            }
           }
           usingWeaponMods {
             id

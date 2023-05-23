@@ -6,7 +6,7 @@
         <div class="d-flex flex-column align-end fill-height">
           <!-- Item image -->
           <div class="d-flex align-self-stretch item-panel">
-            <v-img :src="item.image512pxLink" :lazy-src="item.baseImageLink" :class="itemImageClasses">
+            <v-img :src="imageItem.image512pxLink" :lazy-src="imageItem.baseImageLink" :class="itemImageClasses">
               <template #placeholder>
                 <v-row class="fill-height ma-0" align="center" justify="center">
                   <v-progress-circular indeterminate color="grey-lighten-5"></v-progress-circular>
@@ -146,7 +146,7 @@ const tarkovStore = useTarkovStore();
 
 const { tasks, hideoutStations } = useTarkovData();
 
-const { selfCompletedNeed, relatedTask, relatedStation, lockedBefore, neededCount, currentCount, levelRequired, item, teamNeeds } = inject('neededitem')
+const { selfCompletedNeed, relatedTask, relatedStation, lockedBefore, neededCount, currentCount, levelRequired, item, teamNeeds, imageItem } = inject('neededitem')
 
 const itemImageClasses = computed(() => {
   return {
