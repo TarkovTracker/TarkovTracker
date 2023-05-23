@@ -282,7 +282,8 @@ const selfCompletedNeed = computed(() => {
   if (props.need.needType == "taskObjective") {
     return (
       progressStore.tasksCompletions[props.need.taskId]["self"] ||
-      progressStore.objectiveCompletions[props.need.id]["self"]
+      progressStore.objectiveCompletions[props.need.id]["self"] ||
+      relatedTask.value.factionName != "Any" && relatedTask.value.factionName != tarkovStore.getPMCFaction
     );
   } else if (props.need.needType == "hideoutModule") {
     return (
