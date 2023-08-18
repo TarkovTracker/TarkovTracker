@@ -23,7 +23,7 @@
           details: "Die Anzahl an erledigten Aufgaben.",
         },
         taskItems: {
-          stat: "Afugaben Gegenstände",
+          stat: "Aufgaben Gegenstände",
           details: "Beinhaltet gefunden-im-Raid und nicht gefunden-im-Raid Gegenstände.",
         },
         allObjectives: {
