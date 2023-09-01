@@ -110,8 +110,6 @@ const visibleStations = computed(() => {
   let hideoutStationList = JSON.parse(JSON.stringify(hideoutStations.value));
   let visibleStations = progressStore.visibleStations;
 
-  console.log(visibleStations);
-
   //Display all upgradeable stations
   if (activePrimaryView.value === "available")
     return Object.values(visibleStations).filter(
