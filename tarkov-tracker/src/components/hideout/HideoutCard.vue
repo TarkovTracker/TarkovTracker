@@ -11,7 +11,7 @@
       <span class="text-left pb-0">
         <v-sheet rounded class="px-3 py-3" style="display: inherit">
           <span class="text-subtitle-1">{{ station.name }}</span>
-          <span class="text-caption ml-3">
+          <span class="text-caption ml-3" :hidden="upgradeDisabled">
             <i18n-t
               keypath="page.hideout.stationcard.level"
               scope="global"
@@ -178,7 +178,9 @@
         class="align-center justify-center"
       >
         <v-col cols="auto" class="mx-1 my-1">
-          {{ t("page.hideout.stationcard.upgradeunavailable") }}
+          <span class="mx-3">
+            {{ t("page.hideout.stationcard.upgradeunavailable") }}</span
+          >
         </v-col>
       </v-row>
     </div>
