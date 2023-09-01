@@ -76,6 +76,13 @@
     hideout: {
       title: "Притулок",
       loading: "Завантажуємо дані притулка",
+      nostationsfound: "No stations found. Try changing your filters.",
+      primaryviews: {
+        all: "All",
+        locked: "Locked",
+        available: "Available",
+        maxed: "Maxed",
+      },
       stationcard: {
         level: "Доступно до побудови | Рівень {count} | Рівень {count}",
         nextlevel: "Вимоги для наступного рівня",

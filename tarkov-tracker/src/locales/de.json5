@@ -76,6 +76,13 @@
     hideout: {
       title: "Versteck",
       loading: "Lade Versteck Daten",
+      nostationsfound: "No stations found. Try changing your filters.",
+      primaryviews: {
+        all: "All",
+        locked: "Locked",
+        available: "Available",
+        maxed: "Maxed",
+      },
       stationcard: {
         level: "Bereit zum bauen | Stufe {count} | Stufe {count}",
         nextlevel: "Voraussetzungen für die nächste Stufe",
