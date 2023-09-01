@@ -84,6 +84,7 @@
         level: "Disponible para construir | Nivel {count} | Nivel {count}",
         nextlevel: "Requisitos para el próximo nivel",
         maxlevel: "Nivel máximo de estación alcanzado",
+        upgradeunavailable: "No se puede mejorar esta estación",
         requirements: {
           station: "Requiere nivel {level} de {stationname}",
           skill: "Requiere nivel {level} de {skillname}",

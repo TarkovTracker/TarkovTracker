@@ -88,6 +88,7 @@
         level: "Available to build | Level {count} | Level {count}",
         nextlevel: "Requirements for next level",
         maxlevel: "Max station level reached",
+        upgradeunavailable: "Upgrade unavailable",
         requirements: {
           station: "Requires {stationname} level {level}",
           skill: "Requires {skillname} level {level}",

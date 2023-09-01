@@ -87,6 +87,7 @@
         level: "Доступно до побудови | Рівень {count} | Рівень {count}",
         nextlevel: "Вимоги для наступного рівня",
         maxlevel: "Досягнуто максимального рівня станції",
+        upgradeunavailable: "Upgrade unavailable",
         requirements: {
           station: "Потрібно {stationname} рівня {level}",
           skill: "Потрібно {skillname} рівня {level}",
