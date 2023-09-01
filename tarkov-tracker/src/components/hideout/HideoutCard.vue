@@ -125,7 +125,11 @@
     </v-sheet>
 
     <div class="mb-2">
-      <v-row no-gutters class="align-center justify-center">
+      <v-row
+        v-if="!upgradeDisabled"
+        no-gutters
+        class="align-center justify-center"
+      >
         <v-col v-if="nextLevel?.level" cols="auto" class="mx-1 my-1">
           <v-btn
             color="green"
@@ -166,6 +170,15 @@
               </template>
             </i18n-t>
           </v-btn>
+        </v-col>
+      </v-row>
+      <v-row
+        v-if="upgradeDisabled"
+        no-gutters
+        class="align-center justify-center"
+      >
+        <v-col cols="auto" class="mx-1 my-1">
+          {{ t("page.hideout.stationcard.upgradeunavailable") }}
         </v-col>
       </v-row>
     </div>
@@ -209,6 +222,12 @@ const highlightClasses = computed(() => {
     classes["highlight-green"] = true;
   }
   return classes;
+});
+
+const upgradeDisabled = computed(() => {
+  return !Object.values(progressStore.visibleStations).find(
+    (station) => station.id === props.station.id
+  );
 });
 
 const downgradeDisabled = computed(() => {
