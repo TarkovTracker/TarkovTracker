@@ -6,7 +6,7 @@
   >
     <div class="mt-n10">
       <span class="elevation-3 corner-highlight" :class="highlightClasses">
-        <img class="pt-0" :src="stationAvatar" width="50" />
+        <img class="pt-0" :src="stationAvatar" height="50" />
       </span>
       <span class="text-left pb-0">
         <v-sheet rounded class="px-3 py-3" style="display: inherit">
