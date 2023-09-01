@@ -331,8 +331,4 @@ const stationAvatar = computed(() => {
     rgba(0, 83, 0, 0.15) 100%
   );
 }
-
-.corner-highlight-parent {
-  //overflow: hidden;
-}
 </style>
