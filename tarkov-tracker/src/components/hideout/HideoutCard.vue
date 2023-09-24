@@ -104,7 +104,7 @@
           :key="rIndex"
         >
           <i18n-t
-            keypath="page.hideout.stationcard.requirements.skill"
+            keypath="page.hideout.stationcard.requirements.trader"
             scope="global"
           >
             <template #loyaltylevel>
