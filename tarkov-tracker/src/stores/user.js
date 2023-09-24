@@ -1,6 +1,6 @@
+import { fireuser } from "@/plugins/firebase";
 import { defineStore } from "pinia";
 import { watch } from "vue";
-import { fireuser } from "@/plugins/firebase";
 
 export const defaultState = {
   allTipsHidden: false,
@@ -93,6 +93,9 @@ export const getters = {
   getNeededItemsStyle: (state) => {
     return state.neededitemsStyle ?? "mediumCard";
   },
+  getHideoutPrimaryView: (state) => {
+    return state.hideoutPrimaryView ?? "available";
+  },
 };
 
 // Actions are for mutations and setters
@@ -184,7 +187,10 @@ export const actions = {
   // Needed items style
   setNeededItemsStyle(style) {
     this.neededitemsStyle = style;
-  }
+  },
+  setHideoutPrimaryView(view) {
+    this.hideoutPrimaryView = view;
+  },
 };
 
 export const useUserStore = defineStore("swapUser", {

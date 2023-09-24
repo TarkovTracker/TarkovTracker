@@ -6,12 +6,12 @@
   >
     <div class="mt-n10">
       <span class="elevation-3 corner-highlight" :class="highlightClasses">
-        <img class="pt-0" :src="stationAvatar" width="50" />
+        <img class="pt-0" :src="stationAvatar" height="50" />
       </span>
       <span class="text-left pb-0">
         <v-sheet rounded class="px-3 py-3" style="display: inherit">
           <span class="text-subtitle-1">{{ station.name }}</span>
-          <span class="text-caption ml-3">
+          <span class="text-caption ml-3" :hidden="upgradeDisabled">
             <i18n-t
               keypath="page.hideout.stationcard.level"
               scope="global"
@@ -125,7 +125,11 @@
     </v-sheet>
 
     <div class="mb-2">
-      <v-row no-gutters class="align-center justify-center">
+      <v-row
+        v-if="!upgradeDisabled"
+        no-gutters
+        class="align-center justify-center"
+      >
         <v-col v-if="nextLevel?.level" cols="auto" class="mx-1 my-1">
           <v-btn
             color="green"
@@ -166,6 +170,17 @@
               </template>
             </i18n-t>
           </v-btn>
+        </v-col>
+      </v-row>
+      <v-row
+        v-if="upgradeDisabled"
+        no-gutters
+        class="align-center justify-center"
+      >
+        <v-col cols="auto" class="mx-1 my-1">
+          <span class="mx-3">
+            {{ t("page.hideout.stationcard.upgradeunavailable") }}</span
+          >
         </v-col>
       </v-row>
     </div>
@@ -209,6 +224,12 @@ const highlightClasses = computed(() => {
     classes["highlight-green"] = true;
   }
   return classes;
+});
+
+const upgradeDisabled = computed(() => {
+  return !Object.values(progressStore.visibleStations).find(
+    (station) => station.id === props.station.id
+  );
 });
 
 const downgradeDisabled = computed(() => {
@@ -309,9 +330,5 @@ const stationAvatar = computed(() => {
     rgba(15, 121, 9, 0.15) 35%,
     rgba(0, 83, 0, 0.15) 100%
   );
-}
-
-.corner-highlight-parent {
-  //overflow: hidden;
 }
 </style>

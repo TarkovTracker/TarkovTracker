@@ -77,10 +77,18 @@
     hideout: {
       title: "Hideout",
       loading: "Loading hideout data",
+      nostationsfound: "No stations found. Try changing your filters.",
+      primaryviews: {
+        all: "All",
+        locked: "Locked",
+        available: "Available",
+        maxed: "Maxed",
+      },
       stationcard: {
         level: "Available to build | Level {count} | Level {count}",
         nextlevel: "Requirements for next level",
         maxlevel: "Max station level reached",
+        upgradeunavailable: "Upgrade unavailable",
         requirements: {
           station: "Requires {stationname} level {level}",
           skill: "Requires {skillname} level {level}",

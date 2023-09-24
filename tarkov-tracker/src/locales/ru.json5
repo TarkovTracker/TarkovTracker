@@ -76,10 +76,18 @@
     hideout: {
       title: "Убежище",
       loading: "Загружаем данные об убежище",
+      nostationsfound: "No stations found. Try changing your filters.",
+      primaryviews: {
+        all: "All",
+        locked: "Locked",
+        available: "Available",
+        maxed: "Maxed",
+      },
       stationcard: {
         level: "Доступно к постройке | Уровень {count} | Уровень {count}",
         nextlevel: "Требования для следующего уровня",
         maxlevel: "Достигнут максимальный уровень станции",
+        upgradeunavailable: "Upgrade unavailable",
         requirements: {
           station: "Требуется {stationname} уровня {level}",
           skill: "Требуется {skillname} уровня {level}",

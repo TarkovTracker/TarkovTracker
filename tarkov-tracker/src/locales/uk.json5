@@ -76,10 +76,18 @@
     hideout: {
       title: "Притулок",
       loading: "Завантажуємо дані притулка",
+      nostationsfound: "No stations found. Try changing your filters.",
+      primaryviews: {
+        all: "All",
+        locked: "Locked",
+        available: "Available",
+        maxed: "Maxed",
+      },
       stationcard: {
         level: "Доступно до побудови | Рівень {count} | Рівень {count}",
         nextlevel: "Вимоги для наступного рівня",
         maxlevel: "Досягнуто максимального рівня станції",
+        upgradeunavailable: "Upgrade unavailable",
         requirements: {
           station: "Потрібно {stationname} рівня {level}",
           skill: "Потрібно {skillname} рівня {level}",

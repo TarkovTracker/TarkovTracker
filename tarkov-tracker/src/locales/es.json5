@@ -73,10 +73,18 @@
     hideout: {
       title: "Escondite",
       loading: "Cargando datos del escondite",
+      nostationsfound: "No se encontraron estaciones. Intenta cambiar los filtros.",
+      primaryviews: {
+        all: "Todas",
+        locked: "Bloqueadas",
+        available: "Disponibles",
+        maxed: "Al Máximo",
+      },
       stationcard: {
         level: "Disponible para construir | Nivel {count} | Nivel {count}",
         nextlevel: "Requisitos para el próximo nivel",
         maxlevel: "Nivel máximo de estación alcanzado",
+        upgradeunavailable: "No se puede mejorar esta estación",
         requirements: {
           station: "Requiere nivel {level} de {stationname}",
           skill: "Requiere nivel {level} de {skillname}",

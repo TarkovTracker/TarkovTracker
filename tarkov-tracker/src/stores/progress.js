@@ -1,10 +1,10 @@
-import { defineStore } from "pinia";
 import { useLiveData } from "@/composables/livedata";
-import { computed } from "vue";
+import { useTarkovData } from "@/composables/tarkovdata";
+import { fireuser } from "@/plugins/firebase";
 import { useTarkovStore } from "@/stores/tarkov";
 import { useUserStore } from "@/stores/user";
-import { fireuser } from "@/plugins/firebase";
-import { useTarkovData } from "@/composables/tarkovdata";
+import { defineStore } from "pinia";
+import { computed } from "vue";
 
 const { teammateStores } = useLiveData();
 const userStore = useUserStore();
@@ -84,7 +84,7 @@ export const useProgressStore = defineStore("progress", () => {
             for (const traderStanding of task.finishRewards.traderStanding) {
               rep[teamId][traderStanding.trader.id] =
                 rep[teamId]?.[traderStanding.trader.id] +
-                traderStanding.standing || traderStanding.standing;
+                  traderStanding.standing || traderStanding.standing;
             }
           }
         }
