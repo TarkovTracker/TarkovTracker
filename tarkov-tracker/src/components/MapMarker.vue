@@ -1,7 +1,7 @@
 <template>
   <div
     :style="markerStyle"
-    class="text-red"
+    :class="markerColor"
     @mouseenter="showTooltip()"
     @mouseleave="hideTooltip()"
     @click="forceTooltipToggle()"
@@ -68,6 +68,10 @@ const relatedObjective = computed(() => {
 
 const relatedTask = computed(() => {
   return tasks.value.find((task) => task.id == relatedObjective.value?.taskId);
+});
+
+const markerColor = computed(() => {
+  return props.mark.users.includes('self') ? 'text-red' : 'text-orange';
 });
 
 const markerStyle = computed(() => {

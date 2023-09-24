@@ -367,23 +367,22 @@ const visibleGPS = computed(() => {
         // Only show the GPS location if the objective is not complete by the selected user view
         if (activeUserView.value == "all") {
           // Find the users that have the task unlocked
-          if (
-            unlockedUsers.some(
-              (user) =>
-                progressStore.objectiveCompletions[objective.id][user] == false
-            )
-          ) {
+          var users = unlockedUsers.filter(
+            (user) =>
+              progressStore.objectiveCompletions[objective.id][user] == false
+          )
+          if (users) {
             // Were a valid, unlocked, uncompleted objective, so add it to the list
-            visibleGPS.push({ ...objective.gps, objectiveId: objective.id });
+            visibleGPS.push({ ...objective.gps, objectiveId: objective.id, users: users });
           }
         } else {
           if (
             progressStore.objectiveCompletions[objective.id][
-              activeUserView.value
+            activeUserView.value
             ] == false
           ) {
             // Were a valid, unlocked, uncompleted objective, so add it to the list
-            visibleGPS.push({ ...objective.gps, objectiveId: objective.id });
+            visibleGPS.push({ ...objective.gps, objectiveId: objective.id, users: activeUserView.value });
           }
         }
       }
