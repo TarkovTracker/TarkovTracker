@@ -1,22 +1,11 @@
 <template>
   <tracker-tip tip="hideout"></tracker-tip>
   <v-container>
-    <v-row>
+    <v-row justify="center">
       <v-col lg="4" md="12">
         <v-card>
-          <v-tabs
-            v-model="activePrimaryView"
-            bg-color="accent"
-            slider-color="secondary"
-            align-tabs="center"
-            show-arrows
-          >
-            <v-tab
-              v-for="(view, index) in primaryViews"
-              :key="index"
-              :value="view.view"
-              :prepend-icon="view.icon"
-            >
+          <v-tabs v-model="activePrimaryView" bg-color="accent" slider-color="secondary" align-tabs="center" show-arrows>
+            <v-tab v-for="(view, index) in primaryViews" :key="index" :value="view.view" :prepend-icon="view.icon">
               {{ view.title }}
             </v-tab>
           </v-tabs>
@@ -27,32 +16,19 @@
   <v-container>
     <v-row v-if="hideoutLoading" justify="center">
       <v-col cols="12" align="center">
-        <v-progress-circular
-          indeterminate
-          color="secondary"
-          class="mx-2"
-        ></v-progress-circular>
+        <v-progress-circular indeterminate color="secondary" class="mx-2"></v-progress-circular>
         {{ $t("page.hideout.loading") }} <refresh-button />
       </v-col>
     </v-row>
     <v-row justify="center" class="mt-2">
-      <v-col
-        v-for="(hStation, hIndex) in visibleStations"
-        :key="hIndex"
-        cols="12"
-        sm="12"
-        md="6"
-        lg="6"
-        xl="4"
-      >
+      <v-col v-for="(hStation, hIndex) in visibleStations" :key="hIndex" cols="12" sm="12" md="6" lg="6" xl="4">
         <hideout-card :station="hStation" class="ma-2" />
       </v-col>
     </v-row>
     <v-row v-if="!hideoutLoading && visibleStations.length == 0">
       <v-col cols="12">
         <v-alert icon="mdi-clipboard-search">
-          {{ $t("page.hideout.nostationsfound") }}</v-alert
-        >
+          {{ $t("page.hideout.nostationsfound") }}</v-alert>
       </v-col>
     </v-row>
   </v-container>
