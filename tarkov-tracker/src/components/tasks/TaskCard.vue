@@ -1,5 +1,6 @@
 <template>
   <v-sheet
+    :id="`task-${props.task.id}`"
     class="pa-2 taskContainer"
     :rounded="true"
     :class="{
