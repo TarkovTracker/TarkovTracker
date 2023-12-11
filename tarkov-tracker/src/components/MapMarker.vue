@@ -12,7 +12,7 @@
   </div>
   <div v-if="tooltipVisible" :style="tooltipStyle">
     <v-sheet class="ma-0 elevation-3 rounded px-1 pt-2" color="primary">
-      <task-link :task="relatedTask" />
+      <task-link :task="relatedTask" show-wiki-link />
       <task-objective
         v-if="props.mark.objectiveId"
         :objective="objectives.find((obj) => obj.id == props.mark.objectiveId)"
