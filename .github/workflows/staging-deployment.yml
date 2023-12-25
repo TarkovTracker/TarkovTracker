@@ -1,19 +1,20 @@
 name: Pre-Production Deployment
 
-"on":
+'on':
   push:
     branches:
       - master
 
-staging_deploy:
-  name: Staging Deployment
-  runs-on: ubuntu-latest
-  environment: Staging
-  steps:
-    - uses: actions/checkout@v2
-    - uses: FirebaseExtended/action-hosting-deploy@v0
-      with:
-        repoToken: "${{ secrets.GITHUB_TOKEN }}"
-        firebaseServiceAccount: "${{ secrets.FIREBASE_ENVIRONMENT_CI_TOKEN }}"
-        channelId: live
-        projectId: tarkovtracker-staging
+jobs:
+  staging_deploy:
+    name: Staging Deployment
+    runs-on: ubuntu-latest
+    environment: Staging
+    steps:
+      - uses: actions/checkout@v2
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_ENVIRONMENT_CI_TOKEN }}"
+          channelId: live
+          projectId: tarkovtracker-staging
