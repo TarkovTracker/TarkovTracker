@@ -3,7 +3,8 @@ name: Testing Deployment
 "on": [ pull_request_target ]
 
 jobs:
-  Testing Deploy:
+  testing_deploy:
+    name: Testing Deployment
     runs-on: ubuntu-latest
     environment: Testing
     steps:
