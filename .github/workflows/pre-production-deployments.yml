@@ -7,9 +7,10 @@ on:
       - master
 
 jobs:
-  deploy:
+  Testing Deploy:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
-    environment: ${{ (github.event_name == 'pull_request' && 'Testing') || (github.event_name == 'push' && 'Staging') }}
+    environment: Testing
     steps:
       - uses: actions/checkout@v2
       - uses: FirebaseExtended/action-hosting-deploy@v0
@@ -17,4 +18,17 @@ jobs:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_ENVIRONMENT_CI_TOKEN }}"
           channelId: live
-          projectId: "${{ secrets.FIREBASE_PROJECT_ID }}"
+          projectId: tarkovtracker-testing
+
+  Staging Deploy:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    environment: Staging
+    steps:
+      - uses: actions/checkout@v2
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_ENVIRONMENT_CI_TOKEN }}"
+          channelId: live
+          projectId: tarkovtracker-staging
