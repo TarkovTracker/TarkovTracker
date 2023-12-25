@@ -20,7 +20,7 @@
     "firebase": "^9.8.3",
     "firebaseui": "^6.0.1",
     "graphology": "^0.25.1",
-    "graphql": "^16.6.0",
+    "graphql": "^16.8.1",
     "graphql-tag": "^2.12.6",
     "lodash-es": "^4.17.21",
     "pinia": "^2.0.23",
