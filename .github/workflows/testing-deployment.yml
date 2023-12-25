@@ -1,0 +1,17 @@
+name: Testing Deployment
+
+on:
+  pull_request
+
+jobs:
+  Testing Deploy:
+    runs-on: ubuntu-latest
+    environment: Testing
+    steps:
+      - uses: actions/checkout@v2
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_ENVIRONMENT_CI_TOKEN }}"
+          expires: 30d
+          projectId: tarkovtracker-testing
