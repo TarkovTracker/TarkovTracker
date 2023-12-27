@@ -27,7 +27,6 @@ const colorTheme = {
 };
 
 export default createVuetify({
-  locale: createVueI18nAdapter({ i18n, useI18n }),
   global: {
     ripple: false,
   },
