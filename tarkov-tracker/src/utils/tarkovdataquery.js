@@ -1,6 +1,50 @@
 import gql from "graphql-tag";
 
 export default gql`
+  fragment ItemData on Item {
+    id
+    shortName
+    name
+    link
+    wikiLink
+    image512pxLink
+    gridImageLink
+    baseImageLink
+    iconLink
+    image8xLink
+    backgroundColor
+  }
+
+  fragment MapPositionData on MapPosition {
+    x
+    y
+    z
+  }
+
+  fragment MapWithPositionsData on MapWithPosition {
+    map {
+      id
+    }
+    positions {
+      ...MapPositionData
+    }
+  }
+
+  fragment TaskZoneData on TaskZone {
+    id
+    map {
+      id
+    }
+    position {
+      ...MapPositionData
+    }
+    outline {
+      ...MapPositionData
+    }
+    top
+    bottom
+  }
+
   query TarkovData {
     tasks {
       id
@@ -43,62 +87,27 @@ export default gql`
         }
         optional
         __typename
+        ... on TaskObjectiveBasic {
+          zones {
+            ...TaskZoneData
+          }
+        }
         ... on TaskObjectiveBuildItem {
           item {
-            id
-            shortName
-            name
-            link
-            wikiLink
-            image512pxLink
-            gridImageLink
-            baseImageLink
-            iconLink
-            image8xLink
-            backgroundColor
+            ...ItemData
             properties {
               ... on ItemPropertiesWeapon {
                 defaultPreset {
-                  id
-                  shortName
-                  name
-                  link
-                  wikiLink
-                  image512pxLink
-                  gridImageLink
-                  baseImageLink
-                  iconLink
-                  image8xLink
-                  backgroundColor
+                  ...ItemData
                 }
               }
             }
           }
           containsAll {
-            id
-            shortName
-            name
-            link
-            wikiLink
-            image512pxLink
-            gridImageLink
-            baseImageLink
-            iconLink
-            image8xLink
-            backgroundColor
+            ...ItemData
           }
           containsOne {
-            id
-            shortName
-            name
-            link
-            wikiLink
-            image512pxLink
-            gridImageLink
-            baseImageLink
-            iconLink
-            image8xLink
-            backgroundColor
+            ...ItemData
           }
           attributes {
             name
@@ -123,32 +132,15 @@ export default gql`
           zoneNames
         }
         ... on TaskObjectiveItem {
+          zones {
+            ...TaskZoneData
+          }
           item {
-            id
-            shortName
-            name
-            link
-            wikiLink
-            image512pxLink
-            gridImageLink
-            baseImageLink
-            iconLink
-            image8xLink
-            backgroundColor
+            ...ItemData
             properties {
               ... on ItemPropertiesWeapon {
                 defaultPreset {
-                  id
-                  shortName
-                  name
-                  link
-                  wikiLink
-                  image512pxLink
-                  gridImageLink
-                  baseImageLink
-                  iconLink
-                  image8xLink
-                  backgroundColor
+                  ...ItemData
                 }
               }
             }
@@ -161,23 +153,22 @@ export default gql`
         }
         ... on TaskObjectiveMark {
           markerItem {
-            id
-            shortName
-            name
-            link
-            wikiLink
-            image512pxLink
-            gridImageLink
-            baseImageLink
-            iconLink
-            image8xLink
-            backgroundColor
+            ...ItemData
+          }
+          zones {
+            ...TaskZoneData
           }
         }
         ... on TaskObjectivePlayerLevel {
           playerLevel
         }
         ... on TaskObjectiveQuestItem {
+          possibleLocations {
+            ...MapWithPositionsData
+          }
+          zones {
+            ...TaskZoneData
+          }
           questItem {
             id
             name
@@ -191,73 +182,23 @@ export default gql`
           zoneNames
           bodyParts
           usingWeapon {
-            id
-            shortName
-            name
-            link
-            wikiLink
-            image512pxLink
-            gridImageLink
-            baseImageLink
-            iconLink
-            image8xLink
-            backgroundColor
+            ...ItemData
             properties {
               ... on ItemPropertiesWeapon {
                 defaultPreset {
-                  id
-                  shortName
-                  name
-                  link
-                  wikiLink
-                  image512pxLink
-                  gridImageLink
-                  baseImageLink
-                  iconLink
-                  image8xLink
-                  backgroundColor
+                  ...ItemData
                 }
               }
             }
           }
           usingWeaponMods {
-            id
-            shortName
-            name
-            link
-            wikiLink
-            image512pxLink
-            gridImageLink
-            baseImageLink
-            iconLink
-            image8xLink
-            backgroundColor
+            ...ItemData
           }
           wearing {
-            id
-            shortName
-            name
-            link
-            wikiLink
-            image512pxLink
-            gridImageLink
-            baseImageLink
-            iconLink
-            image8xLink
-            backgroundColor
+            ...ItemData
           }
           notWearing {
-            id
-            shortName
-            name
-            link
-            wikiLink
-            image512pxLink
-            gridImageLink
-            baseImageLink
-            iconLink
-            image8xLink
-            backgroundColor
+            ...ItemData
           }
           distance {
             compareMethod
@@ -278,6 +219,9 @@ export default gql`
               compareMethod
               value
             }
+          }
+          zones {
+            ...TaskZoneData
           }
         }
         ... on TaskObjectiveSkill {
@@ -300,6 +244,15 @@ export default gql`
           }
           level
         }
+        ... on TaskObjectiveUseItem {
+          useAny {
+            ...ItemData
+          }
+          zones {
+            ...TaskZoneData
+          }
+          count
+        }
       }
       startRewards {
         traderStanding {
@@ -312,24 +265,10 @@ export default gql`
         items {
           count
           item {
-            id
-            shortName
-            name
-            link
-            wikiLink
+            ...ItemData
             containsItems {
               item {
-                id
-                shortName
-                name
-                link
-                wikiLink
-                image512pxLink
-                gridImageLink
-                baseImageLink
-                iconLink
-                image8xLink
-                backgroundColor
+                ...ItemData
               }
               count
             }
@@ -343,25 +282,11 @@ export default gql`
           }
           level
           item {
-            id
-            shortName
-            name
-            link
-            wikiLink
+            ...ItemData
             containsItems {
               count
               item {
-                id
-                shortName
-                name
-                link
-                wikiLink
-                image512pxLink
-                gridImageLink
-                baseImageLink
-                iconLink
-                image8xLink
-                backgroundColor
+                ...ItemData
               }
             }
           }
@@ -386,24 +311,10 @@ export default gql`
         items {
           count
           item {
-            id
-            shortName
-            name
-            link
-            wikiLink
+            ...ItemData
             containsItems {
               item {
-                id
-                shortName
-                name
-                link
-                wikiLink
-                image512pxLink
-                gridImageLink
-                baseImageLink
-                iconLink
-                image8xLink
-                backgroundColor
+                ...ItemData
               }
               count
             }
@@ -417,25 +328,11 @@ export default gql`
           }
           level
           item {
-            id
-            shortName
-            name
-            link
-            wikiLink
+            ...ItemData
             containsItems {
               count
               item {
-                id
-                shortName
-                name
-                link
-                wikiLink
-                image512pxLink
-                gridImageLink
-                baseImageLink
-                iconLink
-                image8xLink
-                backgroundColor
+                ...ItemData
               }
             }
           }
@@ -452,17 +349,7 @@ export default gql`
       factionName
       neededKeys {
         keys {
-          id
-          shortName
-          name
-          link
-          wikiLink
-          image512pxLink
-          gridImageLink
-          baseImageLink
-          iconLink
-          image8xLink
-          backgroundColor
+          ...ItemData
         }
         map {
           id

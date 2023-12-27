@@ -391,17 +391,18 @@ const rawMaps = computed(() => {
 });
 
 const maps = computed(() => {
-  // Remove Night Factory from the maps list
+  // Remove Night Factory from the maps list (we just care about "Factory")
   if (!rawMaps.value) return [];
   let noNightFactory = rawMaps.value.filter(
     (map) => map.id != "59fc81d786f774390775787e"
   );
   let processedMaps = [];
+  // Link the svg property from tarkovdata to the map object from tarkov.dev API
   noNightFactory.forEach((map) => {
     let tempMap = { ...map };
     tempMap.svg =
       Object.values(tarkovDataMaps.value).find(
-        (tdm) => String(tdm.id) == String(map.tarkovDataId)
+        (tdm) => String(tdm.tdevId) == String(map.id)
       )?.svg || null;
     processedMaps.push(tempMap);
   });

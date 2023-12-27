@@ -4,6 +4,7 @@ import "vuetify/styles";
 import colors from "vuetify/lib/util/colors";
 import { useI18n } from "vue-i18n";
 import { createVueI18nAdapter } from "vuetify/locale/adapters/vue-i18n";
+import { aliases, mdi } from 'vuetify/iconsets/mdi'
 import i18n from "./i18n";
 
 // Vuetify
@@ -29,6 +30,12 @@ export default createVuetify({
   locale: createVueI18nAdapter({ i18n, useI18n }),
   global: {
     ripple: false,
+  },
+  icons: {
+    defaultSet: 'mdi',
+    sets: {
+      mdi,
+    },
   },
   theme: {
     defaultTheme: "trackerTheme",

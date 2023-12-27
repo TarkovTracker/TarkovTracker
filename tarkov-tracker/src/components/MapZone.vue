@@ -28,7 +28,7 @@ const props = defineProps({
     type: Object,
     required: true,
   },
-  markLocation: {
+  zoneLocation: {
     type: Object,
     required: true,
   },
@@ -75,19 +75,48 @@ const markerColor = computed(() => {
 });
 
 const relativeLocation = computed(() => {
+  // Determine the leftmost x position in the array of zone positions
   // Take the bounds of the map and figure out the initial relative position
   let mapLeft = props.map.svg.bounds[0][0];
   let mapTop = props.map.svg.bounds[0][1];
   let mapWidth = Math.max(props.map.svg.bounds[0][0], props.map.svg.bounds[1][0]) - Math.min(props.map.svg.bounds[0][0], props.map.svg.bounds[1][0]);
   let mapHeight = Math.max(props.map.svg.bounds[0][1], props.map.svg.bounds[1][1]) - Math.min(props.map.svg.bounds[0][1], props.map.svg.bounds[1][1]);
-  let relativeLeft = Math.abs(props.markLocation.positions[0].x - mapLeft);
-  let relativeTop = Math.abs(props.markLocation.positions[0].z - mapTop);
-  let relativeLeftPercent = (relativeLeft / mapWidth) * 100;
-  let relativeTopPercent = (relativeTop / mapHeight) * 100;
+
+  let outlinePercents = []
+  props.zoneLocation.outline.forEach((outline) => {
+    let relativeLeft = Math.abs(outline.x - mapLeft);
+    let relativeTop = Math.abs(outline.z - mapTop);
+    let relativeLeftPercent = (relativeLeft / mapWidth) * 100;
+    let relativeTopPercent = (relativeTop / mapHeight) * 100;
+    outlinePercents.push({
+      leftPercent: relativeLeftPercent,
+      topPercent: relativeTopPercent,
+    })
+  })
+
+  // Find the bounds of the outline
+  let leftPercent = outlinePercents.reduce((min, current) => {
+    return current.leftPercent < min ? current.leftPercent : min;
+  }, outlinePercents[0].leftPercent);
+
+  let topPercent = outlinePercents.reduce((min, current) => {
+    return current.topPercent < min ? current.topPercent : min;
+  }, outlinePercents[0].topPercent);
+
+  let rightPercent = outlinePercents.reduce((max, current) => {
+    return current.leftPercent > max ? current.leftPercent : max;
+  }, outlinePercents[0].leftPercent);
+
+  let bottomPercent = outlinePercents.reduce((max, current) => {
+    return current.topPercent > max ? current.topPercent : max;
+  }, outlinePercents[0].topPercent);
 
   return {
-    leftPercent: relativeLeftPercent,
-    topPercent: relativeTopPercent,
+    leftPercent: leftPercent,
+    topPercent: topPercent,
+    rightPercent: rightPercent,
+    bottomPercent: bottomPercent,
+    outlinePercents: outlinePercents,
   };
 });
 

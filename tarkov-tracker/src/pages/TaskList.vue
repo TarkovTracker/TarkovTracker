@@ -5,19 +5,8 @@
       <v-col lg="4" md="12">
         <!-- Primary views (all, maps, traders) -->
         <v-card>
-          <v-tabs
-            v-model="activePrimaryView"
-            bg-color="accent"
-            slider-color="secondary"
-            align-tabs="center"
-            show-arrows
-          >
-            <v-tab
-              v-for="(view, index) in primaryViews"
-              :key="index"
-              :value="view.view"
-              :prepend-icon="view.icon"
-            >
+          <v-tabs v-model="activePrimaryView" bg-color="accent" slider-color="secondary" align-tabs="center" show-arrows>
+            <v-tab v-for="(view, index) in primaryViews" :key="index" :value="view.view" :prepend-icon="view.icon">
               {{ view.title }}
             </v-tab>
           </v-tabs>
@@ -26,11 +15,7 @@
       <v-col v-show="activePrimaryView == 'all'" lg="8" md="12">
         <!-- The user has selected all quests, no need to filter by a sub-category -->
         <v-card>
-          <v-tabs
-            bg-color="accent"
-            slider-color="secondary"
-            align-tabs="center"
-          >
+          <v-tabs bg-color="accent" slider-color="secondary" align-tabs="center">
             <v-tab value="all">
               {{ $t("page.tasks.showing_all_sources") }}
             </v-tab>
@@ -40,27 +25,11 @@
       <v-col v-show="activePrimaryView == 'maps'" lg="8" md="12">
         <!-- The user has selected quests by map -->
         <v-card>
-          <v-tabs
-            v-model="activeMapView"
-            bg-color="accent"
-            slider-color="secondary"
-            align-tabs="center"
-            show-arrows
-          >
-            <v-tab
-              v-for="(map, index) in maps"
-              :key="index"
-              :value="map.id"
-              prepend-icon="mdi-compass"
-            >
+          <v-tabs v-model="activeMapView" bg-color="accent" slider-color="secondary" align-tabs="center" show-arrows>
+            <v-tab v-for="(map, index) in maps" :key="index" :value="map.id" prepend-icon="mdi-compass">
               <template v-if="mapTaskTotals[map.id] > 0">
-                <v-badge
-                  color="secondary"
-                  :content="mapTaskTotals[map.id]"
-                  :label="String(mapTaskTotals[map.id])"
-                  offset-y="-5"
-                  offset-x="-10"
-                >
+                <v-badge color="secondary" :content="mapTaskTotals[map.id]" :label="String(mapTaskTotals[map.id])"
+                  offset-y="-5" offset-x="-10">
                   {{ map.name }}
                 </v-badge>
               </template>
@@ -74,18 +43,8 @@
       <v-col v-show="activePrimaryView == 'traders'" lg="8" md="12">
         <!-- The user has selected quests by trader -->
         <v-card>
-          <v-tabs
-            v-model="activeTraderView"
-            bg-color="accent"
-            slider-color="secondary"
-            align-tabs="center"
-            show-arrows
-          >
-            <v-tab
-              v-for="(trader, index) in traders"
-              :key="index"
-              :value="trader.id"
-            >
+          <v-tabs v-model="activeTraderView" bg-color="accent" slider-color="secondary" align-tabs="center" show-arrows>
+            <v-tab v-for="(trader, index) in traders" :key="index" :value="trader.id">
               <v-avatar color="primary" size="2em" class="mr-2">
                 <v-img :src="traderAvatar(trader.id)" />
               </v-avatar>
@@ -99,19 +58,9 @@
       <v-col lg="4" md="12">
         <!-- Secondary views (available, locked, completed) -->
         <v-card>
-          <v-tabs
-            v-model="activeSecondaryView"
-            bg-color="accent"
-            slider-color="secondary"
-            align-tabs="center"
-            show-arrows
-          >
-            <v-tab
-              v-for="(view, index) in secondaryViews"
-              :key="index"
-              :value="view.view"
-              :prepend-icon="view.icon"
-            >
+          <v-tabs v-model="activeSecondaryView" bg-color="accent" slider-color="secondary" align-tabs="center"
+            show-arrows>
+            <v-tab v-for="(view, index) in secondaryViews" :key="index" :value="view.view" :prepend-icon="view.icon">
               {{ view.title }}
             </v-tab>
           </v-tabs>
@@ -120,20 +69,9 @@
       <v-col lg="8" md="12">
         <!-- User view -->
         <v-card>
-          <v-tabs
-            v-model="activeUserView"
-            bg-color="accent"
-            slider-color="secondary"
-            align-tabs="center"
-          >
-            <v-tab
-              v-for="view in userViews"
-              :key="view.view"
-              :value="view.view"
-              :disabled="
-                view.view == 'all' && activeSecondaryView != 'available'
-              "
-            >
+          <v-tabs v-model="activeUserView" bg-color="accent" slider-color="secondary" align-tabs="center">
+            <v-tab v-for="view in userViews" :key="view.view" :value="view.view" :disabled="view.view == 'all' && activeSecondaryView != 'available'
+              ">
               {{ view.title }}
             </v-tab>
           </v-tabs>
@@ -143,11 +81,7 @@
     <v-row justify="center">
       <v-col v-if="loadingTasks || reloadingTasks" cols="12" align="center">
         <!-- If we're still waiting on tasks from tarkov.dev API -->
-        <v-progress-circular
-          indeterminate
-          color="secondary"
-          class="mx-2"
-        ></v-progress-circular>
+        <v-progress-circular indeterminate color="secondary" class="mx-2"></v-progress-circular>
         {{ $t("page.tasks.loading") }}
         <refresh-button />
       </v-col>
@@ -155,39 +89,24 @@
     <v-row v-if="!loadingTasks && !reloadingTasks && visibleTasks.length == 0">
       <v-col cols="12">
         <v-alert icon="mdi-clipboard-search">
-          {{ $t("page.tasks.notasksfound") }}</v-alert
-        >
+          {{ $t("page.tasks.notasksfound") }}</v-alert>
       </v-col>
     </v-row>
     <v-row v-show="!loadingTasks && !reloadingTasks" justify="center">
-      <v-col
-        v-if="activePrimaryView == 'maps' && visibleGPS.length > 0"
-        cols="12"
-        class="my-1"
-      >
+      <v-col v-if="activePrimaryView == 'maps' && visibleGPS.length > 0" cols="12" class="my-1">
         <v-expansion-panels v-model="expandMap">
           <v-expansion-panel>
-            <v-expansion-panel-title
-              >Objective Locations</v-expansion-panel-title
-            >
+            <v-expansion-panel-title>Objective Locations</v-expansion-panel-title>
             <v-expansion-panel-text>
-              <tarkov-map
-                :map="maps.find((m) => m.id == activeMapView)"
-                :marks="visibleGPS"
-              />
+              <tarkov-map :map="maps.find((m) => m.id == activeMapView)" :marks="visibleGPS" />
             </v-expansion-panel-text>
           </v-expansion-panel>
         </v-expansion-panels>
       </v-col>
       <v-col cols="12" class="my-1">
-        <v-lazy
-          v-for="(task, taskIndex) in visibleTasks"
-          :key="taskIndex"
-          :options="{
-            threshold: 0.5,
-          }"
-          min-height="100"
-        >
+        <v-lazy v-for="(task, taskIndex) in visibleTasks" :key="taskIndex" :options="{
+          threshold: 0.5,
+        }" min-height="100">
           <task-card :task="task" class="my-1" />
         </v-lazy>
       </v-col>
@@ -363,7 +282,7 @@ const visibleGPS = computed(() => {
     // For each objective
     for (const objective of task.objectives) {
       // If the objective has a GPS location, and its not complete yet, add it to the list
-      if (objective.gps != null) {
+      if (objectiveHasLocation(objective)) {
         // Only show the GPS location if the objective is not complete by the selected user view
         if (activeUserView.value == "all") {
           // Find the users that have the task unlocked
@@ -373,7 +292,7 @@ const visibleGPS = computed(() => {
           )
           if (users) {
             // Were a valid, unlocked, uncompleted objective, so add it to the list
-            visibleGPS.push({ ...objective.gps, objectiveId: objective.id, users: users });
+            visibleGPS.push({ ...objective, users: users });
           }
         } else {
           if (
@@ -382,7 +301,7 @@ const visibleGPS = computed(() => {
             ] == false
           ) {
             // Were a valid, unlocked, uncompleted objective, so add it to the list
-            visibleGPS.push({ ...objective.gps, objectiveId: objective.id, users: activeUserView.value });
+            visibleGPS.push({ ...objective, users: activeUserView.value });
           }
         }
       }
@@ -390,6 +309,14 @@ const visibleGPS = computed(() => {
   }
   return visibleGPS;
 });
+
+function objectiveHasLocation(objective) {
+  if (objective?.possibleLocations?.length > 0 || objective?.zones?.length > 0) {
+    return true;
+  } else {
+    return false;
+  }
+}
 
 const mapTaskTotals = computed(() => {
   let mapTaskCounts = {};
@@ -467,7 +394,7 @@ const updateVisibleTasks = async function () {
       visibleTaskList = visibleTaskList.filter(
         (task) =>
           progressStore.tasksCompletions?.[task.id]?.[activeUserView.value] !=
-            true &&
+          true &&
           progressStore.unlockedTasks?.[task.id]?.[activeUserView.value] != true
       );
     } else if (activeSecondaryView.value == "completed") {

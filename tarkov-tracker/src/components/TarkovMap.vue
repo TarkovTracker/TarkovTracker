@@ -2,28 +2,22 @@
   <v-container>
     <v-row>
       <v-col cols="12">
-        <template
-          v-for="(floor, floorIndex) in props.map.svg.floors"
-          :key="floorIndex"
-        >
-          <v-btn
-            variant="tonal"
-            :color="floor == selectedFloor ? 'green' : ''"
-            class="mx-2"
-            @click="setFloor(floor)"
-            >{{ floor.replace("_", " ") }}</v-btn
-          >
+        <template v-for="(floor, floorIndex) in props.map.svg.floors" :key="floorIndex">
+          <v-btn variant="tonal" :color="floor == selectedFloor ? 'green' : ''" class="mx-2" @click="setFloor(floor)">{{
+            floor.replace("_", " ") }}</v-btn>
         </template>
       </v-col>
       <v-col cols="12">
         <div :id="randomMapId" style="position: relative; width: 100%">
           <template v-for="(mark, markIndex) in props.marks" :key="markIndex">
-            <map-marker
-              v-if="mark.map === props.map.id"
-              :key="markIndex"
-              :mark="mark"
-              :selected-floor="selectedFloor"
-            />
+            <template v-for="(markLocation, markLocationIndex) in mark.possibleLocations" :key="markLocationIndex">
+              <map-marker v-if="markLocation.map.id === props.map.id" :key="markLocationIndex" :mark="mark"
+                :mark-location="markLocation" :selected-floor="selectedFloor" :map="props.map" />
+            </template>
+            <template v-for="(zoneLocation, zoneLocationIndex) in mark.zones" :key="zoneLocationIndex">
+              <map-zone v-if="zoneLocation.map.id === props.map.id" :key="zoneLocationIndex" :mark="mark"
+                :zone-location="zoneLocation" :selected-floor="selectedFloor" :map="props.map" />
+            </template>
           </template>
         </div>
       </v-col>
@@ -57,6 +51,7 @@ const props = defineProps({
 const MapMarker = defineAsyncComponent(() =>
   import("@/components/MapMarker.vue")
 );
+const MapZone = defineAsyncComponent(() => import("@/components/MapZone.vue"));
 
 // selectedFloor is a ref which defaults to the last item in the floors array
 const selectedFloor = ref(
@@ -103,29 +98,9 @@ const draw = async () => {
     }
   }, this);
 };
-onMounted(() => {
-  console.log(`the component is now mounted.`);
-  draw();
 
-  // Event block for creating gps data
-  document.getElementById(randomMapId.value).addEventListener(
-    "click",
-    function (event) {
-      let e = document.getElementById(randomMapId.value);
-      let dim = e.getBoundingClientRect();
-      let gps = {
-        map: props.map.id,
-        leftPercent: parseFloat(
-          (((event.clientX - dim.left) / e.clientWidth) * 100).toFixed(2)
-        ),
-        topPercent: parseFloat(
-          (((event.clientY - dim.top) / e.clientHeight) * 100).toFixed(2)
-        ),
-        floor: selectedFloor.value,
-      };
-      emit("gpsclick", gps);
-    }.bind(this)
-  );
+onMounted(() => {
+  draw();
 });
 
 const userStore = useUserStore();
