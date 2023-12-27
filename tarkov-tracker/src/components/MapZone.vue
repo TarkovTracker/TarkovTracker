@@ -1,9 +1,6 @@
 <template>
-  <div :style="markerStyle" :class="markerColor" @mouseenter="showTooltip()" @mouseleave="hideTooltip()"
+  <div :style="zoneStyle" :class="zoneColor" @mouseenter="showTooltip()" @mouseleave="hideTooltip()"
     @click="forceTooltipToggle()">
-    <v-icon>{{
-      tooltipVisible == true ? "mdi-map-marker-radius" : "mdi-map-marker"
-    }}</v-icon>
   </div>
   <div v-if="tooltipVisible" :style="tooltipStyle">
     <v-sheet class="ma-0 elevation-3 rounded px-1 pt-2" color="primary">
@@ -70,7 +67,8 @@ const relatedTask = computed(() => {
   return tasks.value.find((task) => task.id == relatedObjective.value?.taskId);
 });
 
-const markerColor = computed(() => {
+const zoneColor = computed(() => {
+  if (tooltipVisible.value) return 'text-green';
   return props.mark.users.includes('self') ? 'text-red' : 'text-orange';
 });
 
@@ -84,8 +82,10 @@ const relativeLocation = computed(() => {
 
   let outlinePercents = []
   props.zoneLocation.outline.forEach((outline) => {
+    // Calculate relative values using the coordinate system of the map
     let relativeLeft = Math.abs(outline.x - mapLeft);
     let relativeTop = Math.abs(outline.z - mapTop);
+    // Calculate relative values relative to the map container
     let relativeLeftPercent = (relativeLeft / mapWidth) * 100;
     let relativeTopPercent = (relativeTop / mapHeight) * 100;
     outlinePercents.push({
@@ -111,23 +111,38 @@ const relativeLocation = computed(() => {
     return current.topPercent > max ? current.topPercent : max;
   }, outlinePercents[0].topPercent);
 
+  // Now, calculate the percentages internally to the div based on the bounds
+  let internalPercents = []
+  outlinePercents.forEach((outline) => {
+    let internalLeftPercent = ((outline.leftPercent - leftPercent) / (rightPercent - leftPercent)) * 100;
+    let internalTopPercent = ((outline.topPercent - topPercent) / (bottomPercent - topPercent)) * 100;
+    internalPercents.push({
+      leftPercent: internalLeftPercent,
+      topPercent: internalTopPercent,
+    })
+  })
+
   return {
     leftPercent: leftPercent,
     topPercent: topPercent,
     rightPercent: rightPercent,
     bottomPercent: bottomPercent,
-    outlinePercents: outlinePercents,
+    internalPercents: internalPercents,
   };
 });
 
-const markerStyle = computed(() => {
+const zoneStyle = computed(() => {
   return {
     position: "absolute",
     top: relativeLocation.value.topPercent + "%",
     left: relativeLocation.value.leftPercent + "%",
-    width: "20px",
-    height: "20px",
-    transform: "translate(-50%, -50%)",
+    width: relativeLocation.value.rightPercent - relativeLocation.value.leftPercent + "%",
+    height: relativeLocation.value.bottomPercent - relativeLocation.value.topPercent + "%",
+    "clip-path": "polygon(" + relativeLocation.value.internalPercents.map((point) => {
+      return point.leftPercent + "% " + point.topPercent + "%";
+    }).join(", ") + ")",
+    background: tooltipVisible.value ? "linear-gradient(90deg, rgba(155, 165, 0, 0.5) 0%, rgba(155, 165, 0, 0.5) 100%)" : "linear-gradient(90deg, rgba(255, 165, 0, 0.2) 0%, rgba(255, 165, 0, 0.2) 100%)",
+    "border-style": "dashed",
     // cursor: props.mark.floor === props.selectedFloor ? "pointer" : "inherit",
     // opacity: props.mark.floor === props.selectedFloor ? 1 : 0.2,
     cursor: "pointer",
@@ -141,6 +156,7 @@ const tooltipStyle = computed(() => {
     top: relativeLocation.value.topPercent + "%",
     left: relativeLocation.value.leftPercent + "%",
     transform: "translate(-50%, -125%)",
+    zIndex: 100,
   };
 });
 </script>
