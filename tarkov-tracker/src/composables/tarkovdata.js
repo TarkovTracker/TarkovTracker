@@ -104,27 +104,36 @@ const hideoutGraph = ref({});
 watch(queryHideoutResults, async (newValue, oldValue) => {
   if (newValue?.hideoutStations) {
     let newHideoutGraph = new Graph();
-    newValue.hideoutStations.forEach((station) => {
-      // For each level
-      station.levels.forEach((level) => {
-        newHideoutGraph.mergeNode(level.id);
-        // For each stationRequirement
-        level.stationLevelRequirements.forEach((requirement) => {
-          let requiredStation = newValue.hideoutStations.find(
-            (station) => station.id === requirement.station.id
-          );
-          let requiredLevel = requiredStation.levels.find(
-            (level) => level.level === requirement.level
-          );
-          newHideoutGraph.mergeNode(requiredLevel.id);
-          newHideoutGraph.mergeEdge(requiredLevel.id, level.id);
+    newValue?.hideoutStations.forEach((station) => {
+      console.info(station)
+      if (station != null && station.id != "5d494a295b56502f18c98a08") {
+        // For each level
+        station?.levels.forEach((level) => {
+          console.info(level)
+          if (level != null) {
+            newHideoutGraph.mergeNode(level.id);
+            // For each stationRequirement
+            level.stationLevelRequirements.forEach((requirement) => {
+              if (requirement != null) {
+                let requiredStation = newValue.hideoutStations.find(
+                  (station) => station.id === requirement.station.id
+                );
+                let requiredLevel = requiredStation.levels.find(
+                  (level) => level.level === requirement.level
+                );
+                newHideoutGraph.mergeNode(requiredLevel.id);
+                newHideoutGraph.mergeEdge(requiredLevel.id, level.id);
+              }
+            });
+          }
         });
-      });
+      }
     });
 
     let newModules = [];
     newValue.hideoutStations.forEach((station) => {
-      // For each level
+      if (station.id != "5d494a295b56502f18c98a08") {
+        // For each level
       station.levels.forEach((level) => {
         newModules.push({
           ...level,
@@ -137,6 +146,7 @@ watch(queryHideoutResults, async (newValue, oldValue) => {
           children: newHideoutGraph.outNeighbors(level.id),
         });
       });
+      }
     });
     hideoutModules.value = newModules;
     hideoutGraph.value = newHideoutGraph;
