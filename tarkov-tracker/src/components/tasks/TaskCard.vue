@@ -457,6 +457,11 @@ const markTaskComplete = () => {
         tarkovStore.setTaskObjectiveComplete(o.id);
       });
   });
+  //if the player is not at the task level, set it to the task level
+  if (tarkovStore.playerLevel < props.task.minPlayerLevel) {
+    tarkovStore.setLevel(props.task.minPlayerLevel);
+  }
+
   taskStatus.value = t("page.tasks.questcard.statuscomplete", {
     name: props.task.name,
   });
