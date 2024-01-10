@@ -98,7 +98,8 @@
           <v-expansion-panel>
             <v-expansion-panel-title>Objective Locations</v-expansion-panel-title>
             <v-expansion-panel-text>
-              <tarkov-map :map="maps.find((m) => m.id == activeMapView)" :marks="visibleGPS" />
+              <!-- <tarkov-map :map="maps.find((m) => m.id == activeMapView)" :marks="visibleGPS" /> -->
+              <tarkov-leaflet :map="maps.find((m) => m.id == activeMapView)"></tarkov-leaflet>
             </v-expansion-panel-text>
           </v-expansion-panel>
         </v-expansion-panels>
@@ -132,6 +133,9 @@ const RefreshButton = defineAsyncComponent(() =>
 );
 const TarkovMap = defineAsyncComponent(() =>
   import("@/components/TarkovMap.vue")
+);
+const TarkovLeaflet = defineAsyncComponent(() =>
+  import("@/components/leaflet/TarkovLeaflet.vue")
 );
 const { t } = useI18n({ useScope: "global" });
 const userStore = useUserStore();
