@@ -718,6 +718,14 @@ app.post("/api/v2/progress/task/:taskId", async (req, res) => {
                     progressUpdate[`taskObjectives.${objective.id}.timestamp`] =
                       updateTime;
                   });
+
+                  // Step 4: if player level is less than the task's level, update the player level
+                  if (
+                    progressDoc.data().level === undefined || //handle case where player is level 1 and this not being saved in the progress doc yet
+                    progressDoc.data().level < relevantTask.minPlayerLevel
+                  ) {
+                    progressUpdate["level"] = relevantTask.minPlayerLevel;
+                  }
                   break;
                 case "uncompleted":
                   // Mark the task as uncompleted
