@@ -134,18 +134,18 @@ watch(queryHideoutResults, async (newValue, oldValue) => {
     newValue.hideoutStations.forEach((station) => {
       if (station.id != "5d494a295b56502f18c98a08") {
         // For each level
-      station.levels.forEach((level) => {
-        newModules.push({
-          ...level,
-          stationId: station.id,
-          predecessors: [
-            ...new Set(getPredecessors(newHideoutGraph, level.id)),
-          ],
-          successors: [...new Set(getSuccessors(newHideoutGraph, level.id))],
-          parents: newHideoutGraph.inNeighbors(level.id),
-          children: newHideoutGraph.outNeighbors(level.id),
+        station.levels.forEach((level) => {
+          newModules.push({
+            ...level,
+            stationId: station.id,
+            predecessors: [
+              ...new Set(getPredecessors(newHideoutGraph, level.id)),
+            ],
+            successors: [...new Set(getSuccessors(newHideoutGraph, level.id))],
+            parents: newHideoutGraph.inNeighbors(level.id),
+            children: newHideoutGraph.outNeighbors(level.id),
+          });
         });
-      });
       }
     });
     hideoutModules.value = newModules;
@@ -250,9 +250,6 @@ watch(queryResults, async (newValue, oldValue) => {
       for (let objective of task.objectives) {
         let objMaps = [];
         let objGPS = null;
-        if (objective.id == "5968edc086f77420d2328014") {
-          //debugger
-        }
         if (objectiveMaps.value[objective.id]) {
           // Add all of the objective maps to the locations set
           for (let map of objectiveMaps.value[objective.id]) {
