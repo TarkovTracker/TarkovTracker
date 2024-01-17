@@ -89,6 +89,7 @@ const createMap = (mapData) => {
   let mapZoom = mapData.minZoom + 1;
   const maxZoom = Math.max(7, mapData.maxZoom);
   let scaledBounds = getScaledBounds(mapData.bounds, 1.5);
+  let crsData = getCRS(mapData);
   map.value = L.map('mapContainer', {
     maxBounds: scaledBounds,
     center: mapCenter,
@@ -98,7 +99,7 @@ const createMap = (mapData) => {
     zoomSnap: 0.1,
     scrollWheelZoom: true,
     wheelPxPerZoomLevel: 120,
-    crs: getCRS(mapData),
+    crs: crsData,
     attributionControl: false,
     id: mapData.id,
   });
@@ -229,6 +230,6 @@ onBeforeUnmount(() => {
 
 #mapContainer {
   width: 100%;
-  height: 500px;
+  height: 900px;
 }
 </style>
