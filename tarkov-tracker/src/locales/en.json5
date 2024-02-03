@@ -168,6 +168,7 @@
           create_token_success: "Successfully created a new API token.",
           create_token_error: "Failed to create a new API token.",
           no_tokens: "You do not have any TarkovTracker API tokens.",
+          not_logged_in: "You must be logged in to create an API token.",
           token_column: "Token",
           note_column: "Note",
           created_column: "Created",

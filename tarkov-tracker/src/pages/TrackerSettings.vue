@@ -7,24 +7,43 @@
             {{ $t("page.settings.card.apitokens.title") }}
           </template>
           <template #content>
-            <i18n-t
-              keypath="page.settings.card.apitokens.description"
-              scope="global"
-            >
+            <i18n-t keypath="page.settings.card.apitokens.description" scope="global">
               <template #openAPI_documentation>
-                <a
-                  href="https://tarkovtracker.github.io/TarkovTracker/"
-                  target="_blank"
-                  class="info-link"
-                >
-                  <v-icon class="mr-1" size="16">mdi-file-document</v-icon
-                  >{{
+                <a href="https://tarkovtracker.github.io/TarkovTracker/" target="_blank" class="info-link">
+                  <v-icon class="mr-1" size="16">mdi-file-document</v-icon>{{
                     $t("page.settings.card.apitokens.openAPI_documentation")
                   }}
                 </a>
               </template>
             </i18n-t>
             <api-tokens />
+          </template>
+        </fitted-card>
+      </v-col>
+      <v-col v-else cols="12" sm="12" md="12" lg="12" xl="12">
+        <fitted-card icon="mdi-key-chain" icon-color="white">
+          <template #title>
+            {{ $t("page.settings.card.apitokens.title") }}
+          </template>
+          <template #content>
+            <i18n-t keypath="page.settings.card.apitokens.description" scope="global">
+              <template #openAPI_documentation>
+                <a href="https://tarkovtracker.github.io/TarkovTracker/" target="_blank" class="info-link">
+                  <v-icon class="mr-1" size="16">mdi-file-document</v-icon>{{
+                    $t("page.settings.card.apitokens.openAPI_documentation")
+                  }}
+                </a>
+              </template>
+            </i18n-t>
+            <v-row justify="center">
+              <v-col cols="12">
+                <v-alert dense outlined type="error" :value="true" class="ma-2">
+                  {{
+                    $t("page.settings.card.apitokens.not_logged_in")
+                  }}
+                </v-alert>
+              </v-col>
+            </v-row>
           </template>
         </fitted-card>
       </v-col>
@@ -38,16 +57,10 @@
             <v-container>
               <v-row justify="center">
                 <v-col cols="12">
-                  <v-switch
-                    v-model="streamerMode"
-                    hide-details
-                    density="compact"
-                    :label="
-                      streamerMode
-                        ? $t('page.settings.card.streamermode.modeOn')
-                        : $t('page.settings.card.streamermode.modeOff')
-                    "
-                  >
+                  <v-switch v-model="streamerMode" hide-details density="compact" :label="streamerMode
+                    ? $t('page.settings.card.streamermode.modeOn')
+                    : $t('page.settings.card.streamermode.modeOff')
+                    ">
                   </v-switch>
                 </v-col>
               </v-row>
@@ -71,14 +84,8 @@
             <v-container>
               <v-row justify="center">
                 <v-col cols="12">
-                  <v-select
-                    v-model="currentGameEdition"
-                    density="compact"
-                    :items="gameEditions"
-                    :label="$t('page.settings.card.gameedition.select')"
-                    variant="outlined"
-                    hide-details
-                  ></v-select>
+                  <v-select v-model="currentGameEdition" density="compact" :items="gameEditions"
+                    :label="$t('page.settings.card.gameedition.select')" variant="outlined" hide-details></v-select>
                 </v-col>
               </v-row>
             </v-container>
@@ -97,20 +104,13 @@
                 <v-col cols="auto">
                   <v-dialog v-model="resetDialog">
                     <template #activator="{ props }">
-                      <v-btn
-                        color="warning"
-                        prepend-icon="mdi-alert"
-                        v-bind="props"
-                      >
+                      <v-btn color="warning" prepend-icon="mdi-alert" v-bind="props">
                         {{ $t("page.settings.card.reset.button") }}
                       </v-btn>
                     </template>
                     <v-row class="justify-center">
                       <v-col cols="auto">
-                        <v-card
-                          :title="$t('page.settings.card.reset.confirmtitle')"
-                          style="width: fit-content"
-                        >
+                        <v-card :title="$t('page.settings.card.reset.confirmtitle')" style="width: fit-content">
                           <v-card-text>
                             <v-container class="ma-0 pa-0">
                               <v-row no-gutters>
@@ -122,15 +122,10 @@
                               </v-row>
                               <v-row>
                                 <v-col cols="12" md="6">
-                                  <v-btn
-                                    color="red"
-                                    block
-                                    prepend-icon="mdi-alert"
-                                    @click="
-                                      tarkovStore.$reset();
-                                      resetDialog = false;
-                                    "
-                                  >
+                                  <v-btn color="red" block prepend-icon="mdi-alert" @click="
+                                  tarkovStore.$reset();
+                                  resetDialog = false;
+                                  ">
                                     {{
                                       $t(
                                         "page.settings.card.reset.confirmresetbutton"
@@ -139,16 +134,11 @@
                                   </v-btn>
                                 </v-col>
                                 <v-col cols="12" md="6">
-                                  <v-btn
-                                    color="primary"
-                                    block
-                                    @click="resetDialog = false"
-                                    >{{
-                                      $t(
-                                        "page.settings.card.reset.confirmcancelbutton"
-                                      )
-                                    }}</v-btn
-                                  >
+                                  <v-btn color="primary" block @click="resetDialog = false">{{
+                                    $t(
+                                      "page.settings.card.reset.confirmcancelbutton"
+                                    )
+                                  }}</v-btn>
                                 </v-col>
                               </v-row>
                             </v-container>
