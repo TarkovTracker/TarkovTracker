@@ -8,12 +8,13 @@ export const useAppStore = defineStore("app", {
     drawerRail: useStorage("app_drawerRail", false),
     drawerShow: null,
     localeOverride: useStorage("app_localeOverride", null),
+    mapHeight: useStorage("app_mapHeight", 0),
   }),
   getters: {
     // State getters
     drawerUseRail(state) {
       return (mdAndDown) => !mdAndDown && state.drawerRail;
-    },
+    }
   },
   actions: {
     // State mutations or setters

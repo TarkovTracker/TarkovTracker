@@ -5,7 +5,8 @@
       <v-col lg="4" md="12">
         <!-- Primary views (all, maps, traders) -->
         <v-card>
-          <v-tabs v-model="activePrimaryView" bg-color="accent" slider-color="secondary" align-tabs="center" show-arrows>
+          <v-tabs v-model="activePrimaryView" bg-color="accent" slider-color="secondary" align-tabs="center"
+            show-arrows>
             <v-tab v-for="(view, index) in primaryViews" :key="index" :value="view.view" :prepend-icon="view.icon">
               {{ view.title }}
             </v-tab>
@@ -71,7 +72,7 @@
         <v-card>
           <v-tabs v-model="activeUserView" bg-color="accent" slider-color="secondary" align-tabs="center">
             <v-tab v-for="view in userViews" :key="view.view" :value="view.view" :disabled="view.view == 'all' && activeSecondaryView != 'available'
-              ">
+            ">
               {{ view.title }}
             </v-tab>
           </v-tabs>
@@ -97,7 +98,7 @@
         <v-expansion-panels v-model="expandMap">
           <v-expansion-panel>
             <v-expansion-panel-title>Objective Locations</v-expansion-panel-title>
-            <v-expansion-panel-text>
+            <v-expansion-panel-text id="map-panel">
               <!-- <tarkov-map :map="maps.find((m) => m.id == activeMapView)" :marks="visibleGPS" /> -->
               <tarkov-leaflet :map="maps.find((m) => m.id == activeMapView)"></tarkov-leaflet>
             </v-expansion-panel-text>
@@ -106,8 +107,8 @@
       </v-col>
       <v-col cols="12" class="my-1">
         <v-lazy v-for="(task, taskIndex) in visibleTasks" :key="taskIndex" :options="{
-          threshold: 0.5,
-        }" min-height="100">
+            threshold: 0.5,
+          }" min-height="100">
           <task-card :task="task" class="my-1" />
         </v-lazy>
       </v-col>
@@ -468,4 +469,8 @@ watch(
   }
 );
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+#map-panel::v-deep .v-expansion-panel-text__wrapper {
+  padding: 0 !important
+}
+</style>

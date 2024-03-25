@@ -1,6 +1,9 @@
 <template>
-  <div v-show="metadataFetched" id="mapContainer"></div>
-  <v-progress-circular v-show="!metadataFetched" indeterminate size="64" color="primary" />
+  <div class="map-resizable">
+    <div id="mapContainer" ref="mapContainer">
+      <v-progress-circular v-show="!metadataFetched" indeterminate size="64" color="primary" />
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -8,6 +11,11 @@ import { onMounted, ref, onBeforeUnmount, defineProps, watch } from "vue";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import "./leafletCoordinates";
+import { debounce } from "lodash-es";
+import { useAppStore } from "@/stores/app.js";
+import { computed } from "vue";
+
+const appStore = useAppStore();
 
 const props = defineProps({
   map: {
@@ -32,91 +40,97 @@ const mapMetadata = ref(null);
 const metadataFetched = ref(false);
 
 // Used to reference the leaflet map object
-const map = ref(null);
+const leafMap = ref(null);
 const svgOverlay = ref(null);
+const mapContainer = ref(null);
 
 // Watch for changes to the map being passed in, and for the metdata being fetched
 watch([
   () => props.map,
   () => mapMetadata.value,
 ],
-  (newMapTrigger) => {
-    if (map.value == null) {
-      createMap(findMapObject(props.map));
+  (newMapTrigger, oldMapTrigger) => {
+    // Don't load the map until we have the metadata
+    if (!metadataFetched.value) {
+      return;
     }
-    if (mapMetadata.value) {
-      if (map.value == null) {
-        createMap(findMapObject(props.map));
-      }
-      map.value.eachLayer((layer) => {
-        layer.remove();
-      });
-      let mapObject = findMapObject(props.map);
-      let bounds = getBounds(mapObject.bounds);
-      let maxZoom = Math.max(7, mapObject.maxZoom);
-      let layerOptions = {
-        maxZoom: maxZoom,
-        maxNativeZoom: mapObject.maxZoom,
-        extents: [
-          {
-            height: mapObject.heightRange || [Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER],
-            bounds: [bounds],
-          }
-        ],
-        type: 'map-layer',
-      };
-      if (mapObject?.svgPath) {
-        svgOverlay.value = L.imageOverlay(mapObject.svgPath, bounds, layerOptions).addTo(map.value);
-        svgOverlay.value.addTo(map.value);
 
-        let svgBounds = svgOverlay.value.getBounds();
-        let svgCenter = svgBounds.getCenter();
-        map.value.fitBounds(svgBounds);
-        //map.value.setView(svgCenter, mapObject.minZoom + 1);
-        //debugger
-      }
-      //map.value.flyTo(centerX, centerY);
+    // Only proceed if we have the metadata for the maps
+    if (mapMetadata.value) {
+      // Find the relevant map from the map metadata 
+      let mapObject = findMapObject(props.map);
+
+      // Create the map object and load its layer properties
+      createMap(mapObject);
     }
   }
 );
 
 // Adapted from https://github.com/the-hideout/tarkov-dev/blob/f5bc73dee6a4aebc504c27cc9100c7823c5a50be/src/components/Map.jsx (MIT License)
 const createMap = (mapData) => {
+  // If the leafMap already exists, remove it so we can start fresh
+  if (leafMap.value) {
+    leafMap.value.remove();
+  }
+
   let centerX = (mapData.bounds[0][0] + mapData.bounds[1][0]) / 2;
   let centerY = (mapData.bounds[0][1] + mapData.bounds[1][1]) / 2;
-  //let mapCenter = [centerX, centerY];
-  let mapCenter = [0, 0];
+  let mapCenter = [centerX, centerY];
   let mapZoom = mapData.minZoom + 1;
-  const maxZoom = Math.max(7, mapData.maxZoom);
+  let maxZoom = Math.max(7, mapData.maxZoom);
   let scaledBounds = getScaledBounds(mapData.bounds, 1.5);
   let crsData = getCRS(mapData);
-  map.value = L.map('mapContainer', {
+  leafMap.value = L.map('mapContainer', {
     maxBounds: scaledBounds,
     center: mapCenter,
     zoom: mapZoom,
-    minZoom: mapData.minZoom,
+    minZoom: mapData.minZoom - 1,
     maxZoom: maxZoom,
-    zoomSnap: 0.1,
+    zoomSnap: 0,
     scrollWheelZoom: true,
-    wheelPxPerZoomLevel: 120,
+    wheelPxPerZoomLevel: 60,
     crs: crsData,
     attributionControl: false,
-    id: mapData.id,
   });
 
-  //map.value.panTo([centerX, centerY]);
+  // Add the map layer
+  let bounds = getBounds(mapData.bounds);
+  let layerOptions = {
+    maxZoom: maxZoom,
+    maxNativeZoom: mapData.maxZoom,
+    extents: [
+      {
+        height: mapData.heightRange || [Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER],
+        bounds: [bounds],
+      }
+    ],
+    type: 'map-layer',
+  };
 
+  // Update the base map properties
+  leafMap.value.setMaxZoom(maxZoom);
+
+  // If we have an SVG path, load it
+  if (mapData?.svgPath) {
+    svgOverlay.value = L.imageOverlay(mapData.svgPath, bounds, layerOptions).addTo(leafMap.value);
+    //svgOverlay.value.addTo(leafMap.value);
+
+    let svgBounds = svgOverlay.value.getBounds();
+    leafMap.value.fitBounds(svgBounds);
+  }
+
+  // Add the coordinates control
   L.control.coordinates({
     decimals: 2,
     labelTemplateLat: 'z: {y}',
     labelTemplateLng: 'x: {x}',
     enableUserInput: false,
     wrapCoordinate: false,
-    position: 'topleft',
+    position: 'topright',
     customLabelFcn: (latLng, opts) => {
-      return `x: ${latLng.lng.toFixed(2)} z: ${latLng.lat.toFixed(2)}`;
+      return `X: <span class="value">${latLng.lng.toFixed(2)}</span> Z: <span class="value">${latLng.lat.toFixed(2)}</span>`;
     }
-  }).addTo(map.value);
+  }).addTo(leafMap.value);
 }
 
 // Adapted from https://github.com/the-hideout/tarkov-dev/blob/f5bc73dee6a4aebc504c27cc9100c7823c5a50be/src/components/Map.jsx (MIT License)
@@ -203,6 +217,10 @@ const findMapObject = (mapId) => {
   return mapMetadata.value.find((map) => map.normalizedName == mapNameNormalized).maps.find((entry) => entry.svgPath != null) || null;
 };
 
+const loadMap = (mapData) => {
+  return
+}
+
 
 onMounted(() => {
   // Fetch the map metadata
@@ -214,11 +232,67 @@ onMounted(() => {
       mapMetadata.value = data;
       metadataFetched.value = true;
     });
+
+  document.querySelector('#mapContainer').addEventListener('mousedown', function (event) {
+    // Check if the mousedown event is near the edge of the element.
+    // This is a simplified check; you might need a more sophisticated method.
+    const elementRect = this.getBoundingClientRect();
+    const isNearEdge = event.clientX > elementRect.right - 15 && event.clientY > elementRect.bottom - 15;
+    if (isNearEdge) {
+      // Stop the map from dragging and zooming
+      if (leafMap.value) {
+        leafMap.value.dragging.disable();
+        leafMap.value.scrollWheelZoom.disable();
+      }
+
+
+      // Remove the event listener when the mouse is released anywhere in the document.
+      document.addEventListener('mouseup', function () {
+        // Re-enable dragging
+        if (leafMap.value) {
+          leafMap.value.dragging.enable();
+          leafMap.value.scrollWheelZoom.enable();
+          // Recenter the map
+          leafMap.value.invalidateSize();
+          leafMap.value.fitBounds(svgOverlay.value.getBounds());
+        }
+      }, { once: true });
+    }
+  });
+
+  // Add a mouseover event listener to the map container
+  document.querySelector('#mapContainer').addEventListener('mouseover', function (event) {
+    // Show the coordinates control
+    document.querySelector('.leaflet-control-coordinates').style.display = 'block';
+  });
+
+  // Add a mouseout event listener to the map container
+  document.querySelector('#mapContainer').addEventListener('mouseout', function (event) {
+    // Hide the coordinates control
+    document.querySelector('.leaflet-control-coordinates').style.display = 'none';
+  });
+
+  // Add a resize observer to the map container and save the vertical height when it changes
+  new ResizeObserver((entry) => {
+    // If this is the first load of the height, don't update the store
+    if (firstHeight.value) {
+      firstHeight.value = false;
+    } else {
+      updateMapHeight(entry);
+    }
+  }).observe(document.querySelector('#mapContainer'));
 });
 
+// Helpers to allow the map size to be maintained in local storage between sessions
+const firstHeight = ref(true);
+const updateMapHeight = debounce((newVal) => {
+  appStore.mapHeight = newVal[0].contentRect.height;
+}, 1000);
+const mapHeightPx = computed(() => appStore.mapHeight + 'px');
+
 onBeforeUnmount(() => {
-  if (map.value) {
-    map.value.remove();
+  if (leafMap.value) {
+    leafMap.value.remove();
   }
 });
 </script>
@@ -230,6 +304,23 @@ onBeforeUnmount(() => {
 
 #mapContainer {
   width: 100%;
-  height: 900px;
+  height: v-bind(mapHeightPx);
+  min-height: 500px;
+  resize: vertical;
+}
+
+#mapContainer::v-deep .leaflet-control-coordinates .uiHidden {
+  display: none;
+}
+
+#mapContainer::v-deep .leaflet-control-coordinates {
+  color: #FFFFFF;
+  font-weight: bold;
+  background-color: rgba(var(--v-theme-accent), 1);
+  cursor: pointer;
+  padding: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
 }
 </style>

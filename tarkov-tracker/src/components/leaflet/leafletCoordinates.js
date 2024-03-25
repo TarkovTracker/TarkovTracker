@@ -1,9 +1,10 @@
 /*
- * Source: https://github.com/Low-power/Leaflet.Coordinates/blob/97d5f487172c67e1aace6376a625ba3eb08ec453/dist/Leaflet.Coordinates-0.1.5.src.js
+ * Original Source: https://github.com/Low-power/Leaflet.Coordinates/blob/97d5f487172c67e1aace6376a625ba3eb08ec453/dist/Leaflet.Coordinates-0.1.5.src.js
+ * Source: https://github.com/the-hideout/tarkov-dev/blob/862e2123484211fc6dc9c4b2f309552f6c4e8b2f/src/modules/leaflet-control-coordinates.js
  * L.Control.Coordinates is used for displaying current mouse coordinates on the map.
  */
 
-import L from "leaflet";
+import L from 'leaflet';
 
 L.Control.Coordinates = L.Control.extend({
   options: {
@@ -22,6 +23,8 @@ L.Control.Coordinates = L.Control.extend({
     enableUserInput: true,
     //use Degree-Minute-Second
     useDMS: false,
+    //should coordinate be wrapped as on earth
+    wrapCoordinate: true,
     //if true lat-lng instead of lng-lat label ordering is used
     useLatLngOrder: false,
     //if true user given coordinates are centered directly
@@ -197,7 +200,7 @@ L.Control.Coordinates = L.Control.extend({
     if (!this._showsCoordinates) {
       this._map.on("mousemove", this._update, this);
       this._showsCoordinates = true;
-      var opts = this.options;
+      //var opts = this.options;
       L.DomEvent.addListener(this._container, "click", this._switchUI, this);
       L.DomEvent.removeListener(this._container, "mousemove", L.DomEvent.stop);
 
@@ -259,10 +262,12 @@ L.Control.Coordinates = L.Control.extend({
    *	Mousemove callback function updating labels and input elements
    */
   _update: function (evt) {
-    var pos = evt.latlng,
-      opts = this.options;
+    var pos = evt.latlng;
     if (pos) {
-      pos = pos.wrap();
+      var opts = this.options;
+      if (opts.wrapCoordinate || opts.useDMS) {
+        pos = pos.wrap();
+      }
       this._currentPos = pos;
       this._inputY.value = L.NumberFormatter.round(pos.lat, opts.decimals, opts.decimalSeperator);
       this._inputX.value = L.NumberFormatter.round(pos.lng, opts.decimals, opts.decimalSeperator);
@@ -312,11 +317,11 @@ L.NumberFormatter = {
     var m = Math.floor(minfloat);
     var secfloat = (minfloat - m) * 60;
     var s = Math.round(secfloat);
-    if (s == 60) {
+    if (s === 60) {
       m++;
       s = "00";
     }
-    if (m == 60) {
+    if (m === 60) {
       d++;
       m = "00";
     }
