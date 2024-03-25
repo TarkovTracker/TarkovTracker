@@ -73,6 +73,8 @@ const zoneColor = computed(() => {
 });
 
 const relativeLocation = computed(() => {
+  let rotation = props.map.svg.coordinateRotation * Math.PI / 180;
+
   // Determine the leftmost x position in the array of zone positions
   // Take the bounds of the map and figure out the initial relative position
   let mapLeft = props.map.svg.bounds[0][0];
@@ -82,9 +84,12 @@ const relativeLocation = computed(() => {
 
   let outlinePercents = []
   props.zoneLocation.outline.forEach((outline) => {
+    let rotatedX = outline.x * Math.cos(rotation) - outline.z * Math.sin(rotation);
+    let rotatedZ = outline.x * Math.sin(rotation) + outline.z * Math.cos(rotation);
+
     // Calculate relative values using the coordinate system of the map
-    let relativeLeft = Math.abs(outline.x - mapLeft);
-    let relativeTop = Math.abs(outline.z - mapTop);
+    let relativeLeft = Math.abs(rotatedX - mapLeft);
+    let relativeTop = Math.abs(rotatedZ - mapTop);
     // Calculate relative values relative to the map container
     let relativeLeftPercent = (relativeLeft / mapWidth) * 100;
     let relativeTopPercent = (relativeTop / mapHeight) * 100;

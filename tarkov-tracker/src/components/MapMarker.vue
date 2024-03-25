@@ -75,15 +75,34 @@ const markerColor = computed(() => {
 });
 
 const relativeLocation = computed(() => {
+  let rotation = props.map.svg.coordinateRotation * (Math.PI / 180);
+
   // Take the bounds of the map and figure out the initial relative position
   let mapLeft = props.map.svg.bounds[0][0];
-  let mapTop = props.map.svg.bounds[0][1];
-  let mapWidth = Math.max(props.map.svg.bounds[0][0], props.map.svg.bounds[1][0]) - Math.min(props.map.svg.bounds[0][0], props.map.svg.bounds[1][0]);
-  let mapHeight = Math.max(props.map.svg.bounds[0][1], props.map.svg.bounds[1][1]) - Math.min(props.map.svg.bounds[0][1], props.map.svg.bounds[1][1]);
-  let relativeLeft = Math.abs(props.markLocation.positions[0].x - mapLeft);
-  let relativeTop = Math.abs(props.markLocation.positions[0].z - mapTop);
+  let mapXmin = Math.min(props.map.svg.bounds[0][0], props.map.svg.bounds[0][1]);
+  let mapZmin = Math.min(props.map.svg.bounds[1][0], props.map.svg.bounds[1][1]);
+  let mapTop = props.map.svg.bounds[1][0];
+  let mapWidth = Math.max(props.map.svg.bounds[0][0], props.map.svg.bounds[0][1]) - Math.min(props.map.svg.bounds[0][0], props.map.svg.bounds[0][1]);
+  let mapHeight = Math.max(props.map.svg.bounds[1][0], props.map.svg.bounds[1][1]) - Math.min(props.map.svg.bounds[1][0], props.map.svg.bounds[1][1]);
+
+  // Translate the position to be relative to the center of the map
+  let mapCenterX = mapXmin + (mapWidth / 2);
+  let mapCenterZ = mapZmin + (mapHeight / 2);
+  let centerRelativeX = props.markLocation.positions[0].x - mapCenterX;
+  let centerRelativeZ = props.markLocation.positions[0].z - mapCenterZ;
+  let rotatedX = centerRelativeX * Math.cos(rotation) - centerRelativeZ * Math.sin(rotation);
+  let rotatedZ = centerRelativeX * Math.sin(rotation) + centerRelativeZ * Math.cos(rotation);
+
+  // Translate the position back
+  let shiftedX = rotatedX + mapCenterX;
+  let shiftedZ = rotatedZ + mapCenterZ;
+
+  let relativeLeft = Math.abs(shiftedX - mapXmin);
+  let relativeTop = Math.abs(shiftedZ - mapZmin);
   let relativeLeftPercent = (relativeLeft / mapWidth) * 100;
   let relativeTopPercent = (relativeTop / mapHeight) * 100;
+  // Rotate the relative position based on the rotation of the map
+
 
   return {
     leftPercent: relativeLeftPercent,
@@ -94,7 +113,7 @@ const relativeLocation = computed(() => {
 const markerStyle = computed(() => {
   return {
     position: "absolute",
-    top: relativeLocation.value.topPercent + "%",
+    bottom: (100 - relativeLocation.value.topPercent) + "%",
     left: relativeLocation.value.leftPercent + "%",
     width: "20px",
     height: "20px",
