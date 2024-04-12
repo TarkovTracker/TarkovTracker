@@ -385,7 +385,6 @@ export default gql`
         payRate
         repairCostMultiplier
       }
-      tarkovDataId
     }
   }
 `;
