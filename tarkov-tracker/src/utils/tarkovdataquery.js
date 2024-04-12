@@ -75,7 +75,7 @@ export default gql`
           id
           name
         }
-        level
+        value
       }
       objectives {
         id
