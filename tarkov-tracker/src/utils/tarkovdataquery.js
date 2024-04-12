@@ -177,7 +177,7 @@ export default gql`
         }
         ... on TaskObjectiveShoot {
           shotType
-          target
+          targetNames
           count
           zoneNames
           bodyParts
