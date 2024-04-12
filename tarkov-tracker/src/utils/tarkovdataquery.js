@@ -70,7 +70,7 @@ export default gql`
         }
         status
       }
-      traderLevelRequirements {
+      traderRequirements {
         trader {
           id
           name
