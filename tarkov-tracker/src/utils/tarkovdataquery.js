@@ -15,6 +15,12 @@ export default gql`
     backgroundColor
   }
 
+  fragment CategoryData on ItemCategory {
+  id
+  name
+  normalizedName
+}
+
   fragment MapPositionData on MapPosition {
     x
     y
@@ -106,8 +112,10 @@ export default gql`
           containsAll {
             ...ItemData
           }
-          containsOne {
-            ...ItemData
+          containsCategory {
+          ...CategoryData
+          parent {...CategoryData}
+          children {...CategoryData}
           }
           attributes {
             name
