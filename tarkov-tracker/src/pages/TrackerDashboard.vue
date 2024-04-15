@@ -7,8 +7,8 @@
       hideout upgrades will be pulled automatically
       from <a href='http://tarkov.dev/'>tarkov.dev</a> as they are discovered and confirmed.
     </v-alert>
-    <v-alert density="compact" type="success" title="Automatic Quest Completion" class="mt-3">Thanks to the
-      wonderful folks over at <a href='http://tarkov.dev/'>tarkov.dev</a>, its easier than ever to keep your TarkovTracker
+    <v-alert density="compact" type="success" title="Automatic Quest Completion" class="mb-6 mt-3">Thanks to the
+      wonderful folks over at <a href='http://tarkov.dev/' target="_blank">tarkov.dev</a>, its easier than ever to keep your TarkovTracker
       progress up to date with your in-game progress. They've worked on a new open-source tool which watches the log files
       for the game for messages about quest completions. If you link a TarkovTracker API token with the tool, it can
       automatically mark off the quest for you via the free TarkovTracker API. Check out the project on <a
