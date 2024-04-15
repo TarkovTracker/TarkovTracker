@@ -97,9 +97,6 @@ export default gql`
           zones {
             ...TaskZoneData
           }
-          requiredKeys {
-            ...ItemData
-          }
         }
         ... on TaskObjectiveBuildItem {
           item {
@@ -141,16 +138,10 @@ export default gql`
         ... on TaskObjectiveExtract {
           exitStatus
           zoneNames
-          requiredKeys {
-            ...ItemData
-          }
         }
         ... on TaskObjectiveItem {
           zones {
             ...TaskZoneData
-          }
-          requiredKeys {
-            ...ItemData
           }
           item {
             ...ItemData
@@ -175,9 +166,6 @@ export default gql`
           zones {
             ...TaskZoneData
           }
-          requiredKeys {
-            ...ItemData
-          }
         }
         ... on TaskObjectivePlayerLevel {
           playerLevel
@@ -194,9 +182,6 @@ export default gql`
             name
           }
           count
-          requiredKeys {
-            ...ItemData
-          }
         }
         ... on TaskObjectiveShoot {
           shotType
@@ -246,9 +231,6 @@ export default gql`
           zones {
             ...TaskZoneData
           }
-          requiredKeys {
-            ...ItemData
-          }
         }
         ... on TaskObjectiveSkill {
           skillLevel {
@@ -278,9 +260,6 @@ export default gql`
             ...TaskZoneData
           }
           count
-          requiredKeys {
-            ...ItemData
-          }
         }
       }
       startRewards {
@@ -376,6 +355,15 @@ export default gql`
         }
       }
       factionName
+      neededKeys {
+        keys {
+          ...ItemData
+        }
+        map {
+          id
+          name
+        }
+      }
     }
     maps {
       id
