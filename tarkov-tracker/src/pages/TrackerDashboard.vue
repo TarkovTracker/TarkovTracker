@@ -2,10 +2,12 @@
   <tracker-tip tip="welcomett3"></tracker-tip>
 
   <v-container class="mt-2">
-    <v-alert density="compact" color="green-darken-4" title="Wipe Update">Escape From Tarkov 0.14.0.0 is here - Changes to
+    <v-alert density="compact" color="green-darken-4" title="Update">Escape From Tarkov 0.14.5.1 is here - Changes to
       quests and
       hideout upgrades will be pulled automatically
-      from <a href='http://tarkov.dev/'>tarkov.dev</a> as they are discovered and confirmed.
+      from <a href='http://tarkov.dev/' target="_blank">tarkov.dev</a> as they are discovered and confirmed.
+      <br>
+      - Hideout Hall of Fame has been fixed, if you find any other issues please report them <a href='https://github.com/TarkovTracker/TarkovTracker/issues' target="_blank">here on Github!</a>
     </v-alert>
     <v-alert density="compact" type="success" title="Automatic Quest Completion" class="mb-6 mt-3">Thanks to the
       wonderful folks over at <a href='http://tarkov.dev/' target="_blank">tarkov.dev</a>, its easier than ever to keep your TarkovTracker
