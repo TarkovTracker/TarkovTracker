@@ -24,7 +24,7 @@
           <template #stat>
             {{ $t("page.dashboard.stats.allTasks.stat") }}
           </template>
-          <template #value> {{ completedTasks }}/{{ totalTasks }} </template>
+          <template #value> {{ completedTasks }}/{{ totalTasks }} ({{ ((completedTasks / totalTasks) * 100).toFixed(1) }}%)</template>
           <template #details>
             {{ $t("page.dashboard.stats.allTasks.details") }}
           </template>
@@ -36,7 +36,7 @@
             {{ $t("page.dashboard.stats.allObjectives.stat") }}
           </template>
           <template #value>
-            {{ completedObjectives }}/{{ totalObjectives }}
+            {{ completedObjectives }}/{{ totalObjectives }} ({{ ((completedObjectives / totalObjectives) * 100).toFixed(1) }}%)
           </template>
           <template #details>
             {{ $t("page.dashboard.stats.allObjectives.details") }}
@@ -49,7 +49,7 @@
             {{ $t("page.dashboard.stats.taskItems.stat") }}
           </template>
           <template #value>
-            {{ completedTaskItems }}/{{ totalTaskItems }}
+            {{ completedTaskItems }}/{{ totalTaskItems }} ({{ ((completedTaskItems / totalTaskItems) * 100).toFixed(1) }}%)
           </template>
           <template #details>
             {{ $t("page.dashboard.stats.taskItems.details") }}
