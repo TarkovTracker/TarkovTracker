@@ -258,6 +258,162 @@ const formatProgress = (progressData, userId, hideoutData, taskData) => {
   return progress;
 };
 
+const updateTaskState = (task, state, progressData, taskData, progressUpdate, updateTime) => {
+  functions.logger.info(`Updating task ${task.id} to state ${state}`);
+  switch (state) {
+    case "completed":
+      // Step 1: Check if the task has any alternate tasks
+      if (task?.alternatives?.length > 0) {
+        functions.logger.info(`Failing alternative tasks for task ${task.id}`)
+        // Mark the alternative tasks as failed
+        task.alternatives.forEach((alternativeTaskId) => {
+          // Find the alternative task in the task data, and mark its objectives off as well
+          let alternativeTask = taskData.tasks.find(
+            (task) => task.id == alternativeTaskId
+          );
+
+          if (alternativeTask) {
+            // Mark the alternative task as failed
+            progressUpdate[
+              `taskCompletions.${alternativeTaskId}.complete`
+            ] = true;
+            progressUpdate[
+              `taskCompletions.${alternativeTaskId}.failed`
+            ] = true;
+            progressUpdate[
+              `taskCompletions.${alternativeTaskId}.timestamp`
+            ] = updateTime;
+
+            // For each objective in the alternative task, mark it as complete
+            alternativeTask.objectives.forEach((objective) => {
+              progressUpdate[
+                `taskObjectives.${objective.id}.complete`
+              ] = true;
+              progressUpdate[
+                `taskObjectives.${objective.id}.timestamp`
+              ] = updateTime;
+            });
+          } else {
+            throw new Error(
+              `Alternative task ${alternativeTaskId} not found for task ${task.id}`
+            );
+          }
+        });
+      }
+
+      // Step 2: Mark the task as complete
+      progressUpdate[
+        `taskCompletions.${task.id}.complete`
+      ] = true;
+      progressUpdate[
+        `taskCompletions.${task.id}.timestamp`
+      ] = updateTime;
+
+      // Step 3: Mark the task's objectives as complete
+      task.objectives.forEach((objective) => {
+        progressUpdate[
+          `taskObjectives.${objective.id}.complete`
+        ] = true;
+        progressUpdate[`taskObjectives.${objective.id}.timestamp`] =
+          updateTime;
+      });
+
+      // Step 4: if player level is less than the task's level, update the player level
+      if (
+        progressData.level === undefined || //handle case where player is level 1 and this not being saved in the progress doc yet
+        progressData.level < task.minPlayerLevel
+      ) {
+        functions.logger.info(`Updating player level to ${task.minPlayerLevel}`)
+        progressUpdate["level"] = task.minPlayerLevel;
+      }
+      break;
+    case "uncompleted":
+      // Mark the task as uncompleted
+      progressUpdate[
+        `taskCompletions.${task.id}.complete`
+      ] = false;
+      progressUpdate[
+        `taskCompletions.${task.id}.failed`
+      ] = false;
+      progressUpdate[
+        `taskCompletions.${task.id}.timestamp`
+      ] = admin.firestore.FieldValue.delete();
+
+      task.objectives.forEach((objective) => {
+        progressUpdate[
+          `taskObjectives.${objective.id}.complete`
+        ] = false;
+        progressUpdate[`taskObjectives.${objective.id}.timestamp`] =
+          admin.firestore.FieldValue.delete();
+      });
+
+      // Check if the task has any alternate tasks
+      if (task?.alternatives?.length > 0) {
+        // Mark the alternative tasks as uncompleted
+        task.alternatives.forEach((alternativeTaskId) => {
+          // Find the alternative task in the task data, and mark its objectives off as well
+          let alternativeTask = taskData.tasks.find(
+            (task) => task.id == alternativeTaskId
+          );
+
+          if (alternativeTask) {
+            // Mark the alternative task as uncompleted
+            progressUpdate[
+              `taskCompletions.${alternativeTaskId}.complete`
+            ] = false;
+            progressUpdate[
+              `taskCompletions.${alternativeTaskId}.failed`
+            ] = false;
+            progressUpdate[
+              `taskCompletions.${alternativeTaskId}.timestamp`
+            ] = admin.firestore.FieldValue.delete();
+
+            // For each objective in the alternative task, mark it as uncompleted
+            alternativeTask.objectives.forEach((objective) => {
+              progressUpdate[
+                `taskObjectives.${objective.id}.complete`
+              ] = false;
+              progressUpdate[
+                `taskObjectives.${objective.id}.timestamp`
+              ] = admin.firestore.FieldValue.delete();
+            });
+          } else {
+            throw new Error(
+              `Alternative task ${alternativeTaskId} not found for task ${req.params.taskId}`
+            );
+          }
+        });
+      }
+      break;
+    case "failed":
+      // Mark the task as failed (don't update any alternatives as this is an explicitly manual override)
+      progressUpdate[
+        `taskCompletions.${task.id}.complete`
+      ] = true;
+      progressUpdate[
+        `taskCompletions.${task.id}.failed`
+      ] = true;
+      progressUpdate[
+        `taskCompletions.${task.id}.timestamp`
+      ] = updateTime;
+
+      // Mark the task's objectives as complete
+      task.objectives.forEach((objective) => {
+        progressUpdate[
+          `taskObjectives.${objective.id}.complete`
+        ] = true;
+        progressUpdate[`taskObjectives.${objective.id}.timestamp`] =
+          updateTime;
+      });
+      break;
+    default:
+      functions.logger.info(`Unknown state ${state}`)
+      throw new Error(`Unknown state ${state}`);
+  }
+
+  return progressUpdate;
+}
+
 const invalidateTaskRecursive = (
   taskId,
   taskData,
@@ -660,155 +816,12 @@ app.post("/api/v2/progress/task/:taskId", async (req, res) => {
               // Create an object to aggregate multiple updates into one write
               let progressUpdate = {};
               let updateTime = Date.now();
+              let progressData = progressDoc.data();
 
-              // Case select the state
-              switch (req.body.state) {
-                case "completed":
-                  // Step 1: Check if the task has any alternate tasks
-                  if (relevantTask?.alternatives?.length > 0) {
-                    // Mark the alternative tasks as failed
-                    relevantTask.alternatives.forEach((alternativeTaskId) => {
-                      // Find the alternative task in the task data, and mark its objectives off as well
-                      let alternativeTask = taskData.tasks.find(
-                        (task) => task.id == alternativeTaskId
-                      );
-
-                      if (alternativeTask) {
-                        // Mark the alternative task as failed
-                        progressUpdate[
-                          `taskCompletions.${alternativeTaskId}.complete`
-                        ] = true;
-                        progressUpdate[
-                          `taskCompletions.${alternativeTaskId}.failed`
-                        ] = true;
-                        progressUpdate[
-                          `taskCompletions.${alternativeTaskId}.timestamp`
-                        ] = updateTime;
-
-                        // For each objective in the alternative task, mark it as complete
-                        alternativeTask.objectives.forEach((objective) => {
-                          progressUpdate[
-                            `taskObjectives.${objective.id}.complete`
-                          ] = true;
-                          progressUpdate[
-                            `taskObjectives.${objective.id}.timestamp`
-                          ] = updateTime;
-                        });
-                      } else {
-                        throw new Error(
-                          `Alternative task ${alternativeTaskId} not found for task ${req.params.taskId}`
-                        );
-                      }
-                    });
-                  }
-
-                  // Step 2: Mark the task as complete
-                  progressUpdate[
-                    `taskCompletions.${relevantTask.id}.complete`
-                  ] = true;
-                  progressUpdate[
-                    `taskCompletions.${relevantTask.id}.timestamp`
-                  ] = updateTime;
-
-                  // Step 3: Mark the task's objectives as complete
-                  relevantTask.objectives.forEach((objective) => {
-                    progressUpdate[
-                      `taskObjectives.${objective.id}.complete`
-                    ] = true;
-                    progressUpdate[`taskObjectives.${objective.id}.timestamp`] =
-                      updateTime;
-                  });
-
-                  // Step 4: if player level is less than the task's level, update the player level
-                  if (
-                    progressDoc.data().level === undefined || //handle case where player is level 1 and this not being saved in the progress doc yet
-                    progressDoc.data().level < relevantTask.minPlayerLevel
-                  ) {
-                    progressUpdate["level"] = relevantTask.minPlayerLevel;
-                  }
-                  break;
-                case "uncompleted":
-                  // Mark the task as uncompleted
-                  progressUpdate[
-                    `taskCompletions.${relevantTask.id}.complete`
-                  ] = false;
-                  progressUpdate[
-                    `taskCompletions.${relevantTask.id}.failed`
-                  ] = false;
-                  progressUpdate[
-                    `taskCompletions.${relevantTask.id}.timestamp`
-                  ] = admin.firestore.FieldValue.delete();
-
-                  relevantTask.objectives.forEach((objective) => {
-                    progressUpdate[
-                      `taskObjectives.${objective.id}.complete`
-                    ] = false;
-                    progressUpdate[`taskObjectives.${objective.id}.timestamp`] =
-                      admin.firestore.FieldValue.delete();
-                  });
-
-                  // Check if the task has any alternate tasks
-                  if (relevantTask?.alternatives?.length > 0) {
-                    // Mark the alternative tasks as uncompleted
-                    relevantTask.alternatives.forEach((alternativeTaskId) => {
-                      // Find the alternative task in the task data, and mark its objectives off as well
-                      let alternativeTask = taskData.tasks.find(
-                        (task) => task.id == alternativeTaskId
-                      );
-
-                      if (alternativeTask) {
-                        // Mark the alternative task as uncompleted
-                        progressUpdate[
-                          `taskCompletions.${alternativeTaskId}.complete`
-                        ] = false;
-                        progressUpdate[
-                          `taskCompletions.${alternativeTaskId}.failed`
-                        ] = false;
-                        progressUpdate[
-                          `taskCompletions.${alternativeTaskId}.timestamp`
-                        ] = admin.firestore.FieldValue.delete();
-
-                        // For each objective in the alternative task, mark it as uncompleted
-                        alternativeTask.objectives.forEach((objective) => {
-                          progressUpdate[
-                            `taskObjectives.${objective.id}.complete`
-                          ] = false;
-                          progressUpdate[
-                            `taskObjectives.${objective.id}.timestamp`
-                          ] = admin.firestore.FieldValue.delete();
-                        });
-                      } else {
-                        throw new Error(
-                          `Alternative task ${alternativeTaskId} not found for task ${req.params.taskId}`
-                        );
-                      }
-                    });
-                  }
-                  break;
-                case "failed":
-                  // Mark the task as failed (don't update any alternatives as this is an explicitly manual override)
-                  progressUpdate[
-                    `taskCompletions.${relevantTask.id}.complete`
-                  ] = true;
-                  progressUpdate[
-                    `taskCompletions.${relevantTask.id}.failed`
-                  ] = true;
-                  progressUpdate[
-                    `taskCompletions.${relevantTask.id}.timestamp`
-                  ] = updateTime;
-
-                  // Mark the task's objectives as complete
-                  relevantTask.objectives.forEach((objective) => {
-                    progressUpdate[
-                      `taskObjectives.${objective.id}.complete`
-                    ] = true;
-                    progressUpdate[`taskObjectives.${objective.id}.timestamp`] =
-                      updateTime;
-                  });
-                  break;
-                default:
-                  throw new Error(`Unknown state ${req.body.state}`);
-              }
+              // Update the task state
+              progressUpdate = updateTaskState(
+                relevantTask, req.body.state, progressData, taskData, progressUpdate, updateTime
+              );
 
               // Update the progress document with the changes we've made
               transaction.update(requesteeProgressRef, progressUpdate);
@@ -831,6 +844,122 @@ app.post("/api/v2/progress/task/:taskId", async (req, res) => {
       }
     } else {
       res.status(400).send({ error: "Invalid parameters provided" });
+    }
+  } else {
+    res.status(401).send();
+  }
+});
+
+/**
+ * Update the progress of multiple tasks.
+ *
+ * @openapi
+ * /api/v2/progress/tasks:
+ *   post:
+ *     summary: Update multiple tasks' progress
+ *     tags:
+ *       - "Progress"
+ *     description: Update the progress of multiple tasks with the provided states.
+ *     requestBody:
+ *       required: true
+ *       description: An array of objects with a taskId and state.
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: array
+ *             items:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                   description: The ID of the task to update.
+ *                 state:
+ *                   type: string
+ *                   description: The new state of the task.
+ *                   enum: [uncompleted, completed, failed]
+ *     responses:
+ *       '200':
+ *         description: The tasks were updated successfully.
+ *       '400':
+ *         description: Invalid request parameters.
+ *       '401':
+ *         description: Unauthorized to update progress.
+ *       '500':
+ *         description: Internal server error.
+ */
+app.post("/api/v2/progress/tasks", async (req, res) => {
+  if (req.apiToken != null && req.apiToken.permissions.includes("WP")) {
+    const db = admin.firestore();
+
+    const requesteeProgressRef = db
+      .collection("progress")
+      .doc(req.apiToken.owner);
+
+    // Get the task document
+    let taskData;
+
+    await getTaskData().then((data) => {
+      taskData = data;
+    });
+
+    // Validate the request body
+    // Check if the request body is an array of objects with a taskId and state
+    if (!Array.isArray(req.body)) {
+      res.status(400).send({ error: "Invalid request body" });
+      return;
+    }
+    req.body.forEach((task) => {
+      // Check if the task object has a taskId and state
+      if (
+        typeof task.id !== "string" ||
+        typeof task.state !== "string" ||
+        !["uncompleted", "completed", "failed"].includes(task.state)
+      ) {
+        res.status(400).send({ error: "Invalid request body" });
+        return;
+      }
+    });
+
+    try {
+      await db.runTransaction(async (transaction) => {
+        // Ensure the progress document exists
+        const progressDoc = await transaction.get(requesteeProgressRef);
+        if (!progressDoc.exists) {
+          throw new Error("User's progress document doesn't exist");
+        }
+
+        // Create an object to aggregate multiple updates into one write
+        let progressUpdate = {};
+        let updateTime = Date.now();
+        let progressData = progressDoc.data();
+
+        // For each task in the request body, update the progress according to state.
+        req.body.forEach((task) => {
+          // Check if the task exists
+          let relevantTask = taskData.tasks.find(
+            (taskData) => taskData.id == task.id
+          );
+
+          if (relevantTask) {
+            // Update the task state
+            progressUpdate = updateTaskState(
+              relevantTask, task.state, progressData, taskData, progressUpdate, updateTime
+            );
+          }
+        });
+
+        // Update the progress document with the changes we've made
+        transaction.update(requesteeProgressRef, progressUpdate);
+      });
+      // Finally, send OK
+      res.status(200).send({ message: "Updated progress" });
+    } catch (error) {
+      functions.logger.error("Transaction failed", {
+        error: error,
+        user: req.apiToken.owner,
+        token: req.apiToken,
+      });
+      res.status(500).send({ error: "Progress update failed" });
     }
   } else {
     res.status(401).send();
