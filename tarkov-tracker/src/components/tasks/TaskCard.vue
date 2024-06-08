@@ -346,6 +346,7 @@
 </template>
 <script setup>
 import { defineAsyncComponent, computed, ref } from "vue";
+import { useRouter } from "vue-router";
 import { useDisplay } from "vuetify";
 import { useTarkovStore } from "@/stores/tarkov.js";
 import { useProgressStore } from "@/stores/progress";
@@ -364,6 +365,7 @@ const tarkovStore = useTarkovStore();
 const progressStore = useProgressStore();
 const userStore = useUserStore();
 const { tasks } = useTarkovData();
+const router = useRouter();
 
 const TaskLink = defineAsyncComponent(() =>
   import("@/components/tasks/TaskLink.vue")
@@ -438,6 +440,11 @@ const uncompletedIrrelevantObjectives = computed(() => {
 });
 
 const onMapView = computed(() => {
+  if (router.currentRoute.value.name == "lightkeeper") {
+    // no need to filter any objectives by current map if we are on the lightkeeper progress page
+    return false;
+  }
+
   // If the primary task view is set to map, then we are on the map page
   return userStore.getTaskPrimaryView == "maps";
 });

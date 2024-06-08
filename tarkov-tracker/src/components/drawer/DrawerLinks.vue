@@ -12,6 +12,8 @@
     </drawer-item>
     <drawer-item icon="mdi-home" locale-key="hideout" to="/hideout">
     </drawer-item>
+    <drawer-item icon="mdi-lighthouse" locale-key="lightkeeper" to="/lightkeeper">
+    </drawer-item>
     <drawer-item
       v-show="fireuser.loggedIn"
       icon="mdi-account-group"
