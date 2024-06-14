@@ -339,7 +339,18 @@ const mapTaskTotals = computed(() => {
             )) ||
           progressStore.unlockedTasks[task.id][activeUserView.value]
         ) {
-          mapTaskCounts[map.id]++;
+          let anyObjectiveLeft = false;
+          for (const objective of task.objectives){
+            if (objective.maps.includes(map.id)) {
+              if (progressStore.objectiveCompletions[objective.id].self !== true) {
+                anyObjectiveLeft=true;
+              }
+            }
+          }
+
+          if (anyObjectiveLeft) {
+            mapTaskCounts[map.id]++;
+          }
         }
       }
     }
