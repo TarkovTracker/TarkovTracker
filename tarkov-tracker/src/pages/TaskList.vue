@@ -328,6 +328,9 @@ const mapTaskTotals = computed(() => {
       if (disabledTasks.includes(task.id)) {
         continue;
       }
+      if (hideGlobalTasks.value && task.map == null) {
+        continue;
+      }
       if (task.locations.includes(map.id)) {
         if (
           (activeUserView.value == "all" &&
