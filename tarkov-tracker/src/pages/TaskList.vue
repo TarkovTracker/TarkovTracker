@@ -344,6 +344,7 @@ const mapTaskTotals = computed(() => {
             if (objective.maps.includes(map.id)) {
               if (progressStore.objectiveCompletions[objective.id].self !== true) {
                 anyObjectiveLeft=true;
+                break;
               }
             }
           }
