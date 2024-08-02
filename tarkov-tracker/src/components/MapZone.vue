@@ -138,11 +138,9 @@ const zoneStyle = computed(() => {
     left: relativeLocation.value.leftPercent + "%",
     width: relativeLocation.value.rightPercent - relativeLocation.value.leftPercent + "%",
     height: relativeLocation.value.bottomPercent - relativeLocation.value.topPercent + "%",
-    "clip-path": "polygon(" + relativeLocation.value.internalPercents.map((point) => {
-      return point.leftPercent + "% " + point.topPercent + "%";
-    }).join(", ") + ")",
-    background: tooltipVisible.value ? "linear-gradient(90deg, rgba(155, 165, 0, 0.5) 0%, rgba(155, 165, 0, 0.5) 100%)" : "linear-gradient(90deg, rgba(255, 165, 0, 0.2) 0%, rgba(255, 165, 0, 0.2) 100%)",
+    background: tooltipVisible.value ? "linear-gradient(90deg, rgba(155, 165, 0, 0.5) 0%, rgba(155, 165, 0, 0.5) 100%)" : "linear-gradient(90deg, rgba(255, 165, 0, 0.4) 0%, rgba(255, 165, 0, 0.4) 100%)",
     "border-style": "dashed",
+    "box-shadow": "rgba(251, 227, 32, 0.8) 0px 0px 20px 5px",
     // cursor: props.mark.floor === props.selectedFloor ? "pointer" : "inherit",
     // opacity: props.mark.floor === props.selectedFloor ? 1 : 0.2,
     cursor: "pointer",
