@@ -45,8 +45,8 @@ export default gql`
     bottom
   }
 
-  query TarkovData {
-    tasks {
+  query TarkovData($lang: LanguageCode) {
+    tasks(lang: $lang) {
       id
       tarkovDataId
       name
