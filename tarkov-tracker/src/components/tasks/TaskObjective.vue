@@ -151,6 +151,7 @@ const objectiveIcon = computed(() => {
     mark: "mdi-remote",
     place: "mdi-arrow-down-drop-circle-outline",
     traderLevel: "mdi-thumb-up",
+    traderStanding: "mdi-thumb-up",
     skill: "mdi-dumbbell",
     visit: "mdi-crosshairs-gps",
     buildWeapon: "mdi-progress-wrench",
