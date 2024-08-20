@@ -309,4 +309,11 @@
       description: "These are the list of your team members. You can click the eye icon to hide or show their tasks and needed items while you are using other parts of the tracker.",
     },
   },
+  maps: {
+    levels: 'Levels',
+    layers: {
+      "2nd Floor": "2nd Floor",
+      "3rd Floor": "3rd Floor",
+    }
+  }
 }

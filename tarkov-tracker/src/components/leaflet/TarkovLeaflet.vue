@@ -11,9 +11,13 @@ import { onMounted, ref, onBeforeUnmount, defineProps, watch } from "vue";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import "./leafletCoordinates";
+import "./leafletLayers";
 import { debounce } from "lodash-es";
 import { useAppStore } from "@/stores/app.js";
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n({ useScope: "global" });
 
 const appStore = useAppStore();
 
@@ -41,8 +45,12 @@ const metadataFetched = ref(false);
 
 // Used to reference the leaflet map object
 const leafMap = ref(null);
-const svgOverlay = ref(null);
+const svgLayer = ref(null);
+const tileLayer = ref(null);
 const mapContainer = ref(null);
+
+const svgLayers = ref([]);
+const tileLayers = ref([]);
 
 // Watch for changes to the map being passed in, and for the metdata being fetched
 watch([
@@ -93,9 +101,22 @@ const createMap = (mapData) => {
     attributionControl: false,
   });
 
+  // Add the coordinates control
+  L.control.coordinates({
+    decimals: 2,
+    labelTemplateLat: 'z: {y}',
+    labelTemplateLng: 'x: {x}',
+    enableUserInput: false,
+    wrapCoordinate: false,
+    position: 'topright',
+    customLabelFcn: (latLng, opts) => {
+      return `X: <span class="value">${latLng.lng.toFixed(2)}</span> Z: <span class="value">${latLng.lat.toFixed(2)}</span>`;
+    }
+  }).addTo(leafMap.value);
+
   // Add the map layer
   let bounds = getBounds(mapData.bounds);
-  let layerOptions = {
+  let baseLayerOptions = {
     maxZoom: maxZoom,
     maxNativeZoom: mapData.maxZoom,
     extents: [
@@ -110,27 +131,60 @@ const createMap = (mapData) => {
   // Update the base map properties
   leafMap.value.setMaxZoom(maxZoom);
 
+  // Add the layer control
+  const layerControl = L.control.groupedLayers(null, null, {
+    position: 'topleft',
+    collapsed: true,
+    groupCheckboxes: true,
+    groupsCollapsable: true,
+    exclusiveOptionalGroups: [t('maps.levels')],
+  }).addTo(leafMap.value);
+
   // If we have an SVG path, load it
   if (mapData?.svgPath) {
-    svgOverlay.value = L.imageOverlay(mapData.svgPath, bounds, layerOptions).addTo(leafMap.value);
-    //svgOverlay.value.addTo(leafMap.value);
+    svgLayer.value = L.imageOverlay(mapData.svgPath, bounds, baseLayerOptions).addTo(leafMap.value);
 
-    let svgBounds = svgOverlay.value.getBounds();
+    let svgBounds = svgLayer.value.getBounds();
     leafMap.value.fitBounds(svgBounds);
+    layerControl.addBaseLayer(svgLayer.value, 'Abstract');
   }
 
-  // Add the coordinates control
-  L.control.coordinates({
-    decimals: 2,
-    labelTemplateLat: 'z: {y}',
-    labelTemplateLng: 'x: {x}',
-    enableUserInput: false,
-    wrapCoordinate: false,
-    position: 'topright',
-    customLabelFcn: (latLng, opts) => {
-      return `X: <span class="value">${latLng.lng.toFixed(2)}</span> Z: <span class="value">${latLng.lat.toFixed(2)}</span>`;
-    }
-  }).addTo(leafMap.value);
+  // Set the tilesize (used for the base layer and floor layers)
+  const tileSize = mapData.tileSize || 256;
+
+  // If we hae a tile path, load it
+  if (mapData.tilePath) {
+    tileLayer.value = L.tileLayer(mapData.tilePath || `https://assets.tarkov.dev/maps/${mapData.normalizedName}/{z}/{x}/{y}.png`, {
+      tileSize,
+      bounds,
+      ...baseLayerOptions,
+    });
+    layerControl.addBaseLayer(tileLayer.value, 'Satellite');
+  }
+
+  // Load the other layers
+  if (mapData.layers) {
+    mapData.layers.forEach((layer) => {
+      console.log("Adding layer", layer.name)
+      let layerOptions = {
+        maxZoom: maxZoom,
+        maxNativeZoom: mapData.maxZoom,
+        extents: layer.extents,
+        type: 'map-layer',
+      };
+
+      let layerPath = layer.path || `https://assets.tarkov.dev/maps/${mapData.normalizedName}/${layer.normalizedName}/{z}/{x}/{y}.png`;
+      let newLayer = L.tileLayer(layerPath, {
+        tileSize,
+        bounds,
+        ...layerOptions,
+      });
+
+      newLayer.addTo(leafMap.value)
+
+      layerControl.addOverlay(newLayer, t(`maps.layers.${layer.name}`), t('maps.levels'));
+    });
+  }
 }
 
 // Adapted from https://github.com/the-hideout/tarkov-dev/blob/f5bc73dee6a4aebc504c27cc9100c7823c5a50be/src/components/Map.jsx (MIT License)
@@ -254,7 +308,7 @@ onMounted(() => {
           leafMap.value.scrollWheelZoom.enable();
           // Recenter the map
           leafMap.value.invalidateSize();
-          leafMap.value.fitBounds(svgOverlay.value.getBounds());
+          leafMap.value.fitBounds(svgLayer.value.getBounds());
         }
       }, { once: true });
     }
@@ -322,5 +376,77 @@ onBeforeUnmount(() => {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
+}
+
+#mapContainer::v-deep .leaflet-control-layers-group-name {
+  font-weight: 700;
+  margin-bottom: 0.2em;
+  margin-left: 3px;
+}
+
+#mapContainer::v-deep .leaflet-control-layers-group {
+  margin-bottom: 0.5em;
+}
+
+#mapContainer::v-deep .leaflet-control-layers-scrollbar {
+  overflow-y: scroll;
+  padding-right: 10px;
+}
+
+#mapContainer::v-deep .leaflet-control-layers-group-label {
+  margin-bottom: 2px;
+}
+
+#mapContainer::v-deep .leaflet-control-layers-group-selector,
+#mapContainer::v-deep .leaflet-control-layers-selector {
+  vertical-align: top;
+}
+
+#mapContainer::v-deep .leaflet-control-layers-group label:not(.leaflet-control-layers-group-label) {
+  text-indent: 15px;
+}
+
+#mapContainer::v-deep .leaflet-control-layers-group.group-collapsable.collapsed .leaflet-control-layers-group-collapse,
+.leaflet-control-layers-group.group-collapsable:not(.collapsed) .leaflet-control-layers-group-expand,
+.leaflet-control-layers-group.group-collapsable.collapsed label:not(.leaflet-control-layers-group-label) {
+  display: none;
+}
+
+#mapContainer::v-deep .leaflet-control-layers-group-expand-default:before {
+  content: "+";
+  width: 12px;
+  display: inline-block;
+  text-align: center;
+}
+
+#mapContainer::v-deep .leaflet-control-layers-group-collapse-default:before {
+  content: "-";
+  width: 12px;
+  display: inline-block;
+  text-align: center;
+}
+
+.leaflet-layer.off-level>.leaflet-tile-container,
+div.leaflet-pane.leaflet-overlay-pane>img.off-level {
+  opacity: 20%;
+}
+
+div.awesome-marker.off-level {
+  opacity: 20%;
+  z-index: -9999 !important;
+}
+
+div.leaflet-pane.leaflet-marker-pane>.off-level {
+  opacity: 20%;
+  z-index: -9999 !important;
+}
+
+div.leaflet-overlay-pane>svg.leaflet-zoom-animated>g>path.off-level {
+  stroke-opacity: 20%;
+  fill-opacity: 2%;
+}
+
+.not-shown {
+  display: none;
 }
 </style>
