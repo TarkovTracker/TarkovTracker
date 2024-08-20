@@ -54,8 +54,9 @@ function getSuccessors(graph, nodeId, visited = []) {
 }
 
 function extractLanguageCode() {
-  const  locale = ref(i18n.global.locale.value);
-  return locale.value.split('_')[0];
+  const locale = i18n.global.locale.value;
+  // Return only the language code remove any dash or underscore and what comes after
+  return locale.split(/[-_]/)[0];
 }
 
 const queryErrors = ref(null);
@@ -69,7 +70,7 @@ const {
   onError: taskOnError,
   loading,
   refetch: taskRefetch,
-} = useQuery(tarkovDataQuery, {lang: languageCode.value}, {
+} = useQuery(tarkovDataQuery, { lang: languageCode.value }, {
   fetchPolicy: "cache-and-network",
   notifyOnNetworkStatusChange: true,
   errorPolicy: "all",
@@ -91,7 +92,7 @@ const {
   onError: hideoutOnError,
   loading: hideoutLoading,
   refetch: hideoutRefetch,
-} = useQuery(tarkovHideoutQuery, {lang: languageCode.value}, {
+} = useQuery(tarkovHideoutQuery, { lang: languageCode.value }, {
   fetchPolicy: "cache-and-network",
   notifyOnNetworkStatusChange: true,
   errorPolicy: "all",
