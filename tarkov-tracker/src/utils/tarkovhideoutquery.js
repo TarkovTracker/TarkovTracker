@@ -48,7 +48,7 @@ export default gql`
             id
             name
           }
-          level
+          value
         }
         crafts {
           id

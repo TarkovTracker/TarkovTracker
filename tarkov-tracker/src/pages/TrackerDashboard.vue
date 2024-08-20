@@ -2,29 +2,27 @@
   <tracker-tip tip="welcomett3"></tracker-tip>
 
   <v-container class="mt-2">
-    <v-alert density="compact" color="green-darken-4" title="Wipe Update">Escape From Tarkov 0.14.0.0 is here - Changes to
+    <v-alert density="compact" color="green-darken-4" title="Update">Escape From Tarkov 0.14.5.1 is here - Changes to
       quests and
       hideout upgrades will be pulled automatically
-      from <a href='http://tarkov.dev/'>tarkov.dev</a> as they are discovered and confirmed.
+      from <a href='http://tarkov.dev/' target="_blank">tarkov.dev</a> as they are discovered and confirmed.
+      <br>
+      - Hideout Hall of Fame has been fixed, if you find any other issues please report them <a href='https://github.com/TarkovTracker/TarkovTracker/issues' target="_blank">here on Github!</a>
     </v-alert>
-    <v-alert density="compact" type="success" title="Automatic Quest Completion" class="mt-3">Thanks to the
-      wonderful folks over at <a href='http://tarkov.dev/'>tarkov.dev</a>, its easier than ever to keep your TarkovTracker
+    <v-alert density="compact" type="success" title="Automatic Quest Completion" class="mb-6 mt-3">Thanks to the
+      wonderful folks over at <a href='http://tarkov.dev/' target="_blank">tarkov.dev</a>, its easier than ever to keep your TarkovTracker
       progress up to date with your in-game progress. They've worked on a new open-source tool which watches the log files
       for the game for messages about quest completions. If you link a TarkovTracker API token with the tool, it can
       automatically mark off the quest for you via the free TarkovTracker API. Check out the project on <a
-        href='https://github.com/the-hideout/TarkovMonitor'>GitHub</a> and download it from the project's <a
-        href='https://github.com/the-hideout/TarkovMonitor/releases/latest'>Releases</a></v-alert>
-    <v-alert density="compact" color="#607D8B3F" title="Known Issues" class="mb-6 mt-3">There is currently a bug with the
-      objective maps floors showing objectives incorrectly. This should mainly affect later quests, and should be fixed in
-      the next 24 hours.
-    </v-alert>
+        href='https://github.com/the-hideout/TarkovMonitor' target="_blank">GitHub</a> and download it from the project's <a
+        href='https://github.com/the-hideout/TarkovMonitor/releases/latest' target="_blank">Releases</a></v-alert>
     <v-row justify="center">
       <v-col cols="12" sm="8" md="6" lg="4" xl="3">
         <tracker-stat icon="mdi-progress-check">
           <template #stat>
             {{ $t("page.dashboard.stats.allTasks.stat") }}
           </template>
-          <template #value> {{ completedTasks }}/{{ totalTasks }} </template>
+          <template #value> {{ completedTasks }}/{{ totalTasks }} ({{ ((completedTasks / totalTasks) * 100).toFixed(1) }}%)</template>
           <template #details>
             {{ $t("page.dashboard.stats.allTasks.details") }}
           </template>
@@ -36,7 +34,7 @@
             {{ $t("page.dashboard.stats.allObjectives.stat") }}
           </template>
           <template #value>
-            {{ completedObjectives }}/{{ totalObjectives }}
+            {{ completedObjectives }}/{{ totalObjectives }} ({{ ((completedObjectives / totalObjectives) * 100).toFixed(1) }}%)
           </template>
           <template #details>
             {{ $t("page.dashboard.stats.allObjectives.details") }}
@@ -49,7 +47,7 @@
             {{ $t("page.dashboard.stats.taskItems.stat") }}
           </template>
           <template #value>
-            {{ completedTaskItems }}/{{ totalTaskItems }}
+            {{ completedTaskItems }}/{{ totalTaskItems }} ({{ ((completedTaskItems / totalTaskItems) * 100).toFixed(1) }}%)
           </template>
           <template #details>
             {{ $t("page.dashboard.stats.taskItems.details") }}

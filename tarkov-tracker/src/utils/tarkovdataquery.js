@@ -15,6 +15,12 @@ export default gql`
     backgroundColor
   }
 
+  fragment CategoryData on ItemCategory {
+  id
+  name
+  normalizedName
+}
+
   fragment MapPositionData on MapPosition {
     x
     y
@@ -70,12 +76,12 @@ export default gql`
         }
         status
       }
-      traderLevelRequirements {
+      traderRequirements {
         trader {
           id
           name
         }
-        level
+        value
       }
       objectives {
         id
@@ -106,8 +112,10 @@ export default gql`
           containsAll {
             ...ItemData
           }
-          containsOne {
-            ...ItemData
+          containsCategory {
+          ...CategoryData
+          parent {...CategoryData}
+          children {...CategoryData}
           }
           attributes {
             name
@@ -177,7 +185,7 @@ export default gql`
         }
         ... on TaskObjectiveShoot {
           shotType
-          target
+          targetNames
           count
           zoneNames
           bodyParts
@@ -385,7 +393,6 @@ export default gql`
         payRate
         repairCostMultiplier
       }
-      tarkovDataId
     }
   }
 `;
