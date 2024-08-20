@@ -105,11 +105,9 @@ watch(queryHideoutResults, async (newValue, oldValue) => {
   if (newValue?.hideoutStations) {
     let newHideoutGraph = new Graph();
     newValue?.hideoutStations.forEach((station) => {
-      console.info(station)
       if (station != null && station.id != "5d494a295b56502f18c98a08") {
         // For each level
         station?.levels.forEach((level) => {
-          console.info(level)
           if (level != null) {
             newHideoutGraph.mergeNode(level.id);
             // For each stationRequirement
