@@ -328,6 +328,9 @@ const mapTaskTotals = computed(() => {
       if (disabledTasks.includes(task.id)) {
         continue;
       }
+      if (hideGlobalTasks.value && task.map == null) {
+        continue;
+      }
       if (task.locations.includes(map.id)) {
         if (
           (activeUserView.value == "all" &&
@@ -336,7 +339,19 @@ const mapTaskTotals = computed(() => {
             )) ||
           progressStore.unlockedTasks[task.id][activeUserView.value]
         ) {
-          mapTaskCounts[map.id]++;
+          let anyObjectiveLeft = false;
+          for (const objective of task.objectives){
+            if (objective.maps.includes(map.id)) {
+              if (progressStore.objectiveCompletions[objective.id].self !== true) {
+                anyObjectiveLeft=true;
+                break;
+              }
+            }
+          }
+
+          if (anyObjectiveLeft) {
+            mapTaskCounts[map.id]++;
+          }
         }
       }
     }
