@@ -102,6 +102,14 @@
         statusdowngraded: "Downgraded {name} from level {level}",
       },
     },
+    lightkeeper: {
+      title: "Lightkeeper",
+      primaryviews: {
+        all: "All",
+        available: "Available",
+      },
+      total_remaining: "Total tasks remaining",
+    },
     neededitems: {
       title: "Needed Items",
       loading: "Loading task and hideout data",
@@ -269,6 +277,7 @@
     level: "Level",
     team: "Team",
     tasks: "Tasks",
+    lightkeeper: "Lightkeeper",
     hideout: "Hideout",
     neededitems: "Needed Items",
     tarkovdev: "Tarkov.dev",
@@ -300,6 +309,10 @@
     hideout: {
       title: "Hideout",
       description: "You can mark off progress towards building and upgrading your hideout. The progress you mark will be used to calculate needed items for your hideout.",
+    },
+    lightkeeper: {
+      title: "Lightkeeper",
+      description: "This page helps you track your current progress towards unlocking the Lightkeeper. All tasks shown must be completed before you can gain access to Lightkeeper.",
     },
     neededitems: {
       title: "Needed Items",
