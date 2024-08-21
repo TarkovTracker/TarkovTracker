@@ -3,6 +3,7 @@ import { computed, ref, watch } from "vue";
 import apolloClient from "@/plugins/apollo";
 import tarkovDataQuery from "@/utils/tarkovdataquery.js";
 import tarkovHideoutQuery from "@/utils/tarkovhideoutquery.js";
+import languageQuery from "@/utils/languagequery.js";
 import i18n from "@/plugins/i18n";
 // Import graphlib so that we can use it in the watch function
 import Graph from "graphology";
@@ -53,10 +54,37 @@ function getSuccessors(graph, nodeId, visited = []) {
   return successors;
 }
 
+const availableLanguages = ref(null);
+const languageQueryErrors = ref(null);
+const languageQueryResults = ref(null);
+const {
+  onResult: languageOnResult,
+  onError: languageOnError,
+} = useQuery(languageQuery, null, {
+  fetchPolicy: "cache-and-network",
+  notifyOnNetworkStatusChange: true,
+  errorPolicy: "all",
+});
+languageOnResult((result) => {
+  availableLanguages.value = result.data.__type.enumValues.map((enumValue) => enumValue.name)
+});
+languageOnError((error) => {
+  // Default to English if the language query fails
+  console.error(error);
+  availableLanguages.value = ["en"];
+});
+
 function extractLanguageCode() {
   const locale = i18n.global.locale.value;
   // Return only the language code remove any dash or underscore and what comes after
-  return locale.split(/[-_]/)[0];
+  let browserLocale = locale.split(/[-_]/)[0];
+  // If the available languages include the browser locale, return the browser locale
+  // otherwise, default to English
+  if (availableLanguages.value?.includes(browserLocale)) {
+    return browserLocale;
+  } else {
+    return "en";
+  }
 }
 
 const queryErrors = ref(null);
