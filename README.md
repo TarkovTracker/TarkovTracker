@@ -5,8 +5,8 @@ This repository is for TarkovTracker, a web app for tracking your Escape From Ta
 The following are the steps to get the TarkovTracker project up and running in development.
 
 ### Prerequisites
-* Node.js
-* Java JRE (for Firebase Emulator)
+* Node.js 16.0 or higher
+* Java JRE 11+ or higher (for [Firebase Emulator](https://firebase.google.com/docs/emulator-suite/install_and_configure))
 
 ### Setup
 1. Clone the repository
