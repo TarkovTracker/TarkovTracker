@@ -64,7 +64,7 @@
         statusuncomplete: "Marcado {name} como no completado",
         statusavailable: "Marcados todos los requisitos previos para {name} como completados",
         nonkappa: "No se requiere Kappa",
-        keysneeded: "{keys} necesarios en {mapa} | Uno de {keys} necesarios en {mapa}",
+        keysneeded: "{keys} necesaria en {map} | {keys} necesarias en {map}",
         objectiveshidden: "{count} objetivos no están en este mapa ({uncompleted} sin completar)",
         alternatives: "Misiones alternativas",
         alternativefailed: "Las misiones alternativas también se reiniciarán",

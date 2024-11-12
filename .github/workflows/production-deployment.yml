@@ -1,0 +1,20 @@
+name: Production Deployment
+
+"on":
+  push:
+    branches:
+      - master
+
+jobs:
+  production_deploy:
+    name: Production Deployment
+    runs-on: ubuntu-latest
+    environment: Production
+    steps:
+      - uses: actions/checkout@v2
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_TARKOVTRACKER_PRODUCTION }}"
+          channelId: live
+          projectId: tarkovtracker-production

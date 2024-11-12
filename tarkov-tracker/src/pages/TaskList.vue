@@ -96,7 +96,7 @@
       <v-col v-if="activePrimaryView == 'maps' && visibleGPS.length > 0" cols="12" class="my-1">
         <v-expansion-panels v-model="expandMap">
           <v-expansion-panel>
-            <v-expansion-panel-title>Objective Locations</v-expansion-panel-title>
+            <v-expansion-panel-title>Objective Locations<span v-show="activeMapView != '55f2d3fd4bdc2d5f408b4567'">&nbsp;-&nbsp;{{ timeValue }}</span></v-expansion-panel-title>
             <v-expansion-panel-text>
               <tarkov-map :map="maps.find((m) => m.id == activeMapView)" :marks="visibleGPS" />
             </v-expansion-panel-text>
@@ -251,6 +251,31 @@ const traderAvatar = (id) => {
   return `/img/traders/${id}.jpg`;
 };
 
+
+const timeValue = ref('');
+setTimeout(() => { timeUpdate(); }, 500);
+
+function timeUpdate() {
+  var oneHour = 60*60*1000;
+  var currentDate = new Date();
+  // Tarkov's time runs at 7 times the speed ...
+  var timeAtTarkovSpeed = (currentDate.getTime() * 7) % (24*oneHour);
+  // ... and it is offset by 3 hours from UTC (because that's Moscow's time zone)
+  var tarkovTime = new Date(timeAtTarkovSpeed + (3*oneHour));
+  var tarkovHour = tarkovTime.getUTCHours();
+  var tarkovMinute = tarkovTime.getUTCMinutes();
+  var tarkovSecondHour = (tarkovHour+12) % 24;
+  timeValue.value = 
+    tarkovHour.toString().padStart(2,'0')+':'+tarkovMinute.toString().padStart(2,'0')
+    +" / "+
+    tarkovSecondHour.toString().padStart(2,'0')+':'+tarkovMinute.toString().padStart(2,'0');
+
+  setTimeout(() => {
+    timeUpdate();
+  }, 3000);
+}
+
+
 const loadingTasks = computed(() => {
   return tasksLoading.value;
 });
@@ -328,6 +353,9 @@ const mapTaskTotals = computed(() => {
       if (disabledTasks.includes(task.id)) {
         continue;
       }
+      if (hideGlobalTasks.value && task.map == null) {
+        continue;
+      }
       if (task.locations.includes(map.id)) {
         if (
           (activeUserView.value == "all" &&
@@ -336,7 +364,19 @@ const mapTaskTotals = computed(() => {
             )) ||
           progressStore.unlockedTasks[task.id][activeUserView.value]
         ) {
-          mapTaskCounts[map.id]++;
+          let anyObjectiveLeft = false;
+          for (const objective of task.objectives){
+            if (objective.maps.includes(map.id)) {
+              if (progressStore.objectiveCompletions[objective.id].self !== true) {
+                anyObjectiveLeft=true;
+                break;
+              }
+            }
+          }
+
+          if (anyObjectiveLeft) {
+            mapTaskCounts[map.id]++;
+          }
         }
       }
     }
