@@ -20,7 +20,7 @@
     "firebase": "^9.23.0",
     "firebaseui": "^6.0.1",
     "graphology": "^0.25.1",
-    "graphql": "16.6.0",
+    "graphql": "^16.6.0",
     "graphql-tag": "^2.12.6",
     "leaflet": "^1.9.4",
     "lodash-es": "^4.17.21",
