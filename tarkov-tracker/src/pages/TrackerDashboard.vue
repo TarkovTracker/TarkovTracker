@@ -1,7 +1,7 @@
 <template>
   <tracker-tip tip="welcomett3"></tracker-tip>
 
-  <v-container class="mt-2"
+  <v-container class="mt-2">
     <v-alert density="compact" color="green-darken-4" title="Wipe Update" class="mb-6">
     Changes from patch 0.15.5.1.33420 will be pulled automatically from <a href='http://tarkov.dev/'>tarkov.dev</a> as they are discovered and confirmed.
     </v-alert>
@@ -47,11 +47,10 @@
   </v-container>
 </template>
 <script setup>
-import { inject, computed } from "vue";
-import { defineAsyncComponent } from "vue";
 import { useTarkovData } from "@/composables/tarkovdata";
 import { useProgressStore } from "@/stores/progress";
 import { useTarkovStore } from "@/stores/tarkov.js";
+import { computed, defineAsyncComponent } from "vue";
 const TrackerStat = defineAsyncComponent(() =>
   import("@/components/TrackerStat.vue")
 );
