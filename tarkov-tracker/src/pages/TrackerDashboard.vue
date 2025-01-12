@@ -4,7 +4,7 @@
   <v-container class="mt-2">
     <v-alert density="compact" color="green-darken-4" title="Wipe Update" class="mb-6">Changes to
       quests and
-      hideout upgrades from the 0.15.0.0 patch will be pulled automatically
+      hideout upgrades from the 0.16.0.0 patch will be pulled automatically
       from <a href='http://tarkov.dev/'>tarkov.dev</a> as they are discovered and confirmed.
     </v-alert>
     <v-row justify="center">
