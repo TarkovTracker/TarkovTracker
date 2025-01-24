@@ -78,6 +78,19 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-row dense>
+      <v-col lg="12" md="12">
+        <!-- Sort by (exp, successors) -->
+        <v-card>
+          <v-tabs v-model="sortView" bg-color="accent" slider-color="secondary" align-tabs="center"
+            show-arrows>
+            <v-tab v-for="(view, index) in sortViews" :key="index" :value="view.view" :prepend-icon="view.icon">
+              {{ view.title }}
+            </v-tab>
+          </v-tabs>
+        </v-card>
+      </v-col>
+    </v-row>
     <v-row justify="center">
       <v-col v-if="loadingTasks || reloadingTasks" cols="12" align="center">
         <!-- If we're still waiting on tasks from tarkov.dev API -->
@@ -174,6 +187,19 @@ const secondaryViews = [
   },
 ];
 
+const sortViews = [
+  {
+    title: t("page.tasks.sortviews.successors"),
+    icon: "mdi-sort-descending",
+    view: "successors",
+  },
+  {
+    title: t("page.tasks.sortviews.exp"),
+    icon: "mdi-sort-descending",
+    view: "exp",
+  }
+];
+
 const activePrimaryView = computed({
   get: () => userStore.getTaskPrimaryView,
   set: (value) => userStore.setTaskPrimaryView(value),
@@ -200,6 +226,11 @@ const activeSecondaryView = computed({
     }
     userStore.setTaskSecondaryView(value);
   },
+});
+
+const sortView = computed({
+  get: () => userStore.getTaskSortView,
+  set: (value) => userStore.setTaskSortView(value),
 });
 
 const expandMap = ref([0]);
@@ -467,10 +498,16 @@ const updateVisibleTasks = async function () {
   // Finally, map the tasks to their IDs
   //visibleTaskList = visibleTaskList.map((task) => task.id)
 
-  // Sort the tasks by their count of successors
-  visibleTaskList.sort((a, b) => {
-    return b.successors.length - a.successors.length;
-  });
+  // Sort the tasks by their count of successors or experience
+  if (sortView.value == "exp") {
+    visibleTaskList.sort((a, b) => {
+      return b.experience - a.experience;
+    });
+  } else if (sortView.value == "successors") {
+    visibleTaskList.sort((a, b) => {
+      return b.successors.length - a.successors.length;
+    });
+  }
 
   reloadingTasks.value = false;
   visibleTasks.value = visibleTaskList;
@@ -484,6 +521,7 @@ watch(
     activeTraderView,
     activeSecondaryView,
     activeUserView,
+    sortView,
     tasks,
     hideGlobalTasks,
     hideNonKappaTasks,
