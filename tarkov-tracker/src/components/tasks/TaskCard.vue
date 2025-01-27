@@ -90,6 +90,11 @@
                   </v-chip>
                 </v-col>
               </v-row>
+              <v-row v-if="task?.experience" no-gutters class="mb-1">
+                <v-col cols="auto" class="ml-1">
+                  {{ task.experience }} EXP
+                </v-col>
+              </v-row>
               <v-row no-gutters class="mb-1">
                 <a
                   :href="props.task.wikiLink"
@@ -345,13 +350,13 @@
   </v-sheet>
 </template>
 <script setup>
-import { defineAsyncComponent, computed, ref } from "vue";
-import { useDisplay } from "vuetify";
-import { useTarkovStore } from "@/stores/tarkov.js";
-import { useProgressStore } from "@/stores/progress";
-import { useUserStore } from "@/stores/user";
 import { useTarkovData } from "@/composables/tarkovdata";
+import { useProgressStore } from "@/stores/progress";
+import { useTarkovStore } from "@/stores/tarkov.js";
+import { useUserStore } from "@/stores/user";
+import { computed, defineAsyncComponent, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import { useDisplay } from "vuetify";
 // Define the props for the component
 const props = defineProps({
   task: {

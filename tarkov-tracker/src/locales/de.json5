@@ -44,6 +44,10 @@
         completed: "Abgeschlossen",
         locked: "Gesperrt",
       },
+      sortviews: {
+        exp: "Erfahrung",
+        successors: "Nächste"
+      },
       userviews: {
         all: "Alle",
         yourself: "Du",

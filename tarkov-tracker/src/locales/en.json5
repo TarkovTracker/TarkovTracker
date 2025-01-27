@@ -44,6 +44,10 @@
         completed: "Completed",
         locked: "Locked",
       },
+      sortviews: {
+        exp: "Experience",
+        successors: "Next"
+      },
       userviews: {
         all: "All",
         yourself: "Yourself",

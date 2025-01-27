@@ -44,6 +44,10 @@
         completed: "Завершенные",
         locked: "Заблокированные",
       },
+      sortviews: {
+        exp: "Опыт",
+        successors: "Следующие"
+      },
       userviews: {
         all: "Все",
         yourself: "Свои",

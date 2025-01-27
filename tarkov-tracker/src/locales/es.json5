@@ -45,6 +45,10 @@
         completed: "Completadas",
         locked: "Bloqueadas",
       },
+      sortviews: {
+        exp: "Experiencia",
+        successors: "Siguientes"
+      },
       userviews: {
         all: "Todos",
         yourself: "Tú",
