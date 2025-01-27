@@ -82,9 +82,9 @@
       <v-col lg="12" md="12">
         <!-- Sort by (exp, successors) -->
         <v-card>
-          <v-tabs v-model="sortView" bg-color="accent" slider-color="secondary" align-tabs="center"
+          <v-tabs :model-value="sortView.type" bg-color="accent" slider-color="secondary" align-tabs="center"
             show-arrows>
-            <v-tab v-for="(view, index) in sortViews" :key="index" :value="view.view" :prepend-icon="view.icon">
+            <v-tab v-for="(view, index) in sortViews" :key="index" :value="view.view" :prepend-icon="sortIcon(view)" @click="toggleSortOrder(view.view)">
               {{ view.title }}
             </v-tab>
           </v-tabs>
@@ -190,12 +190,14 @@ const secondaryViews = [
 const sortViews = [
   {
     title: t("page.tasks.sortviews.successors"),
-    icon: "mdi-sort-descending",
+    iconDesc: "mdi-sort-ascending",
+    iconAsc: "mdi-sort-descending",
     view: "successors",
   },
   {
     title: t("page.tasks.sortviews.exp"),
-    icon: "mdi-sort-descending",
+    iconDesc: "mdi-sort-ascending",
+    iconAsc: "mdi-sort-descending",
     view: "exp",
   }
 ];
@@ -230,8 +232,25 @@ const activeSecondaryView = computed({
 
 const sortView = computed({
   get: () => userStore.getTaskSortView,
-  set: (value) => userStore.setTaskSortView(value),
+  set: (value) => userStore.setTaskSortView(value)
 });
+
+const sortIcon = (view) => {
+    if (sortView.value.type === view.view) {
+    return sortView.value.sort === 1 ? view.iconDesc : view.iconAsc;
+  } else {
+    return view.iconDesc;
+  }
+};
+
+const toggleSortOrder = (view)=> {
+  if(sortView.value.type === view) {
+    sortView.value.sort = sortView.value.sort * -1;
+  } else {
+    sortView.value.type = view;
+    sortView.value.sort = 1;
+  } 
+}
 
 const expandMap = ref([0]);
 
@@ -499,13 +518,17 @@ const updateVisibleTasks = async function () {
   //visibleTaskList = visibleTaskList.map((task) => task.id)
 
   // Sort the tasks by their count of successors or experience
-  if (sortView.value == "exp") {
+  
+  const sortKey = sortView.value.type;
+  const sortOrder = sortView.value.sort;
+  
+  if (sortKey == "exp") {
     visibleTaskList.sort((a, b) => {
-      return b.experience - a.experience;
+      return (b.experience - a.experience) * sortOrder;
     });
-  } else if (sortView.value == "successors") {
+  } else if (sortKey == "successors") {
     visibleTaskList.sort((a, b) => {
-      return b.successors.length - a.successors.length;
+      return (b.successors.length - a.successors.length) * sortOrder;
     });
   }
 
@@ -522,6 +545,7 @@ watch(
     activeSecondaryView,
     activeUserView,
     sortView,
+    () => sortView.value.sort,
     tasks,
     hideGlobalTasks,
     hideNonKappaTasks,

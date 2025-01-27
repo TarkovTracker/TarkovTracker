@@ -17,7 +17,7 @@ export const defaultState = {
   taskTraderView: null,
   taskSecondaryView: null,
   taskUserView: null,
-  taskSortView: null,
+  taskSortView: {},
   neededTypeView: null,
   itemsHideNonFIR: false,
   hideGlobalTasks: false,
@@ -79,7 +79,7 @@ export const getters = {
     return state.taskUserView ?? "all";
   },
   getTaskSortView: (state) => {
-    return state.taskSortView ?? "successor";
+    return state.taskSortView.type ? state.taskSortView : { type: "successor", sort: -1 }; // 1 ascending, -1 descending
   },
   getNeededTypeView: (state) => {
     return state.neededTypeView ?? "all";
