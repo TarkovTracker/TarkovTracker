@@ -72,6 +72,10 @@
         alternatives: "Alternative Aufgaben",
         alternativefailed: "Alternative Aufgaben werden auch zurückgesetzt",
       },
+      options: {
+        title: "Aufgabenfilter",
+        close: "Schließen"
+      }
     },
     hideout: {
       title: "Versteck",

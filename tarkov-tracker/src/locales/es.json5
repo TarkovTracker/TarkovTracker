@@ -69,6 +69,10 @@
         alternatives: "Misiones alternativas",
         alternativefailed: "Las misiones alternativas también se reiniciarán",
       },
+      options: {
+        title: "Filtros de misiones",
+        close: "Cerrar"
+      }
     },
     hideout: {
       title: "Escondite",
