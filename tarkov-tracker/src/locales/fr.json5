@@ -73,6 +73,10 @@
         alternativefailed: "Les quêtes alternatives seront également réniitialisées",
         differentfaction: "Cette quête n'est pas disponible pour votre faction",
       },
+      options: {
+        title: "Filtres de quêtes",
+        close: "Fermer"
+      }
     },
     hideout: {
       title: "Planque",
