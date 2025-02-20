@@ -99,6 +99,7 @@ const markerStyle = computed(() => {
     width: "20px",
     height: "20px",
     transform: "translate(-50%, -50%)",
+    "text-shadow": "0px 0px 5px rgba(251, 227, 32, 1), 0px 0px 10px rgba(251, 227, 32, 1), 0px 0px 15px rgba(251, 227, 32, 1), 0px 0px 20px rgba(251, 227, 32, 1)",
     // cursor: props.mark.floor === props.selectedFloor ? "pointer" : "inherit",
     // opacity: props.mark.floor === props.selectedFloor ? 1 : 0.2,
     cursor: "pointer",
