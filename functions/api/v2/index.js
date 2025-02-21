@@ -744,7 +744,7 @@ app.get("/api/v2/team/progress", async (req, res) => {
  * Update the progress of a task.
  *
  * @openapi
- * /api/v2/progress/task/{taskId}:
+ * /progress/task/{taskId}:
  *   post:
  *     summary: Update task progress
  *     tags:
@@ -970,7 +970,7 @@ app.post("/api/v2/progress/tasks", async (req, res) => {
  * Update the progress of tasks associated with an objective.
  *
  * @openapi
- * /api/v2/progress/task/objective/{objectiveId}:
+ * /progress/task/objective/{objectiveId}:
  *   post:
  *     summary: Update objective progress for a task.
  *     tags:
