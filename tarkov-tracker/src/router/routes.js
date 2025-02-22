@@ -25,6 +25,12 @@ const routes = [
         component: () => import("@/pages/TaskList.vue"),
       },
       {
+        name: "lightkeeper",
+        path: "/lightkeeper",
+        meta: {},
+        component: () => import("@/pages/LightKeeper.vue"),
+      },
+      {
         name: "hideout",
         path: "/hideout",
         meta: { background: "hideout" },

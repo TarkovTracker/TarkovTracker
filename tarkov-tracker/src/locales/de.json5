@@ -101,6 +101,14 @@
         statusdowngraded: " {name} wurde runtergestuft von Stufe {level}",
       },
     },
+    lightkeeper: {
+      title: "Lightkeeper",
+      primaryviews: {
+        all: "Alle",
+        available: "Verfügbar",
+      },
+      total_remaining: "Verbleibende Tasks",
+    },
     neededitems: {
       title: "Zu sammelnde Gegenstände",
       loading: "Lade Aufgaben und Versteckdaten",
@@ -237,6 +245,7 @@
     level: "Level",
     team: "Team",
     tasks: "Aufgaben",
+    lightkeeper: "Lightkeeper",
     hideout: "Versteck",
     neededitems: "benötigte Gegenstände",
     tarkovdev: "Tarkov.dev",
@@ -268,6 +277,10 @@
     hideout: {
       title: "Hideout",
       description: "Du kannst Fortschritt im Hideout auswählen und die benötigten Gegenstände für dein Versteck werden aktualisiert.",
+    },
+    lightkeeper: {
+      title: "Lightkeeper",
+      description: "Diese Seite zeigt den Fortschritt bis zum Freischalten von Lightkeeper. Alle hier aufgelisteten Tasks müssen abgeschlossen werden bevor Lightkeeper im Spiel zur Verfügung steht.",
     },
     neededitems: {
       title: "Zu sammelnde Gegenstände",
