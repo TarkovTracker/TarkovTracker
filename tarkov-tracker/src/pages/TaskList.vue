@@ -78,6 +78,42 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-row dense>
+      <v-col sm="10" md="11" lg="11"></v-col>
+      <v-col cols="3" sm="2" md="1" lg="1">
+        <v-dialog v-model="settingsDialog" scrim="#9A8866">
+          <template #activator="{ props }">
+            <v-btn v-bind="props" variant="tonal" style="width: 100%; height: 48px" class="px-0">
+              <v-icon>mdi-cog</v-icon>
+            </v-btn>
+          </template>
+          <v-row class="justify-center">
+            <v-col cols="auto">
+              <v-card :title="$t('page.tasks.options.title')" style="width: fit-content">
+                <v-card-text>
+                  <v-container class="ma-0 pa-0">
+                    <v-row dense>
+                      <v-col cols="12">
+                        <v-switch v-model="hideGlobalTasks" :label="$t(hideGlobalTasksLabel)" inset true-icon="mdi-eye-off"
+                          false-icon="mdi-eye" :color="hideGlobalTasksColor" hide-details density="compact"></v-switch>
+                        <v-switch v-model="hideNonKappaTasks" :label="$t(hideNonKappaTasksLabel)" inset true-icon="mdi-eye-off"
+                          false-icon="mdi-eye" :color="hideNonKappaTasksColor" hide-details density="compact"></v-switch>
+                      </v-col>
+                    </v-row>
+                    <v-row justify="end">
+                      <v-col cols="12" md="6">
+                        <v-btn color="primary" block @click="settingsDialog = false">{{
+                          $t("page.tasks.options.close") }}</v-btn>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-dialog>
+      </v-col>
+    </v-row>
     <v-row justify="center">
       <v-col v-if="loadingTasks || reloadingTasks" cols="12" align="center">
         <!-- If we're still waiting on tasks from tarkov.dev API -->
@@ -174,6 +210,8 @@ const secondaryViews = [
   },
 ];
 
+const settingsDialog = ref(false);
+
 const activePrimaryView = computed({
   get: () => userStore.getTaskPrimaryView,
   set: (value) => userStore.setTaskPrimaryView(value),
@@ -206,10 +244,33 @@ const expandMap = ref([0]);
 
 const hideGlobalTasks = computed({
   get: () => userStore.getHideGlobalTasks,
+  set: (value) => userStore.setHideGlobalTasks(value),
 });
+
 const hideNonKappaTasks = computed({
   get: () => userStore.getHideNonKappaTasks,
+  set: (value) => userStore.setHideNonKappaTasks(value),
 });
+
+const hideGlobalTasksLabel = computed(() =>
+  hideGlobalTasks.value
+    ? "page.settings.card.questfilter.hide_global_tasks"
+    : "page.settings.card.questfilter.show_global_tasks"
+);
+
+const hideNonKappaTasksLabel = computed(() =>
+  hideNonKappaTasks.value
+    ? "page.settings.card.questfilter.hide_non_kappa_tasks"
+    : "page.settings.card.questfilter.show_non_kappa_tasks"
+);
+
+const hideGlobalTasksColor = computed(() =>
+  hideGlobalTasks.value ? "error" : "success"
+);
+
+const hideNonKappaTasksColor = computed(() =>
+  hideNonKappaTasks.value ? "error" : "success"
+);
 
 const activeUserView = computed({
   get: () => userStore.getTaskUserView,
@@ -250,7 +311,6 @@ const userViews = computed(() => {
 const traderAvatar = (id) => {
   return `/img/traders/${id}.jpg`;
 };
-
 
 const timeValue = ref('');
 setTimeout(() => { timeUpdate(); }, 500);

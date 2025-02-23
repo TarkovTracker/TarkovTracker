@@ -73,6 +73,10 @@
         alternativefailed: "Alternative quests will also be reset",
         differentfaction: "This quest is not available to your faction",
       },
+      options: {
+        title: "Task Filters",
+        close: "Close"
+      }
     },
     hideout: {
       title: "Hideout",
