@@ -78,6 +78,19 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-row dense>
+      <v-col lg="12" md="12">
+        <!-- Sort by (exp, successors) -->
+        <v-card>
+          <v-tabs :model-value="sortView.type" bg-color="accent" slider-color="secondary" align-tabs="center"
+            show-arrows>
+            <v-tab v-for="(view, index) in sortViews" :key="index" :value="view.view" :prepend-icon="sortIcon(view)" @click="toggleSortOrder(view.view)">
+              {{ view.title }}
+            </v-tab>
+          </v-tabs>
+        </v-card>
+      </v-col>
+    </v-row>
     <v-row justify="center">
       <v-col v-if="loadingTasks || reloadingTasks" cols="12" align="center">
         <!-- If we're still waiting on tasks from tarkov.dev API -->
@@ -174,6 +187,21 @@ const secondaryViews = [
   },
 ];
 
+const sortViews = [
+  {
+    title: t("page.tasks.sortviews.successors"),
+    iconDesc: "mdi-sort-ascending",
+    iconAsc: "mdi-sort-descending",
+    view: "successors",
+  },
+  {
+    title: t("page.tasks.sortviews.exp"),
+    iconDesc: "mdi-sort-ascending",
+    iconAsc: "mdi-sort-descending",
+    view: "exp",
+  }
+];
+
 const activePrimaryView = computed({
   get: () => userStore.getTaskPrimaryView,
   set: (value) => userStore.setTaskPrimaryView(value),
@@ -201,6 +229,28 @@ const activeSecondaryView = computed({
     userStore.setTaskSecondaryView(value);
   },
 });
+
+const sortView = computed({
+  get: () => userStore.getTaskSortView,
+  set: (value) => userStore.setTaskSortView(value)
+});
+
+const sortIcon = (view) => {
+    if (sortView.value.type === view.view) {
+    return sortView.value.sort === 1 ? view.iconDesc : view.iconAsc;
+  } else {
+    return view.iconDesc;
+  }
+};
+
+const toggleSortOrder = (view)=> {
+  if(sortView.value.type === view) {
+    sortView.value.sort = sortView.value.sort * -1;
+  } else {
+    sortView.value.type = view;
+    sortView.value.sort = 1;
+  } 
+}
 
 const expandMap = ref([0]);
 
@@ -467,10 +517,20 @@ const updateVisibleTasks = async function () {
   // Finally, map the tasks to their IDs
   //visibleTaskList = visibleTaskList.map((task) => task.id)
 
-  // Sort the tasks by their count of successors
-  visibleTaskList.sort((a, b) => {
-    return b.successors.length - a.successors.length;
-  });
+  // Sort the tasks by their count of successors or experience
+  
+  const sortKey = sortView.value.type;
+  const sortOrder = sortView.value.sort;
+  
+  if (sortKey == "exp") {
+    visibleTaskList.sort((a, b) => {
+      return (b.experience - a.experience) * sortOrder;
+    });
+  } else if (sortKey == "successors") {
+    visibleTaskList.sort((a, b) => {
+      return (b.successors.length - a.successors.length) * sortOrder;
+    });
+  }
 
   reloadingTasks.value = false;
   visibleTasks.value = visibleTaskList;
@@ -484,6 +544,8 @@ watch(
     activeTraderView,
     activeSecondaryView,
     activeUserView,
+    sortView,
+    () => sortView.value.sort,
     tasks,
     hideGlobalTasks,
     hideNonKappaTasks,

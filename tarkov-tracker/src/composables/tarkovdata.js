@@ -1,10 +1,10 @@
-import { useQuery, provideApolloClient } from "@vue/apollo-composable";
-import { computed, ref, watch } from "vue";
 import apolloClient from "@/plugins/apollo";
+import i18n from "@/plugins/i18n";
+import languageQuery from "@/utils/languagequery.js";
 import tarkovDataQuery from "@/utils/tarkovdataquery.js";
 import tarkovHideoutQuery from "@/utils/tarkovhideoutquery.js";
-import languageQuery from "@/utils/languagequery.js";
-import i18n from "@/plugins/i18n";
+import { provideApolloClient, useQuery } from "@vue/apollo-composable";
+import { computed, ref, watch } from "vue";
 // Import graphlib so that we can use it in the watch function
 import Graph from "graphology";
 
@@ -142,9 +142,7 @@ watch(queryHideoutResults, async (newValue, oldValue) => {
   if (newValue?.hideoutStations) {
     let newHideoutGraph = new Graph();
     newValue.hideoutStations.forEach((station) => {
-      console.info(station);
       station.levels.forEach((level) => {
-        console.info(level);
         newHideoutGraph.mergeNode(level.id);
         level.stationLevelRequirements.forEach((requirement) => {
           if (requirement != null) {

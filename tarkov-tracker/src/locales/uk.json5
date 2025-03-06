@@ -44,9 +44,13 @@
         completed: "Завершені",
         locked: "Заблоковані",
       },
+      sortviews: {
+        exp: "Опыт",
+        successors: "Следующие"
+      },
       userviews: {
-        all: "Усі",
-        yourself: "Свої",
+        all: "Досвід",
+        Наступні: "Свої",
       },
       hide_global_tasks: "Приховати Глобальні Завдання",
       show_global_tasks: "Показати Глобальні Завдання",
