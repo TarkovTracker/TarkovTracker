@@ -2,10 +2,8 @@
   <tracker-tip tip="welcomett3"></tracker-tip>
 
   <v-container class="mt-2">
-    <v-alert density="compact" color="green-darken-4" title="Wipe Update" class="mb-6">Changes to
-      quests and
-      hideout upgrades from the 0.15.0.0 patch will be pulled automatically
-      from <a href='http://tarkov.dev/'>tarkov.dev</a> as they are discovered and confirmed.
+    <v-alert density="compact" color="green-darken-4" title="Wipe Update" class="mb-6">
+    Changes from patch 0.15.5.1.33420 will be pulled automatically from <a href='http://tarkov.dev/'>tarkov.dev</a> as they are discovered and confirmed.
     </v-alert>
     <v-row justify="center">
       <v-col cols="12" sm="8" md="6" lg="4" xl="3">
@@ -13,7 +11,7 @@
           <template #stat>
             {{ $t("page.dashboard.stats.allTasks.stat") }}
           </template>
-          <template #value> {{ completedTasks }}/{{ totalTasks }} </template>
+          <template #value> {{ completedTasks }}/{{ totalTasks }} ({{ ((completedTasks / totalTasks) * 100).toFixed(1) }}%)</template>
           <template #details>
             {{ $t("page.dashboard.stats.allTasks.details") }}
           </template>
@@ -25,7 +23,7 @@
             {{ $t("page.dashboard.stats.allObjectives.stat") }}
           </template>
           <template #value>
-            {{ completedObjectives }}/{{ totalObjectives }}
+            {{ completedObjectives }}/{{ totalObjectives }} ({{ ((completedObjectives / totalObjectives) * 100).toFixed(1) }}%)
           </template>
           <template #details>
             {{ $t("page.dashboard.stats.allObjectives.details") }}
@@ -38,7 +36,7 @@
             {{ $t("page.dashboard.stats.taskItems.stat") }}
           </template>
           <template #value>
-            {{ completedTaskItems }}/{{ totalTaskItems }}
+            {{ completedTaskItems }}/{{ totalTaskItems }} ({{ ((completedTaskItems / totalTaskItems) * 100).toFixed(1) }}%)
           </template>
           <template #details>
             {{ $t("page.dashboard.stats.taskItems.details") }}
@@ -49,11 +47,10 @@
   </v-container>
 </template>
 <script setup>
-import { inject, computed } from "vue";
-import { defineAsyncComponent } from "vue";
 import { useTarkovData } from "@/composables/tarkovdata";
 import { useProgressStore } from "@/stores/progress";
 import { useTarkovStore } from "@/stores/tarkov.js";
+import { computed, defineAsyncComponent } from "vue";
 const TrackerStat = defineAsyncComponent(() =>
   import("@/components/TrackerStat.vue")
 );

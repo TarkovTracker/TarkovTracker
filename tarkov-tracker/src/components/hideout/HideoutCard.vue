@@ -108,7 +108,7 @@
             scope="global"
           >
             <template #loyaltylevel>
-              {{ requirement.level }}
+              {{ requirement.value }}
             </template>
             <template #tradername>
               {{ requirement.trader.name }}

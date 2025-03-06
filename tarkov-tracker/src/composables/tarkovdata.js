@@ -1,10 +1,10 @@
-import { useQuery, provideApolloClient } from "@vue/apollo-composable";
-import { computed, ref, watch } from "vue";
 import apolloClient from "@/plugins/apollo";
+import i18n from "@/plugins/i18n";
+import languageQuery from "@/utils/languagequery.js";
 import tarkovDataQuery from "@/utils/tarkovdataquery.js";
 import tarkovHideoutQuery from "@/utils/tarkovhideoutquery.js";
-import languageQuery from "@/utils/languagequery.js";
-import i18n from "@/plugins/i18n";
+import { provideApolloClient, useQuery } from "@vue/apollo-composable";
+import { computed, ref, watch } from "vue";
 // Import graphlib so that we can use it in the watch function
 import Graph from "graphology";
 
@@ -141,47 +141,38 @@ const hideoutGraph = ref({});
 watch(queryHideoutResults, async (newValue, oldValue) => {
   if (newValue?.hideoutStations) {
     let newHideoutGraph = new Graph();
-    newValue?.hideoutStations.forEach((station) => {
-      if (station != null && station.id != "5d494a295b56502f18c98a08") {
-        // For each level
-        station?.levels.forEach((level) => {
-          if (level != null) {
-            newHideoutGraph.mergeNode(level.id);
-            // For each stationRequirement
-            level.stationLevelRequirements.forEach((requirement) => {
-              if (requirement != null) {
-                let requiredStation = newValue.hideoutStations.find(
-                  (station) => station.id === requirement.station.id
-                );
-                let requiredLevel = requiredStation.levels.find(
-                  (level) => level.level === requirement.level
-                );
-                newHideoutGraph.mergeNode(requiredLevel.id);
-                newHideoutGraph.mergeEdge(requiredLevel.id, level.id);
-              }
-            });
+    newValue.hideoutStations.forEach((station) => {
+      station.levels.forEach((level) => {
+        newHideoutGraph.mergeNode(level.id);
+        level.stationLevelRequirements.forEach((requirement) => {
+          if (requirement != null) {
+            let requiredStation = newValue.hideoutStations.find(
+              (s) => s.id === requirement.station.id
+            );
+            let requiredLevel = requiredStation.levels.find(
+              (l) => l.level === requirement.level
+            );
+            newHideoutGraph.mergeNode(requiredLevel.id);
+            newHideoutGraph.mergeEdge(requiredLevel.id, level.id);
           }
         });
-      }
+      });
     });
 
     let newModules = [];
     newValue.hideoutStations.forEach((station) => {
-      if (station.id != "5d494a295b56502f18c98a08") {
-        // For each level
-        station.levels.forEach((level) => {
-          newModules.push({
-            ...level,
-            stationId: station.id,
-            predecessors: [
-              ...new Set(getPredecessors(newHideoutGraph, level.id)),
-            ],
-            successors: [...new Set(getSuccessors(newHideoutGraph, level.id))],
-            parents: newHideoutGraph.inNeighbors(level.id),
-            children: newHideoutGraph.outNeighbors(level.id),
-          });
+      station.levels.forEach((level) => {
+        newModules.push({
+          ...level,
+          stationId: station.id,
+          predecessors: [
+            ...new Set(getPredecessors(newHideoutGraph, level.id)),
+          ],
+          successors: [...new Set(getSuccessors(newHideoutGraph, level.id))],
+          parents: newHideoutGraph.inNeighbors(level.id),
+          children: newHideoutGraph.outNeighbors(level.id),
         });
-      }
+      });
     });
     hideoutModules.value = newModules;
     hideoutGraph.value = newHideoutGraph;
