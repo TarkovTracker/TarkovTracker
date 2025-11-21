@@ -160,35 +160,27 @@ const activeNeededView = computed({
 const neededTaskItems = computed(() => {
   return JSON.parse(JSON.stringify(neededItemTaskObjectives.value)).sort(
     (a, b) => {
-      let aCount = 0;
-      tasks.value
-        .find((task) => task.id == a.taskId)
-        .predecessors.forEach((predecessor) => {
-          // Check if the predecessor is completed
-          if (
-            progressStore.tasksCompletions?.[predecessor]?.["self"] === false
-          ) {
-            aCount++;
-          }
-        });
+      const taskA = tasks.value.find((task) => task.id == a.taskId);
+      const taskB = tasks.value.find((task) => task.id == b.taskId);
+      const levelA = Number(taskA?.minPlayerLevel || 0);
+      const levelB = Number(taskB?.minPlayerLevel || 0);
+      if (levelA !== levelB) return levelA - levelB;
 
+      // Tie-breaker: fewer incomplete predecessors first
+      let aCount = 0;
+      taskA?.predecessors.forEach((predecessor) => {
+        if (progressStore.tasksCompletions?.[predecessor]?.["self"] === false) {
+          aCount++;
+        }
+      });
       let bCount = 0;
-      tasks.value
-        .find((task) => task.id == b.taskId)
-        .predecessors.forEach((predecessor) => {
-          // Check if the predecessor is completed
-          if (
-            progressStore.tasksCompletions?.[predecessor]?.["self"] === false
-          ) {
-            bCount++;
-          }
-        });
-      if (aCount > bCount) {
-        return 1;
-      } else if (aCount < bCount) {
-        return -1;
-      }
-      return 0;
+      taskB?.predecessors.forEach((predecessor) => {
+        if (progressStore.tasksCompletions?.[predecessor]?.["self"] === false) {
+          bCount++;
+        }
+      });
+      if (aCount !== bCount) return aCount - bCount;
+      return (taskA?.name || "").localeCompare(taskB?.name || "");
     }
   );
 });
@@ -197,35 +189,35 @@ const neededHideoutItems = computed(() => {
   let hideoutNeeds = JSON.parse(
     JSON.stringify(neededItemHideoutModules.value)
   ).sort((a, b) => {
-    let aCount = 0;
-    hideoutModules.value
-      .find((hModule) => hModule.id == a.hideoutModule.id)
-      .predecessors.forEach((predecessor) => {
-        // Check if the predecessor is completed
-        if (
-          progressStore.moduleCompletions?.[predecessor]?.["self"] === false
-        ) {
-          aCount++;
-        }
-      });
+    const moduleA = hideoutModules.value.find(
+      (hModule) => hModule.id == a.hideoutModule.id
+    );
+    const moduleB = hideoutModules.value.find(
+      (hModule) => hModule.id == b.hideoutModule.id
+    );
+    const levelA = Number(moduleA?.level || 0);
+    const levelB = Number(moduleB?.level || 0);
+    if (levelA !== levelB) return levelA - levelB;
 
+    // Tie-breaker: fewer incomplete predecessors first
+    let aCount = 0;
+    moduleA?.predecessors.forEach((predecessor) => {
+      if (
+        progressStore.moduleCompletions?.[predecessor]?.["self"] === false
+      ) {
+        aCount++;
+      }
+    });
     let bCount = 0;
-    hideoutModules.value
-      .find((hModule) => hModule.id == b.hideoutModule.id)
-      .predecessors.forEach((predecessor) => {
-        // Check if the predecessor is completed
-        if (
-          progressStore.moduleCompletions?.[predecessor]?.["self"] === false
-        ) {
-          bCount++;
-        }
-      });
-    if (aCount > bCount) {
-      return 1;
-    } else if (aCount < bCount) {
-      return -1;
-    }
-    return 0;
+    moduleB?.predecessors.forEach((predecessor) => {
+      if (
+        progressStore.moduleCompletions?.[predecessor]?.["self"] === false
+      ) {
+        bCount++;
+      }
+    });
+    if (aCount !== bCount) return aCount - bCount;
+    return (moduleA?.stationId || "").localeCompare(moduleB?.stationId || "");
   });
   return hideoutNeeds;
 });
