@@ -22,6 +22,8 @@ export const defaultState = {
   hideGlobalTasks: false,
   hideNonKappaTasks: false,
   neededitemsStyle: null,
+  hiddenTasks: {},
+  hideCompletedTasks: false,
 };
 
 // Getters are for reading store state in a uniform manner
@@ -89,12 +91,21 @@ export const getters = {
   getHideNonKappaTasks: (state) => {
     return state.hideNonKappaTasks || false;
   },
+  getHideCompletedTasks: (state) => {
+    return state.hideCompletedTasks || false;
+  },
   // Needed items style
   getNeededItemsStyle: (state) => {
     return state.neededitemsStyle ?? "mediumCard";
   },
   getHideoutPrimaryView: (state) => {
     return state.hideoutPrimaryView ?? "available";
+  },
+  taskIsHidden: (state) => {
+    return (taskId) => state.hiddenTasks?.[taskId] ?? false;
+  },
+  hiddenTaskCount: (state) => {
+    return Object.values(state.hiddenTasks ?? {}).filter((v) => v).length;
   },
 };
 
@@ -184,12 +195,21 @@ export const actions = {
   setHideNonKappaTasks(hide) {
     this.hideNonKappaTasks = hide;
   },
+  setHideCompletedTasks(hide) {
+    this.hideCompletedTasks = hide;
+  },
   // Needed items style
   setNeededItemsStyle(style) {
     this.neededitemsStyle = style;
   },
   setHideoutPrimaryView(view) {
     this.hideoutPrimaryView = view;
+  },
+  toggleTaskHidden(taskId) {
+    if (!this.hiddenTasks) {
+      this.hiddenTasks = {};
+    }
+    this.hiddenTasks[taskId] = !this.hiddenTasks[taskId];
   },
 };
 

@@ -1,6 +1,7 @@
 <template>
   <v-sheet
-    :id="`task-${props.task.id}`"
+    v-if=\"!(userStore.getHideCompletedTasks && isComplete)\"
+    :id=\"`task-${props.task.id}`\"
     class="pa-2 taskContainer"
     :rounded="true"
     :class="{
@@ -29,8 +30,16 @@
             <!-- Not xs, so display full details -->
             <v-container class="ma-0 pa-0">
               <v-row no-gutters class="mb-2" style="font-size: 1.1em">
-                <v-col cols="12">
+                <v-col cols="12" class="d-flex align-center">
                   <task-link :task="props.task" />
+                  <v-btn
+                    :icon="userStore.taskIsHidden(props.task.id) ? 'mdi-eye' : 'mdi-eye-off'"
+                    variant="text"
+                    size="x-small"
+                    class="ml-1"
+                    @click="userStore.toggleTaskHidden(props.task.id)"
+                    :title="userStore.taskIsHidden(props.task.id) ? $t('page.tasks.questcard.unhidebutton') : $t('page.tasks.questcard.hidebutton')"
+                  ></v-btn>
                 </v-col>
               </v-row>
               <v-row v-if="props.task.minPlayerLevel != 0" no-gutters>
@@ -110,7 +119,17 @@
           </template>
           <template v-else>
             <!-- xs, so display only the name -->
-            <task-link :task="props.task" class="d-flex justify-center" />
+            <div class="d-flex justify-center align-center">
+              <task-link :task="props.task" />
+              <v-btn
+                :icon="userStore.taskIsHidden(props.task.id) ? 'mdi-eye' : 'mdi-eye-off'"
+                variant="text"
+                size="x-small"
+                class="ml-1"
+                @click="userStore.toggleTaskHidden(props.task.id)"
+                :title="userStore.taskIsHidden(props.task.id) ? $t('page.tasks.questcard.unhidebutton') : $t('page.tasks.questcard.hidebutton')"
+              ></v-btn>
+            </div>
           </template>
         </v-col>
         <v-col

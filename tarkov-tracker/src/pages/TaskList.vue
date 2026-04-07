@@ -78,6 +78,11 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-row dense justify="center">
+      <v-col cols="auto">
+        <v-switch v-model="hideCompletedTasks" color="secondary" :label="$t('page.tasks.hide_completed_tasks')" hide-details></v-switch>
+      </v-col>
+    </v-row>
     <v-row justify="center">
       <v-col v-if="loadingTasks || reloadingTasks" cols="12" align="center">
         <!-- If we're still waiting on tasks from tarkov.dev API -->
@@ -109,6 +114,17 @@
         }" min-height="100">
           <task-card :task="task" class="my-1" />
         </v-lazy>
+      </v-col>
+    </v-row>
+    <v-row v-if="!loadingTasks && !reloadingTasks && userStore.hiddenTaskCount > 0" justify="center">
+      <v-col cols="12" align="center">
+        <v-btn
+          color="secondary"
+          @click="showHiddenTasks = !showHiddenTasks"
+        >
+          <v-icon class="mr-2">{{ showHiddenTasks ? 'mdi-eye-off' : 'mdi-eye' }}</v-icon>
+          {{ showHiddenTasks ? $t('page.tasks.hide_hidden_tasks') : $t('page.tasks.show_hidden_tasks', { count: userStore.hiddenTaskCount }) }}
+        </v-btn>
       </v-col>
     </v-row>
   </v-container>
@@ -210,6 +226,10 @@ const hideGlobalTasks = computed({
 const hideNonKappaTasks = computed({
   get: () => userStore.getHideNonKappaTasks,
 });
+const hideCompletedTasks = computed({
+  get: () => userStore.getHideCompletedTasks,
+  set: (value) => userStore.setHideCompletedTasks(value),
+});
 
 const activeUserView = computed({
   get: () => userStore.getTaskUserView,
@@ -281,6 +301,8 @@ const loadingTasks = computed(() => {
 });
 
 const reloadingTasks = ref(false);
+
+const showHiddenTasks = ref(false);
 
 const visibleTasks = shallowRef([]);
 
@@ -354,6 +376,9 @@ const mapTaskTotals = computed(() => {
         continue;
       }
       if (hideGlobalTasks.value && task.map == null) {
+        continue;
+      }
+      if (userStore.taskIsHidden(task.id)) {
         continue;
       }
       if (task.locations.includes(map.id)) {
@@ -464,6 +489,18 @@ const updateVisibleTasks = async function () {
       (task) => task.kappaRequired == true
     );
   }
+
+  if (hideCompletedTasks.value) {
+    visibleTaskList = visibleTaskList.filter(
+      (task) => !progressStore.tasksCompletions?.[task.id]?.[activeUserView.value]
+    );
+  }
+
+  if (!showHiddenTasks.value) {
+    visibleTaskList = visibleTaskList.filter(
+      (task) => !userStore.taskIsHidden(task.id)
+    );
+  }
   // Finally, map the tasks to their IDs
   //visibleTaskList = visibleTaskList.map((task) => task.id)
 
@@ -487,6 +524,9 @@ watch(
     tasks,
     hideGlobalTasks,
     hideNonKappaTasks,
+    hideCompletedTasks,
+    showHiddenTasks,
+    () => userStore.hiddenTasks,
     () => tarkovStore.playerLevel,
   ],
   async () => {
