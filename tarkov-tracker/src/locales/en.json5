@@ -52,6 +52,9 @@
       show_global_tasks: "Show Global Tasks",
       hide_non_kappa_tasks: "Hide Non Kappa Tasks",
       show_non_kappa_tasks: "Show Non Kappa Tasks",
+      hide_completed_tasks: "Hide completed tasks",
+      show_hidden_tasks: "Show {count} hidden tasks",
+      hide_hidden_tasks: "Hide hidden tasks",
       notasksfound: "No tasks found. Try changing your filters or updating your level.",
       showing_all_sources: "Showing all sources",
       loading: "Loading tasks",
@@ -66,6 +69,8 @@
         statuscomplete: "Marked {name} as complete",
         statusuncomplete: "Marked {name} as uncompleted",
         statusavailable: "Marked all prerequisites for {name} as complete",
+        hidebutton: "Hide quest",
+        unhidebutton: "Unhide quest",
         nonkappa: "Not Kappa Required",
         keysneeded: "{keys} needed on {map} | One of {keys} needed on {map}",
         objectiveshidden: "{count} objectives not on this map ({uncompleted} uncompleted)",
@@ -105,6 +110,7 @@
     neededitems: {
       title: "Needed Items",
       loading: "Loading task and hideout data",
+      noitemsfound: "No items found. Try changing your filters or search text.",
       neededviews: {
         all: "All",
         tasks: "Tasks",
