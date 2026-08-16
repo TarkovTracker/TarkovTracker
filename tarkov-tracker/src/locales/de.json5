@@ -261,6 +261,10 @@
       title: "Willkommen bei TarkovTracker 3!",
       description: "Willkommen bei TarkovTracker version 3! Das ist eine komplett überarbeitete Version vom original TarkovTracker. Es gibt einige Quality of Life Änderungen aus der vorherigen Version, die nach und nach hinzugefügt werden. Zusätzlich werden Quests aus EFT 0.13 hinzugefügt sobald sie bestätigt wurden. Die ersten paar Tage können Quests Fehlerhaft oder unvollständig sein. Bitte melde Fehler bei uns im Discord, danke für die Geduld!",
     },
+    notmaintained: {
+      title: "TarkovTracker.io wird nicht mehr gepflegt",
+      description: "TarkovTracker.io wird nicht mehr gepflegt. Wechsle zu TarkovTracker.org, um deinen Fortschritt weiter zu verfolgen, und tritt unserem Discord für Unterstützung bei:",
+    },
     login: {
       title: "Login",
       description: "Ein Login ist nicht zum verfolgen deines Fortschritts nötig, jedoch wenn du ihn teilen möchtest oder auf mehreren Geräten nutzen willst. Ansonsten wird dein Fortschritt im Browser gespeichert",
