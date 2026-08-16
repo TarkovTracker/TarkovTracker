@@ -269,6 +269,10 @@
       title: "¡Bienvenido a TarkovTracker 3!",
       description: "¡Bienvenido a la versión 3 de TarkovTracker! Esta es una reescritura completa de la versión original de TarkovTracker. Hay algunas características de calidad de vida que faltan en la versión original y se agregarán en los próximos días. Además, los datos de misiones para EFT v0.13 se agregarán tan pronto como se confirmen. Durante los primeros días, algunas misiones pueden ser inexactas o estar ausentes. Por favor, informa cualquier error que encuentres en Discord. ¡Gracias por tu paciencia!",
     },
+    notmaintained: {
+      title: "TarkovTracker.io ya no se mantiene",
+      description: "TarkovTracker.io ya no se mantiene. Migra a TarkovTracker.org para seguir siguiendo tu progreso, y únete a nuestro Discord para obtener ayuda:",
+    },
     login: {
       title: "Iniciar sesión",
       description: "Solo como información, iniciar sesión no es necesario para usar TarkovTracker y hacer un seguimiento de tu progreso en el juego. La única razón para iniciar sesión es habilitar el compartir tu progreso en vivo con tus amigos y coordinar incursiones, o para mantener los datos en diferentes dispositivos o al borrar los datos del navegador. Si no planeas hacer eso, puedes seguir utilizando TarkovTracker sin iniciar sesión. Tus datos se almacenarán localmente en tu navegador.",
