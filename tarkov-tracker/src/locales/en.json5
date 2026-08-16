@@ -293,6 +293,10 @@
       title: "Welcome to TarkovTracker 3!",
       description: "Welcome to TarkovTracker version 3! This is a complete rewrite of the original TarkovTracker. New features are added every wipe! Please report any bugs you find on Discord.",
     },
+    notmaintained: {
+      title: "TarkovTracker.io is no longer maintained",
+      description: "TarkovTracker.io is no longer maintained. Migrate to TarkovTracker.org to keep tracking your progress, and join our Discord for support:",
+    },
     login: {
       title: "Login",
       description: "As a heads up, logging in is not necessary to use TarkovTracker to track your progress in the game. The only reason to log in is to enable sharing your progress with your friends live and coordinate raids, or to keep data across devices or through clearing browser data. If you aren't planning on doing that, you can continue to use TarkovTracker without logging in. Your data will be stored locally in your browser.",
