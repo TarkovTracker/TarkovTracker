@@ -1,5 +1,5 @@
 <template>
-  <tracker-tip tip="tasks"></tracker-tip>
+  <not-maintained-banner></not-maintained-banner>
   <v-container>
     <v-row dense>
       <v-col lg="4" md="12">
@@ -121,8 +121,8 @@ import { useTarkovData } from "@/composables/tarkovdata";
 import { useProgressStore } from "@/stores/progress";
 import { useTarkovStore } from "@/stores/tarkov";
 
-const TrackerTip = defineAsyncComponent(() =>
-  import("@/components/TrackerTip.vue")
+const NotMaintainedBanner = defineAsyncComponent(() =>
+  import("@/components/NotMaintainedBanner.vue")
 );
 const TaskCard = defineAsyncComponent(() =>
   import("@/components/tasks/TaskCard.vue")
