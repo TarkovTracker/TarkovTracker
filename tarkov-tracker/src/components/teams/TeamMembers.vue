@@ -9,7 +9,6 @@
     </template>
     <template #content>
       <template v-if="teamStore.teamMembers">
-        <tracker-tip tip="teammembers" class="text-left"></tracker-tip>
         <v-container>
           <v-row>
             <v-col
@@ -37,9 +36,6 @@ const IconCard = defineAsyncComponent(() =>
 );
 const TeammemberCard = defineAsyncComponent(() =>
   import("@/components/teams/TeammemberCard.vue")
-);
-const TrackerTip = defineAsyncComponent(() =>
-  import("@/components/TrackerTip.vue")
 );
 const { useTeamStore } = useLiveData();
 const teamStore = useTeamStore();
