@@ -1,5 +1,5 @@
 <template>
-  <tracker-tip tip="login"></tracker-tip>
+  <not-maintained-banner></not-maintained-banner>
   <v-container>
     <v-row>
       <v-col cols="12">
@@ -20,8 +20,8 @@ import * as firebaseui from "firebaseui";
 import { firebase, fireapp, fireuser } from "@/plugins/firebase";
 import { useRouter } from "vue-router";
 import { FirebaseError } from "@firebase/util";
-const TrackerTip = defineAsyncComponent(() =>
-  import("@/components/TrackerTip.vue")
+const NotMaintainedBanner = defineAsyncComponent(() =>
+  import("@/components/NotMaintainedBanner.vue")
 );
 const router = useRouter();
 const ui =
