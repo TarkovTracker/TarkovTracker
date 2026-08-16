@@ -1,5 +1,5 @@
 <template>
-  <tracker-tip tip="hideout"></tracker-tip>
+  <not-maintained-banner></not-maintained-banner>
   <v-container>
     <v-row justify="center">
       <v-col lg="4" md="12">
@@ -40,8 +40,8 @@ import { useTarkovData } from "@/composables/tarkovdata";
 import { useProgressStore } from "@/stores/progress";
 import { useUserStore } from "@/stores/user";
 import { defineAsyncComponent } from "vue";
-const TrackerTip = defineAsyncComponent(() =>
-  import("@/components/TrackerTip.vue")
+const NotMaintainedBanner = defineAsyncComponent(() =>
+  import("@/components/NotMaintainedBanner.vue")
 );
 const HideoutCard = defineAsyncComponent(() =>
   import("@/components/hideout/HideoutCard.vue")

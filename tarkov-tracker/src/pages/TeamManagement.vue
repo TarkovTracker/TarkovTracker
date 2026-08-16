@@ -1,5 +1,5 @@
 <template>
-  <tracker-tip tip="team"></tracker-tip>
+  <not-maintained-banner></not-maintained-banner>
   <v-container v-if="fireuser.loggedIn">
     <v-row v-if="route?.query?.team && route?.query?.code" justify="center">
       <v-col cols="12">
@@ -33,8 +33,8 @@ const TeamOptions = defineAsyncComponent(() =>
 const MyTeam = defineAsyncComponent(() =>
   import("@/components/teams/MyTeam.vue")
 );
-const TrackerTip = defineAsyncComponent(() =>
-  import("@/components/TrackerTip.vue")
+const NotMaintainedBanner = defineAsyncComponent(() =>
+  import("@/components/NotMaintainedBanner.vue")
 );
 const TeamInvite = defineAsyncComponent(() =>
   import("@/components/teams/TeamInvite.vue")

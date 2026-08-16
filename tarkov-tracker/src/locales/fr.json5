@@ -292,6 +292,10 @@
       title: "Bienvenue sur TarkovTracker 3!",
       description: "Bienvenue dans TarkovTracker version 3 ! Il s'agit d'une réécriture complète du TarkovTracker original. De nouvelles fonctionnalités sont ajoutées à chaque wipe ! Veuillez signaler tout bug que vous trouvez sur Discord.",
     },
+    notmaintained: {
+      title: "TarkovTracker.io n'est plus maintenu",
+      description: "TarkovTracker.io n'est plus maintenu. Migrez vers TarkovTracker.org pour continuer à suivre votre progression, et rejoignez notre Discord pour obtenir de l'aide :",
+    },
     login: {
       title: "Login",
       description: "Pour information, il n'est pas nécessaire de se connecter pour utiliser TarkovTracker afin de suivre votre progression dans le jeu. La seule raison de vous connecter est de pouvoir partager vos progrès avec vos amis en direct et de coordonner des raids, ou de conserver des données sur plusieurs appareils ou en effaçant les données du navigateur. Si vous ne prévoyez pas de le faire, vous pouvez continuer à utiliser TarkovTracker sans vous connecter. Vos données seront stockées localement dans votre navigateur.",
