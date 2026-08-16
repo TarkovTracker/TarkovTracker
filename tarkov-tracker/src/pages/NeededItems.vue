@@ -1,5 +1,5 @@
 <template>
-  <tracker-tip tip="neededitems"></tracker-tip>
+  <not-maintained-banner></not-maintained-banner>
   <v-container>
     <v-row align="center" dense>
       <v-col cols="12" sm="12" md="3" lg="3">
@@ -95,8 +95,8 @@ import { defineAsyncComponent } from "vue";
 import { debounce } from "lodash-es";
 import { useI18n } from "vue-i18n";
 import { useUserStore } from "@/stores/user";
-const TrackerTip = defineAsyncComponent(() =>
-  import("@/components/TrackerTip.vue")
+const NotMaintainedBanner = defineAsyncComponent(() =>
+  import("@/components/NotMaintainedBanner.vue")
 );
 const RefreshButton = defineAsyncComponent(() =>
   import("@/components/RefreshButton.vue")
